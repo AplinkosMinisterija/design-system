@@ -1,3 +1,3 @@
-import DatePicker from "react-datepicker";
+import DatePicker from "./DatePicker";
 
 export default DatePicker;

@@ -6,7 +6,7 @@ import TextFieldInput from "../../internal/TextFieldInput";
 import { useSelectData } from "../../../hooks";
 import React from "react";
 
-export interface SelectFieldProps {
+interface SelectFieldProps {
   id?: string;
   name?: string;
   label?: string;

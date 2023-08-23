@@ -11,7 +11,7 @@ export interface SelectOption {
   [key: string]: any;
 }
 
-export interface SelectFieldProps {
+interface SelectFieldProps {
   id?: string;
   name?: string;
   label?: string;

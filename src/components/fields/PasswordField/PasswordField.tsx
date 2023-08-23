@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Icon from "../../other/Icon";
 import FieldWrapper from "../../internal/FieldWrapper";
 import TextFieldInput from "../../internal/TextFieldInput";
-export interface TextFieldProps {
+interface TextFieldProps {
   value?: string | number;
   name?: string;
   error?: string;

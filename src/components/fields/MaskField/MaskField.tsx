@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import FieldWrapper from "../../internal/FieldWrapper";
 
-export interface TextFieldProps {
+interface TextFieldProps {
   value?: string;
   name?: string;
   error?: string;

@@ -11,7 +11,7 @@ import TextField from "../TextField/TextField";
 
 registerLocale("lt", lt);
 
-export interface DatepickerProps {
+interface DatepickerProps {
   startDate?: Date;
   setStartDate?: React.Dispatch<React.SetStateAction<Date>>;
   disabled?: boolean;

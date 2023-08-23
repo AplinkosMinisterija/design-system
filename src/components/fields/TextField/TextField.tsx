@@ -1,7 +1,7 @@
-import React from "react";
 import FieldWrapper from "../../internal/FieldWrapper";
 import TextFieldInput from "../../internal/TextFieldInput";
-export interface TextFieldProps {
+import React from "react";
+interface TextFieldProps {
   value?: string | number;
   name?: string;
   error?: string;

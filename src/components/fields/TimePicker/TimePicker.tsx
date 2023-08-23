@@ -10,7 +10,7 @@ import Icon from "../../other/Icon";
 
 registerLocale("lt", lt);
 
-export interface TimepickerProps {
+interface TimepickerProps {
   label?: string;
   value?: Date;
   error?: string;

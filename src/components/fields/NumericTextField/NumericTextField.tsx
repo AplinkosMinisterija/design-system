@@ -2,7 +2,7 @@ import FieldWrapper from "../../internal/FieldWrapper";
 import TextFieldInput from "../../internal/TextFieldInput";
 import React from "react";
 
-export interface NumericTextFieldProps {
+interface NumericTextFieldProps {
   value?: string | number;
   name?: string;
   error?: string;
