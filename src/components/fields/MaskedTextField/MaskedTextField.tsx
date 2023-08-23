@@ -30,7 +30,7 @@ interface TextFieldProps {
 
 }
 
-const MaskField = ({
+const MaskedTextField = ({
   value = "",
   name,
   error,
@@ -217,4 +217,4 @@ const TextInput = styled.input<{ readOnly: boolean }>`
   }
 `;
 
-export default MaskField;
+export default MaskedTextField;
