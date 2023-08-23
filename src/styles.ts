@@ -79,14 +79,11 @@ export const GlobalStyles = createGlobalStyle`
   textarea {
     font-size: 1.6rem;
   }
-
-
-
-.leaflet-div-icon {
+  
+  .leaflet-div-icon {
     background: transparent;
     border: none;
   }
-
 `;
 
 export const device = {

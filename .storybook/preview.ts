@@ -1,7 +1,16 @@
 import type { Preview } from '@storybook/react';
+
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { withThemeFromJSXProvider } from '@storybook/addon-styling';
-import {GlobalStyles, theme} from "../src/styles";
-import {ThemeProvider} from "styled-components";
+import {theme} from "../src/styles";
+
+
+/* TODO: replace with your own global styles, or remove */
+const GlobalStyles = createGlobalStyle`
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+  `;
 
 const preview: Preview = {
   parameters: {
