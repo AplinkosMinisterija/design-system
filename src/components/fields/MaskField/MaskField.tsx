@@ -3,6 +3,8 @@ import styled from "styled-components";
 import FieldWrapper from "../../internal/FieldWrapper";
 
 interface TextFieldProps {
+  mask: string;
+  maskChar: string;
   value?: string;
   name?: string;
   error?: string;
@@ -25,8 +27,7 @@ interface TextFieldProps {
   secondLabel?: JSX.Element;
   selectedValue?: boolean;
   onBlur?: () => void;
-  mask: string;
-  maskChar: string;
+
 }
 
 const MaskField = ({
