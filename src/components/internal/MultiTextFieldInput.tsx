@@ -1,4 +1,3 @@
-import { isEmpty } from "lodash";
 import React, { useRef } from "react";
 import styled from "styled-components";
 import Icon from "../other/Icon";
@@ -66,7 +65,7 @@ const MultiTextField = ({
         {!disabled && (
           <Input
             ref={inputRef}
-            placeholder={isEmpty(values) ? placeholder : ""}
+            placeholder={!!values?.length ? placeholder : ""}
             disabled={disabled}
             value={input}
             onChange={(e: any) => handleInputChange(e?.target?.value)}

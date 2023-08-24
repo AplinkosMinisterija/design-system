@@ -1,4 +1,3 @@
-import { isEmpty } from "lodash";
 import { useEffect, useState } from "react";
 import { getFilteredOptions } from "./functions";
 
@@ -31,7 +30,7 @@ export const useSelectData = ({
     };
 
     useEffect(() => {
-        if (!showSelect || !isEmpty(options)) return;
+        if (!showSelect || !options?.length) return;
         handleSetOptions();
     }, [showSelect]);
 
