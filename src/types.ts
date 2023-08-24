@@ -19,7 +19,7 @@ export interface Theme {
       primary: string;// for titles and headings
       secondary: string;// for paragraphs and other regular texts
       tertiary: string; // for less important explanatory texts
-      labels: string; // for input label
+      label: string; // for input label
       error: string; // for error
       [key: string] : string;
     };

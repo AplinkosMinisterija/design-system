@@ -22,7 +22,7 @@ export const theme: Theme = {
       primary: "",
       secondary:  "",
       tertiary: "",
-      labels: "#231F20",
+      label: "#231F20",
       accent: "",
       error: "",
       input: "",
