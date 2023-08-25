@@ -1,4 +1,4 @@
-// import { useMediaQuery } from "@material-ui/core";
+import { useMediaQuery } from "react-responsive";
 import { format } from "date-fns";
 import lt from "date-fns/locale/lt";
 import  { useEffect, useState } from "react";
@@ -40,7 +40,7 @@ const Datepicker = ({
   bottom = false
 }: DatepickerProps) => {
   const daterRegex = /^\d{4}-\d{2}-\d{2}$/;
-  const isMobile = false;
+  const isMobile = useMediaQuery({query: device.mobileL});
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const handleBlur = (event: any) => {

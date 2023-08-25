@@ -18,11 +18,12 @@
     "react-icons": "^4.10.1",
     "react-input-mask": "^2.0.4",
     "react-resize-detector": "^9.1.0",
+    "react-responsive": "^9.0.2",
     "styled-components": "^6.0.7"
   },
   "peerDependencies": {
-    "react-dom": "^18.2.0",
-    "react": "^18.2.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.3.2",
