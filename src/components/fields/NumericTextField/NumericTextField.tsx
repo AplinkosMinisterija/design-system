@@ -1,6 +1,5 @@
 import FieldWrapper from "../../internal/FieldWrapper";
 import TextFieldInput from "../../internal/TextFieldInput";
-import React from "react";
 
 interface NumericTextFieldProps {
   value?: string | number;
@@ -47,6 +46,7 @@ const NumericTextField = ({
     if (!event.currentTarget.contains(event.relatedTarget)) {
       const inputValue = value?.toString();
       if (inputValue?.endsWith(".")) {
+        // @ts-ignore
         onChange(inputValue.replaceAll(".", ""));
       }
     }

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import React from "react";
 
 export const ErrorMessage = ({ error }: { error?: string }) => {
   if (!error) return <></>;

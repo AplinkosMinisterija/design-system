@@ -3,7 +3,6 @@ import MultiTextField from "../../internal/MultiTextFieldInput";
 import OptionsContainer from "../../internal/OptionsContainer";
 import { filterSelectedOptions, handleRemove } from "../../../functions";
 import { useSelectData } from "../../../hooks";
-import React from "react";
 
 export interface SelectOption {
   id?: string;
@@ -40,26 +39,14 @@ interface SelectFieldProps {
 const MultiSelect = ({
   label,
   values = [],
-  name,
   error,
-  hasBorder,
-  showError = true,
-  editable = true,
   options,
-  className,
-  left,
-  right,
-  padding,
   onChange,
-  handleLogs,
   disabled = false,
-  backgroundColor,
   getOptionLabel = (option) => option.label,
   getOptionValue = (option) => option.id,
   refreshOptions,
-  isSearchable = false,
   dependantId,
-  ...rest
 }: SelectFieldProps) => {
   const {
     suggestions,

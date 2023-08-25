@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import texts from "../../texts";
 import LoaderComponent from "../other/LoaderComponent";
-import React from "react";
 
 export interface SelectOption {
   id?: string;

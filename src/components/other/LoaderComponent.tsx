@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Loader from "./Loader";
-import React from "react";
 
 const LoaderComponent = ({ size = 40 }) => (
   <LoaderContainer>

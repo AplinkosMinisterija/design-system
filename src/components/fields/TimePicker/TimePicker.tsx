@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import lt from "date-fns/locale/lt";
-import React, { useState } from "react";
+import { useState } from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";

@@ -6,7 +6,6 @@ import {
   AiOutlineLeft,
   AiOutlineLock,
   AiOutlineMail,
-  AiOutlinePlus,
   AiOutlineRight,
   AiOutlineWarning
 } from "react-icons/ai";
@@ -68,7 +67,6 @@ import {
   TiThMenu
 } from "react-icons/ti";
 import { VscVerified } from "react-icons/vsc";
-import React from "react";
 export interface IconProps {
   name: string;
   className?: string;
@@ -211,8 +209,6 @@ const Icon = ({ name, className }: IconProps) => {
       return <MdOutlineFullscreen className={className} />;
     case "exitFullScreen":
       return <MdOutlineFullscreenExit className={className} />;
-    case "plus":
-      return <AiOutlinePlus className={className} />;
     case "warning":
       return <AiOutlineWarning className={className} />;
     case "addCircle":

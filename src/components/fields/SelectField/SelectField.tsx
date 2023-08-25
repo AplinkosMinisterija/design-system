@@ -4,8 +4,6 @@ import FieldWrapper from "../../internal/FieldWrapper";
 import OptionsContainer from "../../internal/OptionsContainer";
 import TextFieldInput from "../../internal/TextFieldInput";
 import { useSelectData } from "../../../hooks";
-import React from "react";
-
 interface SelectFieldProps {
   id?: string;
   name?: string;
@@ -36,24 +34,17 @@ const SelectField = ({
   value,
   name,
   error,
-  hasBorder,
   showError = true,
-  readOnly = false,
   placeholder,
   options,
   className,
   left,
-  right,
   padding,
   getOptionLabel,
   onChange,
   disabled,
-  backgroundColor,
-  getInputLabel,
-  isClearable = false,
   dependantId,
   refreshOptions,
-  ...rest
 }: SelectFieldProps) => {
   const {
     suggestions,
