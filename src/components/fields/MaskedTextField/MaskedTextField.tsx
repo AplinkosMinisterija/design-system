@@ -1,7 +1,7 @@
 
 import InputMask from 'react-input-mask';
 import styled from 'styled-components';
-import FieldWrapper from "../../internal/FieldWrapper.tsx";
+import FieldWrapper from "../../internal/FieldWrapper";
 
 export interface TextFieldProps {
   mask: string;
