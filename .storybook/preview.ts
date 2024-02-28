@@ -2,7 +2,7 @@ import type { Preview } from '@storybook/react';
 
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { withThemeFromJSXProvider } from '@storybook/addon-styling';
-import {theme} from "../src/styles";
+import {theme} from "../styles";
 
 
 /* TODO: replace with your own global styles, or remove */
