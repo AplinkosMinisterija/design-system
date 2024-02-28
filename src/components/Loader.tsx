@@ -1,19 +1,12 @@
-
-const Loader = ({
-  color = "#000",
-  size = 40
-}: {
-  color?: string;
-  size?: number;
-}) => {
+const Loader = ({ color = '#000' }) => {
   return (
     <svg
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       x="0px"
       y="0px"
-      width={`${size}px `}
-      height={`${size}px `}
+      width="40px"
+      height="40px"
       viewBox="0 0 50 50"
     >
       <path
