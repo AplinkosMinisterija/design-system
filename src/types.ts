@@ -7,8 +7,7 @@ interface MainColorTypes {
   success: string;
   [key: string] : string;
 }
-export interface Theme {
-  colors: {
+interface ThemeColors {
     primary: string;
     secondary: string;
     tertiary: string;
@@ -28,7 +27,10 @@ export interface Theme {
     };
     border: string; // for input and other bordered elements
     [key: string] : string | {[key: string] : string};
-  };
+}
+
+export interface Theme<T> {
+  colors: T & ThemeColors;
 }
 
 
