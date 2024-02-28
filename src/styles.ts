@@ -2,15 +2,14 @@ import { createGlobalStyle } from "styled-components";
 import { Theme } from "./types";
 import {ButtonColors} from "./constants.ts";
 
-export const theme: Theme = {
+export const theme: Theme<any> = {
   colors: {
-    [ButtonColors.PRIMARY]: "#53B1FD",
-    [ButtonColors.SECONDARY]: "#13C9E7",
-    [ButtonColors.TERTIARY]: "#7A7E9F",
-    [ButtonColors.TRANSPARENT]: "transparent",
-    [ButtonColors.DANGER]: "#FE5B78",
-    [ButtonColors.SUCCESS]: "#027A48",
-    accent: "#febc1d",
+    primary: "#53B1FD",
+    secondary: "#13C9E7",
+    tertiary: "#7A7E9F",
+    transparent: "transparent",
+    danger: "#FE5B78",
+    success: "#027A48",
     buttonBackground: {
       [ButtonColors.PRIMARY]: "#53B1FD",
       [ButtonColors.SECONDARY]: "white",
