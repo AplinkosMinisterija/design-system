@@ -1,28 +1,8 @@
 import React, {JSX} from 'react';
 import styled from 'styled-components';
 import Loader from "./Loader";
-import {theme} from "../styles";
 import {ButtonColors} from "../constants";
 
-const buttonColors = {
-  [ButtonColors.PRIMARY]: theme.colors.primary,
-  [ButtonColors.SECONDARY]: 'white',
-  [ButtonColors.TERTIARY]: theme.colors.tertiary,
-  [ButtonColors.DANGER]: theme.colors.error,
-  [ButtonColors.SUCCESS]: theme.colors.success,
-  [ButtonColors.TRANSPARENT]: 'transparent',
-  [ButtonColors.POWDER]: theme.colors.powder,
-};
-
-const buttonTextColors = {
-  [ButtonColors.PRIMARY]: theme.colors.text.primary,
-  [ButtonColors.SECONDARY]: theme.colors.text.primary,
-  [ButtonColors.TERTIARY]: 'white',
-  [ButtonColors.DANGER]: 'white',
-  [ButtonColors.SUCCESS]: 'white',
-  [ButtonColors.TRANSPARENT]: theme.colors.text.primary,
-  [ButtonColors.POWDER]: theme.colors.text.primary,
-};
 export interface ButtonProps {
   variant?: ButtonColors;
   route?: string;
@@ -92,8 +72,8 @@ const StyledButton = styled.button<{
   height: ${({ $height }) => `${$height}px`};
   border-radius: ${({ $radius }) => $radius};
   padding: ${({ $padding }) => $padding};
-  background-color: ${({ $variant }) => buttonColors[$variant]};
-  color: ${({ $variant }) => buttonTextColors[$variant]};
+  background-color: ${({ $variant, theme }) => theme.colors.buttonBackground[$variant]};
+  color: ${({ $variant, theme }) => theme.colors.buttonText[$variant]};
   border: ${({ $variant }) => ($variant === ButtonColors.TRANSPARENT ? '0' : '1px')} solid
     ${({ $variant }) =>
       $variant !== ButtonColors.TRANSPARENT ? 'transparent' : ' rgb(35, 31, 32)'};

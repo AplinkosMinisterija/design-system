@@ -1,3 +1,12 @@
+interface MainColorTypes {
+  primary: string;
+  secondary: string;
+  tertiary: string;
+  transparent: string;
+  danger: string;
+  success: string;
+  [key: string] : string;
+}
 export interface Theme {
   colors: {
     primary: string;
@@ -6,15 +15,9 @@ export interface Theme {
     transparent: string;
     danger: string;
     success: string;
-    hover: {
-      primary: string;
-      secondary: string;
-      tertiary: string;
-      transparent: string;
-      danger: string;
-      success: string;
-      [key: string] : string;
-    };
+    buttonBackground: MainColorTypes;
+    buttonText: MainColorTypes;
+    hover: MainColorTypes;
     text: { //use only for text elements
       primary: string;// for titles and headings
       secondary: string;// for paragraphs and other regular texts
