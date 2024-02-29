@@ -5,15 +5,9 @@
   "type": "module",
   "sideEffects": false,
   "main": "/lib/index.js",
-  "exports": {
-    "./Button": "./lib/components/Button.tsx",
-    "./TextField": "./lib/components/TextField.tsx",
-    "./MapField": "./lib/components/MapField.tsx",
-    "./Switch": "./lib/components/Switch.tsx",
-    "./Checkbox": "./lib/components/Checkbox.tsx",
-    "./common/": "./lib/common/",
-    "./types": "./lib/types"
-  },
+  "files": [
+    "lib/"
+  ],
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
