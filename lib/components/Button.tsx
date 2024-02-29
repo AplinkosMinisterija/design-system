@@ -1,7 +1,15 @@
 import {JSX} from 'react';
 import styled from 'styled-components';
 import Loader from "./Loader";
-import {ButtonColors} from "../../constants";
+
+enum ButtonColors {
+  PRIMARY = 'primary',
+  SECONDARY = 'secondary',
+  TERTIARY = 'tertiary',
+  DANGER = 'danger',
+  SUCCESS = 'success',
+  TRANSPARENT = 'transparent',
+}
 
 export interface ButtonProps {
   variant?: ButtonColors;

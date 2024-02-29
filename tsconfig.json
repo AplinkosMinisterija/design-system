@@ -16,8 +16,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "declaration": true,
-    "outDir": "./lib"
+    "outDir": "./build"
   },
   "include": ["lib"],
+  "exclude": ["node_modules"]
 
 }
