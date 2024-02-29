@@ -21,7 +21,7 @@
   "include": [
     "./src/common",
     "./src/components",
-    "./src/types",
+    "./src/types.ts",
     "./src/index.tsx"
   ],
   "exclude": [
