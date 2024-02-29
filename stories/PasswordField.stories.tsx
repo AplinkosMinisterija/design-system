@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import PasswordField from "../lib/components/PasswordField";
-import StoryWrapper from "../lib/common/StoryWrapper";
+import PasswordField from "../src/components/PasswordField";
+import StoryWrapper from "../src/common/StoryWrapper";
 
 const meta: Meta<typeof PasswordField> = {
     component: PasswordField,

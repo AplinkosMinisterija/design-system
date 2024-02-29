@@ -16,9 +16,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "declaration": true,
-    "outDir": "./build"
+    "outDir": "./lib"
   },
-  "include": ["lib"],
+  "include": [
+    "./src/common",
+    "./src/components",
+    "./src/types",
+    "./src/index.tsx"
+  ],
   "exclude": ["node_modules"]
-
 }
