@@ -5,12 +5,50 @@ import { withThemeFromJSXProvider } from '@storybook/addon-styling';
 import {theme} from "../styles";
 
 
-/* TODO: replace with your own global styles, or remove */
 const GlobalStyles = createGlobalStyle`
-    body {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  * {
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  html {
+    font-size: 62.5%;
+    width: 100vw;
+    color: ${theme.colors.text.primary};
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: ${theme.colors.background};
+    font-size: 1.6rem;
+    overflow: hidden;
+    justify-content: center;
+  }
+  h1 {
+    font-size: 3.2rem;
+    color: ${theme.colors.text.primary};
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+    :hover {
+      color: inherit;
     }
+  }
+  button {
+    outline: none;
+    text-decoration: none;
+    display: block;
+    border: none;
+    background-color: transparent;
+  }
+
+  textarea {
+    font-size: 1.6rem;
+  }
   `;
+
+
 
 const preview: Preview = {
   parameters: {

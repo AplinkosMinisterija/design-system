@@ -25,6 +25,7 @@ interface ThemeColors {
       error: string; // for error
       [key: string] : string;
     };
+    cardBackground: { primary: string; success: string };
     border: string; // for input and other bordered elements
     [key: string] : string | {[key: string] : string};
 }

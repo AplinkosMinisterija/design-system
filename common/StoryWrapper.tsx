@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const ComponentContainer = ({children}: any) => {
+const StoryWrapper = ({children}: any) => {
     return (
         <Container>
             <InnerContainer>
@@ -26,4 +26,4 @@ const InnerContainer = styled.div`
     margin: 40px auto;
 `;
 
-export default ComponentContainer;
+export default StoryWrapper;

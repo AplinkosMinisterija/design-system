@@ -1,4 +1,3 @@
-import { createGlobalStyle } from "styled-components";
 import { Theme } from "./types";
 export const theme: Theme<any> = {
   colors: {
@@ -39,62 +38,15 @@ export const theme: Theme<any> = {
       label: '#697586',
       error: '#FE5B78',
     },
+    cardBackground: {
+      primary: '#f7f7f7',
+      success: '#eafbf6'
+    },
     border: "#CDD5DF",
     input: "#FFFFFF",
     shadow: "#121a5529"
   }
 };
-
-export const GlobalStyles = createGlobalStyle`
-  *{
-    box-sizing: border-box;
-    font-family: Atkinson Hyperlegible;
-  }
-  html { 
-    font-size: 62.5%; 
-    width: 100vw;
-    height: 100vh;
-  }
-  body {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background-color: #f8fafc;
-    font-size: 1.6rem;
-    width: 100vw;
-    height: 100vh;
-    overflow:hidden;
-  } 
-  h1 {
-    font-size: 3.2rem;
-    color: #121A55;
-  }
-  a {
-    text-decoration: none;
-    color: inherit;
-    :hover{
-      color: inherit;
-    }
-  }
-  button {
-    outline: none;
-    text-decoration: none;
-    display: block;
-    border: none;
-    background-color: transparent;
-  }
-  #__next {
-    height: 100%;
-  }
-  textarea {
-    font-size: 1.6rem;
-  }
-  
-  .leaflet-div-icon {
-    background: transparent;
-    border: none;
-  }
-`;
 
 export const device = {
   mobileS: `(max-width: 320px)`,
