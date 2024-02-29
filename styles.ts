@@ -1,7 +1,5 @@
 import { createGlobalStyle } from "styled-components";
 import { Theme } from "./types";
-import {ButtonColors} from "./constants.ts";
-
 export const theme: Theme<any> = {
   colors: {
     primary: "#53B1FD",
@@ -11,33 +9,33 @@ export const theme: Theme<any> = {
     danger: "#FE5B78",
     success: "#027A48",
     buttonBackground: {
-      [ButtonColors.PRIMARY]: "#53B1FD",
-      [ButtonColors.SECONDARY]: "white",
-      [ButtonColors.TERTIARY]: "#7A7E9F",
-      [ButtonColors.SUCCESS]: "#027A48",
-      [ButtonColors.DANGER]: "#FE5B78",
-      [ButtonColors.TRANSPARENT]: "transparent",
+      primary: "#53B1FD",
+      secondary: "white",
+      tertiary: "#7A7E9F",
+      success: "#027A48",
+      danger: "#FE5B78",
+      transparent: "transparent",
     },
     buttonText: {
-      [ButtonColors.PRIMARY]: '#101010',
-      [ButtonColors.SECONDARY]: '#101010',
-      [ButtonColors.TERTIARY]: 'white',
-      [ButtonColors.DANGER]: 'white',
-      [ButtonColors.SUCCESS]: 'white',
-      [ButtonColors.TRANSPARENT]: '#101010',
+      primary: '#101010',
+      secondary: '#101010',
+      tertiary: 'white',
+      danger: 'white',
+      success: 'white',
+      transparent: '#101010',
     },
     hover: {
-      [ButtonColors.PRIMARY]: "#53B1FD",
-      [ButtonColors.SECONDARY]: "#13C9E78F",
-      [ButtonColors.TERTIARY]: "#7A7E9F",
-      [ButtonColors.DANGER]: "#FE5B78E6",
-      [ButtonColors.SUCCESS]: "#ECFDF3",
-      [ButtonColors.TRANSPARENT]: "#F3F3F7",
+      primary: "#53B1FD",
+      secondary: "#13C9E78F",
+      tertiary: "#7A7E9F",
+      danger: "#FE5B78E6",
+      success: "#ECFDF3",
+      transparent: "#F3F3F7",
     },
     text: {
-      [ButtonColors.PRIMARY]: '#101010',
-      [ButtonColors.SECONDARY]: '#525252',
-      [ButtonColors.TERTIARY]: '#4B5565',
+      primary: '#101010',
+      secondary: '#525252',
+      tertiary: '#4B5565',
       label: '#697586',
       error: '#FE5B78',
     },

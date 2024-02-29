@@ -14,6 +14,9 @@ const Container = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
+    background-color: aliceblue;
+    padding: 16px;
+    box-sizing: border-box;
 `;
 
 const InnerContainer = styled.div`
