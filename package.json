@@ -4,6 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "sideEffects": false,
+  "exports": {
+    "./Button": "./lib/components/Button.tsx",
+    "./TextField": "./lib/components/TextField.tsx",
+    "./MapField": "./lib/components/MapField.tsx",
+    "./Switch": "./lib/components/Switch.tsx",
+    "./Checkbox": "./lib/components/Checkbox.tsx",
+    "./common/": "./lib/common/",
+    "./types": "./lib/types"
+  },
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",

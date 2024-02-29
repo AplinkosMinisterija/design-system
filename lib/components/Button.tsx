@@ -1,7 +1,7 @@
 import {JSX} from 'react';
 import styled from 'styled-components';
 import Loader from "./Loader";
-import {ButtonColors} from "../constants";
+import {ButtonColors} from "../../constants";
 
 export interface ButtonProps {
   variant?: ButtonColors;

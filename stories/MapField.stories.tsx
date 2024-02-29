@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import MapField from "../components/MapField";
-import StoryWrapper from "../common/StoryWrapper";
+import MapField from "../lib/components/MapField";
+import StoryWrapper from "../lib/common/StoryWrapper";
 
 const meta: Meta<typeof MapField> = {
     component: MapField,
