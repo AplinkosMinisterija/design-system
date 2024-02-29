@@ -46,7 +46,7 @@ const TextFieldInput = ({
         name={name}
         autoComplete="off"
         value={value || ''}
-        onChange={(e) => onChange && onChange(e?.target?.value || '')}
+        onChange={(e: any) => onChange && onChange(e?.target?.value || '')}
         placeholder={placeholder}
         disabled={disabled}
         onFocus={onFocus}
