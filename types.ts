@@ -33,6 +33,40 @@ export interface Theme<T> {
   colors: T & ThemeColors;
 }
 
+export type FeatureCollection = {
+    type: 'FeatureCollection';
+    features: Feature[];
+};
+
+type GenericObject = {
+    [key: string]: any;
+};
+
+type Feature = {
+    type: 'Feature';
+    geometry: Geometry;
+    properties?: GenericObject;
+};
+
+type Geometry = {
+    type: string;
+    coordinates: CoordinatesTypes;
+};
+type CoordinatesPoint = number[];
+type CoordinatesMultiPoint = CoordinatesPoint[];
+type CoordinatesLineString = CoordinatesPoint[];
+type CoordinatesMultiLineString = CoordinatesLineString[];
+type CoordinatesPolygon = CoordinatesLineString[];
+type CoordinatesMultiPolygon = CoordinatesPolygon[];
+
+type CoordinatesTypes =
+    | CoordinatesPoint
+    | CoordinatesLineString
+    | CoordinatesPolygon
+    | CoordinatesMultiPoint
+    | CoordinatesMultiLineString
+    | CoordinatesMultiPolygon;
+
 
 
 
