@@ -4,16 +4,32 @@ import { useWindowSize, device } from '../utils';
 import BackHeader from './headers/BackHeader';
 import LogoHeader from './headers/LogoHeader';
 import SideBar from './SideBar';
-
-const DefaultLayout = ({ children, onScroll = () => {}, loggedIn, loginSlug, currentRoute, routes, logo, onGoHome, onGoBack, onLogin, onLogout, onRouteSelected }: any) => {
+import {JSX} from "react";
+export interface DefaultLayoutProps {
+    loggedIn: boolean;
+    currentRoute: { slug: string, title: string, iconName: string, back: boolean };
+    routes: { slug: string, title: string, iconName: string, back: boolean }[] //Todo: should be icon component not a string
+    onGoBack: () => void;
+    onLogin: () => void;
+    onLogout: () => void;
+    onRouteSelected: (slug: string) => void;
+    onClose: () => void;
+    loginSlug: string;
+    children: any;
+    onGoHome: ()=> void;
+    logo: JSX.Element;
+    onScroll?: () => void;
+}
+const DefaultLayout = (props: DefaultLayoutProps) => {
+    const { children, onScroll = () => {} } = props;
   const isMobile = useWindowSize(device.mobileL);
 
   return (
     <Container>
-      {!isMobile && <SideBar loggedIn={loggedIn} loginSlug={loginSlug} routes={routes} logo={logo} currentRoute={currentRoute} onLogin={onLogin} onLogout={onLogout} onRouteSelected={onRouteSelected} />}
+      {!isMobile && <SideBar {...props} />}
       <ScrollableContainer onScroll={onScroll}>
         <InnerContainer>
-          {currentRoute?.back ? <BackHeader onGoBack={onGoBack} onLogin={onLogin} onLogout={onLogout} onRouteSelected={onRouteSelected} currentRoute={currentRoute}/> : <LogoHeader logo={logo} onGoHome={onGoHome}/>}
+          {props?.currentRoute?.back ? <BackHeader {...props}/> : <LogoHeader {...props}/>}
           {children}
         </InnerContainer>
       </ScrollableContainer>

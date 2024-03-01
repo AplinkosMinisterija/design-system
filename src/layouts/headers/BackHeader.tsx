@@ -1,12 +1,13 @@
-import { useState } from 'react';
-import styled from 'styled-components';
-import Icon, {IconName} from '../../common/Icons';
-import MobileMenu from '../MobileMenu';
-import {device} from "../../utils.ts";
+import { useState } from "react";
+import styled from "styled-components";
+import Icon, { IconName } from "../../common/Icons";
+import MobileMenu from "../MobileMenu";
+import { device } from "../../utils.ts";
+import { DefaultLayoutProps } from "../DefaultLayout.tsx";
 
-const BackHeader = ({onGoBack, onLogin, onLogout, onRouteSelected, currentRoute}: any) => {
+const BackHeader = (props: DefaultLayoutProps) => {
+  const { onGoBack } = props;
   const [showMenu, setShowMenu] = useState(false);
-
 
   return (
     <>
@@ -19,7 +20,7 @@ const BackHeader = ({onGoBack, onLogin, onLogout, onRouteSelected, currentRoute}
           Meniu
         </Menu>
       </Container>
-      <MobileMenu visible={showMenu} onClose={() => setShowMenu(false)} onLogin={onLogin} onLogout={onLogout} onRouteSelected={onRouteSelected} currentRoute={currentRoute} />
+      <MobileMenu visible={showMenu} {...props} />
     </>
   );
 };

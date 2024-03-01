@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import Icon, {IconName} from '../common/Icons.tsx';
+import {DefaultLayoutProps} from "./DefaultLayout.tsx";
 
-const SideBar = ({loggedIn, loginSlug, routes, logo, onLogin, onLogout, onRouteSelected, currentRoute}: any) => {
+const SideBar = ({loggedIn, loginSlug, routes, logo, onLogin, onLogout, onRouteSelected, currentRoute}: DefaultLayoutProps) => {
 
   return (
     <Container>

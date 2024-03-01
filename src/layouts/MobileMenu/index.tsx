@@ -4,8 +4,12 @@ import { device } from '../../utils.ts';
 import MenuButton from './MenuButton';
 import Icon, {IconName} from '../../common/Icons';
 import Modal from '../Modal';
+import {DefaultLayoutProps} from "../DefaultLayout.tsx";
 
-const MobileMenu = ({ onClose, visible = true, loggedIn, currentRoute, routes, onLogin, onLogout,  onRouteSelected }: any) => {
+interface Props extends DefaultLayoutProps{
+  visible: boolean;
+}
+const MobileMenu = ({ onClose, visible = true, loggedIn, currentRoute, routes, onLogin, onLogout,  onRouteSelected }: Props) => {
 
   return (
     <Modal visible={visible} onClose={onClose}>
@@ -21,7 +25,7 @@ const MobileMenu = ({ onClose, visible = true, loggedIn, currentRoute, routes, o
             <Title>Meniu</Title>
             <Subtitle>Pasirinkite dominančią sritį</Subtitle>
           </Headings>
-          {routes?.map((route: any, index: any) => {
+          {routes?.map((route, index: number) => {
             return (
               <MenuButton
                 key={`menu_button_${index}`}
