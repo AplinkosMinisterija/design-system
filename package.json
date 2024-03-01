@@ -52,7 +52,7 @@
     "react": "^18.2.0",
     "storybook": "^7.3.2",
     "typescript": "^5.0.2",
-    "vite": "^5.1.2",
+    "vite": "^5.1.4",
     "vite-plugin-dts": "^3.7.3"
   }
 }

@@ -90,6 +90,13 @@ declare interface MainColorTypes {
     [key: string]: string;
 }
 
+export declare const MapField: ({ mapHost, mapPath, value, onChange, ...rest }: {
+    mapHost: string;
+    mapPath: string;
+    value: FeatureCollection;
+    onChange: (value: FeatureCollection) => void;
+}) => JSX_2.Element;
+
 export declare const PasswordField: ({ value, secondLabel, name, error, showError, label, className, padding, onChange, placeholder, disabled, height, onInputClick, }: TextFieldProps_2) => JSX_2.Element;
 
 export declare const Switch: ({ value, name, onChange }: SwitchProps) => JSX_2.Element;
