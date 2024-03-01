@@ -1,5 +1,6 @@
 import { ChangeEventHandler } from 'react';
 import { JSX as JSX_2 } from 'react/jsx-runtime';
+import { default as React_2 } from 'react';
 
 export declare const Button: {
     ({ variant, route, children, height, padding, leftIcon, radius, buttonPadding, rightIcon, color, type, loading, className, disabled, fontWeight, ...rest }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>): JSX_2.Element;
@@ -46,6 +47,8 @@ declare interface CheckboxProps {
     intermediate?: boolean;
 }
 
+export declare const ContentLayout: ({ children, title, customSubTitle, customTitle, currentRoute }: any) => JSX_2.Element;
+
 declare type CoordinatesLineString = CoordinatesPoint[];
 
 declare type CoordinatesMultiLineString = CoordinatesLineString[];
@@ -59,6 +62,8 @@ declare type CoordinatesPoint = number[];
 declare type CoordinatesPolygon = CoordinatesLineString[];
 
 declare type CoordinatesTypes = CoordinatesPoint | CoordinatesLineString | CoordinatesPolygon | CoordinatesMultiPoint | CoordinatesMultiLineString | CoordinatesMultiPolygon;
+
+export declare const DefaultLayout: ({ children, onScroll, loggedIn, currentRoute, routes, logo }: any) => JSX_2.Element;
 
 declare type Feature = {
     type: 'Feature';
@@ -112,6 +117,14 @@ export declare const MapField: ({ mapHost, mapPath, value, onChange, ...rest }: 
     value: FeatureCollection;
     onChange: (value: FeatureCollection) => void;
 }) => JSX_2.Element;
+
+export declare const Modal: ({ visible, children, onClose }: ModalProps) => JSX_2.Element;
+
+declare interface ModalProps {
+    visible: boolean;
+    onClose?: () => void;
+    children?: React_2.ReactNode;
+}
 
 export declare const PasswordField: ({ value, secondLabel, name, error, showError, label, className, padding, onChange, placeholder, disabled, height, onInputClick, }: TextFieldProps_2) => JSX_2.Element;
 
