@@ -288,4 +288,4 @@ Check the top-level render call using <`+n+">.")}return t}}function De(e,t){{if(
   font-weight: 500;
   border-radius: 99px;
   cursor: pointer;
-`,Cr=$r;O.Button=Be,O.Checkbox=Ke,O.PasswordField=_r,O.Switch=rr,O.Tabs=Cr,O.TextField=hr,Object.defineProperty(O,Symbol.toStringTag,{value:"Module"})});
+`,Cr=$r;O.Button=Be,O.CheckBox=Ke,O.PasswordField=_r,O.Switch=rr,O.Tabs=Cr,O.TextField=hr,Object.defineProperty(O,Symbol.toStringTag,{value:"Module"})});

@@ -33,7 +33,7 @@ declare interface ButtonProps {
     radius?: string;
 }
 
-export declare const Checkbox: ({ value, name, onChange, disabled, label, error, className, intermediate, }: CheckboxProps) => JSX_2.Element;
+export declare const CheckBox: ({ value, name, onChange, disabled, label, error, className, intermediate, }: CheckboxProps) => JSX_2.Element;
 
 declare interface CheckboxProps {
     value?: boolean;

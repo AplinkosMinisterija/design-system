@@ -1259,7 +1259,7 @@ const Xr = ({ name: r, className: o }) => {
 `, dt = rt;
 export {
   st as Button,
-  lt as Checkbox,
+  lt as CheckBox,
   ft as PasswordField,
   ct as Switch,
   dt as Tabs,
