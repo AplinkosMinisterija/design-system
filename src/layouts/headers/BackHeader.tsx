@@ -1,19 +1,17 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Icon, {IconName} from '../../common/Icons';
 import MobileMenu from '../MobileMenu';
 import {device} from "../../utils.ts";
 
-const BackHeader = () => {
+const BackHeader = ({onGoBack, onLogin, onLogout, onRouteSelected}: any) => {
   const [showMenu, setShowMenu] = useState(false);
 
-  const navigate = useNavigate();
 
   return (
     <>
       <Container>
-        <BackButton onClick={() => navigate(-1)}>
+        <BackButton onClick={onGoBack}>
           <BackIcon name={IconName.back} />
         </BackButton>
         <Menu onClick={() => setShowMenu(true)}>
@@ -21,7 +19,7 @@ const BackHeader = () => {
           Meniu
         </Menu>
       </Container>
-      <MobileMenu visible={showMenu} onClose={() => setShowMenu(false)} />
+      <MobileMenu visible={showMenu} onClose={() => setShowMenu(false)} onLogin={onLogin} onLogout={onLogout} onRouteSelected={onRouteSelected} />
     </>
   );
 };

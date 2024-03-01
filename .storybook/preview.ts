@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { withThemeFromJSXProvider } from '@storybook/addon-styling';
-import { Theme } from "../src/utils/types";
+import { Theme } from "../src/types";
 
 export const theme: Theme<any> = {
   colors: {

@@ -5,15 +5,15 @@ import BackHeader from './headers/BackHeader';
 import LogoHeader from './headers/LogoHeader';
 import SideBar from './SideBar';
 
-const DefaultLayout = ({ children, onScroll = () => {}, loggedIn, currentRoute, routes, logo }: any) => {
+const DefaultLayout = ({ children, onScroll = () => {}, loggedIn, loginSlug, currentRoute, routes, logo, onGoHome, onGoBack, onLogin, onLogout, onRouteSelected }: any) => {
   const isMobile = useWindowSize(device.mobileL);
 
   return (
     <Container>
-      {!isMobile && <SideBar loggedIn={loggedIn} routes={routes} logo={logo} currentRoute={currentRoute} />}
+      {!isMobile && <SideBar loggedIn={loggedIn} loginSlug={loginSlug} routes={routes} logo={logo} currentRoute={currentRoute} onLogin={onLogin} onLogout={onLogout} onRouteSelected={onRouteSelected} />}
       <ScrollableContainer onScroll={onScroll}>
         <InnerContainer>
-          {currentRoute?.back ? <BackHeader /> : <LogoHeader logo={logo}/>}
+          {currentRoute?.back ? <BackHeader onGoBack={onGoBack} onLogin={onLogin} onLogout={onLogout} onRouteSelected={onRouteSelected}/> : <LogoHeader logo={logo} onGoHome={onGoHome}/>}
           {children}
         </InnerContainer>
       </ScrollableContainer>

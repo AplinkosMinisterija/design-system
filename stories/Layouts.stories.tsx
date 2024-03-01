@@ -140,6 +140,12 @@ export const Primary: Story = {
                         </g>
                     </svg>
                 }
+                loginSlug={'/newsfeed'}
+                onGoHome={()=>{}}
+                onGoBack={()=>{}}
+                onLogin={()=>{}}
+                onLogout={()=>{}}
+                onRouteSelected={()=>{}}
             >
                 <ContentLayout
                     title="Prenumeratos"

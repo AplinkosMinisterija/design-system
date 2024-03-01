@@ -1,10 +1,9 @@
-import { matchPath, useLocation, useNavigate } from 'react-router';
+import { matchPath, useLocation } from 'react-router';
 import styled from 'styled-components';
 import Icon, {IconName} from '../common/Icons.tsx';
 
-const SideBar = ({loggedIn, routes, onLogout, logo, loginSlug, currentRoute}: any) => {
+const SideBar = ({loggedIn, loginSlug, routes, logo, onLogin, onLogout, onRouteSelected, currentRoute}: any) => {
 
-  const navigate = useNavigate();
   const currentLocation = useLocation();
 
   return (
@@ -17,7 +16,7 @@ const SideBar = ({loggedIn, routes, onLogout, logo, loginSlug, currentRoute}: an
         return (
           <Item
             key={`sidebar_btn_${route.slug}_${index}`}
-            onClick={() => navigate(route.slug)}
+            onClick={() => onRouteSelected(route.slug)}
             $isActive={!!matchPath({ path: route.slug, end: false }, currentRoute.slug)}
           >
             <StyledIcon name={route.iconName!} />
@@ -33,7 +32,7 @@ const SideBar = ({loggedIn, routes, onLogout, logo, loginSlug, currentRoute}: an
         </Item>
       ) : (
         <Item
-          onClick={() => navigate(loginSlug)}
+          onClick={onLogin}
           $isActive={!!matchPath({ path: loginSlug, end: false }, currentLocation.pathname)}
         >
           <StyledIcon name={IconName.logout} />

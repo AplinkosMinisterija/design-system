@@ -1,18 +1,16 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { device } from '../../utils.ts';
 import MobileMenu from '../MobileMenu';
 import Icon, { IconName } from '../../common/Icons';
 
-const LogoHeader = ({logo}: any) => {
-  const navigate = useNavigate();
+const LogoHeader = ({logo, onGoHome}: any) => {
 
   const [showMenu, setShowMenu] = useState(false);
   return (
     <>
       <Container>
-        <div onClick={() => navigate('/')}>
+        <div onClick={onGoHome}>
             {logo}
         </div>
         <Button onClick={() => setShowMenu(true)}>

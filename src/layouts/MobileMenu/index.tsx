@@ -1,13 +1,12 @@
 import Div100vh from 'react-div-100vh';
-import { matchPath, useLocation, useNavigate } from 'react-router-dom';
+import { matchPath, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { device } from '../../utils.ts';
 import MenuButton from './MenuButton';
 import Icon, {IconName} from '../../common/Icons';
 import Modal from '../Modal';
 
-const MobileMenu = ({ onClose, visible = true, loggedIn, loginSlug, onLogout, routes }: any) => {
-  const navigate = useNavigate();
+const MobileMenu = ({ onClose, visible = true, loggedIn, routes, onLogin, onLogout,  onRouteSelected }: any) => {
   const currentLocation = useLocation();
 
   return (
@@ -32,7 +31,7 @@ const MobileMenu = ({ onClose, visible = true, loggedIn, loginSlug, onLogout, ro
                 label={route.title || ''}
                 icon={route.iconName}
                 onClick={() => {
-                  navigate(route.slug);
+                  onRouteSelected(route.slug);
                   onClose();
                 }}
               />
@@ -45,7 +44,7 @@ const MobileMenu = ({ onClose, visible = true, loggedIn, loginSlug, onLogout, ro
               if (loggedIn) {
                 onLogout();
               } else {
-                navigate(loginSlug);
+                onLogin();
                 onClose();
               }
             }}
