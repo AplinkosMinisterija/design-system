@@ -10,6 +10,13 @@
   "files": [
     "dist/"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
