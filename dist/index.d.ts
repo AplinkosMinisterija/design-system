@@ -10,6 +10,7 @@ export declare interface AppRoute {
     title?: string;
     back?: boolean;
     iconName?: string;
+    icon?: JSX_3.Element;
     description?: string;
 }
 
@@ -254,6 +255,7 @@ declare interface ThemeColors {
         success: string;
     };
     border: string;
+    GREY: string;
     [key: string]: string | {
         [key: string]: string;
     };

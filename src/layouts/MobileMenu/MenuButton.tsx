@@ -1,16 +1,22 @@
-import styled from 'styled-components';
-import Icon, { IconName } from '../../common/Icons.tsx';
+import styled from "styled-components";
+import Icon, { IconName } from "../../common/Icons.tsx";
+import { JSX } from "react";
 interface MenuButtonProps {
   label: string;
-  icon?: string;
+  icon?: JSX.Element;
   onClick: () => void;
   isActive?: boolean;
 }
-const MenuButton = ({ label, icon, onClick, isActive = false }: MenuButtonProps) => {
+const MenuButton = ({
+  label,
+  icon,
+  onClick,
+  isActive = false,
+}: MenuButtonProps) => {
   //TODO: disable option
   return (
     <Container $isActive={isActive} onClick={onClick}>
-      <IconContainer>{icon ? <StyledIcon name={icon} /> : null}</IconContainer>
+      <IconContainer>{icon ? icon : null}</IconContainer>
       {label}
       <Icon name={IconName.right} />
     </Container>
@@ -23,7 +29,7 @@ const Container = styled.div<{ $isActive: boolean }>`
   align-items: center;
   font-size: 2rem;
   font-weight: 600;
-  background-color: ${({ theme }) => theme.colors.largeButton.GREY};
+  background-color: ${({ theme }) => theme.colors.GREY};
   border: 1px solid transparent;
   border-radius: 12px;
   padding: 16px;
@@ -53,6 +59,5 @@ const IconContainer = styled.div`
   align-items: center;
   justify-content: center;
 `;
-const StyledIcon = styled(Icon)``;
 
 export default MenuButton;

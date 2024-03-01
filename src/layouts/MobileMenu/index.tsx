@@ -40,7 +40,7 @@ const MobileMenu = ({
                 key={`menu_button_${index}`}
                 isActive={route.slug === currentRoute?.slug}
                 label={route.title || ""}
-                icon={route.iconName}
+                icon={route.icon}
                 onClick={() => {
                   onRouteSelected(route.slug);
                   onClose();
@@ -50,7 +50,7 @@ const MobileMenu = ({
           })}
           <MenuButton
             label={loggedIn ? "Atsijungti" : "Prisijungti"}
-            icon={IconName.logout}
+            icon={<Icon name={IconName.logout} />}
             onClick={() => {
               if (loggedIn) {
                 onLogout();

@@ -1,6 +1,6 @@
-import type { Preview } from '@storybook/react';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { withThemeFromJSXProvider } from '@storybook/addon-styling';
+import type { Preview } from "@storybook/react";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
+import { withThemeFromJSXProvider } from "@storybook/addon-styling";
 import { Theme } from "../src/types";
 
 export const theme: Theme<any> = {
@@ -20,12 +20,12 @@ export const theme: Theme<any> = {
       transparent: "transparent",
     },
     buttonText: {
-      primary: '#101010',
-      secondary: '#101010',
-      tertiary: 'white',
-      danger: 'white',
-      success: 'white',
-      transparent: '#101010',
+      primary: "#101010",
+      secondary: "#101010",
+      tertiary: "white",
+      danger: "white",
+      success: "white",
+      transparent: "#101010",
     },
     hover: {
       primary: "#53B1FD",
@@ -36,22 +36,22 @@ export const theme: Theme<any> = {
       transparent: "#F3F3F7",
     },
     text: {
-      primary: '#101010',
-      secondary: '#525252',
-      tertiary: '#4B5565',
-      label: '#697586',
-      error: '#FE5B78',
+      primary: "#101010",
+      secondary: "#525252",
+      tertiary: "#4B5565",
+      label: "#697586",
+      error: "#FE5B78",
     },
     cardBackground: {
-      primary: '#f7f7f7',
-      success: '#eafbf6'
+      primary: "#f7f7f7",
+      success: "#eafbf6",
     },
     border: "#CDD5DF",
     input: "#FFFFFF",
-    shadow: "#121a5529"
-  }
+    shadow: "#121a5529",
+    GREY: "#f7f7f7",
+  },
 };
-
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -96,11 +96,9 @@ const GlobalStyles = createGlobalStyle`
   }
   `;
 
-
-
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
+    actions: { argTypesRegex: "^on[A-Z].*" },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -116,7 +114,7 @@ const preview: Preview = {
       themes: {
         light: theme,
       },
-      defaultTheme: 'light',
+      defaultTheme: "light",
       Provider: ThemeProvider,
       GlobalStyles,
     }),

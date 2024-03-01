@@ -23,7 +23,7 @@ const SideBar = ({
             onClick={() => onRouteSelected(route.slug)}
             $isActive={route.slug === currentRoute?.slug}
           >
-            <StyledIcon name={route.iconName!} />
+            {route.icon}
             <Label>{route.title}</Label>
           </Item>
         );

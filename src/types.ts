@@ -30,6 +30,7 @@ interface ThemeColors {
   };
   cardBackground: { primary: string; success: string };
   border: string; // for input and other bordered elements
+  GREY: string;
   [key: string]: string | { [key: string]: string };
 }
 
@@ -78,6 +79,7 @@ export interface AppRoute {
   title?: string;
   back?: boolean;
   iconName?: string; //Todo: should be icon component not a string
+  icon?: JSX.Element;
   description?: string;
 }
 
