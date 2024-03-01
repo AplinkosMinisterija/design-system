@@ -63,7 +63,7 @@ declare type CoordinatesPolygon = CoordinatesLineString[];
 
 declare type CoordinatesTypes = CoordinatesPoint | CoordinatesLineString | CoordinatesPolygon | CoordinatesMultiPoint | CoordinatesMultiLineString | CoordinatesMultiPolygon;
 
-export declare const DefaultLayout: ({ children, onScroll, loggedIn, currentRoute, routes, logo }: any) => JSX_2.Element;
+export declare const DefaultLayout: ({ children, onScroll, loggedIn, loginSlug, currentRoute, routes, logo, onGoHome, onGoBack, onLogin, onLogout, onRouteSelected }: any) => JSX_2.Element;
 
 declare type Feature = {
     type: 'Feature';
