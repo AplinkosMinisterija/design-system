@@ -1,24 +1,27 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import { resolve } from "path";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
-  plugins: [react()],
   build: {
     lib: {
-      entry: 'src/index.tsx', // Path to your library's entry point
-      name: 'design-system', // The name your library will be exposed as globally in UMD builds
-      formats: ['es', 'umd'],
-      fileName: (format) => `design-system.${format}.tsx` // The output file name
+      entry: resolve(__dirname, "./src/index.tsx"),
+      name: "design-system",
+      fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      // Externalize dependencies so they're not bundled into the library
-      external: ['react'], // Example: Externalize React and Vue to keep the bundle size small
+      external: ["react", "react-dom", "styled-components"],
       output: {
-        // Provide global variables to use in the UMD build for externalized deps
         globals: {
-          react: 'React'
+          react: "React",
+          "react-dom": "ReactDOM",
+          "styled-components": "styled-components",
         },
       },
     },
+    sourcemap: true,
+    emptyOutDir: true,
   },
+  plugins: [react(), dts({ rollupTypes: true })],
 });
