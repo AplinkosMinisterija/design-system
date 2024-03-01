@@ -1,13 +1,11 @@
 import Div100vh from 'react-div-100vh';
-import { matchPath, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { device } from '../../utils.ts';
 import MenuButton from './MenuButton';
 import Icon, {IconName} from '../../common/Icons';
 import Modal from '../Modal';
 
-const MobileMenu = ({ onClose, visible = true, loggedIn, routes, onLogin, onLogout,  onRouteSelected }: any) => {
-  const currentLocation = useLocation();
+const MobileMenu = ({ onClose, visible = true, loggedIn, currentRoute, routes, onLogin, onLogout,  onRouteSelected }: any) => {
 
   return (
     <Modal visible={visible} onClose={onClose}>
@@ -27,7 +25,7 @@ const MobileMenu = ({ onClose, visible = true, loggedIn, routes, onLogin, onLogo
             return (
               <MenuButton
                 key={`menu_button_${index}`}
-                isActive={!!matchPath({ path: route.slug, end: false }, currentLocation.pathname)}
+                isActive={route.slug === currentRoute.slug}
                 label={route.title || ''}
                 icon={route.iconName}
                 onClick={() => {

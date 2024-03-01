@@ -13,7 +13,7 @@ const DefaultLayout = ({ children, onScroll = () => {}, loggedIn, loginSlug, cur
       {!isMobile && <SideBar loggedIn={loggedIn} loginSlug={loginSlug} routes={routes} logo={logo} currentRoute={currentRoute} onLogin={onLogin} onLogout={onLogout} onRouteSelected={onRouteSelected} />}
       <ScrollableContainer onScroll={onScroll}>
         <InnerContainer>
-          {currentRoute?.back ? <BackHeader onGoBack={onGoBack} onLogin={onLogin} onLogout={onLogout} onRouteSelected={onRouteSelected}/> : <LogoHeader logo={logo} onGoHome={onGoHome}/>}
+          {currentRoute?.back ? <BackHeader onGoBack={onGoBack} onLogin={onLogin} onLogout={onLogout} onRouteSelected={onRouteSelected} currentRoute={currentRoute}/> : <LogoHeader logo={logo} onGoHome={onGoHome}/>}
           {children}
         </InnerContainer>
       </ScrollableContainer>

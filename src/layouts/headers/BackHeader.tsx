@@ -4,7 +4,7 @@ import Icon, {IconName} from '../../common/Icons';
 import MobileMenu from '../MobileMenu';
 import {device} from "../../utils.ts";
 
-const BackHeader = ({onGoBack, onLogin, onLogout, onRouteSelected}: any) => {
+const BackHeader = ({onGoBack, onLogin, onLogout, onRouteSelected, currentRoute}: any) => {
   const [showMenu, setShowMenu] = useState(false);
 
 
@@ -19,7 +19,7 @@ const BackHeader = ({onGoBack, onLogin, onLogout, onRouteSelected}: any) => {
           Meniu
         </Menu>
       </Container>
-      <MobileMenu visible={showMenu} onClose={() => setShowMenu(false)} onLogin={onLogin} onLogout={onLogout} onRouteSelected={onRouteSelected} />
+      <MobileMenu visible={showMenu} onClose={() => setShowMenu(false)} onLogin={onLogin} onLogout={onLogout} onRouteSelected={onRouteSelected} currentRoute={currentRoute} />
     </>
   );
 };
