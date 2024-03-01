@@ -4,6 +4,7 @@ import { device } from "../../utils.ts";
 import MobileMenu from "../MobileMenu";
 import Icon, { IconName } from "../../common/Icons";
 import { DefaultLayoutProps } from "../../types";
+
 const LogoHeader = (props: DefaultLayoutProps) => {
   const { onGoHome, logo } = props;
   const [showMenu, setShowMenu] = useState(false);
@@ -16,7 +17,11 @@ const LogoHeader = (props: DefaultLayoutProps) => {
           Meniu
         </Button>
       </Container>
-      <MobileMenu visible={showMenu} {...props} />
+      <MobileMenu
+        visible={showMenu}
+        onClose={() => setShowMenu(false)}
+        {...props}
+      />
     </>
   );
 };

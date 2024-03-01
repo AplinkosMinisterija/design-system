@@ -20,7 +20,11 @@ const BackHeader = (props: DefaultLayoutProps) => {
           Meniu
         </Menu>
       </Container>
-      <MobileMenu visible={showMenu} {...props} />
+      <MobileMenu
+        visible={showMenu}
+        onClose={() => setShowMenu(false)}
+        {...props}
+      />
     </>
   );
 };

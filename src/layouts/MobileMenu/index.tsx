@@ -8,9 +8,9 @@ import { DefaultLayoutProps } from "../../types";
 
 interface Props extends DefaultLayoutProps {
   visible: boolean;
+  onClose: () => void;
 }
 const MobileMenu = ({
-  onClose,
   visible = true,
   loggedIn,
   currentRoute,
@@ -18,6 +18,7 @@ const MobileMenu = ({
   onLogin,
   onLogout,
   onRouteSelected,
+  onClose,
 }: Props) => {
   return (
     <Modal visible={visible} onClose={onClose}>

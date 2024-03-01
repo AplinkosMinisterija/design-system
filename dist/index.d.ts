@@ -83,7 +83,6 @@ export declare interface DefaultLayoutProps {
     onLogin: () => void;
     onLogout: () => void;
     onRouteSelected: (slug: string) => void;
-    onClose: () => void;
     loginSlug: string;
     children: any;
     onGoHome: () => void;
