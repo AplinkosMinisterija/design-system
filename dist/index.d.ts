@@ -58,7 +58,7 @@ declare interface CheckboxProps {
     intermediate?: boolean;
 }
 
-export declare const ContentLayout: ({ children, title, customSubTitle, customTitle, currentRoute }: any) => JSX_2.Element;
+export declare const ContentLayout: ({ children, title, customSubTitle, customTitle, currentRoute, }: Props) => JSX_2.Element;
 
 declare type CoordinatesLineString = CoordinatesPoint[];
 
@@ -153,6 +153,14 @@ declare interface ModalProps {
 }
 
 export declare const PasswordField: ({ value, secondLabel, name, error, showError, label, className, padding, onChange, placeholder, disabled, height, onInputClick, }: TextFieldProps_2) => JSX_2.Element;
+
+declare interface Props {
+    children: any;
+    title?: string;
+    customSubTitle?: any;
+    customTitle?: any;
+    currentRoute?: AppRoute;
+}
 
 export declare const Switch: ({ value, name, onChange }: SwitchProps) => JSX_2.Element;
 

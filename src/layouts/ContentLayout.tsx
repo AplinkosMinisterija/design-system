@@ -1,15 +1,29 @@
-import styled from 'styled-components';
-import { device } from '../utils.ts';
-
-const ContentLayout = ({ children, title, customSubTitle, customTitle, currentRoute }: any) => {
-
+import styled from "styled-components";
+import { device } from "../utils";
+import { AppRoute } from "../types";
+interface Props {
+  children: any;
+  title?: string;
+  customSubTitle?: any;
+  customTitle?: any;
+  currentRoute?: AppRoute;
+}
+const ContentLayout = ({
+  children,
+  title,
+  customSubTitle,
+  customTitle,
+  currentRoute,
+}: Props) => {
   const pageTitle = title || currentRoute?.title;
 
   return (
     <Container>
       {customTitle || (pageTitle && <Title>{pageTitle}</Title>)}
       {customSubTitle ||
-        (currentRoute?.description && <SubTitle>{currentRoute?.description}</SubTitle>)}
+        (currentRoute?.description && (
+          <SubTitle>{currentRoute?.description}</SubTitle>
+        ))}
       {children}
     </Container>
   );

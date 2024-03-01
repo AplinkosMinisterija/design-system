@@ -1795,7 +1795,13 @@ const W = {
     height: fit-content;
     background-color: #f7f7f7;
   }
-`, hn = ({ children: e, title: t, customSubTitle: a, customTitle: i, currentRoute: s }) => {
+`, hn = ({
+  children: e,
+  title: t,
+  customSubTitle: a,
+  customTitle: i,
+  currentRoute: s
+}) => {
   const f = t || (s == null ? void 0 : s.title);
   return /* @__PURE__ */ n.jsxs(xn, { children: [
     i || f && /* @__PURE__ */ n.jsx(vn, { children: f }),
