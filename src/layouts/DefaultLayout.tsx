@@ -1,27 +1,13 @@
-import Div100vh from 'react-div-100vh';
-import styled from 'styled-components';
-import { useWindowSize, device } from '../utils';
-import BackHeader from './headers/BackHeader';
-import LogoHeader from './headers/LogoHeader';
-import SideBar from './SideBar';
-import {JSX} from "react";
-export interface DefaultLayoutProps {
-    loggedIn: boolean;
-    currentRoute: { slug: string, title: string, iconName: string, back: boolean };
-    routes: { slug: string, title: string, iconName: string, back: boolean }[] //Todo: should be icon component not a string
-    onGoBack: () => void;
-    onLogin: () => void;
-    onLogout: () => void;
-    onRouteSelected: (slug: string) => void;
-    onClose: () => void;
-    loginSlug: string;
-    children: any;
-    onGoHome: ()=> void;
-    logo: JSX.Element;
-    onScroll?: () => void;
-}
+import Div100vh from "react-div-100vh";
+import styled from "styled-components";
+import { useWindowSize, device } from "../utils";
+import BackHeader from "./headers/BackHeader";
+import LogoHeader from "./headers/LogoHeader";
+import SideBar from "./SideBar";
+import { DefaultLayoutProps } from "../types.ts";
+
 const DefaultLayout = (props: DefaultLayoutProps) => {
-    const { children, onScroll = () => {} } = props;
+  const { children, onScroll = () => {} } = props;
   const isMobile = useWindowSize(device.mobileL);
 
   return (
@@ -29,7 +15,11 @@ const DefaultLayout = (props: DefaultLayoutProps) => {
       {!isMobile && <SideBar {...props} />}
       <ScrollableContainer onScroll={onScroll}>
         <InnerContainer>
-          {props?.currentRoute?.back ? <BackHeader {...props}/> : <LogoHeader {...props}/>}
+          {props?.currentRoute?.back ? (
+            <BackHeader {...props} />
+          ) : (
+            <LogoHeader {...props} />
+          )}
           {children}
         </InnerContainer>
       </ScrollableContainer>

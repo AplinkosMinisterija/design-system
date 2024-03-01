@@ -1,6 +1,17 @@
 import { ChangeEventHandler } from 'react';
 import { JSX as JSX_2 } from 'react/jsx-runtime';
+import { JSX as JSX_3 } from 'react';
 import { default as React_2 } from 'react';
+
+export declare interface AppRoute {
+    component: JSX_3.Element;
+    slug: string;
+    loggedIn?: boolean;
+    title?: string;
+    back?: boolean;
+    iconName?: string;
+    description?: string;
+}
 
 export declare const Button: {
     ({ variant, route, children, height, padding, leftIcon, radius, buttonPadding, rightIcon, color, type, loading, className, disabled, fontWeight, ...rest }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>): JSX_2.Element;
@@ -65,20 +76,10 @@ declare type CoordinatesTypes = CoordinatesPoint | CoordinatesLineString | Coord
 
 export declare const DefaultLayout: (props: DefaultLayoutProps) => JSX_2.Element;
 
-declare interface DefaultLayoutProps {
+export declare interface DefaultLayoutProps {
     loggedIn: boolean;
-    currentRoute: {
-        slug: string;
-        title: string;
-        iconName: string;
-        back: boolean;
-    };
-    routes: {
-        slug: string;
-        title: string;
-        iconName: string;
-        back: boolean;
-    }[];
+    currentRoute: AppRoute;
+    routes: AppRoute[];
     onGoBack: () => void;
     onLogin: () => void;
     onLogout: () => void;
@@ -87,18 +88,18 @@ declare interface DefaultLayoutProps {
     loginSlug: string;
     children: any;
     onGoHome: () => void;
-    logo: JSX_2.Element;
+    logo: JSX_3.Element;
     onScroll?: () => void;
 }
 
 declare type Feature = {
-    type: 'Feature';
+    type: "Feature";
     geometry: Geometry;
     properties?: GenericObject;
 };
 
 export declare type FeatureCollection = {
-    type: 'FeatureCollection';
+    type: "FeatureCollection";
     features: Feature[];
 };
 

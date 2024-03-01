@@ -1,14 +1,20 @@
-import styled from 'styled-components';
-import Icon, {IconName} from '../common/Icons.tsx';
-import {DefaultLayoutProps} from "./DefaultLayout.tsx";
+import styled from "styled-components";
+import Icon, { IconName } from "../common/Icons";
+import { DefaultLayoutProps } from "../types";
 
-const SideBar = ({loggedIn, loginSlug, routes, logo, onLogin, onLogout, onRouteSelected, currentRoute}: DefaultLayoutProps) => {
-
+const SideBar = ({
+  loggedIn,
+  loginSlug,
+  routes,
+  logo,
+  onLogin,
+  onLogout,
+  onRouteSelected,
+  currentRoute,
+}: DefaultLayoutProps) => {
   return (
     <Container>
-      <LogoContainer>
-          {logo}
-      </LogoContainer>
+      <LogoContainer>{logo}</LogoContainer>
 
       {routes.map((route: any, index: any) => {
         return (
@@ -29,10 +35,7 @@ const SideBar = ({loggedIn, loginSlug, routes, logo, onLogin, onLogout, onRouteS
           <Label>Atsijungti</Label>
         </Item>
       ) : (
-        <Item
-          onClick={onLogin}
-          $isActive={loginSlug === currentRoute.slug}
-        >
+        <Item onClick={onLogin} $isActive={loginSlug === currentRoute.slug}>
           <StyledIcon name={IconName.logout} />
           <Label>Prisijungti</Label>
         </Item>

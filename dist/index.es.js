@@ -1466,7 +1466,16 @@ const W = {
   @media ${W.mobileL} {
     padding: 0px;
   }
-`, It = Lt, zt = ({ onClose: e, visible: t = !0, loggedIn: a, currentRoute: i, routes: s, onLogin: f, onLogout: v, onRouteSelected: x }) => /* @__PURE__ */ n.jsx(It, { visible: t, onClose: e, children: /* @__PURE__ */ n.jsx(Dt, { children: /* @__PURE__ */ n.jsxs(Wt, { children: [
+`, It = Lt, zt = ({
+  onClose: e,
+  visible: t = !0,
+  loggedIn: a,
+  currentRoute: i,
+  routes: s,
+  onLogin: f,
+  onLogout: v,
+  onRouteSelected: x
+}) => /* @__PURE__ */ n.jsx(It, { visible: t, onClose: e, children: /* @__PURE__ */ n.jsx(Dt, { children: /* @__PURE__ */ n.jsxs(Wt, { children: [
   /* @__PURE__ */ n.jsx(Yt, { children: /* @__PURE__ */ n.jsxs(Bt, { onClick: e, children: [
     /* @__PURE__ */ n.jsx(At, { name: "close" }),
     "Uždaryti"
@@ -1614,7 +1623,16 @@ const W = {
 `, tn = c(I)`
   margin-right: 4px;
   font-size: 2rem;
-`, nn = Zt, on = ({ loggedIn: e, loginSlug: t, routes: a, logo: i, onLogin: s, onLogout: f, onRouteSelected: v, currentRoute: x }) => /* @__PURE__ */ n.jsxs(sn, { children: [
+`, nn = Zt, on = ({
+  loggedIn: e,
+  loginSlug: t,
+  routes: a,
+  logo: i,
+  onLogin: s,
+  onLogout: f,
+  onRouteSelected: v,
+  currentRoute: x
+}) => /* @__PURE__ */ n.jsxs(sn, { children: [
   /* @__PURE__ */ n.jsx(an, { children: i }),
   a.map((u, b) => /* @__PURE__ */ n.jsxs(
     pe,
@@ -1632,17 +1650,10 @@ const W = {
   e ? /* @__PURE__ */ n.jsxs(pe, { onClick: () => f(), $isActive: !1, children: [
     /* @__PURE__ */ n.jsx(X, { name: M.logout }),
     /* @__PURE__ */ n.jsx(fe, { children: "Atsijungti" })
-  ] }) : /* @__PURE__ */ n.jsxs(
-    pe,
-    {
-      onClick: s,
-      $isActive: t === x.slug,
-      children: [
-        /* @__PURE__ */ n.jsx(X, { name: M.logout }),
-        /* @__PURE__ */ n.jsx(fe, { children: "Prisijungti" })
-      ]
-    }
-  )
+  ] }) : /* @__PURE__ */ n.jsxs(pe, { onClick: s, $isActive: t === x.slug, children: [
+    /* @__PURE__ */ n.jsx(X, { name: M.logout }),
+    /* @__PURE__ */ n.jsx(fe, { children: "Prisijungti" })
+  ] })
 ] }), an = c.div`
   margin-bottom: 20px;
 `, X = c(I)`

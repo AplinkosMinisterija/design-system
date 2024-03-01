@@ -1,16 +1,24 @@
-import Div100vh from 'react-div-100vh';
-import styled from 'styled-components';
-import { device } from '../../utils.ts';
-import MenuButton from './MenuButton';
-import Icon, {IconName} from '../../common/Icons';
-import Modal from '../Modal';
-import {DefaultLayoutProps} from "../DefaultLayout.tsx";
+import Div100vh from "react-div-100vh";
+import styled from "styled-components";
+import { device } from "../../utils.ts";
+import MenuButton from "./MenuButton";
+import Icon, { IconName } from "../../common/Icons";
+import Modal from "../Modal";
+import { DefaultLayoutProps } from "../../types";
 
-interface Props extends DefaultLayoutProps{
+interface Props extends DefaultLayoutProps {
   visible: boolean;
 }
-const MobileMenu = ({ onClose, visible = true, loggedIn, currentRoute, routes, onLogin, onLogout,  onRouteSelected }: Props) => {
-
+const MobileMenu = ({
+  onClose,
+  visible = true,
+  loggedIn,
+  currentRoute,
+  routes,
+  onLogin,
+  onLogout,
+  onRouteSelected,
+}: Props) => {
   return (
     <Modal visible={visible} onClose={onClose}>
       <Container>
@@ -30,7 +38,7 @@ const MobileMenu = ({ onClose, visible = true, loggedIn, currentRoute, routes, o
               <MenuButton
                 key={`menu_button_${index}`}
                 isActive={route.slug === currentRoute.slug}
-                label={route.title || ''}
+                label={route.title || ""}
                 icon={route.iconName}
                 onClick={() => {
                   onRouteSelected(route.slug);
@@ -40,7 +48,7 @@ const MobileMenu = ({ onClose, visible = true, loggedIn, currentRoute, routes, o
             );
           })}
           <MenuButton
-            label={loggedIn ? 'Atsijungti' : 'Prisijungti'}
+            label={loggedIn ? "Atsijungti" : "Prisijungti"}
             icon={IconName.logout}
             onClick={() => {
               if (loggedIn) {

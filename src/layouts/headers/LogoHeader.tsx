@@ -1,18 +1,16 @@
-import { useState} from 'react';
-import styled from 'styled-components';
-import { device } from '../../utils.ts';
-import MobileMenu from '../MobileMenu';
-import Icon, { IconName } from '../../common/Icons';
-import {DefaultLayoutProps} from "../DefaultLayout.tsx";
-const LogoHeader = (props: DefaultLayoutProps ) => {
-const {onGoHome, logo} = props;
+import { useState } from "react";
+import styled from "styled-components";
+import { device } from "../../utils.ts";
+import MobileMenu from "../MobileMenu";
+import Icon, { IconName } from "../../common/Icons";
+import { DefaultLayoutProps } from "../../types";
+const LogoHeader = (props: DefaultLayoutProps) => {
+  const { onGoHome, logo } = props;
   const [showMenu, setShowMenu] = useState(false);
   return (
     <>
       <Container>
-        <div onClick={onGoHome}>
-            {logo}
-        </div>
+        <div onClick={onGoHome}>{logo}</div>
         <Button onClick={() => setShowMenu(true)}>
           <MenuIcon name={IconName.burger} />
           Meniu
