@@ -37,7 +37,7 @@ const MobileMenu = ({
             return (
               <MenuButton
                 key={`menu_button_${index}`}
-                isActive={route.slug === currentRoute.slug}
+                isActive={route.slug === currentRoute?.slug}
                 label={route.title || ""}
                 icon={route.iconName}
                 onClick={() => {

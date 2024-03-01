@@ -21,7 +21,7 @@ const SideBar = ({
           <Item
             key={`sidebar_btn_${route.slug}_${index}`}
             onClick={() => onRouteSelected(route.slug)}
-            $isActive={route.slug === currentRoute.slug}
+            $isActive={route.slug === currentRoute?.slug}
           >
             <StyledIcon name={route.iconName!} />
             <Label>{route.title}</Label>
@@ -35,7 +35,7 @@ const SideBar = ({
           <Label>Atsijungti</Label>
         </Item>
       ) : (
-        <Item onClick={onLogin} $isActive={loginSlug === currentRoute.slug}>
+        <Item onClick={onLogin} $isActive={loginSlug === currentRoute?.slug}>
           <StyledIcon name={IconName.logout} />
           <Label>Prisijungti</Label>
         </Item>

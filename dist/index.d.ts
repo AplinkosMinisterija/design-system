@@ -78,7 +78,6 @@ export declare const DefaultLayout: (props: DefaultLayoutProps) => JSX_2.Element
 
 export declare interface DefaultLayoutProps {
     loggedIn: boolean;
-    currentRoute: AppRoute;
     routes: AppRoute[];
     onGoBack: () => void;
     onLogin: () => void;
@@ -89,6 +88,7 @@ export declare interface DefaultLayoutProps {
     children: any;
     onGoHome: () => void;
     logo: JSX_3.Element;
+    currentRoute?: AppRoute;
     onScroll?: () => void;
 }
 

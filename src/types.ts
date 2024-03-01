@@ -83,7 +83,6 @@ export interface AppRoute {
 
 export interface DefaultLayoutProps {
   loggedIn: boolean;
-  currentRoute: AppRoute;
   routes: AppRoute[];
   onGoBack: () => void;
   onLogin: () => void;
@@ -94,5 +93,6 @@ export interface DefaultLayoutProps {
   children: any;
   onGoHome: () => void;
   logo: JSX.Element;
+  currentRoute?: AppRoute;
   onScroll?: () => void;
 }
