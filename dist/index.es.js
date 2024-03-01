@@ -1299,6 +1299,7 @@ const Qr = ({ name: r, className: o }) => {
 export {
   dt as Button,
   pt as CheckBox,
+  Ie as FieldWrapper,
   bt as MapField,
   gt as PasswordField,
   ht as Switch,

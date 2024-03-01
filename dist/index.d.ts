@@ -71,6 +71,22 @@ export declare type FeatureCollection = {
     features: Feature[];
 };
 
+export declare const FieldWrapper: ({ error, showError, label, className, padding, onClick, handleBlur, subLabel, bottomLabel, secondLabel, children, }: FieldWrapperProps) => JSX_2.Element;
+
+declare interface FieldWrapperProps {
+    error?: string;
+    showError?: boolean;
+    label?: string;
+    className?: string;
+    padding?: string;
+    onClick?: () => void;
+    handleBlur?: (event: any) => void;
+    bottomLabel?: string;
+    subLabel?: string;
+    secondLabel?: JSX_2.Element;
+    children: any;
+}
+
 declare type GenericObject = {
     [key: string]: any;
 };
