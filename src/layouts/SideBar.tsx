@@ -23,7 +23,7 @@ const SideBar = ({
             onClick={() => onRouteSelected(route.slug)}
             $isActive={route.slug === currentRoute?.slug}
           >
-            {route.icon}
+            <IconWrapper>{route.icon}</IconWrapper>
             <Label>{route.title}</Label>
           </Item>
         );
@@ -31,12 +31,16 @@ const SideBar = ({
       <Divider />
       {loggedIn ? (
         <Item onClick={() => onLogout()} $isActive={false}>
-          <StyledIcon name={IconName.logout} />
+          <IconWrapper>
+            <Icon name={IconName.logout} />
+          </IconWrapper>
           <Label>Atsijungti</Label>
         </Item>
       ) : (
         <Item onClick={onLogin} $isActive={loginSlug === currentRoute?.slug}>
-          <StyledIcon name={IconName.logout} />
+          <IconWrapper>
+            <Icon name={IconName.logout} />
+          </IconWrapper>
           <Label>Prisijungti</Label>
         </Item>
       )}
@@ -48,7 +52,7 @@ const LogoContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-const StyledIcon = styled(Icon)`
+export const IconWrapper = styled.div`
   cursor: pointer;
   font-size: 2.4rem;
   svg {
@@ -101,7 +105,7 @@ const Item = styled.div<{ $isActive: boolean }>`
     `
 
 
- ${StyledIcon} {
+ ${IconWrapper} {
   rect {
       stroke: black;
     }
@@ -124,7 +128,7 @@ const Item = styled.div<{ $isActive: boolean }>`
   
   `};
 
-  &:hover ${StyledIcon} {
+  &:hover ${IconWrapper} {
     rect {
       stroke: black;
     }
