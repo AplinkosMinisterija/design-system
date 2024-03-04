@@ -1,0 +1,59 @@
+name: Publish NPM package
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  generate-library:
+    name: Generate client library
+    runs-on: ubuntu-latest
+    permissions: read-all
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: package.json
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Generate client libraries
+        run: yarn build
+
+      - name: Copy md files
+        run: |
+          cp ./README.md ./dist/README.md &&
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: design-system
+          path: dist
+
+  publish-library:
+    name: Publish client library
+    runs-on: ubuntu-latest
+    needs: [ generate-library ]
+    permissions:
+      packages: write
+    steps:
+      - name: Download client
+        uses: actions/download-artifact@v3
+        with:
+          name: design-system
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          registry-url: https://registry.npmjs.org
+
+      - name: Publish client library
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
