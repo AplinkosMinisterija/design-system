@@ -1,6 +1,5 @@
 {
   "name": "@aplinkosministerija/design-system",
-  "private": true,
   "description": "Shared Design System Components for React",
   "version": "0.0.1",
   "type": "module",
