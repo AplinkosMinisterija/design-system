@@ -5,7 +5,10 @@ import MobileMenu from '../MobileMenu';
 import { device } from '../../utils';
 import { DefaultLayoutProps } from '../../types';
 
-const BackHeader = (props: DefaultLayoutProps) => {
+interface Props extends DefaultLayoutProps {
+    onGoBack: () => void;
+}
+const BackHeader = (props: Props) => {
   const { onGoBack } = props;
   const [showMenu, setShowMenu] = useState(false);
 
