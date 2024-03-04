@@ -72,5 +72,15 @@
   },
   "eslintConfig": {
     "extends": "@aplinkosministerija/eslint-config-biip-react"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint"
+    ],
+    "*.{md,html,css}": "prettier --write"
+  },
+  "resolutions": {
+    "jackspeak": "2.1.1"
   }
 }
