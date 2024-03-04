@@ -16,7 +16,7 @@ const ContentLayout = ({
   customSubTitle,
   customTitle,
   currentRoute,
-  pageActions = null,
+  pageActions,
 }: Props) => {
   const pageTitle = title || currentRoute?.title;
   return (
