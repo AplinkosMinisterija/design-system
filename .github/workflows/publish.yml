@@ -29,7 +29,8 @@ jobs:
 
       - name: Copy md files
         run: |
-          cp ./README.md ./dist/README.md
+          cp ./README.md ./dist/README.md && 
+          cp ./package.json ./dist/package.json
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
