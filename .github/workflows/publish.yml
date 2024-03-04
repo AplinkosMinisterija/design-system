@@ -29,7 +29,8 @@ jobs:
 
       - name: Copy md files
         run: |
-          cp -r ./dist ./out/dist
+          mkdir ./out && 
+          cp -r ./dist ./out/dist && 
           cp ./README.md ./out/README.md && 
           cp ./package.json ./out/package.json
 
