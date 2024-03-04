@@ -1,12 +1,20 @@
 {
   "name": "@aplinkosministerija/design-system",
   "private": true,
+  "description": "Shared Design System Components for React",
   "version": "0.0.1",
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "design",
+    "system"
+  ],
   "files": [
     "dist/"
   ],
