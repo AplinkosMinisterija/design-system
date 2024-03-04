@@ -162,7 +162,6 @@ export const Primary: Story = {
         }
         loginSlug={'/newsfeed'}
         onGoHome={() => {}}
-        onGoBack={() => {}}
         onLogin={() => {}}
         onLogout={() => {}}
         onRouteSelected={() => {}}
