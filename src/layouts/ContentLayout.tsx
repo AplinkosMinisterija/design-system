@@ -1,23 +1,34 @@
-import styled from 'styled-components';
-import { device } from '../utils';
-import { AppRoute } from '../types';
+import styled from "styled-components";
+import { device } from "../utils";
+import { AppRoute } from "../types";
+import { JSX } from "react";
 interface Props {
   children: any;
   title?: string;
   customSubTitle?: any;
   customTitle?: any;
   currentRoute?: AppRoute;
+  pageActions?: JSX.Element;
 }
-const ContentLayout = ({ children, title, customSubTitle, customTitle, currentRoute }: Props) => {
+const ContentLayout = ({
+  children,
+  title,
+  customSubTitle,
+  customTitle,
+  currentRoute,
+  pageActions,
+}: Props) => {
   const pageTitle = title || currentRoute?.title;
-
   return (
-    <Container>
-      {customTitle || (pageTitle && <Title>{pageTitle}</Title>)}
-      {customSubTitle ||
-        (currentRoute?.description && <SubTitle>{currentRoute?.description}</SubTitle>)}
-      {children}
-    </Container>
+      <Container>
+        {pageActions}
+        <InnerContainer>
+          {customTitle || (pageTitle && <Title>{pageTitle}</Title>)}
+          {customSubTitle ||
+              (currentRoute?.description && <SubTitle>{currentRoute?.description}</SubTitle>)}
+          {children}
+        </InnerContainer>
+      </Container>
   );
 };
 export default ContentLayout;
@@ -30,6 +41,18 @@ const SubTitle = styled.div`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  min-height: 100%;
+  padding: 0 12px;
+  @media ${device.desktop} {
+    max-width: 700px;
+  }
+`;
+
+const InnerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   min-height: 100%;
   align-self: center;
@@ -37,7 +60,6 @@ const Container = styled.div`
   padding: 0 12px;
   background-color: white;
   @media ${device.desktop} {
-    max-width: 700px;
     border-radius: 16px;
     margin: 0 auto;
     padding: 40px;

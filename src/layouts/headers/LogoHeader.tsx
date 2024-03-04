@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { device } from '../../utils.ts';
+import { device } from '../../utils';
 import MobileMenu from '../MobileMenu';
 import Icon, { IconName } from '../../common/Icons';
 import { DefaultLayoutProps } from '../../types';

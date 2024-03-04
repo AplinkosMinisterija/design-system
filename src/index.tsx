@@ -6,11 +6,11 @@ import PasswordField from './components/PasswordField';
 import Tabs from './components/Tabs';
 import MapField from './components/MapField';
 import FieldWrapper from './common/FieldWrapper';
-import DefaultLayout from './layouts/DefaultLayout.tsx';
-import ContentLayout from './layouts/ContentLayout.tsx';
-import Modal from './layouts/Modal.tsx';
+import DefaultLayout from './layouts/DefaultLayout';
+import ContentLayout from './layouts/ContentLayout';
+import Modal from './layouts/Modal';
 
-export * from './types.ts';
+export * from './types';
 export {
   Button,
   CheckBox,

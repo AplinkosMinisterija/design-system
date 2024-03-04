@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
 import { device } from '../utils';
 interface ModalProps {
@@ -23,7 +23,7 @@ const Modal = ({ visible, children, onClose }: ModalProps) => {
   }, [visible, handleCloseOnEscape]);
 
   if (!visible) {
-    return <React.Fragment />;
+    return <Fragment />;
   }
   return (
     <ModalContainer
