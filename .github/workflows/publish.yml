@@ -29,14 +29,15 @@ jobs:
 
       - name: Copy md files
         run: |
-          cp ./README.md ./dist/README.md && 
-          cp ./package.json ./dist/package.json
+          cp -r ./dist ./out/dist
+          cp ./README.md ./out/README.md && 
+          cp ./package.json ./out/package.json
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
           name: design-system
-          path: dist
+          path: out
 
   publish-library:
     name: Publish client library
