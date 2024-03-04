@@ -1,9 +1,9 @@
-import { useState } from "react";
-import styled from "styled-components";
-import Icon, { IconName } from "../../common/Icons";
-import MobileMenu from "../MobileMenu";
-import { device } from "../../utils";
-import { DefaultLayoutProps } from "../../types";
+import { useState } from 'react';
+import styled from 'styled-components';
+import Icon, { IconName } from '../../common/Icons';
+import MobileMenu from '../MobileMenu';
+import { device } from '../../utils';
+import { DefaultLayoutProps } from '../../types';
 
 const BackHeader = (props: DefaultLayoutProps) => {
   const { onGoBack } = props;
@@ -20,11 +20,7 @@ const BackHeader = (props: DefaultLayoutProps) => {
           Meniu
         </Menu>
       </Container>
-      <MobileMenu
-        visible={showMenu}
-        onClose={() => setShowMenu(false)}
-        {...props}
-      />
+      <MobileMenu visible={showMenu} onClose={() => setShowMenu(false)} {...props} />
     </>
   );
 };

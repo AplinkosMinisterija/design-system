@@ -1,4 +1,4 @@
-import { JSX } from "react";
+import { JSX } from 'react';
 
 interface MainColorTypes {
   primary: string;
@@ -39,7 +39,7 @@ export interface Theme<T> {
 }
 
 export type FeatureCollection = {
-  type: "FeatureCollection";
+  type: 'FeatureCollection';
   features: Feature[];
 };
 
@@ -48,7 +48,7 @@ type GenericObject = {
 };
 
 type Feature = {
-  type: "Feature";
+  type: 'Feature';
   geometry: Geometry;
   properties?: GenericObject;
 };

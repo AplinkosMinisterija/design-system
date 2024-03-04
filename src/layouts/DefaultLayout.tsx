@@ -1,10 +1,10 @@
-import Div100vh from "react-div-100vh";
-import styled from "styled-components";
-import { useWindowSize, device } from "../utils";
-import BackHeader from "./headers/BackHeader";
-import LogoHeader from "./headers/LogoHeader";
-import SideBar from "./SideBar";
-import { DefaultLayoutProps } from "../types.ts";
+import Div100vh from 'react-div-100vh';
+import styled from 'styled-components';
+import { useWindowSize, device } from '../utils';
+import BackHeader from './headers/BackHeader';
+import LogoHeader from './headers/LogoHeader';
+import SideBar from './SideBar';
+import { DefaultLayoutProps } from '../types.ts';
 
 const DefaultLayout = (props: DefaultLayoutProps) => {
   const { children, onScroll = () => {} } = props;
@@ -15,11 +15,7 @@ const DefaultLayout = (props: DefaultLayoutProps) => {
       {!isMobile && <SideBar {...props} />}
       <ScrollableContainer onScroll={onScroll}>
         <InnerContainer>
-          {props?.currentRoute?.back ? (
-            <BackHeader {...props} />
-          ) : (
-            <LogoHeader {...props} />
-          )}
+          {props?.currentRoute?.back ? <BackHeader {...props} /> : <LogoHeader {...props} />}
           {children}
         </InnerContainer>
       </ScrollableContainer>
