@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from '@storybook/react';
 
-import DefaultLayout from "../src/layouts/DefaultLayout";
-import { withRouter } from "storybook-addon-react-router-v6";
-import { ContentLayout } from "../src";
-import Icon, { IconName } from "../src/common/Icons";
+import DefaultLayout from '../src/layouts/DefaultLayout';
+import { withRouter } from 'storybook-addon-react-router-v6';
+import { ContentLayout } from '../src';
+import Icon, { IconName } from '../src/common/Icons';
 
 const meta: Meta<typeof DefaultLayout> = {
   component: DefaultLayout,
@@ -13,34 +13,34 @@ export default meta;
 type Story = StoryObj<typeof DefaultLayout>;
 
 export const Primary: Story = {
-  name: "DefaultLayout",
+  name: 'DefaultLayout',
   render: () => {
     return (
       <DefaultLayout
         loggedIn={true}
         currentRoute={{
           component: <div />,
-          title: "Prenumeratos",
+          title: 'Prenumeratos',
           loggedIn: true,
           back: true,
-          slug: "/prenumeratos",
+          slug: '/prenumeratos',
         }}
         onScroll={() => {}}
         routes={[
           {
             component: <div />,
-            title: "Prenumeratos",
+            title: 'Prenumeratos',
             loggedIn: true,
             back: true,
-            slug: "/prenumeratos",
+            slug: '/prenumeratos',
             icon: <Icon name={IconName.visibleOn} />,
           },
           {
             component: <div />,
-            title: "Mano naujienos",
+            title: 'Mano naujienos',
             loggedIn: true,
             back: true,
-            slug: "/newsfeed",
+            slug: '/newsfeed',
             icon: (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -69,11 +69,7 @@ export const Primary: Story = {
             viewBox="0 0 283 36.687"
           >
             <g id="Logo_dark" transform="translate(-272.715 -164)">
-              <g
-                id="Group_7461"
-                data-name="Group 7461"
-                transform="translate(272.715 172.715)"
-              >
+              <g id="Group_7461" data-name="Group 7461" transform="translate(272.715 172.715)">
                 <path
                   id="Path_3631"
                   data-name="Path 3631"
@@ -89,11 +85,7 @@ export const Primary: Story = {
                   fill="#73dc8c"
                 />
               </g>
-              <g
-                id="Group_7462"
-                data-name="Group 7462"
-                transform="translate(313.526 164)"
-              >
+              <g id="Group_7462" data-name="Group 7462" transform="translate(313.526 164)">
                 <path
                   id="Path_3633"
                   data-name="Path 3633"
@@ -168,7 +160,7 @@ export const Primary: Story = {
             </g>
           </svg>
         }
-        loginSlug={"/newsfeed"}
+        loginSlug={'/newsfeed'}
         onGoHome={() => {}}
         onGoBack={() => {}}
         onLogin={() => {}}
@@ -179,10 +171,10 @@ export const Primary: Story = {
           title="Prenumeratos"
           currentRoute={{
             component: <div />,
-            title: "Prenumeratos",
+            title: 'Prenumeratos',
             loggedIn: true,
             back: true,
-            slug: "/prenumeratos",
+            slug: '/prenumeratos',
           }}
         >
           TURINYS
@@ -192,6 +184,6 @@ export const Primary: Story = {
   },
   decorators: [withRouter],
   parameters: {
-    routing: { path: "/newsfeed" },
+    routing: { path: '/newsfeed' },
   },
 };

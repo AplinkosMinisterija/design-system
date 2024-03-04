@@ -1,55 +1,55 @@
-import type { Preview } from "@storybook/react";
-import { createGlobalStyle, ThemeProvider } from "styled-components";
-import { withThemeFromJSXProvider } from "@storybook/addon-styling";
-import { Theme } from "../src/types";
+import type { Preview } from '@storybook/react';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { withThemeFromJSXProvider } from '@storybook/addon-styling';
+import { Theme } from '../src/types';
 
 export const theme: Theme<any> = {
   colors: {
-    primary: "#53B1FD",
-    secondary: "#13C9E7",
-    tertiary: "#7A7E9F",
-    transparent: "transparent",
-    danger: "#FE5B78",
-    success: "#027A48",
+    primary: '#53B1FD',
+    secondary: '#13C9E7',
+    tertiary: '#7A7E9F',
+    transparent: 'transparent',
+    danger: '#FE5B78',
+    success: '#027A48',
     buttonBackground: {
-      primary: "#53B1FD",
-      secondary: "white",
-      tertiary: "#7A7E9F",
-      success: "#027A48",
-      danger: "#FE5B78",
-      transparent: "transparent",
+      primary: '#53B1FD',
+      secondary: 'white',
+      tertiary: '#7A7E9F',
+      success: '#027A48',
+      danger: '#FE5B78',
+      transparent: 'transparent',
     },
     buttonText: {
-      primary: "#101010",
-      secondary: "#101010",
-      tertiary: "white",
-      danger: "white",
-      success: "white",
-      transparent: "#101010",
+      primary: '#101010',
+      secondary: '#101010',
+      tertiary: 'white',
+      danger: 'white',
+      success: 'white',
+      transparent: '#101010',
     },
     hover: {
-      primary: "#53B1FD",
-      secondary: "#13C9E78F",
-      tertiary: "#7A7E9F",
-      danger: "#FE5B78E6",
-      success: "#ECFDF3",
-      transparent: "#F3F3F7",
+      primary: '#53B1FD',
+      secondary: '#13C9E78F',
+      tertiary: '#7A7E9F',
+      danger: '#FE5B78E6',
+      success: '#ECFDF3',
+      transparent: '#F3F3F7',
     },
     text: {
-      primary: "#101010",
-      secondary: "#525252",
-      tertiary: "#4B5565",
-      label: "#697586",
-      error: "#FE5B78",
+      primary: '#101010',
+      secondary: '#525252',
+      tertiary: '#4B5565',
+      label: '#697586',
+      error: '#FE5B78',
     },
     cardBackground: {
-      primary: "#f7f7f7",
-      success: "#eafbf6",
+      primary: '#f7f7f7',
+      success: '#eafbf6',
     },
-    border: "#CDD5DF",
-    input: "#FFFFFF",
-    shadow: "#121a5529",
-    GREY: "#f7f7f7",
+    border: '#CDD5DF',
+    input: '#FFFFFF',
+    shadow: '#121a5529',
+    GREY: '#f7f7f7',
   },
 };
 
@@ -98,7 +98,7 @@ const GlobalStyles = createGlobalStyle`
 
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: "^on[A-Z].*" },
+    actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -114,7 +114,7 @@ const preview: Preview = {
       themes: {
         light: theme,
       },
-      defaultTheme: "light",
+      defaultTheme: 'light',
       Provider: ThemeProvider,
       GlobalStyles,
     }),

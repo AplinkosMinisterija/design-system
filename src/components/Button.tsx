@@ -1,6 +1,6 @@
-import {JSX} from 'react';
+import { JSX } from 'react';
 import styled from 'styled-components';
-import Loader from "./Loader";
+import Loader from './Loader';
 
 enum ButtonColors {
   PRIMARY = 'primary',

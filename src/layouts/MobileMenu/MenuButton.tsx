@@ -1,18 +1,13 @@
-import styled from "styled-components";
-import Icon, { IconName } from "../../common/Icons.tsx";
-import { JSX } from "react";
+import styled from 'styled-components';
+import Icon, { IconName } from '../../common/Icons.tsx';
+import { JSX } from 'react';
 interface MenuButtonProps {
   label: string;
   icon?: JSX.Element;
   onClick: () => void;
   isActive?: boolean;
 }
-const MenuButton = ({
-  label,
-  icon,
-  onClick,
-  isActive = false,
-}: MenuButtonProps) => {
+const MenuButton = ({ label, icon, onClick, isActive = false }: MenuButtonProps) => {
   //TODO: disable option
   return (
     <Container $isActive={isActive} onClick={onClick}>

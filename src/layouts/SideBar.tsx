@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import Icon, { IconName } from "../common/Icons";
-import { DefaultLayoutProps } from "../types";
+import styled from 'styled-components';
+import Icon, { IconName } from '../common/Icons';
+import { DefaultLayoutProps } from '../types';
 
 const SideBar = ({
   loggedIn,

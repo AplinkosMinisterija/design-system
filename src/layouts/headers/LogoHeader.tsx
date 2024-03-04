@@ -1,9 +1,9 @@
-import { useState } from "react";
-import styled from "styled-components";
-import { device } from "../../utils.ts";
-import MobileMenu from "../MobileMenu";
-import Icon, { IconName } from "../../common/Icons";
-import { DefaultLayoutProps } from "../../types";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { device } from '../../utils.ts';
+import MobileMenu from '../MobileMenu';
+import Icon, { IconName } from '../../common/Icons';
+import { DefaultLayoutProps } from '../../types';
 
 const LogoHeader = (props: DefaultLayoutProps) => {
   const { onGoHome, logo } = props;
@@ -17,11 +17,7 @@ const LogoHeader = (props: DefaultLayoutProps) => {
           Meniu
         </Button>
       </Container>
-      <MobileMenu
-        visible={showMenu}
-        onClose={() => setShowMenu(false)}
-        {...props}
-      />
+      <MobileMenu visible={showMenu} onClose={() => setShowMenu(false)} {...props} />
     </>
   );
 };
