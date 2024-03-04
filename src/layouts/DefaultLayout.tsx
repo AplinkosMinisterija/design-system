@@ -7,7 +7,7 @@ import SideBar from './SideBar';
 import { DefaultLayoutProps } from '../types';
 
 const DefaultLayout = (props: DefaultLayoutProps) => {
-  const { children, onScroll = () => {} } = props;
+  const { children, onScroll = () => {}} = props;
   const isMobile = useWindowSize(device.mobileL);
 
   return (

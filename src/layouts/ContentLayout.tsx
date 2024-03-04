@@ -19,7 +19,6 @@ const ContentLayout = ({
   pageActions = null,
 }: Props) => {
   const pageTitle = title || currentRoute?.title;
-
   return (
       <Container>
         {pageActions}
