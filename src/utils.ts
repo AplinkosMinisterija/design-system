@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
+import {AppRoute} from "./types.ts";
+import {matchPath, useLocation} from "react-router";
 
 export const device = {
   mobileS: `(max-width: 320px)`,
@@ -25,4 +27,37 @@ export const useWindowSize = (width: string) => {
   }, [handleResize]);
 
   return isInRange;
+};
+
+export const useGetCurrentRoute = (routes: AppRoute[]) => {
+  const currentLocation = useLocation();
+  return routes?.find(
+      (route: any) => !!matchPath({ path: route.slug, end: true }, currentLocation.pathname),
+  );
+};
+
+export const filterRoutes = (routes: AppRoute[], loggedIn: boolean) => {
+  return routes.filter((route) => {
+    if (!route?.slug) return false;
+    if (Object.prototype.hasOwnProperty.call(route, 'loggedIn')) {
+      return route.loggedIn === loggedIn;
+    }
+    return true;
+  });
+};
+
+export const filterMenuRoutes = (routes: AppRoute[],loggedIn: boolean) => {
+  return routes.filter((route) => {
+    if (!route?.slug) return false;
+    if(!route?.icon) return  false;
+    if (Object.prototype.hasOwnProperty.call(route, 'loggedIn')) {
+      return route.loggedIn === loggedIn;
+    }
+    return true;
+  });
+};
+
+export const swgToUrl = (icon: string) => {
+  const base64SVG = window.btoa(icon);
+  return `data:image/svg+xml;base64,${base64SVG}`;
 };

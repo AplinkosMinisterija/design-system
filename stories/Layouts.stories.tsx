@@ -26,7 +26,7 @@ export const Primary: Story = {
           slug: '/prenumeratos',
         }}
         onScroll={() => {}}
-        routes={[
+        menuRoutes={[
           {
             component: <div />,
             title: 'Prenumeratos',

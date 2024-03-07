@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { device } from '../../utils';
 import MobileMenu from '../MobileMenu';
 import Icon, { IconName } from '../../common/Icons';
-import { DefaultLayoutProps } from '../../types';
+import { DefaultLayoutProps } from '../../types.ts';
 
 const LogoHeader = (props: DefaultLayoutProps) => {
   const { onGoHome, logo } = props;

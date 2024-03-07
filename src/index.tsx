@@ -11,6 +11,7 @@ import ContentLayout from './layouts/ContentLayout';
 import Modal from './layouts/Modal';
 
 export * from './types';
+export * from './utils';
 export {
   Button,
   CheckBox,

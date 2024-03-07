@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Icon, { IconName } from '../../common/Icons';
 import MobileMenu from '../MobileMenu';
 import { device } from '../../utils';
-import { DefaultLayoutProps } from '../../types';
+import { DefaultLayoutProps } from '../../types.ts';
 
 interface Props extends DefaultLayoutProps {
     onGoBack: () => void;

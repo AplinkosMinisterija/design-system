@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { FeatureCollection } from '../types';
+import { FeatureCollection } from '../types.ts';
 
 const MapField = ({
   mapHost,
