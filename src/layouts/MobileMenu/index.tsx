@@ -4,7 +4,7 @@ import { device } from '../../utils';
 import MenuButton from './MenuButton';
 import Icon, { IconName } from '../../common/Icons';
 import Modal from '../Modal';
-import { DefaultLayoutProps } from '../../types';
+import { DefaultLayoutProps } from '../../types.ts';
 
 interface Props extends DefaultLayoutProps {
   visible: boolean;
@@ -14,7 +14,7 @@ const MobileMenu = ({
   visible = true,
   loggedIn,
   currentRoute,
-  routes,
+  menuRoutes,
   onLogin,
   onLogout,
   onRouteSelected,
@@ -34,7 +34,7 @@ const MobileMenu = ({
             <Title>Meniu</Title>
             <Subtitle>Pasirinkite dominančią sritį</Subtitle>
           </Headings>
-          {routes?.map((route, index: number) => {
+          {menuRoutes?.map((route, index: number) => {
             return (
               <MenuButton
                 key={`menu_button_${index}`}

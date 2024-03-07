@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useWindowSize, device } from '../utils';
 import LogoHeader from './headers/LogoHeader';
 import SideBar from './SideBar';
-import { DefaultLayoutProps } from '../types';
+import { DefaultLayoutProps } from '../types.ts';
 
 const DefaultLayout = (props: DefaultLayoutProps) => {
   const { children, onScroll = () => {}} = props;

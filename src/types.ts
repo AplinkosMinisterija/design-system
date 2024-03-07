@@ -84,7 +84,7 @@ export interface AppRoute {
 
 export interface DefaultLayoutProps {
   loggedIn: boolean;
-  routes: AppRoute[];
+  menuRoutes: AppRoute[];
   onLogin: () => void;
   onLogout: () => void;
   onRouteSelected: (slug: string) => void;
