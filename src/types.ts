@@ -78,15 +78,13 @@ export interface AppRoute {
   loggedIn?: boolean;
   title?: string;
   back?: boolean;
-  iconName?: string; //Todo: should be icon component not a string
   icon?: JSX.Element;
   description?: string;
 }
 
 export interface DefaultLayoutProps {
   loggedIn: boolean;
-  routes: AppRoute[];
-  onGoBack: () => void;
+  menuRoutes: AppRoute[];
   onLogin: () => void;
   onLogout: () => void;
   onRouteSelected: (slug: string) => void;

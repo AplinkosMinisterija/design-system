@@ -26,7 +26,7 @@ export const Primary: Story = {
           slug: '/prenumeratos',
         }}
         onScroll={() => {}}
-        routes={[
+        menuRoutes={[
           {
             component: <div />,
             title: 'Prenumeratos',
@@ -162,7 +162,6 @@ export const Primary: Story = {
         }
         loginSlug={'/newsfeed'}
         onGoHome={() => {}}
-        onGoBack={() => {}}
         onLogin={() => {}}
         onLogout={() => {}}
         onRouteSelected={() => {}}

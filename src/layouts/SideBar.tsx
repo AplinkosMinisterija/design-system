@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import Icon, { IconName } from '../common/Icons';
-import { DefaultLayoutProps } from '../types';
+import { DefaultLayoutProps } from '../types.ts';
 
 const SideBar = ({
   loggedIn,
   loginSlug,
-  routes,
+  menuRoutes,
   logo,
   onLogin,
   onLogout,
@@ -15,8 +15,7 @@ const SideBar = ({
   return (
     <Container>
       <LogoContainer>{logo}</LogoContainer>
-
-      {routes.map((route: any, index: any) => {
+      {menuRoutes.map((route: any, index: any) => {
         return (
           <Item
             key={`sidebar_btn_${route.slug}_${index}`}
