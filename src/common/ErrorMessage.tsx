@@ -8,7 +8,7 @@ export const ErrorMessage = ({ error }: { error?: string }) => {
 const Container = styled.label`
   display: inline-block;
   width: 100%;
-  color: ${({ theme }) => theme.colors.error};
+  color: ${({ theme }) => theme.colors.danger};
   font-size: 1.4rem;
   white-space: nowrap;
   overflow: hidden;

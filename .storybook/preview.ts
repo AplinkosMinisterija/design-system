@@ -46,7 +46,7 @@ export const theme: Theme<any> = {
       primary: '#f7f7f7',
       success: '#eafbf6',
     },
-    border: '#CDD5DF',
+    border: '#d4d5de',
     input: '#FFFFFF',
     shadow: '#121a5529',
     GREY: '#f7f7f7',
