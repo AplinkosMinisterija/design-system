@@ -16,8 +16,10 @@ export const MapFieldStory: Story = {
     return (
       <StoryWrapper>
         <MapField
-          mapHost={'https://dev.maps.biip.lt'}
+          mapHost={'https://maps.biip.lt'}
           mapPath={'/edit?types[]=point&buffer=xl'}
+          label={'Pažymėkite vietą'}
+          error={'Laukas privalomas'}
           onChange={(value) => {}}
         />
       </StoryWrapper>
