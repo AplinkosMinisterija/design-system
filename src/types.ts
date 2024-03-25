@@ -1,13 +1,10 @@
 import { JSX } from 'react';
 
-interface MainColorTypes {
-  primary: string;
-  secondary: string;
-  tertiary: string;
-  transparent: string;
-  danger: string;
-  success: string;
-  [key: string]: string;
+interface ButtonColors {
+  background: string;
+  text: string;
+  border: string;
+  hover?: string;
 }
 interface ThemeColors {
   primary: string;
@@ -16,9 +13,12 @@ interface ThemeColors {
   transparent: string;
   danger: string;
   success: string;
-  buttonBackground: MainColorTypes;
-  buttonText: MainColorTypes;
-  hover: MainColorTypes;
+  buttons?: {
+    primary: ButtonColors;
+    secondary: ButtonColors;
+    danger: ButtonColors;
+    [key: string]: ButtonColors;
+  };
   text: {
     //use only for text elements
     primary: string; // for titles and headings
@@ -28,14 +28,12 @@ interface ThemeColors {
     error: string; // for error
     [key: string]: string;
   };
-  cardBackground: { primary: string; success: string };
   border: string; // for input and other bordered elements
-  GREY: string;
-  [key: string]: string | { [key: string]: string };
+  [key: string]: string | any;
 }
 
-export interface Theme<T> {
-  colors: T & ThemeColors;
+export interface Theme {
+  colors: ThemeColors;
 }
 
 export type FeatureCollection = {

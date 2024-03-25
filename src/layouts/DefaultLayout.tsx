@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { useWindowSize, device } from '../utils';
 import LogoHeader from './headers/LogoHeader';
 import SideBar from './SideBar';
-import { DefaultLayoutProps } from '../types.ts';
+import { DefaultLayoutProps } from '../types';
 
 const DefaultLayout = (props: DefaultLayoutProps) => {
-  const { children, onScroll = () => {}} = props;
+  const { children, onScroll = () => {} } = props;
   const isMobile = useWindowSize(device.mobileL);
 
   return (

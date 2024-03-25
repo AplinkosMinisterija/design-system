@@ -2,8 +2,9 @@ import type { Preview } from '@storybook/react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { withThemeFromJSXProvider } from '@storybook/addon-styling';
 import { Theme } from '../src/types';
+import '../globals.css';
 
-export const theme: Theme<any> = {
+export const theme: Theme = {
   colors: {
     primary: '#53B1FD',
     secondary: '#13C9E7',
@@ -11,6 +12,26 @@ export const theme: Theme<any> = {
     transparent: 'transparent',
     danger: '#FE5B78',
     success: '#027A48',
+    buttons: {
+      primary: {
+        background: '#53B1FD',
+        text: '#101010',
+        border: 'transparent',
+        hover: '#53B1FD',
+      },
+      secondary: {
+        background: 'white',
+        text: '#101010',
+        border: 'transparent',
+        hover: '#13C9E78F',
+      },
+      danger: {
+        background: '#FE5B78',
+        text: 'white',
+        border: 'transparent',
+        hover: '#FE5B78E6',
+      },
+    },
     buttonBackground: {
       primary: '#53B1FD',
       secondary: 'white',
