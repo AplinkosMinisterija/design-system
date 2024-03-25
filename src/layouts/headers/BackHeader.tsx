@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import Icon, { IconName } from '../../common/Icons';
 import MobileMenu from '../MobileMenu';
 import { device } from '../../utils';
-import { DefaultLayoutProps } from '../../types.ts';
+import { DefaultLayoutProps } from '../../types';
 
 interface Props extends DefaultLayoutProps {
-    onGoBack: () => void;
+  onGoBack: () => void;
 }
 const BackHeader = (props: Props) => {
   const { onGoBack } = props;

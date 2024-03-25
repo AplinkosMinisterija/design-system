@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { device } from "../utils";
-import { AppRoute } from "../types.ts";
-import { JSX } from "react";
+import styled from 'styled-components';
+import { device } from '../utils';
+import { AppRoute } from '../types';
+import { JSX } from 'react';
 interface Props {
   children: any;
   title?: string;
@@ -20,15 +20,15 @@ const ContentLayout = ({
 }: Props) => {
   const pageTitle = title || currentRoute?.title;
   return (
-      <Container>
-        {pageActions}
-        <InnerContainer>
-          {customTitle || (pageTitle && <Title>{pageTitle}</Title>)}
-          {customSubTitle ||
-              (currentRoute?.description && <SubTitle>{currentRoute?.description}</SubTitle>)}
-          {children}
-        </InnerContainer>
-      </Container>
+    <Container>
+      {pageActions}
+      <InnerContainer>
+        {customTitle || (pageTitle && <Title>{pageTitle}</Title>)}
+        {customSubTitle ||
+          (currentRoute?.description && <SubTitle>{currentRoute?.description}</SubTitle>)}
+        {children}
+      </InnerContainer>
+    </Container>
   );
 };
 export default ContentLayout;

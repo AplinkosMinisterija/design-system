@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import dts from 'vite-plugin-dts';
+import path from 'path';
 
 export default defineConfig({
   build: {
@@ -24,4 +25,9 @@ export default defineConfig({
     emptyOutDir: true,
   },
   plugins: [react(), dts({ rollupTypes: true })],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
 });
