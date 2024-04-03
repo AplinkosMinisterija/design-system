@@ -3,6 +3,15 @@ import styled from 'styled-components';
 import { FeatureCollection } from '../types.ts';
 import FieldWrapper from '../common/FieldWrapper.tsx';
 
+interface MapFieldProps extends Partial<HTMLIFrameElement> {
+  mapHost: string;
+  mapPath: string;
+  onChange: (value: FeatureCollection) => void;
+  value?: FeatureCollection;
+  label?: string;
+  error?: string;
+}
+
 const MapField = ({
   mapHost,
   mapPath = '/edit?types[]=point&buffer=xl',
@@ -11,14 +20,7 @@ const MapField = ({
   error,
   onChange,
   ...rest
-}: {
-  mapHost: string;
-  mapPath: string;
-  value?: FeatureCollection;
-  label?: string;
-  error?: string;
-  onChange: (value: FeatureCollection) => void;
-}) => {
+}: MapFieldProps) => {
   const iframeRef = useRef<any>(null);
 
   const handleSaveGeom = useCallback(
@@ -43,6 +45,7 @@ const MapField = ({
   return (
     <FieldWrapper label={label} error={error}>
       <Iframe
+        {...rest}
         $error={!!error}
         src={`${mapHost}${mapPath}`}
         ref={iframeRef}
@@ -51,7 +54,6 @@ const MapField = ({
         onLoad={handleLoadMap}
         aria-hidden="false"
         tabIndex={1}
-        {...rest}
       />
     </FieldWrapper>
   );
