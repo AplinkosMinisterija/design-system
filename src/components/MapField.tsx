@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { FeatureCollection } from '../types.ts';
-import FieldWrapper from '../common/FieldWrapper.tsx';
+import { FeatureCollection } from '../types';
+import FieldWrapper from '../common/FieldWrapper';
 
 interface MapFieldProps extends Partial<HTMLIFrameElement> {
   mapHost: string;
