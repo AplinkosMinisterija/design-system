@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { withThemeFromJSXProvider } from '@storybook/addon-styling';
-import { Theme } from '../src/types';
+import { ButtonVariants, Theme } from '../src/types';
 
 export const theme: Theme = {
   colors: {
@@ -12,23 +12,41 @@ export const theme: Theme = {
     danger: '#FE5B78',
     success: '#027A48',
     buttons: {
-      primary: {
+      [ButtonVariants.PRIMARY]: {
         background: '#53B1FD',
         text: '#101010',
         border: 'transparent',
-        hover: '#53B1FD',
+        hover: '#0061b0',
       },
-      secondary: {
+      [ButtonVariants.SECONDARY]: {
         background: 'white',
         text: '#101010',
         border: 'transparent',
         hover: '#13C9E78F',
       },
-      danger: {
+      [ButtonVariants.TERTIARY]: {
+        background: '#7A7E9F',
+        text: 'white',
+        border: 'transparent',
+        hover: '#6f759f',
+      },
+      [ButtonVariants.DANGER]: {
         background: '#FE5B78',
         text: 'white',
         border: 'transparent',
-        hover: '#FE5B78E6',
+        hover: 'rgba(252,60,90,0.9)',
+      },
+      [ButtonVariants.SUCCESS]: {
+        background: '#027A48',
+        text: 'white',
+        border: 'transparent',
+        hover: '#00a862',
+      },
+      [ButtonVariants.TRANSPARENT]: {
+        background: 'transparent',
+        text: '#101010',
+        border: 'transparent',
+        hover: 'transparent',
       },
     },
     buttonBackground: {
@@ -71,6 +89,18 @@ export const theme: Theme = {
     shadow: '#121a5529',
     GREY: '#f7f7f7',
   },
+  radius: {
+    buttons: 2.6,
+    fields: 0.4,
+  },
+  height: {
+    buttons: 5.6,
+    fields: 5.6,
+  },
+  fontSize: {
+    buttons: 1.6,
+    fields: 1.6,
+  },
 };
 
 const GlobalStyles = createGlobalStyle`
@@ -87,7 +117,7 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: ${theme.colors.background};
+    background-color: aliceblue;
     font-size: 1.6rem;
     overflow: hidden;
     justify-content: center;
@@ -113,6 +143,9 @@ const GlobalStyles = createGlobalStyle`
 
   textarea {
     font-size: 1.6rem;
+  }
+  #storybook_root {
+    height: 100vh;
   }
   `;
 

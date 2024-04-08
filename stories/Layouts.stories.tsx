@@ -7,6 +7,7 @@ import Icon, { IconName } from '../src/common/Icons';
 
 const meta: Meta<typeof DefaultLayout> = {
   component: DefaultLayout,
+  title: 'Design system/Layouts/Default Layout',
 };
 
 export default meta;

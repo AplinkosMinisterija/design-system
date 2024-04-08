@@ -1,62 +1,37 @@
 import { JSX } from 'react';
 import styled from 'styled-components';
-import Loader from './Loader';
-
-enum ButtonColors {
-  PRIMARY = 'primary',
-  SECONDARY = 'secondary',
-  TERTIARY = 'tertiary',
-  DANGER = 'danger',
-  SUCCESS = 'success',
-  TRANSPARENT = 'transparent',
-}
+import Loader from '../common/Loader';
 
 export interface ButtonProps {
-  variant?: ButtonColors;
+  variant?: string;
   route?: string;
   children?: JSX.Element | string;
   leftIcon?: JSX.Element | string;
   rightIcon?: JSX.Element | string;
-  height?: number;
   type?: string;
   loading?: boolean;
-  padding?: string;
-  buttonPadding?: string;
   signature?: boolean;
   disabled?: boolean;
-  color?: string;
-  fontWeight?: string;
-  radius?: string;
 }
 
 const Button = ({
-  variant = ButtonColors.PRIMARY,
+  variant = 'primary',
   route,
   children,
-  height = 56,
-  padding = '11px 20px',
   leftIcon,
-  radius = '28px',
-  buttonPadding,
   rightIcon,
-  color,
   type,
   loading = false,
   className,
   disabled = false,
-  fontWeight = '600',
   ...rest
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <StyledButton
       className={className}
-      $padding={padding}
-      $fontWeight={fontWeight}
       $variant={variant}
-      $height={height || 40}
       type={type}
       disabled={disabled}
-      $radius={radius}
       {...rest}
     >
       {leftIcon}
@@ -67,7 +42,7 @@ const Button = ({
 };
 
 const StyledButton = styled.button<{
-  $variant: ButtonColors;
+  $variant: string;
   $height: number;
   $padding?: string;
   $fontWeight?: string;
@@ -75,26 +50,22 @@ const StyledButton = styled.button<{
 }>`
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 1.2rem;
   align-items: center;
-  height: ${({ $height }) => `${$height}px`};
-  border-radius: ${({ $radius }) => $radius};
-  padding: ${({ $padding }) => $padding};
-  background-color: ${({ $variant, theme }) => theme.colors.buttonBackground[$variant]};
+  height: ${({ theme }) => theme.height.buttons}rem;
+  border-radius: ${({ theme }) => theme.radius.buttons}rem;
+  padding: 1.1rem 2rem;
+  background-color: ${({ $variant, theme }) => theme.colors.buttons[$variant].background};
   color: ${({ $variant, theme }) => theme.colors.buttonText[$variant]};
-  border: ${({ $variant }) => ($variant === ButtonColors.TRANSPARENT ? '0' : '1px')} solid
-    ${({ $variant }) =>
-      $variant !== ButtonColors.TRANSPARENT ? 'transparent' : ' rgb(35, 31, 32)'};
+  border: ${({ $variant, theme }) => theme.colors.buttons[$variant].border};
   font-weight: ${({ $fontWeight }) => $fontWeight};
-  font-size: 1.8rem;
+  font-size: ${({ theme }) => theme.fontSize.buttons}rem;
   :hover {
-    background-color: ${({ $variant, theme }) => theme.colors.hover[$variant]};
+    background-color: ${({ $variant, theme }) => theme.colors.buttons[$variant].hover};
   }
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
   width: 100%;
 `;
-
-Button.colors = ButtonColors;
 
 export default Button;

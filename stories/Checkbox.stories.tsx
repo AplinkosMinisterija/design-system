@@ -5,6 +5,7 @@ import StoryWrapper from '../src/common/StoryWrapper';
 
 const meta: Meta<typeof Checkbox> = {
   component: Checkbox,
+  title: 'Design system/Checkbox',
 };
 
 export default meta;
@@ -15,7 +16,7 @@ export const CheckboxStory: Story = {
   render: () => {
     return (
       <StoryWrapper>
-        <Checkbox label={'label'} />
+        <Checkbox label={'label'} onChange={() => {}} />
       </StoryWrapper>
     );
   },

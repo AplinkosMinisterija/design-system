@@ -5,6 +5,7 @@ import StoryWrapper from '../src/common/StoryWrapper';
 
 const meta: Meta<typeof Switch> = {
   component: Switch,
+  title: 'Design system/Switch',
 };
 
 export default meta;
@@ -15,7 +16,7 @@ export const SwitchStory: Story = {
   render: () => {
     return (
       <StoryWrapper>
-        <Switch />
+        <Switch onChange={() => {}} />
       </StoryWrapper>
     );
   },

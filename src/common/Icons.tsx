@@ -1,6 +1,8 @@
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from 'react-icons/md';
 import { FiArrowLeft, FiMenu } from 'react-icons/fi';
 import { FaChevronRight } from 'react-icons/fa6';
+import { IoCloseOutline } from 'react-icons/io5';
+import { MdKeyboardArrowDown } from 'react-icons/md';
 
 export enum IconName {
   visibleOn = 'visibleOn',
@@ -9,6 +11,8 @@ export enum IconName {
   back = 'back',
   burger = 'burger',
   right = 'right',
+  close = 'close',
+  dropdownArrow = 'dropdownArrow',
 }
 
 export interface IconProps {
@@ -47,6 +51,10 @@ const Icon = ({ name, className }: IconProps) => {
           <line x1="21" y1="12" x2="9" y2="12"></line>
         </svg>
       );
+    case IconName.close:
+      return <IoCloseOutline className={className} />;
+    case IconName.dropdownArrow:
+      return <MdKeyboardArrowDown className={className} />;
     default:
       return null;
   }
