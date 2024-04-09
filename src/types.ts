@@ -1,4 +1,5 @@
 import { JSX } from 'react';
+export * from '@/common/table/types';
 
 export interface ButtonColors {
   background: string;
