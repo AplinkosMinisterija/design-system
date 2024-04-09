@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { Tbody } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
-import { Columns, NotFoundInfoProps, TableItemWidth } from '../../types';
-import { TableRow } from '../../components/Table';
+import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../types';
 import NotFoundInfo from '@/common/table/NotFoundInfo';
-import Icon from '@/common/Icons';
+import Icon, { IconName } from '@/common/Icons';
 
 export interface DesktopTableProps {
   data?: TableRow[];
@@ -46,25 +45,25 @@ const MobileTable = ({
 
     return (
       <MainTR
-        hasSmallColumnLabel={isFirstSmallColumn}
-        expandable={true}
+        $hasSmallColumnLabel={isFirstSmallColumn}
+        $expandable={true}
         $pointer={!!onClick}
         key={`tr-${index}`}
-        index={index}
+        $index={index}
         onClick={() => handleRowClick(row)}
         style={tableRowStyle}
       >
         <RowTD>
-          {restLabels?.length && (
+          {restLabels?.length ? (
             <StyledIconContainer
               onClick={(e) => {
                 e.stopPropagation();
                 setExpand(!expand);
               }}
             >
-              <StyledIcon expanded={expand} name={'dropdownArrow'} />
+              <StyledIcon expanded={expand} name={IconName.dropdownArrow} />
             </StyledIconContainer>
-          )}
+          ) : null}
         </RowTD>
         {mainLabels.map((label: any, i: number) => {
           return <TD key={`tr-td-${i}`}>{row[label] || '-'}</TD>;
@@ -110,14 +109,14 @@ const MobileTable = ({
 
     if (isFilterApplied) {
       return (
-        <TR expandable={false} $pointer={false} $hide_border={true} index={0}>
+        <TR $expandable={false} $pointer={false} $hide_border={true} $index={0}>
           <TdSecond colSpan={mainLabels.length}>{texts?.notFound || ''}</TdSecond>
         </TR>
       );
     }
 
     return (
-      <TR expandable={false} $pointer={false} $hide_border={true} index={0}>
+      <TR $expandable={false} $pointer={false} $hide_border={true} $index={0}>
         <TdSecond colSpan={mainLabels.length}>
           <NotFoundInfo {...notFoundInfo} />
         </TdSecond>
@@ -130,10 +129,10 @@ const MobileTable = ({
       <CustomTable>
         <THEAD>
           <MainTR
-            hasSmallColumnLabel={isFirstSmallColumn}
-            expandable={true}
+            $hasSmallColumnLabel={isFirstSmallColumn}
+            $expandable={true}
             $pointer={false}
-            index={0}
+            $index={0}
           >
             <ArrowTh />
             {mainLabels.map((key: any, i: number) => {
@@ -220,11 +219,11 @@ const THEAD = styled.thead`
 `;
 
 const MainTR = styled.tr<{
-  index: number;
+  $index: number;
   $hide_border?: boolean;
-  hasSmallColumnLabel?: boolean;
+  $hasSmallColumnLabel?: boolean;
   $pointer: boolean;
-  expandable: boolean;
+  $expandable: boolean;
 }>`
   width: 100%;
   border: none !important;
@@ -232,29 +231,29 @@ const MainTR = styled.tr<{
   grid-template-columns: 32px 40px 1fr 1fr;
   align-items: center;
 
-  ${({ expandable, hasSmallColumnLabel }) =>
-    expandable &&
+  ${({ $expandable, $hasSmallColumnLabel }) =>
+    $expandable &&
     `
     display: grid;
-    grid-template-columns: 32px ${hasSmallColumnLabel ? '40px' : ''}  1fr 1fr;
+    grid-template-columns: 32px ${$hasSmallColumnLabel ? '40px' : ''}  1fr 1fr;
     align-items: center;
   `}
 
   border-bottom: ${({ $hide_border }) => ($hide_border ? 'none' : '1px solid #cdd5df')} !important;
   cursor: ${({ $pointer }) => ($pointer ? 'pointer' : 'default')};
 
-  ${({ index }) =>
-    index % 2 !== 0 &&
+  ${({ $index }) =>
+    $index % 2 !== 0 &&
     `
     background-color: #F8FAFC;
   `}
 `;
 
 const TR = styled.tr<{
-  index: number;
+  $index: number;
   $hide_border?: boolean;
   $pointer: boolean;
-  expandable: boolean;
+  $expandable: boolean;
 }>`
   width: 100%;
   border: none !important;
@@ -262,8 +261,8 @@ const TR = styled.tr<{
   grid-template-columns: 32px 40px 1fr 1fr;
   align-items: center;
 
-  ${({ expandable }) =>
-    expandable &&
+  ${({ $expandable }) =>
+    $expandable &&
     `
     display: grid;
     grid-template-columns: 32px 1fr 1fr;
@@ -273,17 +272,17 @@ const TR = styled.tr<{
   border-bottom: ${({ $hide_border }) => ($hide_border ? 'none' : '1px solid #cdd5df')} !important;
   cursor: ${({ $pointer }) => ($pointer ? 'pointer' : 'default')};
 
-  ${({ index }) =>
-    index % 2 !== 0 &&
+  ${({ $index }) =>
+    $index % 2 !== 0 &&
     `
     background-color: #F8FAFC;
   `}
 `;
 
-const StyledIcon = styled(Icon)<{ expanded: boolean }>`
+const StyledIcon = styled(Icon)<{ $expanded: boolean }>`
   color: #cdd5df;
   font-size: 2.4rem;
-  transform: ${({ expanded }) => (expanded ? 'rotate(180deg)' : 'rotate(0)')};
+  transform: ${({ $expanded }) => ($expanded ? 'rotate(180deg)' : 'rotate(0)')};
 `;
 
 const StyledIconContainer = styled.div`

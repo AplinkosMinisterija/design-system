@@ -1,6 +1,6 @@
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
-import { Columns, NotFoundInfoProps } from '../types';
-import TableLayout from '../layouts/TableLayout';
+import { Columns, NotFoundInfoProps, TableData } from '../types';
+import TableLayout from '../common/table/TableLayout';
 import DesktopTable from '../common/table/DesktopTable';
 import MobileTable from '../common/table/MobileTable';
 import LoaderComponent from '@/common/LoaderComponent';
@@ -8,18 +8,6 @@ import { getActiveColumns } from '@/common/table/functions';
 import { device } from '@/utils';
 import { useMediaQuery } from 'react-responsive';
 
-export interface TableRow {
-  id?: string | number;
-  [key: string]: any;
-}
-
-export interface TableData {
-  data: TableRow[];
-  total?: number;
-  page?: number;
-  pageSize?: number;
-  totalPages?: number;
-}
 export interface LoginLayoutProps {
   data?: TableData;
   columns: Columns;

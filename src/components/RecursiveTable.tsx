@@ -1,8 +1,7 @@
-import { isEmpty, map } from 'lodash';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
 import { RecursiveRow } from '@/common/table/RecursiveRow';
-import TableLayout from '../layouts/TableLayout';
+import TableLayout from '../common/table/TableLayout';
 import LoaderComponent from '@/common/LoaderComponent';
 import NotFoundInfo from '@/common/table/NotFoundInfo';
 import {
@@ -49,10 +48,10 @@ const RecursiveTable = ({
   };
 
   const GenerateTableContent = ({ data }) => {
-    if (!isEmpty(data)) {
+    if (data?.length) {
       return (
         <>
-          {map(data, (row: TableRow, index: number) => {
+          {data?.map((row: TableRow, index: number) => {
             return (
               <RecursiveRow
                 columns={columns}

@@ -15,7 +15,7 @@ import AsyncSelectField from '@/components/AsyncSelectField';
 import SelectField from '@/components/SelectField';
 import NumericTextField from '@/components/NumericTextField';
 import TextAreaField from '@/components/TextAreaField';
-import TableLayout from '@/layouts/TableLayout';
+import TableLayout from '@/common/table/TableLayout';
 import RecursiveTable from '@/components/RecursiveTable';
 import Table from '@/components/Table';
 

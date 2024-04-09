@@ -1,8 +1,18 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { TableRow } from '@/components/Table';
-import { TableItemWidth } from '@/common/table/types';
+import { TableItemWidth, TableRow } from '@/common/table/types';
 import Icon from '@/common/Icons';
+
+interface RecursiveRowProps {
+  row: TableRow;
+  index: number;
+  onClick: any;
+  keys: string[];
+  handleRowClick: any;
+  tableRowStyle: any;
+  padding: any;
+  columns;
+}
 
 export const RecursiveRow = ({
   row,
@@ -13,7 +23,8 @@ export const RecursiveRow = ({
   tableRowStyle,
   padding,
   columns,
-}) => {
+}: RecursiveRowProps) => {
+  console.log('row', row);
   const [show, setShow] = useState(false);
   const hasChildren = !!row.children;
   const renderTd = (i: number, label) => {

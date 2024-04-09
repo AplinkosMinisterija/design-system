@@ -1,7 +1,6 @@
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
-import { Columns, NotFoundInfoProps, TableItemWidth } from '../../types';
-import { TableRow } from '../../components/Table';
+import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../types';
 import NotFoundInfo from '@/common/table/NotFoundInfo';
 
 export interface DesktopTableProps {
@@ -34,28 +33,30 @@ const DesktopTable = ({
     }
   };
 
-  const GenerateTableContent = ({ data }) => {
+  const GenerateTableContent = ({ data }: { data: TableRow[] }) => {
     if (data?.length) {
       return (
         <>
-          {data?.map((row: TableRow, index: number) => (
-            <TR
-              $pointer={!!onClick}
-              key={`tr-${index}`}
-              onClick={() => handleRowClick(row)}
-              style={tableRowStyle}
-            >
-              {keys.map((label, i: number) => {
-                const item = row[label] || '-';
-                const width = columns[label]?.width || TableItemWidth.LARGE;
-                return (
-                  <TD width={width} key={`tr-td-${i}`}>
-                    {item}
-                  </TD>
-                );
-              })}
-            </TR>
-          ))}
+          {data?.map((row: TableRow, index: number) => {
+            return (
+              <TR
+                $pointer={!!onClick}
+                key={`tr-${index}`}
+                onClick={() => handleRowClick(row)}
+                style={tableRowStyle}
+              >
+                {keys.map((label, i: number) => {
+                  const item = row[label] || '-';
+                  const width = columns[label]?.width || TableItemWidth.LARGE;
+                  return (
+                    <TD width={width} key={`tr-td-${i}`}>
+                      {item}
+                    </TD>
+                  );
+                })}
+              </TR>
+            );
+          })}
         </>
       );
     } else if (isFilterApplied) {
@@ -94,7 +95,7 @@ const DesktopTable = ({
         </THEAD>
 
         <StyledTbody>
-          <GenerateTableContent data={data} />
+          <GenerateTableContent data={data || []} />
         </StyledTbody>
       </Table>
     </TableContainer>
@@ -112,7 +113,7 @@ const Table = styled.table`
   width: 100%;
 `;
 
-const TD = styled.td<{ width: string }>`
+const TD = styled.td`
   padding: 6px 22px;
   height: 44px;
   text-align: left;
@@ -120,7 +121,7 @@ const TD = styled.td<{ width: string }>`
   color: #121926;
 `;
 
-const TH = styled.th<{ width: string }>`
+const TH = styled.th`
   padding: 18px 22px;
   height: 44px;
   text-align: left;
