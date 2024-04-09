@@ -9,9 +9,16 @@ import FieldWrapper from './common/FieldWrapper';
 import DefaultLayout from './layouts/DefaultLayout';
 import ContentLayout from './layouts/ContentLayout';
 import Modal from './layouts/Modal';
+import AsyncMultiSelectField from '@/components/AsyncMultiSelectField';
+import MultiSelectField from '@/components/MultiSelectField';
+import AsyncSelectField from '@/components/AsyncSelectField';
+import SelectField from '@/components/SelectField';
+import NumericTextField from '@/components/NumericTextField';
+import TextAreaField from '@/components/TextAreaField';
 
 export * from './types';
 export * from './utils';
+
 export {
   Button,
   CheckBox,
@@ -24,4 +31,10 @@ export {
   DefaultLayout,
   ContentLayout,
   Modal,
+  AsyncMultiSelectField,
+  MultiSelectField,
+  AsyncSelectField,
+  SelectField,
+  NumericTextField,
+  TextAreaField,
 };

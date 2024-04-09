@@ -5,6 +5,7 @@ import StoryWrapper from '../src/common/StoryWrapper';
 
 const meta: Meta<typeof MapField> = {
   component: MapField,
+  title: 'Design system/Fields/Map Field',
 };
 
 export default meta;

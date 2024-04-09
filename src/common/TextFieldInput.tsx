@@ -28,7 +28,7 @@ const TextFieldInput = ({
   placeholder,
   type = 'text',
   disabled,
-  height = 56,
+  height,
   selectedValue = false,
   onInputClick,
   inputMode = 'text',
@@ -36,7 +36,7 @@ const TextFieldInput = ({
   ...rest
 }: TextFieldProps) => {
   return (
-    <InputContainer $error={!!error} $height={height || 40} $disabled={disabled || false}>
+    <InputContainer $error={!!error} $height={height} $disabled={disabled || false}>
       {leftIcon}
       <StyledTextInput
         $selectedValue={selectedValue}
@@ -60,19 +60,17 @@ const TextFieldInput = ({
 
 const InputContainer = styled.div<{
   $error: boolean;
-  $height: number;
   $disabled: boolean;
 }>`
   display: flex;
-  height: ${({ $height }) => `${$height}px`};
+  height: ${({ theme }) => `${theme.height.fields}rem`};
   background-color: white;
   justify-content: space-between;
   align-items: center;
-  border-radius: 4px;
+  border-radius: ${({ theme }) => theme.radius.fields}rem;
   overflow: hidden;
-  border: 1px solid ${({ theme, $error }) => ($error ? theme.colors.error : theme.colors.border)};
+  border: 1px solid ${({ theme, $error }) => ($error ? theme.colors.danger : theme.colors.border)};
   opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
-
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'text')};
   :focus-within {
     border-color: ${({ theme }) => theme.colors.primary};

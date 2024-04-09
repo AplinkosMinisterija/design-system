@@ -5,6 +5,7 @@ import StoryWrapper from '../src/common/StoryWrapper';
 
 const meta: Meta<typeof Tabs> = {
   component: Tabs,
+  title: 'Design system/Tabs',
 };
 
 export default meta;

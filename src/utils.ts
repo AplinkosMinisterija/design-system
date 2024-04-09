@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { AppRoute } from './types.ts';
+import { AppRoute } from './types';
 import { matchPath, useLocation } from 'react-router';
 
 export const device = {

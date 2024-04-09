@@ -1,10 +1,15 @@
 import { JSX } from 'react';
 
-interface ButtonColors {
+export interface ButtonColors {
   background: string;
   text: string;
   border: string;
   hover?: string;
+}
+export interface FieldsColors {
+  border: string;
+  text: string;
+  background: string;
 }
 interface ThemeColors {
   primary: string;
@@ -13,12 +18,12 @@ interface ThemeColors {
   transparent: string;
   danger: string;
   success: string;
-  buttons?: {
+  buttons: {
+    // configure your own button variants
     primary: ButtonColors;
-    secondary: ButtonColors;
-    danger: ButtonColors;
     [key: string]: ButtonColors;
   };
+  fields?: FieldsColors;
   text: {
     //use only for text elements
     primary: string; // for titles and headings
@@ -29,11 +34,27 @@ interface ThemeColors {
     [key: string]: string;
   };
   border: string; // for input and other bordered elements
-  [key: string]: string | any;
+  [key: string]: any;
 }
 
 export interface Theme {
   colors: ThemeColors;
+  radius?: {
+    fields: number;
+    buttons: number;
+    [key: string]: any;
+  };
+  height?: {
+    fields: number;
+    buttons: number;
+    [key: string]: any;
+  };
+  fontSize?: {
+    fields: number;
+    buttons: number;
+    [key: string]: any;
+  };
+  [key: string]: any;
 }
 
 export type FeatureCollection = {
@@ -92,4 +113,29 @@ export interface DefaultLayoutProps {
   logo: JSX.Element;
   currentRoute?: AppRoute;
   onScroll?: () => void;
+}
+
+export type FileProps = {
+  url: string;
+  name: string;
+  size: number;
+  main?: boolean;
+};
+
+export type ServerErrors = {
+  [responseErrorType: string]: string;
+};
+
+export type ValidationMessages = {
+  error: string;
+  [responseErrorMessage: string]: string;
+};
+
+export enum ButtonVariants {
+  PRIMARY = 'primary',
+  SECONDARY = 'secondary',
+  TERTIARY = 'tertiary',
+  DANGER = 'danger',
+  SUCCESS = 'success',
+  TRANSPARENT = 'transparent',
 }

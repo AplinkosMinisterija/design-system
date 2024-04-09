@@ -1,27 +1,17 @@
 import styled from 'styled-components';
 
 const StoryWrapper = ({ children }: any) => {
-  return (
-    <Container>
-      <InnerContainer>{children}</InnerContainer>
-    </Container>
-  );
+  return <InnerContainer>{children}</InnerContainer>;
 };
 
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  background-color: aliceblue;
-  padding: 16px;
-  box-sizing: border-box;
-`;
-
 const InnerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   max-width: 600px;
   margin: 40px auto;
+  gap: 16px;
 `;
 
 export default StoryWrapper;

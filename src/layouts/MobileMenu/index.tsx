@@ -4,7 +4,7 @@ import { device } from '../../utils';
 import MenuButton from './MenuButton';
 import Icon, { IconName } from '../../common/Icons';
 import Modal from '../Modal';
-import { DefaultLayoutProps } from '../../types.ts';
+import { DefaultLayoutProps } from '../../types';
 
 interface Props extends DefaultLayoutProps {
   visible: boolean;
