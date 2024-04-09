@@ -118,7 +118,6 @@ const StyledReactPaginate = styled(ReactPaginate)`
     border: none;
     font-size: 1.2rem;
     font-weight: bold;
-    font-family: Atkinson Hyperlegible;
     cursor: pointer;
   }
 
