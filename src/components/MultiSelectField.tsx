@@ -5,7 +5,7 @@ import { filterSelectedOptions, handleRemove } from '@/common/functions';
 import { useSelectData } from '@/common/hooks';
 
 export interface SelectOption {
-  id?: string;
+  id?: string | number;
   label?: string;
   [key: string]: any;
 }

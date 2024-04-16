@@ -15,6 +15,7 @@ export interface TextFieldProps {
   inputMode?: any;
   selectedValue?: boolean;
   onFocus?: any;
+  variant?: string;
 }
 
 const TextFieldInput = ({
@@ -33,6 +34,7 @@ const TextFieldInput = ({
   onInputClick,
   inputMode = 'text',
   onFocus = () => {},
+  variant = 'default',
   ...rest
 }: TextFieldProps) => {
   return (
@@ -63,16 +65,19 @@ const InputContainer = styled.div<{
   $disabled: boolean;
 }>`
   display: flex;
-  height: ${({ theme }) => `${theme.height.fields}rem`};
-  background-color: white;
+  height: ${({ theme }) => `${theme.height.fields || 5.6}rem`};
+  background-color: ${({ theme }) => theme.colors.fields?.background || 'white'};
   justify-content: space-between;
   align-items: center;
-  border-radius: ${({ theme }) => theme.radius.fields}rem;
+  border-radius: ${({ theme }) => theme.radius.fields || 0.4}rem;
   overflow: hidden;
-  border: 1px solid ${({ theme, $error }) => ($error ? theme.colors.danger : theme.colors.border)};
+  border: 1px solid
+    ${({ theme, $error }) =>
+      $error ? theme.colors.error || '#FE5B78' : theme.colors.fields?.border || '#d4d5de'};
   opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'text')};
   :focus-within {
+    //TODO: fix focus styles
     border-color: ${({ theme }) => theme.colors.primary};
     box-shadow: 0 0 0 4px ${({ theme }) => `${theme.colors.primary}33`};
   }
@@ -86,12 +91,10 @@ const StyledTextInput = styled.input<{
   padding: 0 12px;
   width: 100%;
   height: 100%;
-
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'text')};
-
-  background-color: white;
-  font-size: 1.6rem;
-  color: ${({ theme }) => theme.colors.text.input};
+  background-color: ${({ theme }) => theme.colors.fields?.background || 'white'};
+  font-size: ${({ theme }) => theme.fontSize.fields || 1.6}rem;
+  color: ${({ theme }) => theme.colors.fields?.text || '#101010'};
 
   &:focus {
     outline: none;
@@ -107,19 +110,19 @@ const StyledTextInput = styled.input<{
   }
   ::-webkit-input-placeholder {
     color: ${({ theme, $selectedValue }) =>
-      theme.colors.text.input + `${!$selectedValue ? '8F' : ''}`};
+      (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
   }
   ::-moz-placeholder {
     color: ${({ theme, $selectedValue }) =>
-      theme.colors.text.input + `${!$selectedValue ? '8F' : ''}`};
+      (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
   }
   ::-ms-placeholder {
     color: ${({ theme, $selectedValue }) =>
-      theme.colors.text.input + `${!$selectedValue ? '8F' : ''}`};
+      (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
   }
   ::placeholder {
     color: ${({ theme, $selectedValue }) =>
-      theme.colors.text.input + `${!$selectedValue ? '8F' : ''}`};
+      (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
   }
 `;
 

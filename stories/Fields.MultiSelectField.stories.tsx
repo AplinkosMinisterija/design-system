@@ -16,7 +16,23 @@ export const MultiSelectFieldStory: Story = {
   render: () => {
     return (
       <StoryWrapper>
-        <MultiSelectField onChange={() => {}} options={[]} values={null} />
+        <MultiSelectField
+          onChange={(e) => {
+            console.log(e);
+          }}
+          options={[
+            { id: 1, label: 'Vilkas' },
+            { id: 2, label: 'Bebras' },
+            { id: 3, label: 'Šernas' },
+            { id: 4, label: 'Briedis' },
+            { id: 5, label: 'Stirna' },
+            { id: 6, label: 'Kiškis' },
+          ]}
+          values={[
+            { id: 1, label: 'Vilkas' },
+            { id: 2, label: 'Bebras' },
+          ]}
+        />
       </StoryWrapper>
     );
   },
