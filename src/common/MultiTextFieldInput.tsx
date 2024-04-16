@@ -33,7 +33,6 @@ const MultiTextField = ({
 
   const handleClick = () => {
     if (!inputRef?.current) return;
-
     inputRef?.current?.focus();
   };
 
@@ -42,7 +41,7 @@ const MultiTextField = ({
       className="inputContainer"
       onClick={handleClick}
       $hasBorder={true}
-      $backgroundColor={backgroundColor || '#ffffff'}
+      $backgroundColor={backgroundColor}
       $readOnly={false}
       $error={!!error}
       $disabled={disabled || false}
@@ -56,7 +55,6 @@ const MultiTextField = ({
               onClick={(e) => {
                 e.stopPropagation();
                 if (disabled) return;
-
                 onRemove({ value, index });
               }}
             >
@@ -64,7 +62,6 @@ const MultiTextField = ({
             </IconContainer>
           </SimpleCard>
         ))}
-
         {!disabled && (
           <Input
             ref={inputRef}
@@ -94,23 +91,22 @@ const InputContainer = styled.div<{
     $hasBorder
       ? `
    border: 1px solid
-    ${$error ? theme.colors.error : theme.colors.border};
+    ${$error ? theme.colors.error || '#FE5B78' : theme.colors.fields?.border || '#d4d5de'};
   `
       : null}
-  border-radius: ${({ theme }) => theme.radius.fields}rem;
+  border-radius: ${({ theme }) => theme.radius.fields || 0.8}rem;
   display: flex;
   justify-content: space-between;
   padding: 4px 12px 4px 4px;
-  min-height: ${({ theme }) => `${theme.height.fields}rem`};
+  min-height: ${({ theme }) => `${theme.height.fields || 5.6}rem`};
   overflow: hidden;
-  background-color: ${({ $backgroundColor }) => $backgroundColor};
+  background-color: ${({ theme, $backgroundColor }) =>
+    $backgroundColor || theme.colors.fields?.background || 'white'};
   align-items: center;
-  border: 1px solid ${({ theme, $error }) => ($error ? theme.colors.danger : theme.colors.border)};
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
-  :focus-within {
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 4px ${({ theme }) => `${theme.colors.primary}33`};
+  :focus {
+    outline: none;
   }
   width: 100%;
 `;
@@ -129,15 +125,15 @@ const Input = styled.input`
   flex: 1;
   background-color: transparent;
   font-size: 1.6rem;
-  color: ${({ theme }) => theme.colors.label};
+  color: ${({ theme }) => theme.colors.fields?.text || '#101010'};
   ::-webkit-input-placeholder {
-    color: ${({ theme }) => theme.colors.label + '8F'};
+    color: ${({ theme }) => (theme.colors.fields?.text || '#101010') + '8F'};
   }
   ::-moz-placeholder {
-    color: ${({ theme }) => theme.colors.label + '8F'};
+    color: ${({ theme }) => (theme.colors.fields?.text || '#101010') + '8F'};
   }
   ::placeholder {
-    color: ${({ theme }) => theme.colors.label + '8F'};
+    color: ${({ theme }) => (theme.colors.fields?.text || '#101010') + '8F'};
   }
   :focus {
     outline: none;
@@ -155,7 +151,7 @@ const InnerContainer = styled.div`
 
 const StyledCloseIcon = styled(Icon)`
   font-size: 1rem;
-  color: black;
+  color: ${({ theme }) => theme.colors.fields?.tagText || '#333333'};
 `;
 
 const IconContainer = styled.div`
@@ -168,9 +164,9 @@ const IconContainer = styled.div`
 
 const SimpleCard = styled.label<{ disabled: boolean }>`
   border-radius: 2px;
-  color: rgb(51, 51, 51);
-  background-color: rgb(230, 230, 230);
-  border-radius: 2px;
+  color: ${({ theme }) => theme.colors.fields?.tagText || '#333333'};
+  background-color: ${({ theme }) => theme.colors.fields?.tag || '#e8eeef'};
+  border-radius: ${({ theme }) => theme.radius.multiSelectFieldTag || 0.2}rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -184,7 +180,7 @@ const Name = styled.div`
 `;
 
 const StyledIcons = styled(Icon)`
-  color: #cdd5df;
+  color: ${({ theme }) => theme.colors.fields?.icon || '#cdd5df'};
   font-size: 2.4rem;
 `;
 const DropdownIconContainer = styled.div`

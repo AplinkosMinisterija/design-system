@@ -91,7 +91,8 @@ export const theme: Theme = {
   },
   radius: {
     buttons: 2.6,
-    fields: 0.4,
+    fields: 0.8,
+    multiSelectFieldTag: 0.4,
   },
   height: {
     buttons: 5.6,

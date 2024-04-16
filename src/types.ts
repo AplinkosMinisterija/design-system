@@ -8,9 +8,13 @@ export interface ButtonColors {
   hover?: string;
 }
 export interface FieldsColors {
-  border: string;
-  text: string;
-  background: string;
+  border?: string;
+  text?: string;
+  background?: string;
+  error?: string;
+  tag?: string;
+  tagText?: string;
+  icon?: string;
 }
 interface ThemeColors {
   primary: string;
@@ -24,7 +28,7 @@ interface ThemeColors {
     primary: ButtonColors;
     [key: string]: ButtonColors;
   };
-  fields?: FieldsColors;
+  fields?: FieldsColors; // for inputs
   text: {
     //use only for text elements
     primary: string; // for titles and headings
@@ -34,7 +38,7 @@ interface ThemeColors {
     error: string; // for error
     [key: string]: string;
   };
-  border: string; // for input and other bordered elements
+  border: string;
   [key: string]: any;
 }
 
@@ -43,6 +47,7 @@ export interface Theme {
   radius?: {
     fields: number;
     buttons: number;
+    multiSelectFieldTag: number;
     [key: string]: any;
   };
   height?: {

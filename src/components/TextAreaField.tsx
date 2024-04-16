@@ -39,8 +39,6 @@ const TextAreaField = (props: TextFieldProps) => {
 
   const { width, ref } = useResizeDetector();
 
-  console.log('ref', ref?.current);
-
   useEffect(() => {
     if (rows * 20 < ref?.current?.scrollHeight) {
       ref.current.style.height = 'auto';
@@ -72,19 +70,21 @@ const TextAreaField = (props: TextFieldProps) => {
   );
 };
 
-const InputContainer = styled.div<{ error: boolean; disabled: boolean }>`
-  border: 1px solid ${({ theme, error }) => (error ? theme.colors.error : theme.colors.border)};
+const InputContainer = styled.div<{ $error: boolean; $disabled: boolean }>`
   display: flex;
   height: auto;
   overflow: hidden;
   justify-content: space-between;
   padding: 8px;
   box-sizing: border-box;
-  background-color: white;
-  opacity: ${({ disabled }) => (disabled ? 0.48 : 1)};
-  border: 1px solid ${({ theme, error }) => (error ? theme.colors.error : theme.colors.border)};
-  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.fields?.background || 'white'};
+  border: 1px solid
+    ${({ theme, $error }) =>
+      $error ? theme.colors.error || '#FE5B78' : theme.colors.fields?.border || '#d4d5de'};
+  opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
+  border-radius: ${({ theme }) => theme.radius.fields || 0.4}rem;
   :focus-within {
+    //TODO: fix focus style
     border-color: ${({ theme }) => theme.colors.primary};
     box-shadow: 0 0 0 4px ${({ theme }) => `${theme.colors.primary}33`};
   }
@@ -92,14 +92,13 @@ const InputContainer = styled.div<{ error: boolean; disabled: boolean }>`
 
 const StyledTextArea = styled.textarea`
   border: none;
-  font-size: 1.6rem;
-  line-height: 2rem;
   width: 100%;
   overflow-y: hidden;
   resize: none;
-  color: ${({ theme }) => theme.colors.label};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'text')};
-  background-color: transparent;
+  font-size: ${({ theme }) => theme.fontSize.fields || 1.6}rem;
+  color: ${({ theme }) => theme.colors.fields?.text || '#101010'};
+  background-color: ${({ theme }) => theme.colors.fields?.background || 'white'};
   :focus {
     outline: none;
   }
