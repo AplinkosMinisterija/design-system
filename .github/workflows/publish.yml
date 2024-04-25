@@ -44,7 +44,7 @@ jobs:
   publish-library:
     name: Publish client library
     runs-on: ubuntu-latest
-    needs: [generate-library]
+#    needs: [generate-library]
     if: false
     permissions:
       packages: write
