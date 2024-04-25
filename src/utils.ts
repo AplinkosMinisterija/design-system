@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AppRoute } from './types';
 import { matchPath, useLocation } from 'react-router';
+import { createGlobalStyle } from 'styled-components';
+import { theme } from '../.storybook/preview';
 
 export const device = {
   mobileS: `(max-width: 320px)`,
@@ -61,3 +63,49 @@ export const svgToUrl = (icon: string) => {
   const base64SVG = window.btoa(icon);
   return `data:image/svg+xml;base64,${base64SVG}`;
 };
+
+export const GlobalStyles = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  html {
+    font-size: 62.5%;
+    width: 100vw;
+    color: ${theme.colors.text.primary};
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: aliceblue;
+    font-size: 1.6rem;
+    overflow: hidden;
+    justify-content: center;
+  }
+  h1 {
+    font-size: 3.2rem;
+    color: ${theme.colors.text.primary};
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+    :hover {
+      color: inherit;
+    }
+  }
+  button {
+    outline: none;
+    text-decoration: none;
+    display: block;
+    border: none;
+    background-color: transparent;
+  }
+
+  textarea {
+    font-size: 1.6rem;
+  }
+  #storybook_root {
+    height: 100vh;
+  }
+  `;
