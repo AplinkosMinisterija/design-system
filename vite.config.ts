@@ -24,7 +24,7 @@ export default defineConfig({
     sourcemap: false,
     emptyOutDir: true,
   },
-  plugins: [react(), dts()],
+  plugins: [react(), dts({ rollupTypes: true })],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

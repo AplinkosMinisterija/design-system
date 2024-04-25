@@ -11,7 +11,7 @@
     "noEmit": true,
     "declaration": true,
     "jsx": "react-jsx",
-    "typeRoots": ["./dist/index.d.ts"],
+//    "typeRoots": ["./dist/index.d.ts"],
 
     /* Linting */
     "strict": true,
@@ -19,7 +19,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
-    "baseUrl": ".",
+//    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
