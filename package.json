@@ -24,19 +24,20 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "peerDependencies": {
+  "dependencies": {
     "react": "^18.2.0",
     "react-router": "^6.22.2",
-    "styled-components": "^6.1.8"
-  },
-  "dependencies": {
+    "styled-components": "^6.1.8",
     "react-div-100vh": "^0.7.0",
     "react-icons": "^4.10.1",
     "react-paginate": "^8.2.0",
     "react-resize-detector": "^10.0.1",
     "react-responsive": "^10.0.0",
     "react-super-responsive-table": "^5.2.2",
-    "react-toastify": "^10.0.5"
+    "react-toastify": "^10.0.5",
+    "typescript": "^5.0.2",
+    "vite": "^5.1.2",
+    "vite-plugin-dts": "^3.7.3"
   },
   "engines": {
     "node": ">=20.0.0 <21.0.0"
@@ -71,10 +72,7 @@
     "react-router-dom": "^6.22.2",
     "storybook": "^7.3.2",
     "storybook-addon-react-router-v6": "^2.0.10",
-    "styled-components": "^6.1.8",
-    "typescript": "^5.0.2",
-    "vite": "^5.1.2",
-    "vite-plugin-dts": "^3.7.3"
+    "styled-components": "^6.1.8"
   },
   "eslintConfig": {
     "extends": "@aplinkosministerija/eslint-config-biip-react"
