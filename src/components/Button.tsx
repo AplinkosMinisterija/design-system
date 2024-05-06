@@ -56,7 +56,7 @@ const StyledButton = styled.button<{
   border-radius: ${({ theme }) => theme.radius.buttons}rem;
   padding: 1.1rem 2rem;
   background-color: ${({ $variant, theme }) => theme.colors.buttons[$variant].background};
-  color: ${({ $variant, theme }) => theme.colors.buttonText[$variant]};
+  color: ${({ $variant, theme }) => theme.colors.buttons[$variant].text};
   border: ${({ $variant, theme }) => theme.colors.buttons[$variant].border};
   font-weight: ${({ $fontWeight }) => $fontWeight};
   font-size: ${({ theme }) => theme.fontSize.buttons}rem;

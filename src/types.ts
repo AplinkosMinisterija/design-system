@@ -32,10 +32,6 @@ interface ThemeColors {
   text: {
     //use only for text elements
     primary: string; // for titles and headings
-    secondary: string; // for paragraphs and other regular texts
-    tertiary: string; // for less important explanatory texts
-    label: string; // for input label
-    error: string; // for error
     [key: string]: string;
   };
   border: string;
