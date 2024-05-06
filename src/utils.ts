@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { matchPath, useLocation } from 'react-router';
-import { createGlobalStyle } from 'styled-components';
-import { theme } from '../.storybook/preview';
-import {AppRoute} from "./types";
+import { AppRoute } from './types';
 
 export const device = {
   mobileS: `(max-width: 320px)`,
@@ -64,7 +62,7 @@ export const svgToUrl = (icon: string) => {
   return `data:image/svg+xml;base64,${base64SVG}`;
 };
 
-export const GlobalStyles = createGlobalStyle`
+export const globalStyles = (theme) => `
   * {
     box-sizing: border-box;
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -108,9 +106,7 @@ export const GlobalStyles = createGlobalStyle`
   #storybook_root {
     height: 100vh;
   }
-  `;
-
-
+ `;
 
 export function useStorage<T>(
   key: string,

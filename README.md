@@ -35,7 +35,9 @@ html {
 
 Otherwise, import global styles from the library:
 ```javascript
-import { GlobalStyles } from '@aplinkosministerija/design-system';
+import { globalStyles } from '@aplinkosministerija/design-system';
+const GlobalStyles = createGlobalStyle`${globalStyles(theme)}`;
+
 ```
 
 Once styled-components are configured and the theme and global styles are set up, you can simply import components from the library and use them in your code.

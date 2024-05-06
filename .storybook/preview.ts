@@ -1,8 +1,8 @@
 import type { Preview } from '@storybook/react';
-import { ThemeProvider } from 'styled-components';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { withThemeFromJSXProvider } from '@storybook/addon-styling';
-import { ButtonVariants, Theme } from '../src/types';
-import { GlobalStyles } from '@/utils';
+import { ButtonVariants, Theme } from '../src';
+import { globalStyles } from '../src/utils';
 
 export const theme: Theme = {
   colors: {
@@ -104,6 +104,8 @@ export const theme: Theme = {
     fields: 1.6,
   },
 };
+
+const GlobalStyles = createGlobalStyle`${globalStyles(theme)}`;
 
 const preview: Preview = {
   parameters: {
