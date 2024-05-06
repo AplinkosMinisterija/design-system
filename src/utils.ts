@@ -88,7 +88,7 @@ export function useStorage<T>(
     if (!persistent) {
       setStoredValue(initialValue);
     }
-  }, [persistent]);
+  }, []);
 
   const setValue = (value) => {
     if (typeof storedValue === 'object') {
