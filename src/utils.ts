@@ -94,7 +94,7 @@ export function useStorage<T>(
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [initialValue, persistent]);
+  }, []);
 
   const setValue = (value) => {
     if (typeof storedValue === 'object') {
