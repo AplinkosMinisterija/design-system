@@ -85,16 +85,10 @@ export function useStorage<T>(
   }, [key, storedValue, storage]);
 
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      if (!persistent) {
-        setStoredValue(initialValue);
-      }
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
+    if (!persistent) {
+      setStoredValue(initialValue);
+    }
+  }, [persistent]);
 
   const setValue = (value) => {
     if (typeof storedValue === 'object') {
