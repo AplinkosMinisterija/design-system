@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { AppRoute } from './types';
 import { matchPath, useLocation } from 'react-router';
+import { AppRoute } from './types';
 
 export const device = {
   mobileS: `(max-width: 320px)`,
@@ -61,3 +61,45 @@ export const svgToUrl = (icon: string) => {
   const base64SVG = window.btoa(icon);
   return `data:image/svg+xml;base64,${base64SVG}`;
 };
+
+
+
+export function useStorage<T>(
+  key: string,
+  initialValue: T,
+  persistent: boolean = true,
+): {
+  value: T;
+  setValue: (params: any) => void;
+  resetValue: () => void;
+} {
+  const storage = localStorage;
+
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    const item = storage.getItem(key);
+    return item ? JSON.parse(item) : initialValue;
+  });
+
+  useEffect(() => {
+    storage.setItem(key, JSON.stringify(storedValue));
+  }, [key, storedValue, storage]);
+
+  useEffect(() => {
+    if (!persistent) {
+      setStoredValue(initialValue);
+    }
+  }, []);
+
+  const setValue = (value) => {
+    if (typeof storedValue === 'object') {
+      return setStoredValue({ ...storedValue, ...value });
+    }
+    setStoredValue(value);
+  };
+
+  const resetValue = () => {
+    setStoredValue(initialValue);
+  };
+
+  return { value: storedValue, setValue, resetValue };
+}
