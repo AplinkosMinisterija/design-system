@@ -2,7 +2,7 @@ import Div100vh from 'react-div-100vh';
 import styled from 'styled-components';
 import { device } from '../../../utils';
 import MenuButton from './MenuButton';
-import Icon, { IconName } from '@/components/common/Icons';
+import Icon, { IconName } from '../../common/Icons';
 import Modal from '../Modal';
 import { DefaultLayoutProps } from '../../../types';
 

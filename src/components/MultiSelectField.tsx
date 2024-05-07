@@ -1,8 +1,8 @@
-import OptionsContainer from '@/components/common/OptionsContainer';
-import FieldWrapper from '@/components/common/FieldWrapper';
-import MultiTextField from '@/components/common/MultiTextFieldInput';
-import { filterSelectedOptions, handleRemove } from '@/components/common/functions';
-import { useSelectData } from '@/components/common/hooks';
+import OptionsContainer from './common/OptionsContainer';
+import FieldWrapper from './common/FieldWrapper';
+import MultiTextField from './common/MultiTextFieldInput';
+import { filterSelectedOptions, handleRemove } from './common/functions';
+import { useSelectData } from './common/hooks';
 
 export interface SelectOption {
   id?: string | number;

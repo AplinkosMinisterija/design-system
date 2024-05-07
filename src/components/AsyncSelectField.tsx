@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import Icon from '@/components/common/Icons';
-import { useAsyncSelectData } from '@/components/common/hooks';
-import FieldWrapper from '@/components/common/FieldWrapper';
-import TextFieldInput from '@/components/common/TextFieldInput';
-import OptionsContainer, { OptionContainerTexts } from '@/components/common/OptionsContainer';
+import Icon from './common/Icons';
+import { useAsyncSelectData } from './common/hooks';
+import FieldWrapper from './common/FieldWrapper';
+import TextFieldInput from './common/TextFieldInput';
+import OptionsContainer, { OptionContainerTexts } from './common/OptionsContainer';
 
 export interface AsyncSelectFieldProps {
   name?: string;

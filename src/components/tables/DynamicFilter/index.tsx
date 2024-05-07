@@ -3,11 +3,11 @@ import { map } from 'lodash';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Filter, { FilterInputTypes } from './Filter';
-import { device, formatDate } from '@/utils';
-import Icon, { IconName } from '@/components/common/Icons';
-import Loader from '@/components/common/Loader';
-import Popup from '@/components/layouts/Popup';
-import { FilterConfig, RowConfig } from '@/types';
+import { device, formatDate } from '../../../utils';
+import Icon, { IconName } from '../../common/Icons';
+import Popup from '../../layouts/Popup';
+import { FilterConfig, RowConfig } from '../../../types';
+import Loader from '../../common/Loader';
 
 const mapFilters = (
   filterConfig: { [key: string]: FilterConfig },
@@ -64,9 +64,9 @@ const mapFilters = (
 };
 
 interface DynamicFilterProps {
-  loading: boolean;
-  disabled: boolean;
-  className: string;
+  loading?: boolean;
+  disabled?: boolean;
+  className?: string;
   filterConfig: Record<string, FilterConfig>;
   rowConfig: RowConfig;
   onSetFilters: (filters: Record<string, any>) => void;

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useResizeDetector } from 'react-resize-detector';
 import styled from 'styled-components';
-import { FieldWrapper } from '@/index';
+import FieldWrapper from './common/FieldWrapper';
 
 export interface TextFieldProps {
   value?: string | number;

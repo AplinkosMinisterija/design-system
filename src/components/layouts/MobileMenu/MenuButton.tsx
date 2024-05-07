@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Icon, { IconName } from '@/components/common/Icons';
+import Icon, { IconName } from '../../common/Icons';
 import { JSX } from 'react';
 interface MenuButtonProps {
   label: string;

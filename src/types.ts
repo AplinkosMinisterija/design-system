@@ -1,6 +1,6 @@
 import { JSX } from 'react';
-import { FilterInputTypes } from '@/components/tables/DynamicFilter/Filter';
-export * from '@/components/tables/components/types';
+import { FilterInputTypes } from './components/tables/DynamicFilter/Filter';
+export * from './components/tables/components/types';
 
 export interface ButtonColors {
   background: string;

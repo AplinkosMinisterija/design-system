@@ -3,8 +3,8 @@ import { Tbody } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
 import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../../types';
-import NotFoundInfo from '@/components/tables/components/NotFoundInfo';
-import Icon, { IconName } from '@/components/common/Icons';
+import NotFoundInfo from '../../tables/components/NotFoundInfo';
+import Icon, { IconName } from '../../common/Icons';
 
 export interface DesktopTableProps {
   data?: TableRow[];

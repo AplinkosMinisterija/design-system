@@ -12,9 +12,9 @@ import {
   FilterConfig,
   handleDateRestriction,
   RowConfig,
-} from '@/index';
-import Checkbox from '@/components/Checkbox';
-import Datepicker from '@/components/DatePicker';
+} from '../../../index';
+import Checkbox from '../../Checkbox';
+import Datepicker from '../../DatePicker';
 
 export interface LabelsProps {
   [key: string]: string;

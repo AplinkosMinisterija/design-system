@@ -1,4 +1,4 @@
-import { ServerErrors, ValidationMessages } from '@/types';
+import { ServerErrors, ValidationMessages } from '../../types';
 import { toast } from 'react-toastify';
 
 export const getFilteredOptions = (

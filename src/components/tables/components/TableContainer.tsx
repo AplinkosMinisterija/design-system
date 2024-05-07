@@ -3,11 +3,11 @@ import ReactPaginate from 'react-paginate';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
-import { TableData } from '@/components/tables/components/types';
+import { TableData } from '../../tables/components/types';
 import { useMediaQuery } from 'react-responsive';
-import { device } from '@/utils';
-import LoaderComponent from '@/components/common/LoaderComponent';
-import Icon from '@/components/common/Icons';
+import { device } from '../../../utils';
+import LoaderComponent from '../../common/LoaderComponent';
+import Icon from '../../common/Icons';
 
 class ChildrenType {}
 

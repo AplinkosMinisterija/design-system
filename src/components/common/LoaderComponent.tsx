@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Loader from '@/components/common/Loader';
+import Loader from '../common/Loader';
 
 const LoaderComponent = ({ className }: any) => (
   <LoaderContainer className={className}>

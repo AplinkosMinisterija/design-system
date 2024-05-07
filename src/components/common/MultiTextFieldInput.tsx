@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import styled from 'styled-components';
-import Icon from '@/components/common/Icons';
+import Icon from '../common/Icons';
 export interface MultiTextFieldProps {
   values: any[];
   error?: string;

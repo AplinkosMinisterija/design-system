@@ -1,16 +1,16 @@
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
-import { RecursiveRow } from '@/components/tables/components/RecursiveRow';
-import LoaderComponent from '@/components/common/LoaderComponent';
-import NotFoundInfo from '@/components/tables/components/NotFoundInfo';
+import { RecursiveRow } from '../tables/components/RecursiveRow';
+import LoaderComponent from '../common/LoaderComponent';
+import NotFoundInfo from '../tables/components/NotFoundInfo';
 import {
   Columns,
   NotFoundInfoProps,
   TableData,
   TableItemWidth,
   TableRow,
-} from '@/components/tables/components/types';
-import { getActiveColumns } from '@/components/tables/components/functions';
+} from '../tables/components/types';
+import { getActiveColumns } from '../tables/components/functions';
 
 export interface RecursiveTableProps {
   data?: TableData;

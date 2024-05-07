@@ -1,11 +1,11 @@
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import { Columns, NotFoundInfoProps, TableData } from '../../types';
-import TableContainer from '@/components/tables/components/TableContainer';
-import DesktopTable from '@/components/tables/components/DesktopTable';
-import MobileTable from '@/components/tables/components/MobileTable';
-import LoaderComponent from '@/components/common/LoaderComponent';
-import { getActiveColumns } from '@/components/tables/components/functions';
-import { device } from '@/utils';
+import TableContainer from '../tables/components/TableContainer';
+import DesktopTable from '../tables/components/DesktopTable';
+import MobileTable from '../tables/components/MobileTable';
+import LoaderComponent from '../common/LoaderComponent';
+import { getActiveColumns } from '../tables/components/functions';
+import { device } from '../../utils';
 import { useMediaQuery } from 'react-responsive';
 
 export interface LoginLayoutProps {
