@@ -1,6 +1,6 @@
 import { useCallback, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
-import { device } from '../utils';
+import { device } from '../../utils';
 interface ModalProps {
   visible: boolean;
   onClose?: () => void;

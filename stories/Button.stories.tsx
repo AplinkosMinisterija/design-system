@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import Button from '../src/components/Button';
-import StoryWrapper from '../src/common/StoryWrapper';
+import StoryWrapper from '../src/components/common/StoryWrapper';
 import { ButtonVariants } from '../src';
 import styled from 'styled-components';
 

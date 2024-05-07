@@ -1,27 +1,21 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import Icon, { IconName } from '../../common/Icons';
+import { device } from '../../../utils';
 import MobileMenu from '../MobileMenu';
-import { device } from '../../utils';
-import { DefaultLayoutProps } from '../../types';
+import Icon, { IconName } from '@/components/common/Icons';
+import { DefaultLayoutProps } from '../../../types';
 
-interface Props extends DefaultLayoutProps {
-  onGoBack: () => void;
-}
-const BackHeader = (props: Props) => {
-  const { onGoBack } = props;
+const LogoHeader = (props: DefaultLayoutProps) => {
+  const { onGoHome, logo } = props;
   const [showMenu, setShowMenu] = useState(false);
-
   return (
     <>
       <Container>
-        <BackButton onClick={onGoBack}>
-          <BackIcon name={IconName.back} />
-        </BackButton>
-        <Menu onClick={() => setShowMenu(true)}>
+        <div onClick={onGoHome}>{logo}</div>
+        <Button onClick={() => setShowMenu(true)}>
           <MenuIcon name={IconName.burger} />
           Meniu
-        </Menu>
+        </Button>
       </Container>
       <MobileMenu visible={showMenu} onClose={() => setShowMenu(false)} {...props} />
     </>
@@ -42,7 +36,7 @@ const Container = styled.div`
   }
 `;
 
-const Menu = styled.div`
+const Button = styled.div`
   align-items: center;
   color: ${({ theme }) => theme.colors.text.primary};
   display: flex;
@@ -52,18 +46,7 @@ const Menu = styled.div`
 
 const MenuIcon = styled(Icon)`
   margin-right: 4px;
-  font-size: 2.4rem;
+  font-size: 2rem;
 `;
 
-const BackIcon = styled(Icon)`
-  align-items: center;
-  display: flex;
-  font-size: 2.4rem;
-  gap: 4px;
-  text-decoration: none;
-`;
-
-const BackButton = styled.div`
-  padding: 16px 16px 16px 0;
-`;
-export default BackHeader;
+export default LogoHeader;

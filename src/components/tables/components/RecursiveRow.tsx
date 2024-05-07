@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { TableItemWidth, TableRow } from '@/common/table/types';
-import Icon from '@/common/Icons';
+import { TableItemWidth, TableRow } from '@/components/tables/components/types';
+import Icon from '@/components/common/Icons';
 
 interface RecursiveRowProps {
   row: TableRow;

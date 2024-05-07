@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import DefaultLayout from '../src/layouts/DefaultLayout';
+import DefaultLayout from '../src/components/layouts/DefaultLayout';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import { ContentLayout } from '../src';
-import Icon, { IconName } from '../src/common/Icons';
+import Icon, { IconName } from '../src/components/common/Icons';
 
 const meta: Meta<typeof DefaultLayout> = {
   component: DefaultLayout,

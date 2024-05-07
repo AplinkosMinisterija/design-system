@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Table from '../src/components/Table';
-import StoryWrapper from '../src/common/StoryWrapper';
+import Table from '../src/components/tables/Table';
+import StoryWrapper from '../src/components/common/StoryWrapper';
 import { withRouter } from 'storybook-addon-react-router-v6';
 
 const meta: Meta<typeof Table> = {

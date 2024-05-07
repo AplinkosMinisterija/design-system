@@ -31,6 +31,9 @@
     "styled-components": "^6.1.8"
   },
   "dependencies": {
+    "date-fns": "^3.6.0",
+    "formik": "^2.4.6",
+    "react-datepicker": "^6.9.0",
     "react-div-100vh": "^0.7.0",
     "react-icons": "^4.10.1",
     "react-paginate": "^8.2.0",

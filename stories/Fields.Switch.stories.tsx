@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import Switch from '../src/components/Switch';
-import StoryWrapper from '../src/common/StoryWrapper';
+import StoryWrapper from '../src/components/common/StoryWrapper';
 
 const meta: Meta<typeof Switch> = {
   component: Switch,
-  title: 'Design system/Switch',
+  title: 'Design system/Fields/Switch',
 };
 
 export default meta;

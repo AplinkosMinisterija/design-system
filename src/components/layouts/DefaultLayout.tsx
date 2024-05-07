@@ -1,9 +1,9 @@
 import Div100vh from 'react-div-100vh';
 import styled from 'styled-components';
-import { useWindowSize, device } from '../utils';
+import { useWindowSize, device } from '../../utils';
 import LogoHeader from './headers/LogoHeader';
 import SideBar from './SideBar';
-import { DefaultLayoutProps } from '../types';
+import { DefaultLayoutProps } from '../../types';
 
 const DefaultLayout = (props: DefaultLayoutProps) => {
   const { children, onScroll = () => {} } = props;

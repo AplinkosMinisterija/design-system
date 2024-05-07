@@ -3,11 +3,11 @@ import ReactPaginate from 'react-paginate';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
-import { TableData } from '@/common/table/types';
+import { TableData } from '@/components/tables/components/types';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/utils';
-import LoaderComponent from '@/common/LoaderComponent';
-import Icon from '@/common/Icons';
+import LoaderComponent from '@/components/common/LoaderComponent';
+import Icon from '@/components/common/Icons';
 
 class ChildrenType {}
 
@@ -18,7 +18,7 @@ export interface TableLayoutProps {
   children: ChildrenType;
 }
 
-const TableLayout = ({ data, pageName = 'page', loading, children }: TableLayoutProps) => {
+const TableContainer = ({ data, pageName = 'page', loading, children }: TableLayoutProps) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const params = Object.fromEntries([...Array.from(searchParams)]);
@@ -129,4 +129,4 @@ const StyledReactPaginate = styled(ReactPaginate)`
   }
 `;
 
-export default TableLayout;
+export default TableContainer;

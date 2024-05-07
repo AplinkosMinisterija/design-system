@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import NumericTextField from '../src/components/NumericTextField';
-import StoryWrapper from '../src/common/StoryWrapper';
+import StoryWrapper from '../src/components/common/StoryWrapper';
 
 const meta: Meta<typeof NumericTextField> = {
   component: NumericTextField,

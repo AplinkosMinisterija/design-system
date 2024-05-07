@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import styled from 'styled-components';
-import Loader from '../common/Loader';
+import Loader from '@/components/common/Loader';
 
 export interface ButtonProps {
   variant?: string;

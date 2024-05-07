@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import RecursiveTable from '../src/components/RecursiveTable';
-import StoryWrapper from '../src/common/StoryWrapper';
+import RecursiveTable from '../src/components/tables/RecursiveTable';
+import StoryWrapper from '../src/components/common/StoryWrapper';
 import { withRouter } from 'storybook-addon-react-router-v6';
 
 const meta: Meta<typeof RecursiveTable> = {

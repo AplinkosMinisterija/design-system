@@ -1,7 +1,7 @@
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
-import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../types';
-import NotFoundInfo from '@/common/table/NotFoundInfo';
+import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../../types';
+import NotFoundInfo from '@/components/tables/components/NotFoundInfo';
 
 export interface DesktopTableProps {
   data?: TableRow[];

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import Tabs from '../src/components/Tabs';
-import StoryWrapper from '../src/common/StoryWrapper';
+import StoryWrapper from '../src/components/common/StoryWrapper';
 
 const meta: Meta<typeof Tabs> = {
   component: Tabs,

@@ -1,10 +1,10 @@
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
-import { Columns, NotFoundInfoProps, TableData } from '../types';
-import TableLayout from '../common/table/TableLayout';
-import DesktopTable from '../common/table/DesktopTable';
-import MobileTable from '../common/table/MobileTable';
-import LoaderComponent from '@/common/LoaderComponent';
-import { getActiveColumns } from '@/common/table/functions';
+import { Columns, NotFoundInfoProps, TableData } from '../../types';
+import TableContainer from '@/components/tables/components/TableContainer';
+import DesktopTable from '@/components/tables/components/DesktopTable';
+import MobileTable from '@/components/tables/components/MobileTable';
+import LoaderComponent from '@/components/common/LoaderComponent';
+import { getActiveColumns } from '@/components/tables/components/functions';
 import { device } from '@/utils';
 import { useMediaQuery } from 'react-responsive';
 
@@ -35,7 +35,7 @@ const Table = ({
   if (loading) return <LoaderComponent />;
 
   return (
-    <TableLayout data={data} pageName={pageName} loading={loading}>
+    <TableContainer data={data} pageName={pageName} loading={loading}>
       {isMobile ? (
         <MobileTable
           data={data?.data}
@@ -55,7 +55,7 @@ const Table = ({
           isFilterApplied={isFilterApplied}
         />
       )}
-    </TableLayout>
+    </TableContainer>
   );
 };
 

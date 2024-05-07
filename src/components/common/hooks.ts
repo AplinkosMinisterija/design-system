@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getFilteredOptions, handleResponse } from '@/common/functions';
+import { getFilteredOptions, handleResponse } from '@/components/common/functions';
 
 export const useSelectData = ({
   options,

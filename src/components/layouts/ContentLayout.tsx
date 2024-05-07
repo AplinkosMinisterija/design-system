@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { device } from '../utils';
-import { AppRoute } from '../types';
+import { device } from '../../utils';
+import { AppRoute } from '../../types';
 import { JSX } from 'react';
 interface Props {
   children: any;

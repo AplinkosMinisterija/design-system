@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import LoaderComponent from '@/common/LoaderComponent';
+import LoaderComponent from '@/components/common/LoaderComponent';
 
 export interface SelectOption {
   id?: string;

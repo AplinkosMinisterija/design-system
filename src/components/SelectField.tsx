@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { useSelectData } from '@/common/hooks';
-import FieldWrapper from '@/common/FieldWrapper';
-import TextFieldInput from '@/common/TextFieldInput';
-import OptionsContainer from '@/common/OptionsContainer';
-import Icon from '@/common/Icons';
+import { useSelectData } from '@/components/common/hooks';
+import FieldWrapper from '@/components/common/FieldWrapper';
+import TextFieldInput from '@/components/common/TextFieldInput';
+import OptionsContainer from '@/components/common/OptionsContainer';
+import Icon from '@/components/common/Icons';
 
 export interface SelectFieldProps {
   name?: string;

@@ -2,7 +2,7 @@ import type { Preview } from '@storybook/react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { withThemeFromJSXProvider } from '@storybook/addon-styling';
 import { ButtonVariants, Theme } from '../src';
-import { globalStyles } from '../src/utils';
+import { globalStyles } from '../src';
 
 export const theme: Theme = {
   colors: {
