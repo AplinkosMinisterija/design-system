@@ -65,11 +65,11 @@ const InputContainer = styled.div<{
   $disabled: boolean;
 }>`
   display: flex;
-  height: ${({ theme }) => `${theme.height.fields || 5.6}rem`};
+  height: ${({ theme }) => `${theme.height?.fields || 5.6}rem`};
   background-color: ${({ theme }) => theme.colors.fields?.background || 'white'};
   justify-content: space-between;
   align-items: center;
-  border-radius: ${({ theme }) => theme.radius.fields || 0.4}rem;
+  border-radius: ${({ theme }) => theme.radius?.fields || 0.4}rem;
   overflow: hidden;
   border: 1px solid
     ${({ theme, $error }) =>
@@ -93,7 +93,7 @@ const StyledTextInput = styled.input<{
   height: 100%;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'text')};
   background-color: ${({ theme }) => theme.colors.fields?.background || 'white'};
-  font-size: ${({ theme }) => theme.fontSize.fields || 1.6}rem;
+  font-size: ${({ theme }) => theme.fontSize?.fields || 1.6}rem;
   color: ${({ theme }) => theme.colors.fields?.text || '#101010'};
 
   &:focus {

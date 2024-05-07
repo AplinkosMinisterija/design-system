@@ -38,7 +38,7 @@ const Container = styled.div`
 
 const Button = styled.div`
   align-items: center;
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: ${({ theme }) => theme.colors.text?.primary || '#101010'};
   display: flex;
   font-weight: 600;
   gap: 4px;

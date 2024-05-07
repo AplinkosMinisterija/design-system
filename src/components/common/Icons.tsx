@@ -1,6 +1,7 @@
 import {
   MdArrowBackIos,
   MdArrowForwardIos,
+  MdOutlineCalendarToday,
   MdOutlineVisibility,
   MdOutlineVisibilityOff,
 } from 'react-icons/md';
@@ -20,6 +21,7 @@ export enum IconName {
   dropdownArrow = 'dropdownArrow',
   forward = 'forward',
   backward = 'backward',
+  calendar = 'calendar',
 }
 
 export interface IconProps {
@@ -66,6 +68,8 @@ const Icon = ({ name, className }: IconProps) => {
       return <MdArrowForwardIos className={className} />;
     case IconName.backward:
       return <MdArrowBackIos className={className} />;
+    case IconName.calendar:
+      return <MdOutlineCalendarToday className={className} />;
     default:
       return null;
   }

@@ -94,11 +94,11 @@ const InputContainer = styled.div<{
     ${$error ? theme.colors.error || '#FE5B78' : theme.colors.fields?.border || '#d4d5de'};
   `
       : null}
-  border-radius: ${({ theme }) => theme.radius.fields || 0.8}rem;
+  border-radius: ${({ theme }) => theme.radius?.fields || 0.8}rem;
   display: flex;
   justify-content: space-between;
   padding: 4px 12px 4px 4px;
-  min-height: ${({ theme }) => `${theme.height.fields || 5.6}rem`};
+  min-height: ${({ theme }) => `${theme.height?.fields || 5.6}rem`};
   overflow: hidden;
   background-color: ${({ theme, $backgroundColor }) =>
     $backgroundColor || theme.colors.fields?.background || 'white'};

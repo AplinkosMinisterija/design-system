@@ -1,13 +1,13 @@
 import { format } from 'date-fns';
-import * as lt from 'date-fns/locale/lt';
+import { lt } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
-import DatePicker, { registerLocale } from 'react-datepicker';
+import Datepicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import TextField from './TextField';
 import { useMediaQuery } from 'react-responsive';
-import { device } from '@/utils';
-import Icons from '@/components/common/Icons';
+import { device } from '../utils';
+import Icons, { IconName } from './common/Icons';
 
 registerLocale('lt', lt);
 
@@ -27,7 +27,7 @@ export interface DatepickerProps {
   bottom?: boolean;
 }
 
-const Datepicker = ({
+const DatePicker = ({
   value,
   error,
   onChange,
@@ -114,7 +114,7 @@ const Datepicker = ({
                 </IconContainer>
               )}
               <IconContainer disabled={disabled} onClick={() => setOpen(!open)}>
-                <CalendarIcon name={'calendar'} />
+                <CalendarIcon name={IconName.calendar} />
               </IconContainer>
             </>
           }
@@ -129,7 +129,7 @@ const Datepicker = ({
               <CloseIcon name="close" />
             </div>
           )}
-          <DatePicker
+          <Datepicker
             locale="lt"
             open={open}
             {...(maxDate ? { maxDate: new Date(maxDate) } : {})}
@@ -150,7 +150,7 @@ const Datepicker = ({
               setOpen(false);
             }}
             inline
-          ></DatePicker>
+          ></Datepicker>
         </DateContainer>
       ) : null}
     </Container>
@@ -368,4 +368,4 @@ const ClearIcon = styled(Icons)<{ disabled: boolean }>`
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;
 
-export default Datepicker;
+export default DatePicker;

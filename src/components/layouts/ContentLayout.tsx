@@ -34,7 +34,7 @@ const ContentLayout = ({
 export default ContentLayout;
 
 const SubTitle = styled.div`
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: ${({ theme }) => theme.colors.text?.primary || '#101010'};
   margin-bottom: 16px;
 `;
 
@@ -69,7 +69,7 @@ const InnerContainer = styled.div`
 `;
 
 const Title = styled.div`
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: ${({ theme }) => theme.colors.text?.primary || '#101010'};
   font-size: 3.2rem;
   font-weight: 800;
   margin: 16px 0;

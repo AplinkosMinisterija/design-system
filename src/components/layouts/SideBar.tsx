@@ -97,7 +97,7 @@ const Item = styled.div<{ $isActive: boolean }>`
   padding: 12px 8px;
   border-radius: 5px;
   transition: all 0.2s ease-out;
-  color: ${({ theme }) => theme.colors.text.retroBlack};
+  color: ${({ theme }) => theme.colors.text?.primary || '#101010'};
 
   ${({ $isActive, theme }) =>
     $isActive &&
