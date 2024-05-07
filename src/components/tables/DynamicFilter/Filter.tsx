@@ -218,7 +218,6 @@ const InputWrapper = styled.div<{ isLast: boolean; single: boolean }>`
   min-width: ${({ single }) => (single ? '400px' : 'auto')};
   flex: 2;
   margin-top: 8px;
-
   @media ${device.mobileL} {
     min-width: 100%;
   }
@@ -242,15 +241,23 @@ const StyledSingleCheckbox = styled(Checkbox)`
 
 const ClearButton = styled.button`
   margin-top: 24px;
-  align-self: flex-end;
-  height: 40px;
-  padding: 0 20px;
-  cursor: pointer;
-  color: #175cd3;
+  color: ${({ theme }) => theme.colors.link || '#175cd3'};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: ${({ theme }) => theme.height?.buttons || 4}rem;
+  padding: 1.1rem 2rem;
+  color: ${({ theme }) => theme.colors.link || '#101010'};
+  font-size: ${({ theme }) => theme.fontSize.link || 1.6}rem;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
   text-decoration: underline;
+  white-space: nowrap;
+  overflow: hidden;
   :hover {
     opacity: 0.6;
   }
+  width: 100%;
 `;
 
 export default Filter;

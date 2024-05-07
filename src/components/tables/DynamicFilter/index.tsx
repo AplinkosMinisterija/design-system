@@ -63,7 +63,7 @@ const mapFilters = (
   return applied.flat();
 };
 
-interface DynamicFilterProps {
+export interface DynamicFilterProps {
   loading?: boolean;
   disabled?: boolean;
   className?: string;
@@ -118,7 +118,6 @@ const DynamicFilter = ({
 
                     return;
                   }
-
                   onSetFilters(rest);
                 }}
               >
@@ -244,4 +243,5 @@ const FilterWraper = styled.div`
 `;
 
 DynamicFilter.map = mapFilters;
+
 export default DynamicFilter;

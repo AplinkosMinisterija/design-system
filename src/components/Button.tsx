@@ -43,23 +43,19 @@ const Button = ({
 
 const StyledButton = styled.button<{
   $variant: string;
-  $height: number;
-  $padding?: string;
-  $fontWeight?: string;
-  $radius?: string;
 }>`
   display: flex;
   justify-content: center;
   gap: 1.2rem;
   align-items: center;
-  height: ${({ theme }) => theme.height.buttons}rem;
-  border-radius: ${({ theme }) => theme.radius.buttons}rem;
+  height: ${({ theme }) => theme.height?.buttons || 4}rem;
+  border-radius: ${({ theme }) => theme.radius?.buttons || 0.4}rem;
   padding: 1.1rem 2rem;
   background-color: ${({ $variant, theme }) => theme.colors.buttons[$variant].background};
   color: ${({ $variant, theme }) => theme.colors.buttons[$variant].text};
   border: ${({ $variant, theme }) => theme.colors.buttons[$variant].border};
-  font-weight: ${({ $fontWeight }) => $fontWeight};
-  font-size: ${({ theme }) => theme.fontSize.buttons}rem;
+  font-weight: ${({ theme }) => theme.fontWeight.buttons || 400};
+  font-size: ${({ theme }) => theme.fontSize.buttons || 1.6}rem;
   :hover {
     background-color: ${({ $variant, theme }) => theme.colors.buttons[$variant].hover};
   }

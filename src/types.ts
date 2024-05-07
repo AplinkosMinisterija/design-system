@@ -16,6 +16,7 @@ export interface FieldsColors {
   tag?: string;
   tagText?: string;
   icon?: string;
+  label?: string;
 }
 interface ThemeColors {
   primary: string;
@@ -36,6 +37,7 @@ interface ThemeColors {
     [key: string]: string;
   };
   border: string;
+  link?: string;
   [key: string]: any;
 }
 
@@ -48,13 +50,20 @@ export interface Theme {
     [key: string]: any;
   };
   height?: {
-    fields: number;
-    buttons: number;
+    fields?: number;
+    buttons?: number;
     [key: string]: any;
   };
   fontSize?: {
     fields: number;
-    buttons: number;
+    fieldLabels?: number;
+    buttons?: number;
+    [key: string]: any;
+  };
+  fontWeight?: {
+    fields?: number;
+    fieldLabels?: number;
+    buttons?: number;
     [key: string]: any;
   };
   [key: string]: any;
@@ -151,8 +160,8 @@ export interface FilterConfig {
   options?: any[];
   customSetValue?: (setFieldValue: () => void, input: string) => void;
   getDependId?: (values: any) => string;
-  optionsApi?: (input?: string, page?: number) => Promise<any>;
-  refreshOptions?: (input?: string, page?: number) => Promise<any>;
+  optionsApi?: (input: string, page: number) => Promise<any>;
+  refreshOptions?: (input?: string, page?: number) => any;
   getOptionValue?: (value: any) => string;
   default?: any;
 }

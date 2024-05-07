@@ -64,16 +64,16 @@ const LabelRow = styled.div`
 `;
 
 const BottomLabel = styled.div`
-  margin-top: 6px;
+  margin-top: 0.6rem;
   font-size: 1.2rem;
   color: #697586;
 `;
 
 const Label = styled.label`
   text-align: left;
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.text?.primary || '#101010'};
+  font-size: ${({ theme }) => theme.fonts?.fieldLabels || 1.4}rem;
+  font-weight: ${({ theme }) => theme.fontWeight?.fieldLabels || 400};
+  color: ${({ theme }) => theme.colors.fields?.label || '#101010'};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -86,7 +86,7 @@ const LabelContainer = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 4px;
+  margin-bottom: 0.4rem;
 `;
 
 const SubLabel = styled.div`
@@ -94,7 +94,7 @@ const SubLabel = styled.div`
   font-size: 1.2rem;
   font-weight: 600;
   color: #0b1f518f;
-  max-width: 130px;
+  max-width: 13rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

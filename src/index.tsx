@@ -18,8 +18,8 @@ import TextAreaField from './components/TextAreaField';
 import TableContainer from './components/tables/components/TableContainer';
 import RecursiveTable from './components/tables/RecursiveTable';
 import Table from './components/tables/Table';
-import Datepicker from './components/DatePicker';
-
+import DatePicker from './components/DatePicker';
+import DynamicFilter from './components/tables/DynamicFilter';
 export * from './types';
 export * from './utils';
 
@@ -44,5 +44,6 @@ export {
   TableContainer,
   RecursiveTable,
   Table,
-  Datepicker,
+  DatePicker,
+  DynamicFilter,
 };
