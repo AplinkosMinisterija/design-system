@@ -10,6 +10,7 @@ export interface ButtonColors {
 }
 export interface FieldsColors {
   border?: string;
+  borderFocus?: string;
   text?: string;
   background?: string;
   error?: string;
@@ -17,6 +18,7 @@ export interface FieldsColors {
   tagText?: string;
   icon?: string;
   label?: string;
+  [key: string]: any;
 }
 interface ThemeColors {
   primary: string;
