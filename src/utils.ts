@@ -137,7 +137,7 @@ export function useStorage<T>(
 
   const setValue = (value) => {
     if (typeof storedValue === 'object') {
-      return setStoredValue({ ...storedValue, ...value });
+      return setStoredValue(value);
     }
     setStoredValue(value);
   };
