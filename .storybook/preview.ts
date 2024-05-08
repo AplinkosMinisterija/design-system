@@ -2,7 +2,7 @@ import type { Preview } from '@storybook/react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { withThemeFromJSXProvider } from '@storybook/addon-styling';
 import { ButtonVariants, Theme } from '../src';
-import { globalStyles } from '../src/utils';
+import { globalStyles } from '../src';
 
 export const theme: Theme = {
   colors: {
@@ -50,6 +50,12 @@ export const theme: Theme = {
         hover: 'transparent',
       },
     },
+    fields: {
+      text: '#101010',
+      label: '#101010',
+      border: '#d4d5de',
+      background: 'white',
+    },
     buttonBackground: {
       primary: '#53B1FD',
       secondary: 'white',
@@ -80,6 +86,12 @@ export const theme: Theme = {
   fontSize: {
     buttons: 1.6,
     fields: 1.6,
+    fieldLabels: 1.4,
+  },
+  fontWeight: {
+    fields: 400,
+    fieldLabels: 600,
+    buttons: 600,
   },
 };
 

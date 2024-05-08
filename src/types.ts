@@ -1,5 +1,6 @@
 import { JSX } from 'react';
-export * from '@/common/table/types';
+import { FilterInputTypes } from './components/tables/DynamicFilter/Filter';
+export * from './components/tables/components/types';
 
 export interface ButtonColors {
   background: string;
@@ -15,6 +16,7 @@ export interface FieldsColors {
   tag?: string;
   tagText?: string;
   icon?: string;
+  label?: string;
 }
 interface ThemeColors {
   primary: string;
@@ -35,6 +37,7 @@ interface ThemeColors {
     [key: string]: string;
   };
   border: string;
+  link?: string;
   [key: string]: any;
 }
 
@@ -47,13 +50,20 @@ export interface Theme {
     [key: string]: any;
   };
   height?: {
-    fields: number;
-    buttons: number;
+    fields?: number;
+    buttons?: number;
     [key: string]: any;
   };
   fontSize?: {
     fields: number;
-    buttons: number;
+    fieldLabels?: number;
+    buttons?: number;
+    [key: string]: any;
+  };
+  fontWeight?: {
+    fields?: number;
+    fieldLabels?: number;
+    buttons?: number;
     [key: string]: any;
   };
   [key: string]: any;
@@ -141,3 +151,19 @@ export enum ButtonVariants {
   SUCCESS = 'success',
   TRANSPARENT = 'transparent',
 }
+
+export interface FilterConfig {
+  label: string;
+  key: string;
+  optionLabel?: (value: any) => string;
+  inputType: FilterInputTypes;
+  options?: any[];
+  customSetValue?: (setFieldValue: () => void, input: string) => void;
+  getDependId?: (values: any) => string;
+  optionsApi?: (input: string, page: number) => Promise<any>;
+  refreshOptions?: (input?: string, page?: number) => any;
+  getOptionValue?: (value: any) => string;
+  default?: any;
+}
+
+export type RowConfig = string[][];

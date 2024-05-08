@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useResizeDetector } from 'react-resize-detector';
 import styled from 'styled-components';
-import { FieldWrapper } from '@/index';
+import FieldWrapper from './common/FieldWrapper';
 
 export interface TextFieldProps {
   value?: string | number;
@@ -82,7 +82,7 @@ const InputContainer = styled.div<{ $error: boolean; $disabled: boolean }>`
     ${({ theme, $error }) =>
       $error ? theme.colors.error || '#FE5B78' : theme.colors.fields?.border || '#d4d5de'};
   opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
-  border-radius: ${({ theme }) => theme.radius.fields || 0.4}rem;
+  border-radius: ${({ theme }) => theme.radius?.fields || 0.4}rem;
   :focus-within {
     //TODO: fix focus style
     border-color: ${({ theme }) => theme.colors.primary};
@@ -96,7 +96,7 @@ const StyledTextArea = styled.textarea`
   overflow-y: hidden;
   resize: none;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'text')};
-  font-size: ${({ theme }) => theme.fontSize.fields || 1.6}rem;
+  font-size: ${({ theme }) => theme.fontSize?.fields || 1.6}rem;
   color: ${({ theme }) => theme.colors.fields?.text || '#101010'};
   background-color: ${({ theme }) => theme.colors.fields?.background || 'white'};
   :focus {

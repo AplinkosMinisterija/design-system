@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { matchPath, useLocation } from 'react-router';
-import { AppRoute } from './types';
+import { AppRoute, FilterConfig } from './types';
+import { format } from 'date-fns/format';
 
 export const device = {
   mobileS: `(max-width: 320px)`,
@@ -147,3 +148,24 @@ export function useStorage<T>(
 
   return { value: storedValue, setValue, resetValue };
 }
+
+export const formatDate = (date?: Date | string) =>
+  date ? format(new Date(date), 'yyyy-MM-dd') : '-';
+
+export const handleDateRestriction = (filter: FilterConfig, values: any) => {
+  const key = filter.key;
+  const includesFrom = key.includes('From');
+  const includesTo = key.includes('To');
+  const dateTo = key.replace(/From$/, 'To');
+  const dateFrom = key.replace(/To$/, 'From');
+  return {
+    ...(includesFrom &&
+      values[dateTo] && {
+        maxDate: new Date(values[dateTo]),
+      }),
+    ...(includesTo &&
+      values[dateFrom] && {
+        minDate: new Date(values[dateFrom]),
+      }),
+  };
+};

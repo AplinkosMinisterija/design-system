@@ -1,8 +1,8 @@
-import { useAsyncSelectData } from '@/common/hooks';
-import FieldWrapper from '@/common/FieldWrapper';
-import MultiTextField from '@/common/MultiTextFieldInput';
-import { filterSelectedOptions, handleRemove } from '@/common/functions';
-import OptionsContainer, { OptionContainerTexts } from '@/common/OptionsContainer';
+import { useAsyncSelectData } from './common/hooks';
+import FieldWrapper from './common/FieldWrapper';
+import MultiTextField from './common/MultiTextFieldInput';
+import { filterSelectedOptions, handleRemove } from './common/functions';
+import OptionsContainer, { OptionContainerTexts } from './common/OptionsContainer';
 
 export interface SelectOption {
   id?: string;
