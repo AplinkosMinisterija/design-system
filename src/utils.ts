@@ -135,18 +135,11 @@ export function useStorage<T>(
     }
   }, []);
 
-  const setValue = (value) => {
-    if (typeof storedValue === 'object') {
-      return setStoredValue(value);
-    }
-    setStoredValue(value);
-  };
-
   const resetValue = () => {
     setStoredValue(initialValue);
   };
 
-  return { value: storedValue, setValue, resetValue };
+  return { value: storedValue, setValue: setStoredValue, resetValue };
 }
 
 export const formatDate = (date?: Date | string) =>
