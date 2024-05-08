@@ -1,5 +1,5 @@
-import { FieldWrapper } from '@/index';
-import TextFieldInput from '@/common/TextFieldInput';
+import FieldWrapper from './common/FieldWrapper';
+import TextFieldInput from './common/TextFieldInput';
 
 export interface NumericTextFieldProps {
   value?: string | number;

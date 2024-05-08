@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import FieldWrapper from '../common/FieldWrapper';
-import TextFieldInput from '../common/TextFieldInput';
-import Icon from '../common/Icons';
+import FieldWrapper from './common/FieldWrapper';
+import TextFieldInput from './common/TextFieldInput';
+import Icon from './common/Icons';
 export interface TextFieldProps {
   value?: string | number;
   name?: string;

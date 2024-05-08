@@ -1,8 +1,8 @@
-import OptionsContainer from '@/common/OptionsContainer';
-import FieldWrapper from '@/common/FieldWrapper';
-import MultiTextField from '@/common/MultiTextFieldInput';
-import { filterSelectedOptions, handleRemove } from '@/common/functions';
-import { useSelectData } from '@/common/hooks';
+import OptionsContainer from './common/OptionsContainer';
+import FieldWrapper from './common/FieldWrapper';
+import MultiTextField from './common/MultiTextFieldInput';
+import { filterSelectedOptions, handleRemove } from './common/functions';
+import { useSelectData } from './common/hooks';
 
 export interface SelectOption {
   id?: string | number;

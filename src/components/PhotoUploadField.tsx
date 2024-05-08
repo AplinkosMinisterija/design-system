@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { device } from '@/utils';
-import { FileProps } from '@/types';
-import LoaderComponent from '@/common/LoaderComponent';
-import Icon from '@/common/Icons';
+import { device } from '../utils';
+import { FileProps } from '../types';
+import LoaderComponent from './common/LoaderComponent';
+import Icon from './common/Icons';
 
 export interface PhotoFieldProps {
   photo: FileProps | File | any;

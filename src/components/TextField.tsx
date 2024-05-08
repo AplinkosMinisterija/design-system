@@ -1,5 +1,5 @@
-import FieldWrapper from '../common/FieldWrapper';
-import TextFieldInput from '../common/TextFieldInput';
+import FieldWrapper from './common/FieldWrapper';
+import TextFieldInput from './common/TextFieldInput';
 export interface TextFieldProps {
   value?: string | number;
   name?: string;
