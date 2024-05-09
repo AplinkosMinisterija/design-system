@@ -105,10 +105,10 @@ const InputContainer = styled.div<{
   align-items: center;
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
-  :focus {
+  &:focus {
     outline: none;
   }
-  :focus-within {
+  &:focus-within {
     border-color: ${({ theme }) =>
       theme.colors.fields?.borderFocus || theme.colors.fields?.border || '#d4d5de'};
     box-shadow: ${({ theme }) =>
