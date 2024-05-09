@@ -145,6 +145,8 @@ export type ValidationMessages = {
   [responseErrorMessage: string]: string;
 };
 
+export type ChildrenType = string | JSX.Element | JSX.Element[];
+
 export enum ButtonVariants {
   PRIMARY = 'primary',
   SECONDARY = 'secondary',

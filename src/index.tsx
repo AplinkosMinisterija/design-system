@@ -8,6 +8,7 @@ import DatePicker from './components/DatePicker';
 import ContentLayout from './components/layouts/ContentLayout';
 import DefaultLayout from './components/layouts/DefaultLayout';
 import Modal from './components/layouts/Modal';
+import SimpleContainer from './components/layouts/SimpleContainer';
 import MapField from './components/MapField';
 import MultiSelectField from './components/MultiSelectField';
 import NumericTextField from './components/NumericTextField';
@@ -46,5 +47,6 @@ export {
   Table,
   DatePicker,
   ColumnButton,
+  SimpleContainer,
   DynamicFilter,
 };
