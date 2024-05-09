@@ -4,6 +4,7 @@ import {
   MdOutlineCalendarToday,
   MdOutlineVisibility,
   MdOutlineVisibilityOff,
+  MdSettings,
 } from 'react-icons/md';
 import { FiArrowLeft, FiMenu } from 'react-icons/fi';
 import { FaChevronRight } from 'react-icons/fa6';
@@ -22,6 +23,7 @@ export enum IconName {
   forward = 'forward',
   backward = 'backward',
   calendar = 'calendar',
+  settings = 'settings',
 }
 
 export interface IconProps {
@@ -31,6 +33,8 @@ export interface IconProps {
 
 const Icon = ({ name, className }: IconProps) => {
   switch (name) {
+    case IconName.settings:
+      return <MdSettings className={className} />;
     case IconName.visibleOn:
       return <MdOutlineVisibility className={className} />;
     case IconName.visibleOff:
