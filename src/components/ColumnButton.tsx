@@ -23,7 +23,7 @@ export interface ColumnButtonTexts {
 
 export interface ColumnButtonProps {
   columns: Columns;
-  onToggle: (columns: any) => void;
+  onToggle: (columns: Columns) => void;
   texts: ColumnButtonTexts;
 }
 
@@ -112,7 +112,7 @@ const OptionContainer = styled.div`
   padding: 15px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   overflow-x: auto;
   min-width: 130px;
   z-index: 9999;

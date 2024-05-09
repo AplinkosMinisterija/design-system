@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 
-import ColumnButton from '../src/components/ColumnButton';
+import ColumnButton, { Columns } from '../src/components/ColumnButton';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 
 const meta: Meta<typeof ColumnButton> = {
@@ -9,7 +9,7 @@ const meta: Meta<typeof ColumnButton> = {
   title: 'Design system/Buttons/ColumnButton',
 };
 
-const columns = {
+const columns: Columns = {
   name: { label: 'Rūšis', show: true },
   amount: { label: 'Kiekis', show: true },
 };
