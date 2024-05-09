@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import DefaultLayout from '../src/components/layouts/DefaultLayout';
-import { withRouter } from 'storybook-addon-react-router-v6';
 import { ContentLayout } from '../src';
 import Icon, { IconName } from '../src/components/common/Icons';
 
@@ -182,7 +181,6 @@ export const Primary: Story = {
       </DefaultLayout>
     );
   },
-  decorators: [withRouter],
   parameters: {
     routing: { path: '/newsfeed' },
   },
