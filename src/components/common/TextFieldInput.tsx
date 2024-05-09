@@ -77,9 +77,10 @@ const InputContainer = styled.div<{
   opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'text')};
   :focus-within {
-    //TODO: fix focus styles
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 4px ${({ theme }) => `${theme.colors.primary}33`};
+    border-color: ${({ theme }) =>
+      theme.colors.fields?.borderFocus || theme.colors.fields?.border || '#d4d5de'};
+    box-shadow: ${({ theme }) =>
+      theme.colors.fields?.borderFocus ? `0 0 0 4px ${theme.colors.fields.borderFocus}33` : 'none'};
   }
 `;
 

@@ -25,7 +25,7 @@ export interface TextFieldProps {
 }
 
 const TextField = ({
-  value,
+  value = '',
   name,
   error,
   showError = true,

@@ -25,7 +25,7 @@ const MultiTextField = ({
   onRemove,
   handleKeyDown,
   placeholder = '',
-  input,
+  input = '',
   disabled,
   height = 56,
 }: MultiTextFieldProps) => {
@@ -107,6 +107,12 @@ const InputContainer = styled.div<{
   opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
   :focus {
     outline: none;
+  }
+  :focus-within {
+    border-color: ${({ theme }) =>
+      theme.colors.fields?.borderFocus || theme.colors.fields?.border || '#d4d5de'};
+    box-shadow: ${({ theme }) =>
+      theme.colors.fields?.borderFocus ? `0 0 0 4px ${theme.colors.fields.borderFocus}33` : 'none'};
   }
   width: 100%;
 `;
