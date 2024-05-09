@@ -1,6 +1,6 @@
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
-import { RecursiveRow } from '../tables/components/RecursiveRow';
+import { RecursiveRow } from './components/RecursiveRow';
 import LoaderComponent from '../common/LoaderComponent';
 import NotFoundInfo from '../tables/components/NotFoundInfo';
 import {
@@ -9,8 +9,9 @@ import {
   TableData,
   TableItemWidth,
   TableRow,
-} from '../tables/components/types';
-import { getActiveColumns } from '../tables/components/functions';
+} from './components/types';
+import { getActiveColumns } from './components/functions';
+import TableContainer from '../tables/components/TableContainer';
 
 export interface RecursiveTableProps {
   data?: TableData;
@@ -90,35 +91,29 @@ const RecursiveTable = ({
 
   return (
     <TableContainer data={data} pageName={pageName} loading={loading}>
-      <TableContainer>
-        <Table>
-          <THEAD>
-            <TR $pointer={false}>
-              {keys.map((key: any, i: number) => {
-                const item = columns[key]?.label;
-                const width = columns[key]?.width || TableItemWidth.LARGE;
+      <Table>
+        <THEAD>
+          <TR $pointer={false}>
+            {keys.map((key: any, i: number) => {
+              const item = columns[key]?.label;
+              const width = columns[key]?.width || TableItemWidth.LARGE;
 
-                return (
-                  <TH width={width} key={`th-${i}`}>
-                    {item}
-                  </TH>
-                );
-              })}
-            </TR>
-          </THEAD>
+              return (
+                <TH width={width} key={`th-${i}`}>
+                  {item}
+                </TH>
+              );
+            })}
+          </TR>
+        </THEAD>
 
-          <StyledTbody>
-            <GenerateTableContent data={data?.data} />
-          </StyledTbody>
-        </Table>
-      </TableContainer>
+        <StyledTbody>
+          <GenerateTableContent data={data?.data} />
+        </StyledTbody>
+      </Table>
     </TableContainer>
   );
 };
-
-const TableContainer = styled.div`
-  width: 100%;
-`;
 
 const Table = styled.table`
   border-collapse: collapse;

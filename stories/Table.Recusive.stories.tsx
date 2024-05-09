@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import RecursiveTable from '../src/components/tables/RecursiveTable';
 import StoryWrapper from '../src/components/common/StoryWrapper';
-import { withRouter } from 'storybook-addon-react-router-v6';
 
 const meta: Meta<typeof RecursiveTable> = {
   component: RecursiveTable,
@@ -26,7 +25,7 @@ export const RecursiveTableStory: Story = {
               desktopOrder: 1,
               show: true,
               visible: true,
-              width: 'auto',
+              // width: 'auto',
             },
             column2: {
               label: 'Column 2',
@@ -34,7 +33,7 @@ export const RecursiveTableStory: Story = {
               desktopOrder: 1,
               show: true,
               visible: true,
-              width: 'auto',
+              // width: 'auto',
             },
           }}
           data={{
@@ -71,5 +70,4 @@ export const RecursiveTableStory: Story = {
       </StoryWrapper>
     );
   },
-  decorators: [withRouter],
 };

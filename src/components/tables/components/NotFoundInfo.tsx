@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 export interface EmptyStateTextProps {
@@ -8,10 +7,15 @@ export interface EmptyStateTextProps {
 }
 
 const NotFoundInfo = ({ text, urlText, url }: EmptyStateTextProps) => {
-  const navigate = useNavigate();
+  const origin = window.location.origin;
   return (
     <Container>
-      {text?.trim()} {url && <Url onClick={() => navigate(url)}>{urlText?.trim()}</Url>}
+      {text?.trim()}{' '}
+      {url && (
+        <Url onClick={() => (url ? window.location.assign(origin + '/' + url) : {})}>
+          {urlText?.trim()}
+        </Url>
+      )}
     </Container>
   );
 };

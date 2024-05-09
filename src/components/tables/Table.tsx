@@ -4,7 +4,7 @@ import TableContainer from '../tables/components/TableContainer';
 import DesktopTable from '../tables/components/DesktopTable';
 import MobileTable from '../tables/components/MobileTable';
 import LoaderComponent from '../common/LoaderComponent';
-import { getActiveColumns } from '../tables/components/functions';
+import { getActiveColumns } from './components/functions';
 import { device } from '../../utils';
 import { useMediaQuery } from 'react-responsive';
 
