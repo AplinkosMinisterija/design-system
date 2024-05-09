@@ -25,7 +25,6 @@ export const RecursiveTableStory: Story = {
               desktopOrder: 1,
               show: true,
               visible: true,
-              // width: 'auto',
             },
             column2: {
               label: 'Column 2',
@@ -33,7 +32,6 @@ export const RecursiveTableStory: Story = {
               desktopOrder: 1,
               show: true,
               visible: true,
-              // width: 'auto',
             },
           }}
           data={{
