@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { CheckBox, FieldWrapper } from 'src';
 import styled from 'styled-components';
+import CheckBox from '../components/Checkbox';
+import { ErrorMessage } from './common/ErrorMessage';
 import Icon, { IconName } from './common/Icons';
 
 export type Columns = {
@@ -72,19 +73,18 @@ const ColumnButton = ({ columns, onToggle, texts }: ColumnButtonProps) => {
       </StyledButton>
       {isOpen && (
         <OptionContainer>
-          <FieldWrapper error={error}>
-            {visibleColumnsKeys.map((key) => (
-              <div key={`column-${key}`}>
-                <StyledSingleCheckbox
-                  value={columns[key].show}
-                  label={columns[key].label}
-                  onChange={() => {
-                    handleToggle(key);
-                  }}
-                />
-              </div>
-            ))}
-          </FieldWrapper>
+          {visibleColumnsKeys.map((key) => (
+            <div key={`column-${key}`}>
+              <StyledCheckbox
+                value={columns[key].show}
+                label={columns[key].label}
+                onChange={() => {
+                  handleToggle(key);
+                }}
+              />
+            </div>
+          ))}
+          <ErrorMessage error={error} />
         </OptionContainer>
       )}
     </Container>
@@ -95,7 +95,7 @@ const Container = styled.div`
   position: relative;
 `;
 
-const StyledSingleCheckbox = styled(CheckBox)`
+const StyledCheckbox = styled(CheckBox)`
   width: 100%;
   white-space: nowrap;
   overflow: hidden;

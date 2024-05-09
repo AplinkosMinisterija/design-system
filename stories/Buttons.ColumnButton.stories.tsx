@@ -6,10 +6,10 @@ import StoryWrapper from '../src/components/common/StoryWrapper';
 
 const meta: Meta<typeof ColumnButton> = {
   component: ColumnButton,
-  title: 'Design system/ColumnButton',
+  title: 'Design system/Buttons/ColumnButton',
 };
 
-export const columns = {
+const columns = {
   name: { label: 'Rūšis', show: true },
   amount: { label: 'Kiekis', show: true },
 };
