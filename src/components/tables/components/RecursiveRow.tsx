@@ -24,7 +24,6 @@ export const RecursiveRow = ({
   padding,
   columns,
 }: RecursiveRowProps) => {
-  console.log('row', row);
   const [show, setShow] = useState(false);
   const hasChildren = !!row.children;
   const renderTd = (i: number, label) => {
