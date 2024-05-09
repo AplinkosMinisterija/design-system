@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { NotFoundInfoProps } from './types';
 
-const NotFoundInfo = ({ text, urlText, navigate }: NotFoundInfoProps) => {
+const NotFoundInfo = ({ text, urlText, onClick }: NotFoundInfoProps) => {
   return (
     <Container>
-      {text?.trim()} {urlText && <Url onClick={navigate}>{urlText?.trim()}</Url>}
+      {text?.trim()} {urlText && <Url onClick={onClick}>{urlText?.trim()}</Url>}
     </Container>
   );
 };
