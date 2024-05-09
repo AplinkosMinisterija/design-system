@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 const meta: Meta<typeof Button> = {
   component: Button,
-  title: 'Design system/Button',
+  title: 'Design system/Buttons/Button',
 };
 
 export default meta;
