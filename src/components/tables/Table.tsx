@@ -17,6 +17,7 @@ export interface LoginLayoutProps {
   pageName?: string;
   isFilterApplied?: boolean;
   loading?: boolean;
+  onPageChane: (page: number) => void;
 }
 
 const Table = ({
@@ -28,6 +29,7 @@ const Table = ({
   pageName,
   loading,
   isFilterApplied = false,
+  onPageChane = () => {},
 }: LoginLayoutProps) => {
   const isMobile = useMediaQuery({ query: device.mobileL });
   const activeColumns = getActiveColumns(columns);
@@ -35,7 +37,7 @@ const Table = ({
   if (loading) return <LoaderComponent />;
 
   return (
-    <TableContainer data={data} pageName={pageName} loading={loading}>
+    <TableContainer data={data} pageName={pageName} loading={loading} onPageChane={onPageChane}>
       {isMobile ? (
         <MobileTable
           data={data?.data}

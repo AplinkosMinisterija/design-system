@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
@@ -14,10 +13,17 @@ export interface TableLayoutProps {
   data?: TableData;
   pageName?: string;
   loading?: boolean;
+  onPageChane: (page: number) => void;
   children: ChildrenType;
 }
 
-const TableContainer = ({ data, pageName = 'page', loading, children }: TableLayoutProps) => {
+const TableContainer = ({
+  data,
+  pageName = 'page',
+  loading,
+  children,
+  onPageChane,
+}: TableLayoutProps) => {
   const params = Object.fromEntries(new URLSearchParams(window.location.search));
   const totalPages = data?.totalPages || 0;
   const showPagination = data?.data?.length;
@@ -25,25 +31,8 @@ const TableContainer = ({ data, pageName = 'page', loading, children }: TableLay
   const pageRange = isMobile ? 1 : 3;
   const pageMargin = isMobile ? 1 : 3;
 
-  const updateSearchParams = (paramsObject: any) => {
-    const searchParams = new URLSearchParams(paramsObject);
-    window.location.search = searchParams.toString();
-  };
-
-  useEffect(() => {
-    if (!loading && totalPages < parseInt(params?.page)) {
-      updateSearchParams({
-        ...params,
-        [pageName]: '1',
-      });
-    }
-  }, [params?.page, data, loading]);
-
   const handlePageChange = (e) => {
-    updateSearchParams({
-      ...params,
-      [pageName]: (e.selected + 1).toString(),
-    });
+    onPageChane(e.selected + 1);
   };
 
   if (loading) return <LoaderComponent />;

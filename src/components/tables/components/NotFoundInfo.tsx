@@ -1,21 +1,10 @@
 import styled from 'styled-components';
+import { NotFoundInfoProps } from './types';
 
-export interface EmptyStateTextProps {
-  url?: string;
-  urlText?: string;
-  text?: string;
-}
-
-const NotFoundInfo = ({ text, urlText, url }: EmptyStateTextProps) => {
-  const origin = window.location.origin;
+const NotFoundInfo = ({ text, urlText, navigate }: NotFoundInfoProps) => {
   return (
     <Container>
-      {text?.trim()}{' '}
-      {url && (
-        <Url onClick={() => (url ? window.location.assign(origin + '/' + url) : {})}>
-          {urlText?.trim()}
-        </Url>
-      )}
+      {text?.trim()} {urlText && <Url onClick={navigate}>{urlText?.trim()}</Url>}
     </Container>
   );
 };
