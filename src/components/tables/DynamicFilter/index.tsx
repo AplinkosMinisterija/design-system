@@ -92,7 +92,7 @@ const DynamicFilter = ({
     filter: 'Filtruoti',
     label: 'Filtrai',
   },
-  variant = 'columns',
+  variant = 'primary',
   showCount = true,
   showIcon = false,
 }: DynamicFilterProps) => {

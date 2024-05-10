@@ -24,24 +24,18 @@ export const ButtonStory: Story = {
       <StoryWrapper>
         <Container>
           {themeVariants?.map((key) => {
-            return (
-              <ButtonWrapper>
-                <Button variant={key}>{key.toUpperCase()}</Button>
-              </ButtonWrapper>
-            );
+            return <Button variant={key}>{key.toUpperCase()}</Button>;
           })}
-          <ButtonWrapper>
-            <Button variant={'primary'} leftIcon={<Icons name={IconName.logout} />}>
-              Log in
-            </Button>
-          </ButtonWrapper>
-          <ButtonWrapper>
-            <Button variant={'outline'} rightIcon={<Icons name={IconName.logout} />}>
-              Log out
-            </Button>
-          </ButtonWrapper>
+          <Button variant={'primary'} leftIcon={<Icons name={IconName.logout} />}>
+            Log in
+          </Button>
+          <Button variant={'outline'} rightIcon={<Icons name={IconName.logout} />}>
+            Log out
+          </Button>
         </Container>
-        <CustomButton variant={'primary'}>Custom button</CustomButton>
+        <CustomButton variant={'primary'} width={'100%'}>
+          Custom button
+        </CustomButton>
       </StoryWrapper>
     );
   },
@@ -52,10 +46,6 @@ const Container = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   gap: 1.6rem;
-`;
-
-const ButtonWrapper = styled.div`
-  width: fit-content;
 `;
 
 const CustomButton = styled(Button)`

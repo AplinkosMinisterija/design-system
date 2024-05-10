@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import DynamicFilter from '../src/components/tables/DynamicFilter';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import { withRouter } from 'storybook-addon-react-router-v6';
-import { FilterConfig } from '../src';
+import { ButtonVariants, FilterConfig } from '../src';
 import { FilterInputTypes } from '../src/components/tables/DynamicFilter/Filter';
 
 const meta: Meta<typeof DynamicFilter> = {
@@ -51,6 +51,7 @@ export const TabsStory: Story = {
             filter: 'Filtruoti',
             label: 'Filtrai',
           }}
+          variant={ButtonVariants.COLUMNS}
         />
       </StoryWrapper>
     );

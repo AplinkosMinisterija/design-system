@@ -69,15 +69,13 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
 
   return (
     <Container tabIndex={1} onBlur={handleBlur}>
-      <ButtonWrapper>
-        <Button
-          variant={variant}
-          leftIcon={<StyledIcon $variant={variant} name={IconName.settings} />}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {texts.columns}
-        </Button>
-      </ButtonWrapper>
+      <Button
+        variant={variant}
+        leftIcon={<StyledIcon $variant={variant} name={IconName.settings} />}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {texts.columns}
+      </Button>
       {isOpen && (
         <OptionContainer>
           {visibleColumnsKeys.map((key) => (
@@ -100,10 +98,6 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
 
 const Container = styled.div`
   position: relative;
-`;
-
-const ButtonWrapper = styled.div`
-  width: fit-content;
 `;
 
 const StyledCheckbox = styled(CheckBox)`
@@ -136,7 +130,6 @@ const StyledIcon = styled(Icon)<{ $variant: string }>`
     '#9aa4b2'};
   font-size: ${({ theme }) => theme.fontSize.buttons || 1.6}rem;
   cursor: pointer;
-  margin: 0;
 `;
 
 export default ColumnButton;

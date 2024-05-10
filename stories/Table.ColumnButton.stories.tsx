@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import ColumnButton, { Columns } from '../src/components/tables/ColumnButton';
 import StoryWrapper from '../src/components/common/StoryWrapper';
+import { ButtonVariants } from '../src';
 
 const meta: Meta<typeof ColumnButton> = {
   component: ColumnButton,
@@ -31,6 +32,7 @@ export const ButtonStory: Story = {
             atLeastOneColumn: 'Turi būti pasirinktas bent vienas stulpelis',
             columns: 'Stulpeliai',
           }}
+          variant={ButtonVariants.COLUMNS}
         />
       </StoryWrapper>
     );

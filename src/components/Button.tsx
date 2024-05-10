@@ -12,6 +12,7 @@ export interface ButtonProps {
   loading?: boolean;
   signature?: boolean;
   disabled?: boolean;
+  width?: string;
 }
 
 const Button = ({
@@ -24,22 +25,29 @@ const Button = ({
   loading = false,
   className,
   disabled = false,
+  width,
   ...rest
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
-    <StyledButton
-      className={className}
-      $variant={variant}
-      type={type}
-      disabled={disabled}
-      {...rest}
-    >
-      {leftIcon}
-      {loading ? <Loader color="white" /> : children}
-      {rightIcon}
-    </StyledButton>
+    <ButtonWrapper $width={width}>
+      <StyledButton
+        className={className}
+        $variant={variant}
+        type={type}
+        disabled={disabled}
+        {...rest}
+      >
+        {leftIcon}
+        {loading ? <Loader color="white" /> : children}
+        {rightIcon}
+      </StyledButton>
+    </ButtonWrapper>
   );
 };
+
+const ButtonWrapper = styled.div<{ $width: string }>`
+  width: ${({ $width }) => $width || 'fit-content'};
+`;
 
 const StyledButton = styled.button<{
   $variant: string;
