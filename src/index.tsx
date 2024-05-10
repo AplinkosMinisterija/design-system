@@ -2,7 +2,7 @@ import AsyncMultiSelectField from './components/AsyncMultiSelectField';
 import AsyncSelectField from './components/AsyncSelectField';
 import Button from './components/Button';
 import CheckBox from './components/Checkbox';
-import ColumnButton from './components/ColumnButton';
+import ColumnButton from './components/tables/ColumnButton';
 import FieldWrapper from './components/common/FieldWrapper';
 import DatePicker from './components/DatePicker';
 import ContentLayout from './components/layouts/ContentLayout';

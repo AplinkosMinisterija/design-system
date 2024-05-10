@@ -15,45 +15,50 @@ export const theme: Theme = {
     buttons: {
       [ButtonVariants.PRIMARY]: {
         background: '#53B1FD',
-        text: '#101010',
+        text: 'white',
         border: 'transparent',
-        hover: '#0061b0',
+        hover: '#a9d8fd',
       },
       [ButtonVariants.SECONDARY]: {
         background: 'white',
-        text: '#101010',
+        text: '#525469',
         border: 'transparent',
-        hover: '#13C9E78F',
+        hover: '#53B1FD',
+        hoverText: 'white',
       },
-      [ButtonVariants.TERTIARY]: {
-        background: '#7A7E9F',
-        text: 'white',
-        border: 'transparent',
-        hover: '#6f759f',
-      },
-      [ButtonVariants.DANGER]: {
-        background: '#FE5B78',
-        text: 'white',
-        border: 'transparent',
-        hover: 'rgba(252,60,90,0.9)',
-      },
-      [ButtonVariants.SUCCESS]: {
-        background: '#027A48',
-        text: 'white',
-        border: 'transparent',
-        hover: '#00a862',
+      [ButtonVariants.OUTLINE]: {
+        background: 'transparent',
+        text: '#7A7E9F',
+        border: '#7A7E9F',
+        hover: 'transparent',
+        hoverText: '#525469',
+        hoverBorder: '#525469',
       },
       [ButtonVariants.TRANSPARENT]: {
         background: 'transparent',
         text: '#101010',
         border: 'transparent',
         hover: 'transparent',
+        hoverText: '#53B1FD',
+      },
+      [ButtonVariants.COLUMNS]: {
+        background: 'white',
+        text: '#101010',
+        border: '#9aa4b2',
+        hover: 'white',
+        hoverBorder: '#626872',
+        icon: '#9aa4b2',
+        count: {
+          text: 'white',
+          background: '#53B1FD',
+        },
       },
     },
     fields: {
       text: '#101010',
       label: '#101010',
       border: '#d4d5de',
+      borderFocus: '#4656f6',
       background: 'white',
     },
     buttonBackground: {
@@ -75,23 +80,23 @@ export const theme: Theme = {
     GREY: '#f7f7f7',
   },
   radius: {
-    buttons: 2.6,
-    fields: 0.8,
+    buttons: 0.4,
+    fields: 0.4,
     multiSelectFieldTag: 0.4,
   },
   height: {
-    buttons: 5.6,
+    buttons: 4,
     fields: 5.6,
   },
   fontSize: {
     buttons: 1.6,
     fields: 1.6,
-    fieldLabels: 1.4,
+    fieldLabels: 1.6,
   },
   fontWeight: {
     fields: 400,
-    fieldLabels: 600,
-    buttons: 600,
+    fieldLabels: 400,
+    buttons: 400,
   },
 };
 

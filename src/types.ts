@@ -7,6 +7,13 @@ export interface ButtonColors {
   text: string;
   border: string;
   hover?: string;
+  hoverText?: string;
+  icon?: string;
+  count?: {
+    background: string;
+    text: string;
+  };
+  [key: string]: any;
 }
 export interface FieldsColors {
   border?: string;
@@ -151,9 +158,9 @@ export enum ButtonVariants {
   PRIMARY = 'primary',
   SECONDARY = 'secondary',
   TERTIARY = 'tertiary',
-  DANGER = 'danger',
-  SUCCESS = 'success',
+  OUTLINE = 'outline',
   TRANSPARENT = 'transparent',
+  COLUMNS = 'columns',
 }
 
 export interface FilterConfig {

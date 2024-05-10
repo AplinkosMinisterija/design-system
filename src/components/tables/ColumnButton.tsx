@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import CheckBox from '../components/Checkbox';
-import { ErrorMessage } from './common/ErrorMessage';
-import Icon, { IconName } from './common/Icons';
+import CheckBox from '../Checkbox';
+import { ErrorMessage } from '../common/ErrorMessage';
+import Icon, { IconName } from '../common/Icons';
+import Button from '../Button';
 
 export type Columns = {
   [key: string]: Column;
@@ -25,9 +26,10 @@ export interface ColumnButtonProps {
   columns: Columns;
   onToggle: (columns: Columns) => void;
   texts: ColumnButtonTexts;
+  variant?: string;
 }
 
-const ColumnButton = ({ columns, onToggle, texts }: ColumnButtonProps) => {
+const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState('');
 
@@ -67,10 +69,15 @@ const ColumnButton = ({ columns, onToggle, texts }: ColumnButtonProps) => {
 
   return (
     <Container tabIndex={1} onBlur={handleBlur}>
-      <StyledButton onClick={() => setIsOpen(!isOpen)}>
-        <StyledIcon name={IconName.settings} />
-        {texts.columns}
-      </StyledButton>
+      <ButtonWrapper>
+        <Button
+          variant={variant}
+          leftIcon={<StyledIcon $variant={variant} name={IconName.settings} />}
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {texts.columns}
+        </Button>
+      </ButtonWrapper>
       {isOpen && (
         <OptionContainer>
           {visibleColumnsKeys.map((key) => (
@@ -95,6 +102,10 @@ const Container = styled.div`
   position: relative;
 `;
 
+const ButtonWrapper = styled.div`
+  width: fit-content;
+`;
+
 const StyledCheckbox = styled(CheckBox)`
   width: 100%;
   white-space: nowrap;
@@ -114,34 +125,18 @@ const OptionContainer = styled.div`
   flex-direction: column;
   gap: 8px;
   overflow-x: auto;
-  min-width: 130px;
+  min-width: 150px;
   z-index: 9999;
 `;
 
-const StyledIcon = styled(Icon)`
-  color: #9aa4b2;
-  font-size: 1.4rem;
+const StyledIcon = styled(Icon)<{ $variant: string }>`
+  color: ${({ theme, $variant }) =>
+    theme.colors.buttons[$variant]?.icon ||
+    theme.colors.buttons[$variant || 'primary']?.text ||
+    '#9aa4b2'};
+  font-size: ${({ theme }) => theme.fontSize.buttons || 1.6}rem;
   cursor: pointer;
-`;
-
-const StyledButton = styled.button`
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  align-items: center;
-  height: 40px;
-  border-radius: 4px;
-  background-color: white;
-  color: #121926;
-  border: 1px solid #cdd5df;
-  font-weight: normal;
-  font-size: 1.4rem;
-  :hover {
-    opacity: 0.6;
-  }
-  cursor: pointer;
-  width: fit-content;
-  padding: 12px;
+  margin: 0;
 `;
 
 export default ColumnButton;

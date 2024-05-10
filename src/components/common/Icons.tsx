@@ -4,12 +4,12 @@ import {
   MdOutlineCalendarToday,
   MdOutlineVisibility,
   MdOutlineVisibilityOff,
-  MdSettings,
 } from 'react-icons/md';
 import { FiArrowLeft, FiMenu } from 'react-icons/fi';
 import { FaChevronRight } from 'react-icons/fa6';
-import { IoCloseOutline } from 'react-icons/io5';
+import { IoCloseOutline, IoFilter } from 'react-icons/io5';
 import { MdKeyboardArrowDown } from 'react-icons/md';
+import { IoMdSettings } from 'react-icons/io';
 
 export enum IconName {
   visibleOn = 'visibleOn',
@@ -24,6 +24,7 @@ export enum IconName {
   backward = 'backward',
   calendar = 'calendar',
   settings = 'settings',
+  filter = 'IoFilter',
 }
 
 export interface IconProps {
@@ -33,8 +34,10 @@ export interface IconProps {
 
 const Icon = ({ name, className }: IconProps) => {
   switch (name) {
+    case IconName.filter:
+      return <IoFilter className={className} />;
     case IconName.settings:
-      return <MdSettings className={className} />;
+      return <IoMdSettings className={className} />;
     case IconName.visibleOn:
       return <MdOutlineVisibility className={className} />;
     case IconName.visibleOff:
