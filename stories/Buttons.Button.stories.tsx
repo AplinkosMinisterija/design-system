@@ -2,10 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import Button from '../src/components/Button';
 import StoryWrapper from '../src/components/common/StoryWrapper';
-import { theme } from '../.storybook/preview';
-import { IconName } from '../src/components/common/Icons';
-import Icons from '../src/components/common/Icons';
+import Icons, { IconName } from '../src/components/common/Icons';
 import styled from 'styled-components';
+import { ButtonVariants } from '../src';
 
 const meta: Meta<typeof Button> = {
   component: Button,
@@ -15,7 +14,12 @@ const meta: Meta<typeof Button> = {
 export default meta;
 type Story = StoryObj<typeof Button>;
 
-const themeVariants = Object.keys(theme.colors.buttons);
+const themeVariants = [
+  ButtonVariants.PRIMARY,
+  ButtonVariants.SECONDARY,
+  ButtonVariants.OUTLINE,
+  ButtonVariants.TRANSPARENT,
+];
 
 export const ButtonStory: Story = {
   name: 'Button',
