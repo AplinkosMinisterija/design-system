@@ -4,7 +4,7 @@ import TableContainer from '../tables/components/TableContainer';
 import DesktopTable from '../tables/components/DesktopTable';
 import MobileTable from '../tables/components/MobileTable';
 import LoaderComponent from '../common/LoaderComponent';
-import { getActiveColumns } from '../tables/components/functions';
+import { getActiveColumns } from './components/functions';
 import { device } from '../../utils';
 import { useMediaQuery } from 'react-responsive';
 
@@ -17,6 +17,7 @@ export interface LoginLayoutProps {
   pageName?: string;
   isFilterApplied?: boolean;
   loading?: boolean;
+  onPageChane: (page: number) => void;
 }
 
 const Table = ({
@@ -28,6 +29,7 @@ const Table = ({
   pageName,
   loading,
   isFilterApplied = false,
+  onPageChane = () => {},
 }: LoginLayoutProps) => {
   const isMobile = useMediaQuery({ query: device.mobileL });
   const activeColumns = getActiveColumns(columns);
@@ -35,7 +37,7 @@ const Table = ({
   if (loading) return <LoaderComponent />;
 
   return (
-    <TableContainer data={data} pageName={pageName} loading={loading}>
+    <TableContainer data={data} pageName={pageName} loading={loading} onPageChane={onPageChane}>
       {isMobile ? (
         <MobileTable
           data={data?.data}

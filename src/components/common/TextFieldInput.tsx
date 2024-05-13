@@ -76,7 +76,7 @@ const InputContainer = styled.div<{
       $error ? theme.colors.error || '#FE5B78' : theme.colors.fields?.border || '#d4d5de'};
   opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'text')};
-  :focus-within {
+  &:focus-within {
     border-color: ${({ theme }) =>
       theme.colors.fields?.borderFocus || theme.colors.fields?.border || '#d4d5de'};
     box-shadow: ${({ theme }) =>

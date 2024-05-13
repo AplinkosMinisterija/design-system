@@ -1,17 +1,10 @@
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { NotFoundInfoProps } from './types';
 
-export interface EmptyStateTextProps {
-  url?: string;
-  urlText?: string;
-  text?: string;
-}
-
-const NotFoundInfo = ({ text, urlText, url }: EmptyStateTextProps) => {
-  const navigate = useNavigate();
+const NotFoundInfo = ({ text, urlText, onClick }: NotFoundInfoProps) => {
   return (
     <Container>
-      {text?.trim()} {url && <Url onClick={() => navigate(url)}>{urlText?.trim()}</Url>}
+      {text?.trim()} {urlText && <Url onClick={onClick}>{urlText?.trim()}</Url>}
     </Container>
   );
 };

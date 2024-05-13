@@ -22,6 +22,7 @@ import Table from './components/tables/Table';
 import Tabs from './components/Tabs';
 import TextAreaField from './components/TextAreaField';
 import TextField from './components/TextField';
+import TreeSelectField from './components/TreeSelectFiled';
 export * from './types';
 export * from './utils';
 export {
@@ -49,4 +50,5 @@ export {
   ColumnButton,
   SimpleContainer,
   DynamicFilter,
+  TreeSelectField,
 };
