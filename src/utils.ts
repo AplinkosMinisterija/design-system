@@ -1,7 +1,7 @@
+import { format } from 'date-fns/format';
 import { useCallback, useEffect, useState } from 'react';
 import { matchPath, useLocation } from 'react-router';
 import { AppRoute, FilterConfig } from './types';
-import { format } from 'date-fns/format';
 
 export const device = {
   mobileS: `(max-width: 320px)`,
@@ -115,19 +115,13 @@ export function useStorage<T>(
   persistent: boolean = true,
 ): {
   value: T;
-  setValue: (params: any) => void;
+  setValue: (newValue: T) => void;
   resetValue: () => void;
 } {
-  const storage = localStorage;
-
   const [storedValue, setStoredValue] = useState<T>(() => {
-    const item = storage.getItem(key);
+    const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : initialValue;
   });
-
-  useEffect(() => {
-    storage.setItem(key, JSON.stringify(storedValue));
-  }, [key, storedValue, storage]);
 
   useEffect(() => {
     if (!persistent) {
@@ -135,11 +129,40 @@ export function useStorage<T>(
     }
   }, []);
 
-  const resetValue = () => {
-    setStoredValue(initialValue);
+  useEffect(() => {
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === key) {
+        setStoredValue(JSON.parse(event.newValue as string));
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  const updateStorage = (newValue: T) => {
+    setStoredValue(newValue);
+    localStorage.setItem(key, JSON.stringify(newValue));
+    window.dispatchEvent(
+      new StorageEvent('storage', {
+        key,
+        newValue: JSON.stringify(newValue),
+      }),
+    );
   };
 
-  return { value: storedValue, setValue: setStoredValue, resetValue };
+  const setValue = (newValue: T) => {
+    updateStorage(newValue);
+  };
+
+  const resetValue = () => {
+    updateStorage(initialValue);
+  };
+
+  return { value: storedValue, setValue, resetValue };
 }
 
 export const formatDate = (date?: Date | string) =>
