@@ -2,20 +2,21 @@ name: Continuous integration
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
 
 jobs:
   validate:
     name: Validate build & test
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: package.json
           cache: yarn
@@ -25,3 +26,38 @@ jobs:
 
       - name: Build
         run: yarn build
+
+  storybook-preview:
+    name: Publish storybook preview
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Generate Storybook
+        run: yarn build-storybook
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: page
+          path: storybook-static
+
+      - name: Publish to Cloudflare pages
+        uses: AplinkosMinisterija/reusable-workflows/.github/actions/cloudflare-pages-publish@main
+        with:
+          cloudflare-api-token: ${{ secrets.BIIP_CLOUDFLARE_PAGES_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.BIIP_CLOUDFLARE_ACCOUNT_ID }}
+          cloudflare-project-name: design-system
+          artifact-name: page
