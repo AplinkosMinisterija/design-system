@@ -120,6 +120,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
             return (
               <InputWrapper single={singleItem} key={filter.key} isLast={index === row.length - 1}>
                 <AsyncMultiSelectField
+                  name={filter.key}
                   label={filter.label}
                   values={values[filter.key] || []}
                   onChange={(value) => setFieldValue(filter.key, value)}

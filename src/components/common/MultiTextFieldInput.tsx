@@ -119,6 +119,7 @@ const InputContainer = styled.div<{
 
 const Input = styled.input`
   border: none;
+  outline: none;
   display: inline-block;
   min-width: 50px;
   width: 100%;
@@ -143,6 +144,7 @@ const Input = styled.input`
   }
   :focus {
     outline: none;
+    border: none;
   }
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   width: 100%;

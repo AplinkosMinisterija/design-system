@@ -19,6 +19,7 @@ export interface OptionsContainerProps {
   showSelect: boolean;
   handleClick: (option: any) => any;
   texts?: OptionContainerTexts;
+  observerRef?: any;
 }
 
 const OptionsContainer = ({
@@ -26,28 +27,27 @@ const OptionsContainer = ({
   disabled = false,
   getOptionLabel,
   handleClick,
-  handleScroll,
   showSelect,
+  observerRef,
   loading,
   texts = { noOptions: '' },
 }: OptionsContainerProps) => {
-  if (!showSelect || disabled) {
-    return <></>;
-  }
+  const display = showSelect && !disabled;
 
   const renderOptions = () => {
-    if (!values?.length)
+    if (!values.length)
       return loading ? (
         <LoaderComponent />
       ) : (
         <Option key={texts.noOptions}>{texts.noOptions}</Option>
       );
+
     return (
       <>
-        {values?.map((option, key) => {
+        {values.map((option, index) => {
           return (
             <Option
-              key={JSON.stringify(option) + key}
+              key={JSON.stringify(option) + index}
               onClick={() => {
                 handleClick(option);
               }}
@@ -60,30 +60,27 @@ const OptionsContainer = ({
       </>
     );
   };
-
   return (
-    <OptionContainer
-      onClick={(e) => e.stopPropagation()}
-      className="optionContainer"
-      onScroll={handleScroll}
-    >
+    <OptionContainer display={display}>
       {renderOptions()}
+      {observerRef && <ObserverRef display={display} ref={observerRef} />}
     </OptionContainer>
   );
 };
 
-const OptionContainer = styled.div`
+const OptionContainer = styled.div<{ display: boolean }>`
+  display: ${({ display }) => (display ? 'block' : 'none')};
   position: absolute;
-  z-index: 9;
+  z-index: 29;
   width: 100%;
   padding: 10px 0px;
-  display: block;
   max-height: 200px;
   overflow-y: auto;
   overflow-x: hidden;
   border: none;
   background: #ffffff 0% 0% no-repeat padding-box;
   box-shadow: 0px 2px 16px #121a5529;
+
   > * {
     &:first-child {
       border-top-left-radius: 4px;
@@ -106,6 +103,10 @@ const Option = styled.div`
   &:hover {
     background: #f3f3f7 0% 0% no-repeat padding-box;
   }
+`;
+
+const ObserverRef = styled.div<{ display: boolean }>`
+  display: ${({ display }) => (display ? 'block' : 'none')};
 `;
 
 export default OptionsContainer;

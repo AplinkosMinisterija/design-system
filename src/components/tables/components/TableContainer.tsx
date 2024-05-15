@@ -1,11 +1,9 @@
 import ReactPaginate from 'react-paginate';
-import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
-import { TableData } from './types';
-import { useMediaQuery } from 'react-responsive';
-import { device } from '../../../utils';
-import LoaderComponent from '../../common/LoaderComponent';
+import { device, useWindowSize } from '../../../utils';
 import Icon from '../../common/Icons';
+import LoaderComponent from '../../common/LoaderComponent';
+import { TableData } from './types';
 
 class ChildrenType {}
 
@@ -27,7 +25,7 @@ const TableContainer = ({
   const params = Object.fromEntries(new URLSearchParams(window.location.search));
   const totalPages = data?.totalPages || 0;
   const showPagination = data?.data?.length;
-  const isMobile = useMediaQuery({ query: device.mobileL });
+  const isMobile = useWindowSize(device.mobileL);
   const pageRange = isMobile ? 1 : 3;
   const pageMargin = isMobile ? 1 : 3;
 
