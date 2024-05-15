@@ -28,7 +28,7 @@ export interface SelectFieldProps {
   name: string;
 }
 
-const AsyncMultiSelect = ({
+const AsyncMultiSelectField = ({
   label,
   values = [],
   name,
@@ -96,4 +96,4 @@ const AsyncMultiSelect = ({
   );
 };
 
-export default AsyncMultiSelect;
+export default AsyncMultiSelectField;
