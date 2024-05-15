@@ -42,7 +42,7 @@ const AsyncMultiSelectField = ({
   getOptionValue = (option) => option.id,
   loadOptions,
   dependantValue,
-  texts,
+  texts = { noOptions: 'Nėra pasirinkimų' },
 }: SelectFieldProps) => {
   const {
     loading,

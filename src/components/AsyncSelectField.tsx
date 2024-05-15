@@ -42,7 +42,7 @@ const AsyncSelectField = ({
   loadOptions,
   dependantValue,
   placeholder = '',
-  texts,
+  texts = { noOptions: 'Nėra pasirinkimų' },
 }: AsyncSelectFieldProps) => {
   const {
     loading,
