@@ -1,13 +1,12 @@
-import { useMediaQuery } from 'react-responsive';
 import { map } from 'lodash';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Filter, { FilterInputTypes } from './Filter';
-import { device, formatDate } from '../../../utils';
-import Icon, { IconName } from '../../common/Icons';
-import Popup from '../../layouts/Popup';
 import { FilterConfig, RowConfig } from '../../../types';
+import { device, FilterInputTypes, formatDate, useWindowSize } from '../../../utils';
+import Icon, { IconName } from '../../common/Icons';
 import Loader from '../../common/Loader';
+import Popup from '../../layouts/Popup';
+import Filter from './Filter';
 
 const mapFilters = (
   filterConfig: { [key: string]: FilterConfig },
@@ -90,7 +89,7 @@ const DynamicFilter = ({
     filter: 'Filtruoti',
   },
 }: DynamicFilterProps) => {
-  const isMobile = useMediaQuery({ query: device.mobileL });
+  const isMobile = useWindowSize(device.mobileL);
 
   const [showFilters, setShowFilters] = useState(false);
 
@@ -127,7 +126,7 @@ const DynamicFilter = ({
           ))}
         <Wrapper className={className} disabled={disabled} onClick={() => setShowFilters(true)}>
           <StyledButton disabled={disabled}>
-            <StyledIcon name="filter" />
+            <StyledIcon name={IconName.filter} />
             {loading ? <Loader color="white" /> : 'Filtrai'}
             <Count>{appliedFilters.length}</Count>
           </StyledButton>

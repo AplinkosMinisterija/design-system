@@ -2,16 +2,17 @@ import { Formik } from 'formik';
 import { map } from 'lodash';
 import styled from 'styled-components';
 import {
-  AsyncSelectField,
-  SelectField,
-  MultiSelectField,
-  TextField,
   AsyncMultiSelectField,
-  device,
+  AsyncSelectField,
   Button,
+  device,
   FilterConfig,
+  FilterInputTypes,
   handleDateRestriction,
+  MultiSelectField,
   RowConfig,
+  SelectField,
+  TextField,
 } from '../../../index';
 import Checkbox from '../../Checkbox';
 import Datepicker from '../../DatePicker';
@@ -20,7 +21,7 @@ export interface LabelsProps {
   [key: string]: string;
 }
 
-export interface LoginLayoutProps {
+export interface DynamicFilterProps {
   texts: {
     clearAll: string;
     filter: string;
@@ -31,17 +32,7 @@ export interface LoginLayoutProps {
   values?: any;
 }
 
-export enum FilterInputTypes {
-  text = 'text',
-  date = 'date',
-  multiselect = 'multiselect',
-  singleSelect = 'singleselect',
-  asyncSingleSelect = 'asyncSingleSelect',
-  asyncMultiSelect = 'asyncMultiSelect',
-  checkbox = 'checkbox',
-}
-
-const Filter = ({ values, filters, rowConfig, onSubmit, texts }: LoginLayoutProps) => {
+const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterProps) => {
   const generateDefaultValues = () => {
     const defaultValues = {};
     map(filters, (filter) => {
