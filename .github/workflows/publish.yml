@@ -66,11 +66,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pages: write
-      id-token: write
+      deployments: write
     environment:
       name: storybook
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: https://ui.startupgov.lt
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -87,11 +86,16 @@ jobs:
       - name: Generate Storybook
         run: yarn build-storybook
 
-      - name: Upload page artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          path: ./storybook-static
+          name: page
+          path: storybook-static
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish to Cloudflare pages
+        uses: AplinkosMinisterija/reusable-workflows/.github/actions/cloudflare-pages-publish@main
+        with:
+          cloudflare-api-token: ${{ secrets.BIIP_CLOUDFLARE_PAGES_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.BIIP_CLOUDFLARE_ACCOUNT_ID }}
+          cloudflare-project-name: design-system
+          artifact-name: page
+          branch: production
