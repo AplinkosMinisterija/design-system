@@ -1,13 +1,11 @@
-import { QueryClient, QueryClientProvider } from 'react-query';
 import styled from 'styled-components';
+import QueryProvider from './ReactQueryProvider';
 
 const StoryWrapper = ({ children }: any) => {
-  const queryClient = new QueryClient();
-
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryProvider>
       <InnerContainer>{children}</InnerContainer>;
-    </QueryClientProvider>
+    </QueryProvider>
   );
 };
 
