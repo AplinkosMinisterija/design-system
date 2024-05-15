@@ -1,6 +1,7 @@
 import AsyncMultiSelectField from './components/AsyncMultiSelectField';
 import AsyncSelectField from './components/AsyncSelectField';
 import Button from './components/Button';
+import ButtonsGroup from './components/ButtonsGroup';
 import CheckBox from './components/Checkbox';
 import ColumnButton from './components/ColumnButton';
 import FieldWrapper from './components/common/FieldWrapper';
@@ -51,4 +52,5 @@ export {
   SimpleContainer,
   DynamicFilter,
   TreeSelectField,
+  ButtonsGroup,
 };

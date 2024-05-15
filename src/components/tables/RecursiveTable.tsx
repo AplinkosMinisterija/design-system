@@ -1,4 +1,3 @@
-import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
 import { RecursiveRow } from './components/RecursiveRow';
 import LoaderComponent from '../common/LoaderComponent';

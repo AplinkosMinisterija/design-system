@@ -10,6 +10,12 @@ export const device = {
   desktop: `(min-width: 869px)`,
 };
 
+export const intersectionObserverConfig = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 1.0,
+};
+
 export enum FilterInputTypes {
   text = 'text',
   date = 'date',

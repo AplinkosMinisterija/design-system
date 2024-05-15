@@ -1,4 +1,3 @@
-import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import styled from 'styled-components';
 import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../../types';
 import NotFoundInfo from '../../tables/components/NotFoundInfo';

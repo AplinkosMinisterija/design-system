@@ -1,7 +1,14 @@
+import { QueryClient, QueryClientProvider } from 'react-query';
 import styled from 'styled-components';
 
 const StoryWrapper = ({ children }: any) => {
-  return <InnerContainer>{children}</InnerContainer>;
+  const queryClient = new QueryClient();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <InnerContainer>{children}</InnerContainer>;
+    </QueryClientProvider>
+  );
 };
 
 const InnerContainer = styled.div`
