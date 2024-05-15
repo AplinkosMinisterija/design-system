@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import QueryProvider from './ReactQueryProvider';
+import ReactQueryProvider from './ReactQueryProvider';
 
 const StoryWrapper = ({ children }: any) => {
   return (
-    <QueryProvider>
+    <ReactQueryProvider>
       <InnerContainer>{children}</InnerContainer>;
-    </QueryProvider>
+    </ReactQueryProvider>
   );
 };
 
