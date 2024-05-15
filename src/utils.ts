@@ -10,6 +10,16 @@ export const device = {
   desktop: `(min-width: 869px)`,
 };
 
+export enum FilterInputTypes {
+  text = 'text',
+  date = 'date',
+  multiselect = 'multiselect',
+  singleSelect = 'singleselect',
+  asyncSingleSelect = 'asyncSingleSelect',
+  asyncMultiSelect = 'asyncMultiSelect',
+  checkbox = 'checkbox',
+}
+
 export const useWindowSize = (width: string) => {
   const [isInRange, setIsInRange] = useState(false);
 
