@@ -120,6 +120,7 @@ export const useAsyncSelectData = ({
     initialPageParam: 1,
     queryFn: ({ pageParam }: any) => fetchData(pageParam),
     getNextPageParam: (lastPage) => lastPage.page,
+    enabled: showSelect,
     gcTime: 60000,
   });
 
