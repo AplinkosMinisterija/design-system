@@ -5,6 +5,7 @@ import ButtonsGroup from './components/ButtonsGroup';
 import CheckBox from './components/Checkbox';
 import ColumnButton from './components/ColumnButton';
 import FieldWrapper from './components/common/FieldWrapper';
+import ReactQueryProvider from './components/common/ReactQueryProvider';
 import DatePicker from './components/DatePicker';
 import ContentLayout from './components/layouts/ContentLayout';
 import DefaultLayout from './components/layouts/DefaultLayout';
@@ -53,4 +54,5 @@ export {
   DynamicFilter,
   TreeSelectField,
   ButtonsGroup,
+  ReactQueryProvider,
 };
