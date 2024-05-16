@@ -119,22 +119,22 @@ export const useAsyncSelectData = ({
     };
   };
 
-  const handleLoadData = async (input: string, page: number) => {
-    setLoading(true);
-    handleResponse({
-      endpoint: () => loadOptions(input, page, dependantValue),
-      onSuccess: (response: any) => {
-        setCurrentPage(response.page);
+  // const handleLoadData = async (input: string, page: number) => {
+  //   setLoading(true);
+  //   handleResponse({
+  //     endpoint: () => loadOptions(input, page, dependantValue),
+  //     onSuccess: (response: any) => {
+  //       setCurrentPage(response.page);
 
-        const data = !!response?.[optionsKey] ? response?.[optionsKey] : response;
+  //       const data = !!response?.[optionsKey] ? response?.[optionsKey] : response;
 
-        setSuggestions([...suggestions, ...data]);
+  //       setSuggestions([...suggestions, ...data]);
 
-        setHasMore(response?.page < response?.totalPages);
-        setLoading(false);
-      },
-    });
-  };
+  //       setHasMore(response?.page < response?.totalPages);
+  //       setLoading(false);
+  //     },
+  //   });
+  // };
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } = useInfiniteQuery({
     queryKey: [name, input],
