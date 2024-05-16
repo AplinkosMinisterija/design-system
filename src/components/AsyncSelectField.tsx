@@ -60,7 +60,6 @@ const AsyncSelectField = ({
     onChange,
     dependantValue,
     optionsKey,
-    name,
   });
 
   const placeholderValue = value

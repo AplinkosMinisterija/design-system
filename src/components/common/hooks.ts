@@ -1,4 +1,3 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { intersectionObserverConfig } from '../../utils';
 import { getFilteredOptions, handleResponse } from '../common/functions';
@@ -92,8 +91,9 @@ export const useAsyncSelectData = ({
   disabled,
   onChange,
   dependantValue,
-  name,
   optionsKey,
+  serverErrors,
+  validationMessages,
 }: any) => {
   const [input, setInput] = useState('');
   const [showSelect, setShowSelect] = useState(false);
@@ -103,53 +103,44 @@ export const useAsyncSelectData = ({
   const [suggestions, setSuggestions] = useState<any>([]);
   const [hasMore, setHasMore] = useState(false);
 
-  const fetchData = async (page: number) => {
-    const data = await loadOptions(input, page, dependantValue);
 
-    if (data?.[optionsKey]) {
-      return {
-        data: data?.[optionsKey],
-        page: data.page < data.totalPages ? data.page + 1 : undefined,
-      };
+  useEffect(() => {
+    if (showSelect) {
+      handleLoadData('', 1);
     }
+  }, [showSelect]);
 
-    return {
-      data,
-      page: undefined,
-    };
+  useEffect(() => {
+    if (!dependantValue) return;
+
+    handleLoadData('', 1);
+  }, [JSON.stringify(dependantValue)]);
+
+  const handleLoadData = async (input: string, page: number) => {
+    setLoading(true);
+   await handleResponse({
+      serverErrors,
+      validationMessages,
+      endpoint: () => loadOptions(input, page, dependantValue),
+      onSuccess: (response: any) => {
+        setCurrentPage(response.page);
+
+        const data = !!response?.[optionsKey] ? response?.[optionsKey] : response;
+        const isFirstPage = response?.page === 1;
+
+        setSuggestions(isFirstPage ? data : [...suggestions, ...data]);
+
+        setHasMore(response?.page < response?.totalPages);
+        setLoading(false);
+      },
+    });
   };
-
-  // const handleLoadData = async (input: string, page: number) => {
-  //   setLoading(true);
-  //   handleResponse({
-  //     endpoint: () => loadOptions(input, page, dependantValue),
-  //     onSuccess: (response: any) => {
-  //       setCurrentPage(response.page);
-
-  //       const data = !!response?.[optionsKey] ? response?.[optionsKey] : response;
-
-  //       setSuggestions([...suggestions, ...data]);
-
-  //       setHasMore(response?.page < response?.totalPages);
-  //       setLoading(false);
-  //     },
-  //   });
-  // };
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } = useInfiniteQuery({
-    queryKey: [name, input],
-    initialPageParam: 1,
-    queryFn: ({ pageParam }: any) => fetchData(pageParam),
-    getNextPageParam: (lastPage) => lastPage.page,
-    enabled: showSelect,
-    gcTime: 60000,
-  });
 
   useEffect(() => {
     const currentObserver = observerRef.current;
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
+      if (entry.isIntersecting && hasMore && !loading) {
+        handleLoadData(input, currentPage + 1);
       }
     }, intersectionObserverConfig);
 
@@ -162,7 +153,7 @@ export const useAsyncSelectData = ({
         observer.unobserve(currentObserver);
       }
     };
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage, data]);
+  }, [hasMore, loading]);
 
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
@@ -174,20 +165,24 @@ export const useAsyncSelectData = ({
   const handleClick = (option: any) => {
     setShowSelect(false);
     setInput('');
+    setSuggestions([]);
+    setCurrentPage(1);
     onChange(option);
   };
 
   const handleToggleSelect = () => {
+
     !disabled && setShowSelect(!showSelect);
   };
 
-  const handleInputChange = (input: string) => {
-    setShowSelect(!!input);
+  const handleInputChange = async (input: string) => {
+    setShowSelect(true);
     setInput(input);
+    await handleLoadData(input, 1);
   };
 
   return {
-    loading: isFetching,
+    loading,
     suggestions,
     input,
     handleInputChange,
