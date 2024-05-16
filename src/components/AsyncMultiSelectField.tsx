@@ -25,7 +25,7 @@ export interface SelectFieldProps {
   optionsKey?: string;
   hasOptionKey?: boolean;
   placeholder?: string;
-  name: string;
+  name?: string;
 }
 
 const AsyncMultiSelectField = ({
@@ -56,7 +56,6 @@ const AsyncMultiSelectField = ({
     handleClick,
   } = useAsyncSelectData({
     loadOptions,
-    name,
     disabled,
     onChange: (option: any) => onChange([...values, option]),
     dependantValue,
@@ -72,6 +71,7 @@ const AsyncMultiSelectField = ({
       handleBlur={handleBlur}
     >
       <MultiTextField
+        name={name}
         placeholder={placeholder}
         values={values}
         onRemove={({ index }) => {
