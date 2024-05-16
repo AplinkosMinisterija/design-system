@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { intersectionObserverConfig } from '../../utils';
-import { getFilteredOptions } from '../common/functions';
+import { getFilteredOptions, handleResponse } from '../common/functions';
 
 export const useSelectData = ({
   options,
@@ -98,6 +98,10 @@ export const useAsyncSelectData = ({
   const [input, setInput] = useState('');
   const [showSelect, setShowSelect] = useState(false);
   const observerRef = useRef(null);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [suggestions, setSuggestions] = useState<any>([]);
+  const [hasMore, setHasMore] = useState(false);
 
   const fetchData = async (page: number) => {
     const data = await loadOptions(input, page, dependantValue);
@@ -113,6 +117,23 @@ export const useAsyncSelectData = ({
       data,
       page: undefined,
     };
+  };
+
+  const handleLoadData = async (input: string, page: number) => {
+    setLoading(true);
+    handleResponse({
+      endpoint: () => loadOptions(input, page, dependantValue),
+      onSuccess: (response: any) => {
+        setCurrentPage(response.page);
+
+        const data = !!response?.[optionsKey] ? response?.[optionsKey] : response;
+
+        setSuggestions([...suggestions, ...data]);
+
+        setHasMore(response?.page < response?.totalPages);
+        setLoading(false);
+      },
+    });
   };
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } = useInfiniteQuery({
@@ -164,13 +185,6 @@ export const useAsyncSelectData = ({
     setShowSelect(!!input);
     setInput(input);
   };
-
-  const suggestions = data
-    ? data.pages
-        .flat()
-        .map((item) => item?.data)
-        .flat()
-    : [];
 
   return {
     loading: isFetching,
