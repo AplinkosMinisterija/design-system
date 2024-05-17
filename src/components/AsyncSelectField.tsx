@@ -4,6 +4,7 @@ import { useAsyncSelectData } from './common/hooks';
 import Icon from './common/Icons';
 import OptionsContainer, { OptionContainerTexts } from './common/OptionsContainer';
 import TextFieldInput from './common/TextFieldInput';
+import { JSX } from 'react';
 
 export interface AsyncSelectFieldProps {
   name?: string;
@@ -14,8 +15,9 @@ export interface AsyncSelectFieldProps {
   padding?: string;
   onChange: (option: any) => void;
   disabled?: boolean;
-  getOptionLabel: (option: any) => string;
-  getInputLabel?: (option: any) => string;
+  getOptionLabel: (option: any) => string | JSX.Element;
+  optionsEqual: (option1: any, option2: any) => boolean;
+  getInputValue: (option: any) => string;
   className?: string;
   placeholder?: string;
   hasBorder?: boolean;
@@ -24,6 +26,7 @@ export interface AsyncSelectFieldProps {
   optionsKey?: string;
   hasOptionKey?: boolean;
   texts?: OptionContainerTexts;
+  defaultOptions?: any[];
 }
 
 const AsyncSelectField = ({
@@ -37,13 +40,17 @@ const AsyncSelectField = ({
   onChange,
   name,
   disabled = false,
-  getOptionLabel = (option) => option.label,
-  getInputLabel,
+  getOptionLabel,
+  getInputValue,
+  optionsEqual,
   loadOptions,
   dependantValue,
   placeholder = '',
   texts = { noOptions: 'Nėra pasirinkimų' },
+  defaultOptions,
 }: AsyncSelectFieldProps) => {
+  const filteredDefaultOptions =
+    defaultOptions?.filter((option) => !optionsEqual(option, value)) || [];
   const {
     loading,
     suggestions,
@@ -62,11 +69,7 @@ const AsyncSelectField = ({
     optionsKey,
   });
 
-  const placeholderValue = value
-    ? getInputLabel
-      ? getInputLabel(value)
-      : getOptionLabel(value)
-    : placeholder;
+  const placeholderValue = value ? getInputValue(value) : placeholder;
 
   return (
     <FieldWrapper
@@ -92,7 +95,7 @@ const AsyncSelectField = ({
       <OptionsContainer
         loading={loading}
         observerRef={observerRef}
-        values={suggestions}
+        values={suggestions?.length ? suggestions : filteredDefaultOptions}
         getOptionLabel={getOptionLabel}
         showSelect={showSelect}
         handleClick={handleClick}

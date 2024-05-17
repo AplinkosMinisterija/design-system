@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import LoaderComponent from '../common/LoaderComponent';
+import { JSX } from 'react';
 
 export interface SelectOption {
   id?: string;
@@ -13,7 +14,7 @@ export interface OptionContainerTexts {
 export interface OptionsContainerProps {
   values?: any[];
   disabled?: boolean;
-  getOptionLabel: (option: any) => string;
+  getOptionLabel: (option: any) => string | JSX.Element;
   handleScroll?: (option: any) => any;
   loading?: boolean;
   showSelect: boolean;

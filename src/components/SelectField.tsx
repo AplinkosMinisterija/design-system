@@ -4,6 +4,7 @@ import FieldWrapper from './common/FieldWrapper';
 import TextFieldInput from './common/TextFieldInput';
 import OptionsContainer from './common/OptionsContainer';
 import Icon from './common/Icons';
+import { JSX } from 'react';
 
 export interface SelectFieldProps {
   name?: string;
@@ -16,7 +17,8 @@ export interface SelectFieldProps {
   padding?: string;
   onChange: (option: any) => void;
   disabled?: boolean;
-  getOptionLabel: (option: any) => string;
+  getOptionLabel: (option: any) => string | JSX.Element;
+  getInputValue: (option: any) => string;
   className?: string;
   placeholder?: string;
   dependantId?: string;
@@ -35,6 +37,7 @@ const SelectField = ({
   left,
   padding,
   getOptionLabel,
+  getInputValue,
   onChange,
   disabled,
   dependantId,
@@ -77,7 +80,7 @@ const SelectField = ({
         rightIcon={<StyledIcon name={'dropdownArrow'} />}
         onChange={handleOnChange}
         disabled={disabled}
-        placeholder={(value && getOptionLabel(value)) || placeholder}
+        placeholder={(value && getInputValue(value)) || placeholder}
         selectedValue={value}
       />
       <OptionsContainer
