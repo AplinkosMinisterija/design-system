@@ -14,6 +14,7 @@ export interface MultiTextFieldProps {
   input: string;
   backgroundColor?: string;
   height?: number;
+  name?: string;
 }
 
 const MultiTextField = ({
@@ -27,6 +28,7 @@ const MultiTextField = ({
   placeholder = '',
   input = '',
   disabled,
+  name,
   height = 56,
 }: MultiTextFieldProps) => {
   const inputRef = useRef<any>(null);
@@ -64,6 +66,7 @@ const MultiTextField = ({
         ))}
         {!disabled && (
           <Input
+            name={name}
             ref={inputRef}
             placeholder={!values?.length ? placeholder : ''}
             disabled={disabled}
