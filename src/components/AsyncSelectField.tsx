@@ -26,7 +26,6 @@ export interface AsyncSelectFieldProps {
   optionsKey?: string;
   hasOptionKey?: boolean;
   texts?: OptionContainerTexts;
-  defaultOptions?: any[];
 }
 
 const AsyncSelectField = ({
@@ -42,15 +41,11 @@ const AsyncSelectField = ({
   disabled = false,
   getOptionLabel,
   getInputValue,
-  optionsEqual,
   loadOptions,
   dependantValue,
   placeholder = '',
   texts = { noOptions: 'Nėra pasirinkimų' },
-  defaultOptions,
 }: AsyncSelectFieldProps) => {
-  const filteredDefaultOptions =
-    defaultOptions?.filter((option) => !optionsEqual(option, value)) || [];
   const {
     loading,
     suggestions,
@@ -91,11 +86,10 @@ const AsyncSelectField = ({
         placeholder={placeholderValue}
         selectedValue={value}
       />
-
       <OptionsContainer
         loading={loading}
         observerRef={observerRef}
-        values={suggestions?.length ? suggestions : filteredDefaultOptions}
+        values={suggestions}
         getOptionLabel={getOptionLabel}
         showSelect={showSelect}
         handleClick={handleClick}

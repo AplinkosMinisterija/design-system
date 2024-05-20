@@ -39,9 +39,7 @@ export const AsyncSelectFieldStory: Story = {
               name: 'Kauno r. sav.',
             },
           }}
-          loadOptions={() => []}
-          placeholder={'Placeholder'}
-          defaultOptions={[
+          loadOptions={() => [
             {
               name: 'Nemunas',
               cadastral_id: '10010001',
@@ -85,6 +83,7 @@ export const AsyncSelectFieldStory: Story = {
               },
             },
           ]}
+          placeholder={'Placeholder'}
         />
       </StoryWrapper>
     );
