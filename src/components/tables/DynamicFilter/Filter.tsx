@@ -84,6 +84,9 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   getOptionLabel={(option) =>
                     hasOptionLabelFunction ? optionLabel(option) : option.label
                   }
+                  getInputValue={(option) =>
+                    hasOptionLabelFunction ? optionLabel(option) : option.label
+                  }
                   refreshOptions={filter.refreshOptions}
                 />
               </InputWrapper>
@@ -110,6 +113,9 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   value={values[filter.key]}
                   onChange={(value) => setFieldValue(filter.key, value)}
                   getOptionLabel={(option) =>
+                    hasOptionLabelFunction ? optionLabel(option) : option.name
+                  }
+                  getInputValue={(option) =>
                     hasOptionLabelFunction ? optionLabel(option) : option.name
                   }
                   loadOptions={(input, page) => filter.optionsApi && filter.optionsApi(input, page)}

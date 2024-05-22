@@ -16,7 +16,6 @@ export interface AsyncSelectFieldProps {
   onChange: (option: any) => void;
   disabled?: boolean;
   getOptionLabel: (option: any) => string | JSX.Element;
-  optionsEqual: (option1: any, option2: any) => boolean;
   getInputValue: (option: any) => string;
   className?: string;
   placeholder?: string;

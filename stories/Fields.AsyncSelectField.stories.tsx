@@ -28,9 +28,6 @@ export const AsyncSelectFieldStory: Story = {
           getInputValue={(option) =>
             `${option.name} (${option.cadastral_id}) - ${option.municipality.name}`
           }
-          optionsEqual={(option1: any, option2: any) =>
-            option1.cadastral_id === option2.cadastral_id
-          }
           value={{
             name: 'Nemunas',
             cadastral_id: '10010001',
