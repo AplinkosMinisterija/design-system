@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Icon, { IconName } from '../common/Icons';
 import { DefaultLayoutProps } from '../../types';
+import Icon, { IconName } from '../common/Icons';
 
 const SideBar = ({
   loggedIn,
@@ -20,7 +20,7 @@ const SideBar = ({
           <Item
             key={`sidebar_btn_${route.slug}_${index}`}
             onClick={() => onRouteSelected(route.slug)}
-            $isActive={route.slug === currentRoute?.slug}
+            $isActive={currentRoute?.slug.includes(route.slug)}
           >
             <IconWrapper>{route.icon}</IconWrapper>
             <Label>{route.title}</Label>
