@@ -51,13 +51,15 @@ const StyledButton = styled.button<{
   height: ${({ theme }) => theme.height?.buttons || 4}rem;
   border-radius: ${({ theme }) => theme.radius?.buttons || 0.4}rem;
   padding: 1.1rem 2rem;
-  background-color: ${({ $variant, theme }) => theme.colors.buttons[$variant].background};
-  color: ${({ $variant, theme }) => theme.colors.buttons[$variant].text};
-  border: ${({ $variant, theme }) => theme.colors.buttons[$variant].border};
-  font-weight: ${({ theme }) => theme.fontWeight.buttons || 400};
-  font-size: ${({ theme }) => theme.fontSize.buttons || 1.6}rem;
+  background-color: ${({ $variant, theme }) =>
+    theme.colors.buttons?.[$variant]?.background || '#53B1FD'};
+  color: ${({ $variant, theme }) => theme.colors.buttons?.[$variant]?.text || '#101010'};
+  border: ${({ $variant, theme }) => theme.colors.buttons?.[$variant]?.border || 'transparent'};
+  font-weight: ${({ theme }) => theme.fontWeight?.buttons || 400};
+  font-size: ${({ theme }) => theme.fontSize?.buttons || 1.6}rem;
   :hover {
-    background-color: ${({ $variant, theme }) => theme.colors.buttons[$variant].hover};
+    background-color: ${({ $variant, theme }) =>
+      theme.colors.buttons?.[$variant]?.hover || '#0061b0'};
   }
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
