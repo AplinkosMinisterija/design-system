@@ -1,13 +1,12 @@
-import { useMediaQuery } from 'react-responsive';
 import { map } from 'lodash';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Filter, { FilterInputTypes } from './Filter';
-import { device, formatDate } from '../../../utils';
-import Icon, { IconName } from '../../common/Icons';
-import Popup from '../../layouts/Popup';
 import { FilterConfig, RowConfig } from '../../../types';
-import Button from '../../Button';
+import { device, FilterInputTypes, formatDate, useWindowSize } from '../../../utils';
+import Icon, { IconName } from '../../common/Icons';
+import Loader from '../../common/Loader';
+import Popup from '../../layouts/Popup';
+import Filter from './Filter';
 
 const mapFilters = (
   filterConfig: { [key: string]: FilterConfig },
@@ -64,7 +63,6 @@ const mapFilters = (
 };
 
 export interface DynamicFilterProps {
-  variant?: string;
   loading?: boolean;
   disabled?: boolean;
   className?: string;
@@ -75,14 +73,13 @@ export interface DynamicFilterProps {
   texts: {
     clearAll: string;
     filter: string;
-    label: string;
   };
-  showCount?: boolean;
-  showIcon?: boolean;
 }
 
 const DynamicFilter = ({
   loading = false,
+  disabled = false,
+  className,
   filterConfig,
   rowConfig,
   onSetFilters,
@@ -90,13 +87,9 @@ const DynamicFilter = ({
   texts = {
     clearAll: 'Išvalyti filtrus',
     filter: 'Filtruoti',
-    label: 'Filtrai',
   },
-  variant = 'primary',
-  showCount = true,
-  showIcon = false,
 }: DynamicFilterProps) => {
-  const isMobile = useMediaQuery({ query: device.mobileL });
+  const isMobile = useWindowSize(device.mobileL);
 
   const [showFilters, setShowFilters] = useState(false);
 
@@ -131,21 +124,13 @@ const DynamicFilter = ({
               </CloseIconContainer>
             </Tag>
           ))}
-        <ButtonWrapper>
-          <Button
-            variant={variant}
-            leftIcon={
-              showIcon ? <StyledIcon $variant={variant} name={IconName.filter} /> : undefined
-            }
-            rightIcon={
-              showCount ? <Count $variant={variant}>{appliedFilters.length}</Count> : undefined
-            }
-            onClick={() => setShowFilters(true)}
-            loading={loading}
-          >
-            Filtrai
-          </Button>
-        </ButtonWrapper>
+        <Wrapper className={className} disabled={disabled} onClick={() => setShowFilters(true)}>
+          <StyledButton disabled={disabled}>
+            <StyledIcon name={IconName.filter} />
+            {loading ? <Loader color="white" /> : 'Filtrai'}
+            <Count>{appliedFilters.length}</Count>
+          </StyledButton>
+        </Wrapper>
       </Container>
       <Popup visible={showFilters} onClose={() => setShowFilters(false)}>
         <FilterWraper>
@@ -194,22 +179,48 @@ const TextContainer = styled.div`
   vertical-align: middle;
 `;
 
-const StyledIcon = styled(Icon)<{ $variant: string }>`
-  color: ${({ theme, $variant }) =>
-    theme.colors.buttons[$variant]?.icon || theme.colors.buttons[$variant]?.text || '#9aa4b2'};
+const Wrapper = styled.div<{
+  disabled: boolean;
+}>`
+  opacity: ${({ disabled }) => (disabled ? 0.48 : 1)};
+  min-width: 100px;
 `;
 
-const Count = styled.div<{ $variant: string }>`
-  background-color: ${({ theme, $variant }) =>
-    theme.colors.buttons[$variant]?.count?.background || 'white'};
+export const StyledButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  border-radius: 4px;
+  background-color: white;
+  color: #121926;
+  border: 1px solid #cdd5df;
+  font-weight: normal;
+  font-size: 1.4rem;
+  :hover {
+    opacity: 0.6;
+  }
+  cursor: pointer;
+  width: fit-content;
+  padding: 12px;
+`;
+
+const StyledIcon = styled(Icon)`
+  color: #9aa4b2;
+  margin-right: 14px;
+`;
+
+const Count = styled.div`
+  background-color: ${({ theme }) => theme.colors.primary};
   border-radius: 9px;
   width: 18px;
   height: 18px;
   justify-content: center;
   align-items: center;
   display: flex;
-  color: ${({ theme, $variant }) => theme.colors.buttons[$variant]?.count?.text || '#53B1FD'};
+  color: white;
   font-size: 1rem;
+  margin-left: 14px;
 `;
 
 const Tag = styled.div`
@@ -228,10 +239,6 @@ const Tag = styled.div`
 
 const FilterWraper = styled.div`
   padding: 0 24px 24px 24px;
-`;
-
-const ButtonWrapper = styled.div`
-  width: fit-content;
 `;
 
 DynamicFilter.map = mapFilters;

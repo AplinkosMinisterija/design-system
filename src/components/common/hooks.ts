@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { intersectionObserverConfig } from '../../utils';
 import { getFilteredOptions, handleResponse } from '../common/functions';
 
 export const useSelectData = ({
@@ -94,12 +95,65 @@ export const useAsyncSelectData = ({
   serverErrors,
   validationMessages,
 }: any) => {
+  const [input, setInput] = useState('');
+  const [showSelect, setShowSelect] = useState(false);
+  const observerRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [suggestions, setSuggestions] = useState<any>([]);
   const [hasMore, setHasMore] = useState(false);
-  const [input, setInput] = useState('');
-  const [showSelect, setShowSelect] = useState(false);
+
+
+  useEffect(() => {
+    if (showSelect) {
+      handleLoadData('', 1);
+    }
+  }, [showSelect]);
+
+  useEffect(() => {
+    if (!dependantValue) return;
+
+    handleLoadData('', 1);
+  }, [JSON.stringify(dependantValue)]);
+
+  const handleLoadData = async (input: string, page: number) => {
+    setLoading(true);
+   await handleResponse({
+      serverErrors,
+      validationMessages,
+      endpoint: () => loadOptions(input, page, dependantValue),
+      onSuccess: (response: any) => {
+        setCurrentPage(response.page);
+
+        const data = !!response?.[optionsKey] ? response?.[optionsKey] : response;
+        const isFirstPage = response?.page === 1;
+
+        setSuggestions(isFirstPage ? data : [...suggestions, ...data]);
+
+        setHasMore(response?.page < response?.totalPages);
+        setLoading(false);
+      },
+    });
+  };
+
+  useEffect(() => {
+    const currentObserver = observerRef.current;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && hasMore && !loading) {
+        handleLoadData(input, currentPage + 1);
+      }
+    }, intersectionObserverConfig);
+
+    if (currentObserver) {
+      observer.observe(currentObserver);
+    }
+
+    return () => {
+      if (currentObserver) {
+        observer.unobserve(currentObserver);
+      }
+    };
+  }, [hasMore, loading]);
 
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
@@ -116,66 +170,26 @@ export const useAsyncSelectData = ({
     onChange(option);
   };
 
-  useEffect(() => {
-    if (!(suggestions || []).length && showSelect) {
-      handleLoadData('', 1);
-    }
-  }, [showSelect]);
-
-  useEffect(() => {
-    if (!dependantValue) return;
-
-    handleLoadData('', 1);
-  }, [JSON.stringify(dependantValue)]);
-
-  const handleLoadData = async (input: string, page: number, lazyLoading = false) => {
-    setLoading(true);
-    handleResponse({
-      serverErrors,
-      validationMessages,
-      endpoint: () => loadOptions(input, page, dependantValue),
-      onSuccess: (response: any) => {
-        setCurrentPage(response.page);
-
-        const data = response?.[optionsKey] ? response?.[optionsKey] : response;
-
-        setSuggestions(lazyLoading ? [...suggestions, ...data] : data);
-
-        setHasMore(response?.page < response?.totalPages);
-        setLoading(false);
-      },
-    });
-  };
-
-  const handleScroll = async (e: any) => {
-    const element = e.currentTarget;
-    const isTheBottom =
-      Math.abs(element.scrollHeight - element.clientHeight - element.scrollTop) <= 1;
-
-    if (isTheBottom && hasMore && !loading) {
-      handleLoadData(input, currentPage + 1, true);
-    }
-  };
-
   const handleToggleSelect = () => {
+
     !disabled && setShowSelect(!showSelect);
   };
 
-  const handleInputChange = (input: string) => {
+  const handleInputChange = async (input: string) => {
     setShowSelect(true);
-    handleLoadData(input, 1);
     setInput(input);
+    await handleLoadData(input, 1);
   };
 
   return {
     loading,
     suggestions,
-    handleScroll,
     input,
     handleInputChange,
     handleToggleSelect,
     showSelect,
     handleBlur,
+    observerRef,
     handleClick,
   };
 };

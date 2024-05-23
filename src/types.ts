@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import { FilterInputTypes } from './components/tables/DynamicFilter/Filter';
+import { FilterInputTypes } from './utils';
 export * from './components/tables/components/types';
 
 export interface ButtonColors {

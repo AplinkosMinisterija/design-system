@@ -1,7 +1,7 @@
-import { useAsyncSelectData } from './common/hooks';
 import FieldWrapper from './common/FieldWrapper';
-import MultiTextField from './common/MultiTextFieldInput';
 import { filterSelectedOptions, handleRemove } from './common/functions';
+import { useAsyncSelectData } from './common/hooks';
+import MultiTextField from './common/MultiTextFieldInput';
 import OptionsContainer, { OptionContainerTexts } from './common/OptionsContainer';
 
 export interface SelectOption {
@@ -24,40 +24,42 @@ export interface SelectFieldProps {
   dependantValue?: any;
   optionsKey?: string;
   hasOptionKey?: boolean;
+  placeholder?: string;
+  name?: string;
 }
 
 const AsyncMultiSelectField = ({
   label,
   values = [],
+  name,
   error,
   showError = true,
+  placeholder,
   optionsKey = 'rows',
-  hasOptionKey = true,
   onChange,
   disabled = false,
   getOptionLabel = (option) => option.label,
   getOptionValue = (option) => option.id,
   loadOptions,
   dependantValue,
-  texts,
+  texts = { noOptions: 'Nėra pasirinkimų' },
 }: SelectFieldProps) => {
   const {
     loading,
-    handleScroll,
     suggestions,
     handleInputChange,
     handleToggleSelect,
     input,
     showSelect,
+    observerRef,
     handleBlur,
     handleClick,
   } = useAsyncSelectData({
     loadOptions,
     disabled,
-    onChange: (option) => onChange([...values, option]),
+    onChange: (option: any) => onChange([...values, option]),
     dependantValue,
     optionsKey,
-    hasOptionKey,
   });
 
   return (
@@ -69,6 +71,8 @@ const AsyncMultiSelectField = ({
       handleBlur={handleBlur}
     >
       <MultiTextField
+        name={name}
+        placeholder={placeholder}
         values={values}
         onRemove={({ index }) => {
           handleRemove(index, onChange, values);
@@ -83,9 +87,9 @@ const AsyncMultiSelectField = ({
         values={filterSelectedOptions(suggestions, values, getOptionValue)}
         getOptionLabel={getOptionLabel}
         loading={loading}
+        observerRef={observerRef}
         showSelect={showSelect}
         handleClick={handleClick}
-        handleScroll={handleScroll}
         texts={texts}
       />
     </FieldWrapper>

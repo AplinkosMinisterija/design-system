@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
 const StoryWrapper = ({ children }: any) => {
-  return <InnerContainer>{children}</InnerContainer>;
+  return (
+      <InnerContainer>{children}</InnerContainer>
+  );
 };
 
 const InnerContainer = styled.div`

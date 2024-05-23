@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import Icon from './common/Icons';
-import { useAsyncSelectData } from './common/hooks';
 import FieldWrapper from './common/FieldWrapper';
-import TextFieldInput from './common/TextFieldInput';
+import { useAsyncSelectData } from './common/hooks';
+import Icon from './common/Icons';
 import OptionsContainer, { OptionContainerTexts } from './common/OptionsContainer';
+import TextFieldInput from './common/TextFieldInput';
+import { JSX } from 'react';
 
 export interface AsyncSelectFieldProps {
   name?: string;
@@ -14,8 +15,8 @@ export interface AsyncSelectFieldProps {
   padding?: string;
   onChange: (option: any) => void;
   disabled?: boolean;
-  getOptionLabel: (option: any) => string;
-  getInputLabel?: (option: any) => string;
+  getOptionLabel: (option: any) => string | JSX.Element;
+  getInputValue: (option: any) => string;
   className?: string;
   placeholder?: string;
   hasBorder?: boolean;
@@ -34,20 +35,18 @@ const AsyncSelectField = ({
   className,
   padding,
   optionsKey = 'rows',
-  hasOptionKey = true,
   onChange,
   name,
   disabled = false,
-  getOptionLabel = (option) => option.label,
-  getInputLabel,
+  getOptionLabel,
+  getInputValue,
   loadOptions,
   dependantValue,
   placeholder = '',
-  texts,
+  texts = { noOptions: 'Nėra pasirinkimų' },
 }: AsyncSelectFieldProps) => {
   const {
     loading,
-    handleScroll,
     suggestions,
     handleInputChange,
     handleToggleSelect,
@@ -55,14 +54,17 @@ const AsyncSelectField = ({
     showSelect,
     handleBlur,
     handleClick,
+    observerRef,
   } = useAsyncSelectData({
     loadOptions,
     disabled,
     onChange,
     dependantValue,
     optionsKey,
-    hasOptionKey,
   });
+
+  const placeholderValue = value ? getInputValue(value) : placeholder;
+
   return (
     <FieldWrapper
       onClick={handleToggleSelect}
@@ -80,15 +82,12 @@ const AsyncSelectField = ({
         rightIcon={<StyledIcon name={'dropdownArrow'} />}
         onChange={handleInputChange}
         disabled={disabled}
-        placeholder={
-          value ? (getInputLabel ? getInputLabel(value) : getOptionLabel(value)) : placeholder
-        }
+        placeholder={placeholderValue}
         selectedValue={value}
       />
-
       <OptionsContainer
         loading={loading}
-        handleScroll={handleScroll}
+        observerRef={observerRef}
         values={suggestions}
         getOptionLabel={getOptionLabel}
         showSelect={showSelect}
