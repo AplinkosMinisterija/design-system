@@ -51,7 +51,7 @@ const PasswordField = ({
         type={show ? 'text' : 'password'}
         name={name}
         error={error}
-        rightIcon={
+        right={
           <IconContainer onClick={() => setShow(!show)}>
             <StyledIcon name={show ? 'visibleOn' : 'visibleOff'} />
           </IconContainer>

@@ -79,7 +79,7 @@ const AsyncSelectField = ({
         value={input}
         name={name}
         error={error}
-        rightIcon={<StyledIcon name={'dropdownArrow'} />}
+        right={<StyledIcon name={'dropdownArrow'} />}
         onChange={handleInputChange}
         disabled={disabled}
         placeholder={placeholderValue}

@@ -8,8 +8,8 @@ export interface TextFieldProps {
   label?: string;
   icon?: JSX.Element;
   className?: string;
-  leftIcon?: JSX.Element;
-  rightIcon?: JSX.Element;
+  left?: JSX.Element;
+  right?: JSX.Element;
   padding?: string;
   onChange?: (option?: any) => void;
   bottomLabel?: string;
@@ -32,8 +32,8 @@ const TextField = ({
   readOnly = false,
   label,
   className,
-  leftIcon,
-  rightIcon,
+  left,
+  right,
   padding,
   onChange,
   subLabel,
@@ -60,8 +60,8 @@ const TextField = ({
         value={value}
         name={name}
         error={error}
-        leftIcon={leftIcon}
-        rightIcon={rightIcon}
+        left={left}
+        right={right}
         onChange={onChange}
         disabled={disabled}
         height={height}

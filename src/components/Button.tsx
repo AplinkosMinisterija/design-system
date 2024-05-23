@@ -6,8 +6,8 @@ export interface ButtonProps {
   variant?: string;
   route?: string;
   children?: JSX.Element | string;
-  leftIcon?: JSX.Element | string;
-  rightIcon?: JSX.Element | string;
+  left?: JSX.Element | string;
+  right?: JSX.Element | string;
   type?: string;
   loading?: boolean;
   signature?: boolean;
@@ -19,8 +19,8 @@ const Button = ({
   variant = 'primary',
   route,
   children,
-  leftIcon,
-  rightIcon,
+  left,
+  right,
   type,
   loading = false,
   className,
@@ -37,9 +37,9 @@ const Button = ({
         disabled={disabled}
         {...rest}
       >
-        {leftIcon}
+        {left}
         {loading ? <Loader color="white" /> : children}
-        {rightIcon}
+        {right}
       </StyledButton>
     </ButtonWrapper>
   );

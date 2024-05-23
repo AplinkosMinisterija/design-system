@@ -30,10 +30,10 @@ export const ButtonStory: Story = {
           {themeVariants?.map((key) => {
             return <Button variant={key}>{key.toUpperCase()}</Button>;
           })}
-          <Button variant={'primary'} leftIcon={<Icons name={IconName.logout} />}>
+          <Button variant={'primary'} left={<Icons name={IconName.logout} />}>
             Log in
           </Button>
-          <Button variant={'outline'} rightIcon={<Icons name={IconName.logout} />}>
+          <Button variant={'outline'} right={<Icons name={IconName.logout} />}>
             Log out
           </Button>
         </Container>

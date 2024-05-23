@@ -76,8 +76,8 @@ const SelectField = ({
         value={input}
         name={name}
         error={error}
-        leftIcon={left}
-        rightIcon={<StyledIcon name={'dropdownArrow'} />}
+        left={left}
+        right={<StyledIcon name={'dropdownArrow'} />}
         onChange={handleOnChange}
         disabled={disabled}
         placeholder={(value && getInputValue(value)) || placeholder}

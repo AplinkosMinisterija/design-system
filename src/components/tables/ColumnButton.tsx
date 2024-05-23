@@ -71,7 +71,7 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
     <Container tabIndex={1} onBlur={handleBlur}>
       <Button
         variant={variant}
-        leftIcon={<StyledIcon $variant={variant} name={IconName.settings} />}
+        left={<StyledIcon $variant={variant} name={IconName.settings} />}
         onClick={() => setIsOpen(!isOpen)}
       >
         {texts.columns}
