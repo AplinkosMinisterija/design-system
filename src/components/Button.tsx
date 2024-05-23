@@ -54,7 +54,8 @@ const StyledButton = styled.button<{
   background-color: ${({ $variant, theme }) =>
     theme.colors.buttons?.[$variant]?.background || '#53B1FD'};
   color: ${({ $variant, theme }) => theme.colors.buttons?.[$variant]?.text || '#101010'};
-  border: ${({ $variant, theme }) => theme.colors.buttons?.[$variant]?.border || 'transparent'};
+  border: 1px solid
+    ${({ $variant, theme }) => theme.colors.buttons?.[$variant]?.border || 'transparent'};
   font-weight: ${({ theme }) => theme.fontWeight?.buttons || 400};
   font-size: ${({ theme }) => theme.fontSize?.buttons || 1.6}rem;
   :hover {
