@@ -1,6 +1,7 @@
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { intersectionObserverConfig } from '../../utils';
-import { getFilteredOptions, handleResponse } from '../common/functions';
+import { getFilteredOptions } from '../common/functions';
 
 export const useSelectData = ({
   options,
@@ -91,56 +92,39 @@ export const useAsyncSelectData = ({
   disabled,
   onChange,
   dependantValue,
+  name,
   optionsKey,
-  serverErrors,
-  validationMessages,
-}: any) => {
+  handleGetNextPageParam,
+}) => {
   const [input, setInput] = useState('');
   const [showSelect, setShowSelect] = useState(false);
   const observerRef = useRef(null);
-  const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [suggestions, setSuggestions] = useState<any>([]);
-  const [hasMore, setHasMore] = useState(false);
 
+  const fetchData = async (page: number) => {
+    const data = await loadOptions(input, page, dependantValue);
+    const nextPage = handleGetNextPageParam(data);
+    const formattedData = data?.[optionsKey] ?? data;
 
-  useEffect(() => {
-    if (showSelect) {
-      handleLoadData('', 1);
-    }
-  }, [showSelect]);
-
-  useEffect(() => {
-    if (!dependantValue) return;
-
-    handleLoadData('', 1);
-  }, [JSON.stringify(dependantValue)]);
-
-  const handleLoadData = async (input: string, page: number) => {
-    setLoading(true);
-   await handleResponse({
-      serverErrors,
-      validationMessages,
-      endpoint: () => loadOptions(input, page, dependantValue),
-      onSuccess: (response: any) => {
-        setCurrentPage(response.page);
-
-        const data = !!response?.[optionsKey] ? response?.[optionsKey] : response;
-        const isFirstPage = response?.page === 1;
-
-        setSuggestions(isFirstPage ? data : [...suggestions, ...data]);
-
-        setHasMore(response?.page < response?.totalPages);
-        setLoading(false);
-      },
-    });
+    return {
+      data: formattedData,
+      nextPage: nextPage || undefined,
+    };
   };
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } = useInfiniteQuery({
+    enabled: showSelect,
+    queryKey: [name, input],
+    initialPageParam: 1,
+    queryFn: ({ pageParam }: any) => fetchData(pageParam),
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    gcTime: 60000,
+  });
 
   useEffect(() => {
     const currentObserver = observerRef.current;
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && hasMore && !loading) {
-        handleLoadData(input, currentPage + 1);
+      if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
       }
     }, intersectionObserverConfig);
 
@@ -153,7 +137,7 @@ export const useAsyncSelectData = ({
         observer.unobserve(currentObserver);
       }
     };
-  }, [hasMore, loading]);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage, data]);
 
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
@@ -165,24 +149,27 @@ export const useAsyncSelectData = ({
   const handleClick = (option: any) => {
     setShowSelect(false);
     setInput('');
-    setSuggestions([]);
-    setCurrentPage(1);
     onChange(option);
   };
 
   const handleToggleSelect = () => {
-
     !disabled && setShowSelect(!showSelect);
   };
 
-  const handleInputChange = async (input: string) => {
-    setShowSelect(true);
+  const handleInputChange = (input: string) => {
+    setShowSelect(!!input.length);
     setInput(input);
-    await handleLoadData(input, 1);
   };
 
+  const suggestions = data
+    ? data.pages
+        .flat()
+        .map((item) => item?.data)
+        .flat()
+    : [];
+
   return {
-    loading,
+    loading: isFetching,
     suggestions,
     input,
     handleInputChange,

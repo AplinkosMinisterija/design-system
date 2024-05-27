@@ -1,8 +1,11 @@
 import styled from 'styled-components';
+import DesignSystemProvider from './DesignSystemProvider';
 
 const StoryWrapper = ({ children }: any) => {
   return (
+    <DesignSystemProvider>
       <InnerContainer>{children}</InnerContainer>
+    </DesignSystemProvider>
   );
 };
 
