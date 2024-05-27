@@ -1,5 +1,5 @@
-import { ServerErrors, ValidationMessages } from '../../types';
 import { toast } from 'react-toastify';
+import { ServerErrors, ValidationMessages } from '../../types';
 
 export const getFilteredOptions = (
   options: any[],
@@ -40,37 +40,4 @@ export const handleError = (
     hideProgressBar: true,
     closeOnClick: true,
   });
-};
-export const handleResponse = async ({
-  endpoint,
-  onSuccess,
-  onError,
-  serverErrors,
-  validationMessages,
-}: {
-  endpoint: () => Promise<any>;
-  serverErrors: ServerErrors;
-  validationMessages: ValidationMessages;
-  onSuccess?: (data: any) => void;
-  onError?: (data: any) => void;
-}) => {
-  const response = await endpoint();
-
-  if (onError && response?.error) {
-    return onError(
-      serverErrors[response?.error?.type] ||
-        validationMessages[response?.error?.message] ||
-        validationMessages.error,
-    );
-  }
-
-  if (!response || response?.error) {
-    return handleError(serverErrors, validationMessages, response?.error?.type);
-  }
-
-  if (onSuccess) {
-    return onSuccess(response);
-  }
-
-  return response;
 };

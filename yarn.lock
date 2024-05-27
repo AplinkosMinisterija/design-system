@@ -3185,6 +3185,18 @@
     "@types/express" "^4.7.0"
     file-system-cache "2.3.0"
 
+"@tanstack/query-core@5.38.0":
+  version "5.38.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.38.0.tgz#36e0cd309cdbd75b4ff3fa81cdb3839befc7d6f6"
+  integrity sha512-QtkoxvFcu52mNpp3+qOo9H265m3rt83Dgbw5WnNyJvr83cegrQ7zT8haHhL4Rul6ZQkeovxyWbXVW9zI0WYx6g==
+
+"@tanstack/react-query@^5.20.5":
+  version "5.39.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.39.0.tgz#a5d8d72c12f8d4f036c62b6f829c76b37af53f08"
+  integrity sha512-zc0WnyEffyTgG+myLv8cY2tJOUT6jOprCiprpbMqylCaCFipSDUPCYCt2AC+qxgk2CFuqiI/fjb1u5/HhLkrPg==
+  dependencies:
+    "@tanstack/query-core" "5.38.0"
+
 "@testing-library/dom@^9.0.0":
   version "9.3.4"
   resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-9.3.4.tgz#50696ec28376926fec0a1bf87d9dbac5e27f60ce"
@@ -7233,6 +7245,7 @@ prelude-ls@^1.2.1:
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
 "prettier-fallback@npm:prettier@^3", prettier@^3.2.5:
+  name prettier-fallback
   version "3.2.5"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.2.5.tgz#e52bc3090586e824964a8813b09aba6233b28368"
   integrity sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==

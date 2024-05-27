@@ -4,6 +4,7 @@ import Button from './components/Button';
 import ButtonsGroup from './components/ButtonsGroup';
 import CheckBox from './components/Checkbox';
 import ColumnButton from './components/ColumnButton';
+import DesignSystemProvider from './components/common/DesignSystemProvider';
 import FieldWrapper from './components/common/FieldWrapper';
 import DatePicker from './components/DatePicker';
 import ContentLayout from './components/layouts/ContentLayout';
@@ -53,5 +54,5 @@ export {
   DynamicFilter,
   TreeSelectField,
   ButtonsGroup,
+  DesignSystemProvider,
 };
-
