@@ -1,10 +1,10 @@
-import styled from 'styled-components';
-import { useSelectData } from './common/hooks';
-import FieldWrapper from './common/FieldWrapper';
-import TextFieldInput from './common/TextFieldInput';
-import OptionsContainer from './common/OptionsContainer';
-import Icon from './common/Icons';
 import { JSX } from 'react';
+import styled from 'styled-components';
+import FieldWrapper from './common/FieldWrapper';
+import { useSelectData } from './common/hooks';
+import Icon, { IconName } from './common/Icons';
+import OptionsContainer from './common/OptionsContainer';
+import TextFieldInput from './common/TextFieldInput';
 
 export interface SelectFieldProps {
   name?: string;
@@ -77,7 +77,22 @@ const SelectField = ({
         name={name}
         error={error}
         left={left}
-        right={<StyledIcon name={'dropdownArrow'} />}
+        right={
+          <>
+            {value && !disabled && (
+              <IconContainer
+                $disabled={disabled}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  !disabled && onChange(undefined);
+                }}
+              >
+                <ClearIcon $disabled={disabled!} name={IconName.close} />
+              </IconContainer>
+            )}
+            <StyledIcon name={IconName.dropdownArrow} />
+          </>
+        }
         onChange={handleOnChange}
         disabled={disabled}
         placeholder={(value && getInputValue(value)) || placeholder}
@@ -93,6 +108,20 @@ const SelectField = ({
     </FieldWrapper>
   );
 };
+
+const ClearIcon = styled(Icon)<{ $disabled: boolean }>`
+  color: #cdd5df;
+  font-size: 2.4rem;
+  margin-right: 12px;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+`;
+
+const IconContainer = styled.div<{ $disabled: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+`;
 
 const StyledIcon = styled(Icon)`
   color: #cdd5df;

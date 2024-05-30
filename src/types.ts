@@ -166,6 +166,7 @@ export enum ButtonVariants {
 export interface FilterConfig {
   label: string;
   key: string;
+  handleGetNextPageParam?: (params: any) => number;
   optionLabel?: (value: any) => string;
   inputType: FilterInputTypes;
   options?: any[];

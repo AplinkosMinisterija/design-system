@@ -112,6 +112,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   label={filter.label}
                   value={values[filter.key]}
                   onChange={(value) => setFieldValue(filter.key, value)}
+                  handleGetNextPageParam={filter?.handleGetNextPageParam}
                   getOptionLabel={(option) =>
                     hasOptionLabelFunction ? optionLabel(option) : option.name
                   }
@@ -133,6 +134,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   getOptionLabel={(option) =>
                     hasOptionLabelFunction ? optionLabel(option) : option.name
                   }
+                  handleGetNextPageParam={filter?.handleGetNextPageParam}
                   loadOptions={(input, page) => filter.optionsApi && filter.optionsApi(input, page)}
                   getOptionValue={(option) => (hasOptionValue ? optionValue(option) : option.id)}
                 />

@@ -1,13 +1,13 @@
+import { JSX } from 'react';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
 import { useAsyncSelectData } from './common/hooks';
-import Icon from './common/Icons';
+import Icon, { IconName } from './common/Icons';
 import OptionsContainer, { OptionContainerTexts } from './common/OptionsContainer';
 import TextFieldInput from './common/TextFieldInput';
-import { JSX } from 'react';
 
 export interface AsyncSelectFieldProps {
-  name?: string;
+  name: string;
   label?: string;
   value?: any;
   error?: string;
@@ -25,6 +25,7 @@ export interface AsyncSelectFieldProps {
   optionsKey?: string;
   hasOptionKey?: boolean;
   texts?: OptionContainerTexts;
+  handleGetNextPageParam?: (params: any) => number | undefined;
 }
 
 const AsyncSelectField = ({
@@ -44,6 +45,9 @@ const AsyncSelectField = ({
   dependantValue,
   placeholder = '',
   texts = { noOptions: 'Nėra pasirinkimų' },
+  handleGetNextPageParam = (data) => {
+    return data?.page < data?.totalPages ? data.page + 1 : undefined;
+  },
 }: AsyncSelectFieldProps) => {
   const {
     loading,
@@ -61,6 +65,8 @@ const AsyncSelectField = ({
     onChange,
     dependantValue,
     optionsKey,
+    handleGetNextPageParam,
+    name,
   });
 
   const placeholderValue = value ? getInputValue(value) : placeholder;
@@ -79,7 +85,22 @@ const AsyncSelectField = ({
         value={input}
         name={name}
         error={error}
-        right={<StyledIcon name={'dropdownArrow'} />}
+        right={
+          <>
+            {value && !disabled && (
+              <IconContainer
+                $disabled={disabled}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  !disabled && onChange(undefined);
+                }}
+              >
+                <ClearIcon $disabled={disabled!} name={IconName.close} />
+              </IconContainer>
+            )}
+            <StyledIcon name={IconName.dropdownArrow} />
+          </>
+        }
         onChange={handleInputChange}
         disabled={disabled}
         placeholder={placeholderValue}
@@ -102,6 +123,20 @@ const StyledIcon = styled(Icon)`
   color: #cdd5df;
   font-size: 2.4rem;
   margin-right: 12px;
+`;
+
+const ClearIcon = styled(Icon)<{ $disabled: boolean }>`
+  color: #cdd5df;
+  font-size: 2.4rem;
+  margin-right: 12px;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+`;
+
+const IconContainer = styled.div<{ $disabled: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
 `;
 
 export default AsyncSelectField;

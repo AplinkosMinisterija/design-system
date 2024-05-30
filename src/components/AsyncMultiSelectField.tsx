@@ -25,7 +25,8 @@ export interface SelectFieldProps {
   optionsKey?: string;
   hasOptionKey?: boolean;
   placeholder?: string;
-  name?: string;
+  name: string;
+  handleGetNextPageParam?: (params: any) => number | undefined;
 }
 
 const AsyncMultiSelectField = ({
@@ -43,6 +44,9 @@ const AsyncMultiSelectField = ({
   loadOptions,
   dependantValue,
   texts = { noOptions: 'Nėra pasirinkimų' },
+  handleGetNextPageParam = (data) => {
+    return data?.page < data?.totalPages ? data.page + 1 : undefined;
+  },
 }: SelectFieldProps) => {
   const {
     loading,
@@ -60,6 +64,8 @@ const AsyncMultiSelectField = ({
     onChange: (option: any) => onChange([...values, option]),
     dependantValue,
     optionsKey,
+    name,
+    handleGetNextPageParam,
   });
 
   return (
