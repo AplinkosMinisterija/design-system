@@ -34,18 +34,18 @@ interface ThemeColors {
   transparent: string;
   danger: string;
   success: string;
-  buttons: {
+  buttons?: {
     // configure your own button variants
     primary: ButtonColors;
     [key: string]: ButtonColors;
   };
   fields?: FieldsColors; // for inputs
-  text: {
+  text?: {
     //use only for text elements
     primary: string; // for titles and headings
     [key: string]: string;
   };
-  border: string;
+  border?: string;
   link?: string;
   [key: string]: any;
 }
