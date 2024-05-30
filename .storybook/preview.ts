@@ -1,8 +1,7 @@
 import type { Preview } from '@storybook/react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { withThemeFromJSXProvider } from '@storybook/addon-styling';
-import { ButtonVariants, Theme } from '../src';
-import { globalStyles } from '../src';
+import { ButtonVariants, Theme, globalStyles } from '../src';
 
 export const theme: Theme = {
   colors: {
@@ -112,7 +111,6 @@ const preview: Preview = {
       },
     },
   },
-
   decorators: [
     // Adds global styles and theme switching support.
     withThemeFromJSXProvider({
