@@ -3,8 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import DynamicFilter from '../src/components/tables/DynamicFilter';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import { withRouter } from 'storybook-addon-react-router-v6';
-import { ButtonVariants, FilterConfig } from '../src';
-import { FilterInputTypes } from '../src/components/tables/DynamicFilter/Filter';
+import { ButtonVariants, FilterConfig, FilterInputTypes } from '../src';
 
 const meta: Meta<typeof DynamicFilter> = {
   component: DynamicFilter,
@@ -49,9 +48,7 @@ export const TabsStory: Story = {
           texts={{
             clearAll: 'Išvalyti filtrus',
             filter: 'Filtruoti',
-            label: 'Filtrai',
           }}
-          variant={ButtonVariants.COLUMNS}
         />
       </StoryWrapper>
     );
