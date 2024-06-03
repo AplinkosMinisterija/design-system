@@ -4,18 +4,7 @@ import CheckBox from '../Checkbox';
 import { ErrorMessage } from '../common/ErrorMessage';
 import Icon, { IconName } from '../common/Icons';
 import Button from '../Button';
-
-export type Columns = {
-  [key: string]: Column;
-};
-
-export type Column = {
-  label: string | JSX.Element;
-  mobileOrder?: number;
-  desktopOrder?: number;
-  show: boolean;
-  width?: string;
-};
+import { Columns } from './components/types';
 
 export interface ColumnButtonTexts {
   atLeastOneColumn: string;
