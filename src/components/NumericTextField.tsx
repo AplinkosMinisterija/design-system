@@ -9,8 +9,8 @@ export interface NumericTextFieldProps {
   label?: string;
   icon?: JSX.Element;
   className?: string;
-  leftIcon?: JSX.Element;
-  rightIcon?: JSX.Element;
+  left?: JSX.Element;
+  right?: JSX.Element;
   padding?: string;
   onChange: (option: any) => void;
   ref?: HTMLHeadingElement;
@@ -31,8 +31,8 @@ const NumericTextField = ({
   error,
   label,
   className,
-  leftIcon,
-  rightIcon: rightIcon,
+  left,
+  right,
   padding,
   onChange,
   placeholder,
@@ -72,8 +72,8 @@ const NumericTextField = ({
         value={value}
         name={name}
         error={error}
-        leftIcon={leftIcon}
-        rightIcon={rightIcon}
+        left={left}
+        right={right}
         onChange={handleChange}
         disabled={disabled}
         height={height}

@@ -85,7 +85,7 @@ const AsyncSelectField = ({
         value={input}
         name={name}
         error={error}
-        rightIcon={
+        right={
           <>
             {value && !disabled && (
               <IconContainer

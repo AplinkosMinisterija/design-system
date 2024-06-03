@@ -7,6 +7,13 @@ export interface ButtonColors {
   text: string;
   border: string;
   hover?: string;
+  hoverText?: string;
+  icon?: string;
+  count?: {
+    background: string;
+    text: string;
+  };
+  [key: string]: any;
 }
 export interface FieldsColors {
   border?: string;
@@ -27,18 +34,18 @@ interface ThemeColors {
   transparent: string;
   danger: string;
   success: string;
-  buttons: {
+  buttons?: {
     // configure your own button variants
     primary: ButtonColors;
     [key: string]: ButtonColors;
   };
   fields?: FieldsColors; // for inputs
-  text: {
+  text?: {
     //use only for text elements
     primary: string; // for titles and headings
     [key: string]: string;
   };
-  border: string;
+  border?: string;
   link?: string;
   [key: string]: any;
 }
@@ -151,9 +158,9 @@ export enum ButtonVariants {
   PRIMARY = 'primary',
   SECONDARY = 'secondary',
   TERTIARY = 'tertiary',
-  DANGER = 'danger',
-  SUCCESS = 'success',
+  OUTLINE = 'outline',
   TRANSPARENT = 'transparent',
+  COLUMNS = 'columns',
 }
 
 export interface FilterConfig {

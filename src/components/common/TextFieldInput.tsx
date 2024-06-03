@@ -3,8 +3,8 @@ export interface TextFieldProps {
   value?: string | number;
   name?: string;
   error?: string;
-  leftIcon?: JSX.Element;
-  rightIcon?: JSX.Element;
+  left?: JSX.Element;
+  right?: JSX.Element;
   onChange?: (option?: any) => void;
   disabled?: boolean;
   height?: number;
@@ -23,8 +23,8 @@ const TextFieldInput = ({
   name,
   error,
   readOnly = false,
-  leftIcon,
-  rightIcon,
+  left,
+  right,
   onChange,
   placeholder,
   type = 'text',
@@ -39,7 +39,7 @@ const TextFieldInput = ({
 }: TextFieldProps) => {
   return (
     <InputContainer $error={!!error} $height={height} $disabled={disabled || false}>
-      {leftIcon}
+      {left}
       <StyledTextInput
         $selectedValue={selectedValue}
         onClick={() => (onInputClick ? onInputClick() : null)}
@@ -55,7 +55,7 @@ const TextFieldInput = ({
         inputMode={inputMode}
         {...rest}
       />
-      {rightIcon}
+      {right}
     </InputContainer>
   );
 };

@@ -76,8 +76,8 @@ const SelectField = ({
         value={input}
         name={name}
         error={error}
-        leftIcon={left}
-        rightIcon={
+        left={left}
+        right={
           <>
             {value && !disabled && (
               <IconContainer

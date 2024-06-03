@@ -139,7 +139,7 @@ const DateField = ({
           padding={padding}
           value={textValue}
           error={error}
-          rightIcon={
+          right={
             <>
               {value && !disabled && (
                 <IconContainer
