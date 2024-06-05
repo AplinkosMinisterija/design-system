@@ -1,10 +1,10 @@
 import { Columns, NotFoundInfoProps, TableData } from '../../types';
-import TableContainer from '../tables/components/TableContainer';
+import { device, useWindowSize } from '../../utils';
+import LoaderComponent from '../common/LoaderComponent';
 import DesktopTable from '../tables/components/DesktopTable';
 import MobileTable from '../tables/components/MobileTable';
-import LoaderComponent from '../common/LoaderComponent';
+import TableContainer from '../tables/components/TableContainer';
 import { getActiveColumns } from './components/functions';
-import { device, useWindowSize } from '../../utils';
 
 export interface LoginLayoutProps {
   data?: TableData;
@@ -15,7 +15,8 @@ export interface LoginLayoutProps {
   pageName?: string;
   isFilterApplied?: boolean;
   loading?: boolean;
-  onPageChane: (page: number) => void;
+  onPageChange: (page: number) => void;
+  onColumnToggle?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
 }
 
 const Table = ({
@@ -27,7 +28,8 @@ const Table = ({
   pageName,
   loading,
   isFilterApplied = false,
-  onPageChane = () => {},
+  onPageChange = () => {},
+  onColumnToggle,
 }: LoginLayoutProps) => {
   const isMobile = useWindowSize(device.mobileL);
   const activeColumns = getActiveColumns(columns);
@@ -35,7 +37,7 @@ const Table = ({
   if (loading) return <LoaderComponent />;
 
   return (
-    <TableContainer data={data} pageName={pageName} loading={loading} onPageChane={onPageChane}>
+    <TableContainer data={data} pageName={pageName} loading={loading} onPageChange={onPageChange}>
       {isMobile ? (
         <MobileTable
           data={data?.data}
@@ -44,6 +46,7 @@ const Table = ({
           tableRowStyle={tableRowStyle}
           notFoundInfo={notFoundInfo}
           isFilterApplied={isFilterApplied}
+          onColumnToggle={onColumnToggle}
         />
       ) : (
         <DesktopTable
@@ -53,6 +56,7 @@ const Table = ({
           tableRowStyle={tableRowStyle}
           notFoundInfo={notFoundInfo}
           isFilterApplied={isFilterApplied}
+          onColumnToggle={onColumnToggle}
         />
       )}
     </TableContainer>
