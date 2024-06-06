@@ -36,7 +36,7 @@ export const TabsStory: Story = {
 
     const [data, setData] = useState(initData);
 
-    const handleToggleColumn = ({ key, direction }) => {
+    const handleColumnSort = ({ key, direction }) => {
       const sortedData = data.data.sort((a, b) => {
         if (a[key].localeCompare(b[key]) === 1) {
           return direction === 'asc' ? -1 : 1;
@@ -54,7 +54,7 @@ export const TabsStory: Story = {
     return (
       <StoryWrapper>
         <Table
-          onColumnToggle={handleToggleColumn}
+          onColumnSort={handleColumnSort}
           columns={{
             column1: {
               label: 'Column 1',

@@ -11,7 +11,7 @@ export interface DesktopTableProps {
   tableRowStyle?: any;
   customPageName?: string;
   isFilterApplied?: boolean;
-  onColumnToggle?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
+  onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
   onClick?: (id: string) => void;
   texts?: {
     notFound: string;
@@ -26,7 +26,7 @@ const DesktopTable = ({
   isFilterApplied = false,
   onClick,
   texts,
-  onColumnToggle,
+  onColumnSort,
 }: DesktopTableProps) => {
   const keys = Object.keys(columns);
   const [sortedColumn, setSortedColumn] = useState<{
@@ -41,12 +41,12 @@ const DesktopTable = ({
   };
 
   const handleColumnClick = (key) => {
-    if (!onColumnToggle) return;
+    if (!onColumnSort) return;
 
     const direction =
       sortedColumn.key === key ? (sortedColumn?.direction === 'asc' ? 'desc' : 'asc') : 'asc';
 
-    onColumnToggle({ key, direction });
+    onColumnSort({ key, direction });
 
     setSortedColumn({
       key,
@@ -112,6 +112,7 @@ const DesktopTable = ({
 
               return (
                 <TH
+                  $pointer={!!onColumnSort}
                   onClick={() => {
                     handleColumnClick(key);
                   }}
@@ -120,7 +121,7 @@ const DesktopTable = ({
                 >
                   <LabelContainer>
                     {label}
-                    {!!onColumnToggle && (
+                    {!!onColumnSort && (
                       <IconContainer>
                         <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
                         <ArrowIconDown $isActive={isSelectedDown} name={IconName.tableArrowDown} />
@@ -180,7 +181,9 @@ const TD = styled.td`
   color: #121926;
 `;
 
-const TH = styled.th`
+const TH = styled.th<{
+  $pointer: boolean;
+}>`
   padding: 18px 22px;
   height: 44px;
   text-align: left;
@@ -188,6 +191,7 @@ const TH = styled.th`
   font-weight: bold;
   letter-spacing: 0.29px;
   color: #9aa4b2;
+  cursor: ${({ $pointer }) => ($pointer ? 'pointer' : 'default')};
 `;
 
 const TdSecond = styled.td`

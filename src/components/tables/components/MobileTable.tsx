@@ -11,7 +11,7 @@ export interface DesktopTableProps {
   tableRowStyle?: any;
   customPageName?: string;
   isFilterApplied?: boolean;
-  onColumnToggle?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
+  onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
   onClick?: (id: string) => void;
   texts?: {
     notFound: string;
@@ -25,7 +25,7 @@ const MobileTable = ({
   tableRowStyle,
   isFilterApplied = false,
   onClick,
-  onColumnToggle,
+  onColumnSort,
   texts,
 }: DesktopTableProps) => {
   const keys = Object.keys(columns);
@@ -45,12 +45,12 @@ const MobileTable = ({
   };
 
   const handleColumnClick = (key) => {
-    if (!onColumnToggle) return;
+    if (!onColumnSort) return;
 
     const direction =
       sortedColumn.key === key ? (sortedColumn?.direction === 'asc' ? 'desc' : 'asc') : 'asc';
 
-    onColumnToggle({ key, direction });
+    onColumnSort({ key, direction });
 
     setSortedColumn({
       key,
@@ -169,7 +169,7 @@ const MobileTable = ({
                 >
                   <LabelContainer>
                     {label}
-                    {!!onColumnToggle && (
+                    {!!onColumnSort && (
                       <IconContainer>
                         <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
                         <ArrowIconDown $isActive={isSelectedDown} name={IconName.tableArrowDown} />

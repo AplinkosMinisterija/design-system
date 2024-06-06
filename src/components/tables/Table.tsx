@@ -16,7 +16,7 @@ export interface LoginLayoutProps {
   isFilterApplied?: boolean;
   loading?: boolean;
   onPageChange: (page: number) => void;
-  onColumnToggle?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
+  onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
 }
 
 const Table = ({
@@ -29,7 +29,7 @@ const Table = ({
   loading,
   isFilterApplied = false,
   onPageChange = () => {},
-  onColumnToggle,
+  onColumnSort,
 }: LoginLayoutProps) => {
   const isMobile = useWindowSize(device.mobileL);
   const activeColumns = getActiveColumns(columns);
@@ -46,7 +46,7 @@ const Table = ({
           tableRowStyle={tableRowStyle}
           notFoundInfo={notFoundInfo}
           isFilterApplied={isFilterApplied}
-          onColumnToggle={onColumnToggle}
+          onColumnSort={onColumnSort}
         />
       ) : (
         <DesktopTable
@@ -56,7 +56,7 @@ const Table = ({
           tableRowStyle={tableRowStyle}
           notFoundInfo={notFoundInfo}
           isFilterApplied={isFilterApplied}
-          onColumnToggle={onColumnToggle}
+          onColumnSort={onColumnSort}
         />
       )}
     </TableContainer>
