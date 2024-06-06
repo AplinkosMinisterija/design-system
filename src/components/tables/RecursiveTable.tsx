@@ -1,7 +1,9 @@
 import styled from 'styled-components';
-import { RecursiveRow } from './components/RecursiveRow';
 import LoaderComponent from '../common/LoaderComponent';
 import NotFoundInfo from '../tables/components/NotFoundInfo';
+import TableContainer from '../tables/components/TableContainer';
+import { getActiveColumns } from './components/functions';
+import { RecursiveRow } from './components/RecursiveRow';
 import {
   Columns,
   NotFoundInfoProps,
@@ -9,8 +11,6 @@ import {
   TableItemWidth,
   TableRow,
 } from './components/types';
-import { getActiveColumns } from './components/functions';
-import TableContainer from '../tables/components/TableContainer';
 
 export interface RecursiveTableProps {
   data?: TableData;
@@ -24,7 +24,7 @@ export interface RecursiveTableProps {
   texts?: {
     notFound: string;
   };
-  onPageChane: (page: number) => void;
+  onPageChange: (page: number) => void;
 }
 
 const RecursiveTable = ({
@@ -37,7 +37,7 @@ const RecursiveTable = ({
   loading,
   isFilterApplied = false,
   texts,
-  onPageChane = () => {},
+  onPageChange = () => {},
 }: RecursiveTableProps) => {
   const activeColumns = getActiveColumns(columns);
   const keys = Object.keys(activeColumns);
@@ -91,7 +91,7 @@ const RecursiveTable = ({
   if (loading) return <LoaderComponent />;
 
   return (
-    <TableContainer data={data} pageName={pageName} loading={loading} onPageChane={onPageChane}>
+    <TableContainer data={data} pageName={pageName} loading={loading} onPageChange={onPageChange}>
       <Table>
         <THEAD>
           <TR $pointer={false}>
