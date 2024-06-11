@@ -44,8 +44,10 @@ const MobileTable = ({
     }
   };
 
+  const canSort = !!onColumnSort && !!data?.length;
+
   const handleColumnClick = (key) => {
-    if (!onColumnSort) return;
+    if (!canSort) return;
 
     const direction =
       sortedColumn.key === key ? (sortedColumn?.direction === 'asc' ? 'desc' : 'asc') : 'asc';
@@ -169,7 +171,7 @@ const MobileTable = ({
                 >
                   <LabelContainer>
                     {label}
-                    {!!onColumnSort && (
+                    {canSort && (
                       <IconContainer>
                         <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
                         <ArrowIconDown $isActive={isSelectedDown} name={IconName.tableArrowDown} />
