@@ -11,7 +11,7 @@ export interface TableLayoutProps {
   data?: TableData;
   pageName?: string;
   loading?: boolean;
-  onPageChane: (page: number) => void;
+  onPageChange: (page: number) => void;
   children: ChildrenType;
 }
 
@@ -20,17 +20,17 @@ const TableContainer = ({
   pageName = 'page',
   loading,
   children,
-  onPageChane,
+  onPageChange,
 }: TableLayoutProps) => {
   const params = Object.fromEntries(new URLSearchParams(window.location.search));
   const totalPages = data?.totalPages || 0;
-  const showPagination = data?.data?.length;
+  const showPagination = !!data?.data?.length;
   const isMobile = useWindowSize(device.mobileL);
   const pageRange = isMobile ? 1 : 3;
   const pageMargin = isMobile ? 1 : 3;
 
   const handlePageChange = (e) => {
-    onPageChane(e.selected + 1);
+    onPageChange(e.selected + 1);
   };
 
   if (loading) return <LoaderComponent />;

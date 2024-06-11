@@ -11,7 +11,7 @@ import {
   MdSettings,
   MdTune,
 } from 'react-icons/md';
-
+import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
 export enum IconName {
   visibleOn = 'visibleOn',
   filter = 'filter',
@@ -26,6 +26,8 @@ export enum IconName {
   backward = 'backward',
   calendar = 'calendar',
   settings = 'settings',
+  tableArrowUp = 'tableArrowUp',
+  tableArrowDown = 'tableArrowDown',
 }
 
 export interface IconProps {
@@ -35,6 +37,10 @@ export interface IconProps {
 
 const Icon = ({ name, className }: IconProps) => {
   switch (name) {
+    case IconName.tableArrowDown:
+      return <RiArrowDownSFill className={className} />;
+    case IconName.tableArrowUp:
+      return <RiArrowUpSFill className={className} />;
     case IconName.filter:
       return <MdTune className={className} />;
     case IconName.settings:
