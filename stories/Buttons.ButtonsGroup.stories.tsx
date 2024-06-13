@@ -19,7 +19,17 @@ export const ButtonsGroupStory: Story = {
     return (
       <StoryWrapper>
         <ButtonsGroup
-          options={['test1', 'test2']}
+          options={[
+            'test1',
+            'test1',
+            'test1',
+            'test1',
+            'test1',
+            'test1',
+            'test1',
+            'test1',
+            'test3',
+          ]}
           onChange={(value) => setSelected(value)}
           isSelected={(option) => option === selected}
           getOptionLabel={(option) => option}
