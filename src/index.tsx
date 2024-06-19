@@ -12,6 +12,7 @@ import DefaultLayout from './components/layouts/DefaultLayout';
 import Modal from './components/layouts/Modal';
 import SimpleContainer from './components/layouts/SimpleContainer';
 import MapField from './components/MapField';
+import Map from './components/map/Index';
 import MultiSelectField from './components/MultiSelectField';
 import NumericTextField from './components/NumericTextField';
 import PasswordField from './components/PasswordField';
@@ -35,6 +36,7 @@ export {
   PasswordField,
   Tabs,
   MapField,
+  Map,
   FieldWrapper,
   DefaultLayout,
   ContentLayout,
