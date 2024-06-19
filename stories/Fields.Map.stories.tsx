@@ -65,7 +65,7 @@ export const MapDrawStory: Story = {
           controls={{ fullscreen: 'top-right', geolocate: true, navigation: true }}
           draw={{
             multi: true,
-            buffer: { min: 1000, step: 500, max: 10000 },
+            buffer: { min: 1000, max: 10000 },
             types: [DrawType.POINT, DrawType.POLYGON],
           }}
           value={value}

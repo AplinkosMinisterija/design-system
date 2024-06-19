@@ -16,6 +16,7 @@ import epsg from 'epsg-index/all.json';
 import { coordEach } from '@turf/meta';
 import { cloneDeep, mergeWith } from 'lodash';
 import { ThemeMapColors } from 'src/types';
+import { DragCircleMode } from './DragCircleMode';
 
 export const BASEMAP_URL = {
   LIGHT: 'https://basemap.startupgov.lt/vector/styles/bright/style.json',
@@ -43,7 +44,7 @@ export type DrawOptions = {
     | {
         min: number;
         max: number;
-        step: number;
+        initial?: number;
       };
 };
 
@@ -82,10 +83,18 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styl
   if (!draw || !map) return;
 
   if (draw.buffer) {
-    draw.buffer = typeof draw.buffer === 'boolean' ? { step: 1, max: 10, min: 1 } : draw.buffer;
+    draw.buffer = typeof draw.buffer === 'boolean' ? { max: 10, min: 1 } : draw.buffer;
   }
 
   if (!Array.isArray(draw.types)) draw.types = [draw.types];
+
+  let modes = MapboxDraw.modes;
+
+  if (draw.buffer) {
+    modes = Object.assign(modes, {
+      draw_point: DragCircleMode(draw.buffer),
+    });
+  }
 
   const mapDraw = new MapboxDraw({
     controls: {
@@ -94,6 +103,7 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styl
       polygon: draw.types.includes(DrawType.POLYGON),
       trash: draw.types.length > 1 || draw.multi,
     },
+    modes,
     styles,
     displayControlsDefault: false,
     userProperties: true,
