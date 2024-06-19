@@ -13,7 +13,7 @@ export const theme: Theme = {
     success: '#027A48',
     map: {
       primary: '#53B1FD',
-      // selected: '#FE5B78',
+      selected: '#a9d8fd',
     },
     buttons: {
       [ButtonVariants.PRIMARY]: {
