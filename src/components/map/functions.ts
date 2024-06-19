@@ -15,6 +15,12 @@ import proj4 from 'proj4';
 import epsg from 'epsg-index/all.json';
 import { coordEach } from '@turf/meta';
 import { cloneDeep, mergeWith } from 'lodash';
+import { ThemeMapColors } from 'src/types';
+
+export const BASEMAP_URL = {
+  LIGHT: 'https://basemap.startupgov.lt/vector/styles/bright/style.json',
+  GRAY: 'https://basemap.startupgov.lt/vector/styles/positron/style.json',
+};
 
 export type DrawTypes =
   | MapboxDraw.constants.types.POINT
@@ -44,7 +50,6 @@ export type DrawOptions = {
 export const PREVIEW_LAYER_ID = 'preview-layer';
 export const MAP_PROJECTION = '4326';
 
-
 export const DrawType = MapboxDraw.constants.types;
 
 export function getPosition(
@@ -73,7 +78,7 @@ export function parseDrawOptions(draw?: boolean | DrawOptions) {
   }) as DrawOptions;
 }
 
-export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON) {
+export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styles?: any[]) {
   if (!draw || !map) return;
 
   if (draw.buffer) {
@@ -89,9 +94,7 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON) {
       polygon: draw.types.includes(DrawType.POLYGON),
       trash: draw.types.length > 1 || draw.multi,
     },
-
-    // modes: Object.assign({ point_buffer: DragCircleMode }, MapboxDraw.modes),
-    styles: getMapStyles(),
+    styles,
     displayControlsDefault: false,
     userProperties: true,
   });
@@ -122,7 +125,7 @@ export function convertGeojsonToProjection(source: AllGeoJSON, from: string, to:
   return source;
 }
 
-export function setupPreviewLayer(map?: Map, value?: AllGeoJSON) {
+export function setupPreviewLayer(map?: Map, value?: AllGeoJSON, styles?: any[]) {
   if (!map || !value) return;
   map.on('load', () => {
     map.addSource(PREVIEW_LAYER_ID, {
@@ -130,9 +133,9 @@ export function setupPreviewLayer(map?: Map, value?: AllGeoJSON) {
       data: value,
     });
 
-    getMapStyles().forEach((style) => {
+    styles?.forEach((style) => {
       map.addLayer({
-        ...(style as any),
+        ...style,
         source: PREVIEW_LAYER_ID,
       });
     });
@@ -161,43 +164,118 @@ export function addMapControls(map: Map, controls?: MapControls) {
   }
 }
 
-export function getMapStyles() {
-  const primaryColor = '#D20C0C';
+export function getMapStyles(colors: ThemeMapColors) {
+  if (!colors?.primary) {
+    throw new Error('Setup theme colors for map!');
+  }
+
+  const isPoint = ['==', '$type', 'Point'];
+  const isLine = ['==', '$type', 'LineString'];
+  const isPolygon = ['==', '$type', 'Polygon'];
+  const isActive = ['==', 'active', 'true'];
+  const isNotActive = ['!=', 'active', 'true'];
+  const isPointActive = ['any', isActive, ['==', 'meta', 'midpoint'], ['==', 'meta', 'vertex']];
+  const isPointNotActive = [
+    'all',
+    isNotActive,
+    ['!=', 'meta', 'midpoint'],
+    ['!=', 'meta', 'vertex'],
+  ];
+
+  const states = {
+    colors: {
+      default: colors.primary,
+      active: colors.selected || colors.primary,
+    },
+    opacity: {
+      default: 0.7,
+      active: 1,
+    },
+    fillOpacity: {
+      default: 0.1,
+      active: 0.15,
+    },
+    line: {
+      width: {
+        default: 3,
+        active: 3,
+      },
+    },
+    circle: {
+      radius: {
+        active: 7,
+        default: 5,
+      },
+    },
+  };
 
   return [
     {
       id: 'draw-points',
       type: 'circle',
-      filter: ['all', ['==', '$type', 'Point']],
+      filter: ['all', isPoint, isPointNotActive],
       paint: {
-        'circle-radius': 5,
-
-        'circle-color': primaryColor,
-        'circle-opacity': 0.7,
+        'circle-radius': states.circle.radius.default,
+        'circle-color': states.colors.default,
+        'circle-opacity': states.opacity.default,
+      },
+    },
+    {
+      id: 'draw-points-active',
+      type: 'circle',
+      filter: ['all', isPoint, isPointActive],
+      paint: {
+        'circle-radius': states.circle.radius.active,
+        'circle-color': states.colors.active,
+        'circle-opacity': states.opacity.active,
       },
     },
     {
       id: 'draw-line',
       type: 'line',
-      filter: ['any', ['==', '$type', 'LineString'], ['==', '$type', 'Polygon']],
+      filter: ['all', ['any', isLine, isPolygon], isNotActive],
       layout: {
         'line-cap': 'round',
         'line-join': 'round',
       },
       paint: {
-        'line-color': primaryColor,
-        'line-width': 3,
-        'line-opacity': 0.7,
+        'line-color': states.colors.default,
+        'line-width': states.line.width.default,
+        'line-opacity': states.opacity.default,
+      },
+    },
+    {
+      id: 'draw-line-active',
+      type: 'line',
+      filter: ['all', ['any', isLine, isPolygon], isActive],
+      layout: {
+        'line-cap': 'round',
+        'line-join': 'round',
+      },
+      paint: {
+        'line-color': states.colors.active,
+        'line-width': states.line.width.active,
+        'line-opacity': states.opacity.active,
       },
     },
     {
       id: 'draw-fill',
       type: 'fill',
-      filter: ['all', ['==', '$type', 'Polygon']],
+      filter: ['all', isPolygon, isNotActive],
       paint: {
-        'fill-color': primaryColor,
-        'fill-outline-color': primaryColor,
-        'fill-opacity': 0.1,
+        'fill-color': states.colors.default,
+        'fill-outline-color': states.colors.default,
+        'fill-opacity': states.fillOpacity.default,
+      },
+    },
+    {
+      id: 'draw-fill-active',
+      type: 'fill',
+      filter: ['all', isPolygon, isActive],
+      paint: {
+        'fill-color': states.colors.active,
+        'fill-outline-color': states.colors.active,
+        'fill-opacity': states.fillOpacity.active,
       },
     },
   ];

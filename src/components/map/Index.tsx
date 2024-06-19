@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import FieldWrapper from '../common/FieldWrapper';
 import { Feature, LngLatBounds, MapOptions, Map as MaplibreMap } from 'maplibre-gl';
 
@@ -11,12 +11,14 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import bbox from '@turf/bbox';
 import { AllGeoJSON } from '@turf/helpers';
 import {
+  BASEMAP_URL,
   DrawOptions,
   MAP_PROJECTION,
   MapControls,
   addMapControls,
   convertGeojsonToProjection,
   enableDraw,
+  getMapStyles,
   parseDrawOptions,
   setupPreviewLayer,
 } from './functions';
@@ -35,6 +37,7 @@ export interface MapProps {
   controls?: MapControls;
   preview?: boolean;
   draw?: boolean | DrawOptions;
+  basemapUrl?: string;
 }
 
 const Map = ({
@@ -47,18 +50,20 @@ const Map = ({
   value,
   preview,
   controls,
+  basemapUrl,
 }: MapProps) => {
   const mapContainer = useRef(null as HTMLDivElement | null);
   const map = useRef(null as MaplibreMap | null);
   const mapDraw = useRef(null as MapboxDraw | null);
   const value4326 = useRef(undefined as AllGeoJSON | undefined);
+  const theme = useTheme();
 
   projection = projection || '3346';
   draw = parseDrawOptions(draw);
 
   const mapOptions: Partial<MapOptions> = {
     attributionControl: false,
-    style: 'https://basemap.startupgov.lt/vector/styles/bright/style.json',
+    style: basemapUrl || BASEMAP_URL.LIGHT,
   };
 
   if (value) {
@@ -105,6 +110,7 @@ const Map = ({
       });
     }
   }
+  const styles = getMapStyles(theme.colors.map);
 
   useEffect(() => {
     // stops map from intializing more than once (or container not exists)
@@ -116,10 +122,10 @@ const Map = ({
     addMapControls(map.current, controls);
 
     if (draw && !preview) {
-      mapDraw.current = enableDraw(map.current, draw, value4326.current);
+      mapDraw.current = enableDraw(map.current, draw, value4326.current, styles);
       addDrawEvents();
     } else if (value4326.current) {
-      setupPreviewLayer(map.current, value4326.current);
+      setupPreviewLayer(map.current, value4326.current, styles);
     }
 
     onLoad?.(map.current);
