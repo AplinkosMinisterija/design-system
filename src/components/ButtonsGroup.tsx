@@ -47,7 +47,11 @@ const ButtonsGroup = ({
 const Container = styled.div`
   border-radius: 4px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
 `;
 
 const StyledButton = styled.button<{
