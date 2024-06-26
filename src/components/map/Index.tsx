@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import FieldWrapper from '../common/FieldWrapper';
-import { Feature, LngLatBounds, MapOptions, Map as MaplibreMap } from 'maplibre-gl';
+import { Feature, LngLatBounds, MapOptions, Map as MaplibreMap, addProtocol } from 'maplibre-gl';
 
 // @ts-ignore
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
@@ -23,6 +23,8 @@ import {
   setupPreviewLayer,
   transformBufferedItems,
 } from './functions';
+import { MapLayers } from './layers';
+import { Protocol } from 'pmtiles';
 
 MapboxDraw.constants.classes.CONTROL_BASE = 'maplibregl-ctrl';
 MapboxDraw.constants.classes.CONTROL_PREFIX = 'maplibregl-ctrl-';
@@ -39,6 +41,7 @@ export interface MapProps {
   preview?: boolean;
   draw?: boolean | DrawOptions;
   basemapUrl?: string;
+  layers?: string[];
 }
 
 const Map = ({
@@ -52,12 +55,16 @@ const Map = ({
   preview,
   controls,
   basemapUrl,
+  layers,
 }: MapProps) => {
   const mapContainer = useRef(null as HTMLDivElement | null);
   const map = useRef(null as MaplibreMap | null);
   const mapDraw = useRef(null as MapboxDraw | null);
   const value4326 = useRef(undefined as AllGeoJSON | undefined);
   const theme = useTheme();
+
+  const protocol = new Protocol();
+  addProtocol('pmtiles', protocol.tile);
 
   projection = projection || '3346';
   draw = parseDrawOptions(draw);
@@ -115,6 +122,22 @@ const Map = ({
   }
   const styles = getMapStyles(theme.colors.map);
 
+  function addDefaultLayers() {
+    if (!map.current || !layers?.length) return;
+
+    const mapLayers = MapLayers(theme.colors.map);
+
+    map.current.on('load', () => {
+      layers.forEach((layerType) => {
+        map.current?.addSource(layerType, mapLayers[layerType].source);
+
+        mapLayers[layerType].layers.forEach((layer) => {
+          map.current?.addLayer(layer);
+        });
+      });
+    });
+  }
+
   useEffect(() => {
     // stops map from intializing more than once (or container not exists)
     if (map.current || !mapContainer?.current) return;
@@ -123,6 +146,7 @@ const Map = ({
     map.current = new MaplibreMap(mapOptions as MapOptions);
 
     addMapControls(map.current, controls);
+    addDefaultLayers();
 
     if (draw && !preview) {
       mapDraw.current = enableDraw(map.current, draw, value4326.current, styles);

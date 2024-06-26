@@ -31,6 +31,8 @@ export interface FieldsColors {
 export interface ThemeMapColors {
   primary: string;
   selected?: string;
+  outline?: string;
+  fill?: string;
 }
 
 interface ThemeColors {

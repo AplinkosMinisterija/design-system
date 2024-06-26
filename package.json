@@ -46,6 +46,7 @@
     "formik": "^2.4.6",
     "maplibre-gl": "^4.3.2",
     "numeral": "^2.0.6",
+    "pmtiles": "^3.0.6",
     "proj4": "^2.11.0",
     "react-datepicker": "^6.9.0",
     "react-div-100vh": "^0.7.0",

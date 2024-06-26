@@ -14,6 +14,7 @@ export const theme: Theme = {
     map: {
       primary: '#53B1FD',
       selected: '#a9d8fd',
+      outline: '#d7eafa'
     },
     buttons: {
       [ButtonVariants.PRIMARY]: {
