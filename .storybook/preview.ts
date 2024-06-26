@@ -11,6 +11,11 @@ export const theme: Theme = {
     transparent: 'transparent',
     danger: '#FE5B78',
     success: '#027A48',
+    map: {
+      primary: '#53B1FD',
+      selected: '#a9d8fd',
+      outline: '#d7eafa'
+    },
     buttons: {
       [ButtonVariants.PRIMARY]: {
         background: '#53B1FD',

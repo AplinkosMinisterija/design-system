@@ -27,6 +27,14 @@ export interface FieldsColors {
   label?: string;
   [key: string]: any;
 }
+
+export interface ThemeMapColors {
+  primary: string;
+  selected?: string;
+  outline?: string;
+  fill?: string;
+}
+
 interface ThemeColors {
   primary: string;
   secondary: string;
@@ -34,6 +42,7 @@ interface ThemeColors {
   transparent: string;
   danger: string;
   success: string;
+  map?: ThemeMapColors;
   buttons?: {
     // configure your own button variants
     primary: ButtonColors;
