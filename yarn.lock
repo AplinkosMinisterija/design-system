@@ -3332,6 +3332,15 @@
     "@turf/meta" "^7.0.0"
     tslib "^2.6.2"
 
+"@turf/center@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/center/-/center-7.0.0.tgz#b804e7a7e26546475509f732f34350e40f620b35"
+  integrity sha512-5RZia9uuWxz2oCyd1vsNkBeraBNdwCsIo4UGRQdyswBeLFVbRwIUa7M7+2z2D7B1YIgovuLIRVfk6FeWUQXDtQ==
+  dependencies:
+    "@turf/bbox" "^7.0.0"
+    "@turf/helpers" "^7.0.0"
+    tslib "^2.6.2"
+
 "@turf/circle@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@turf/circle/-/circle-7.0.0.tgz#4b5a68c7bb6f342147032ae19fbb9fee359706c5"

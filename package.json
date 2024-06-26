@@ -35,6 +35,7 @@
     "@mapbox/mapbox-gl-draw-static-mode": "^1.0.1",
     "@tanstack/react-query": "^5.20.5",
     "@turf/bbox": "^7.0.0",
+    "@turf/center": "^7.0.0",
     "@turf/circle": "^7.0.0",
     "@turf/helpers": "^7.0.0",
     "@turf/length": "^7.0.0",

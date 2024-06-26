@@ -13,10 +13,12 @@ import { AllGeoJSON } from '@turf/helpers';
 import proj4 from 'proj4';
 // @ts-ignore
 import epsg from 'epsg-index/all.json';
-import { coordEach } from '@turf/meta';
+import { coordEach, featureEach } from '@turf/meta';
 import { cloneDeep, mergeWith } from 'lodash';
 import { ThemeMapColors } from 'src/types';
-import { DragCircleMode } from './DragCircleMode';
+import { DragCircle, convertCircleToPoint, convertFeatureToCircle } from './modes';
+import { DirectSelect, SimpleSelect } from './modes';
+import circle from '@turf/circle';
 
 export const BASEMAP_URL = {
   LIGHT: 'https://basemap.startupgov.lt/vector/styles/bright/style.json',
@@ -91,8 +93,11 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styl
   let modes = MapboxDraw.modes;
 
   if (draw.buffer) {
+    // TODO: setup lines
     modes = Object.assign(modes, {
-      draw_point: DragCircleMode(draw.buffer),
+      draw_point: DragCircle(draw.buffer),
+      simple_select: SimpleSelect({ circle: draw.buffer }),
+      direct_select: DirectSelect({ circle: draw.buffer }),
     });
   }
 
@@ -130,6 +135,20 @@ export function convertGeojsonToProjection(source: AllGeoJSON, from: string, to:
     const newCoord = transform.forward(coords);
     coords[0] = newCoord[0];
     coords[1] = newCoord[1];
+  });
+
+  return source;
+}
+
+export function transformBufferedItems(source: AllGeoJSON, toPolygons: boolean = true) {
+  featureEach(source as any, (feature, index) => {
+    let item: any;
+    if (toPolygons) item = convertFeatureToCircle(feature);
+    else item = convertCircleToPoint(feature);
+
+    if (item) {
+      (source as any).features[index] = item;
+    }
   });
 
   return source;

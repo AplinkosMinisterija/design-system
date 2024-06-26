@@ -21,6 +21,7 @@ import {
   getMapStyles,
   parseDrawOptions,
   setupPreviewLayer,
+  transformBufferedItems,
 } from './functions';
 
 MapboxDraw.constants.classes.CONTROL_BASE = 'maplibregl-ctrl';
@@ -67,7 +68,9 @@ const Map = ({
   };
 
   if (value) {
-    value4326.current = convertGeojsonToProjection(value, projection, MAP_PROJECTION);
+    value4326.current = transformBufferedItems(
+      convertGeojsonToProjection(value, projection, MAP_PROJECTION),
+    );
     mapOptions.bounds = new LngLatBounds(bbox(value4326.current) as any);
     mapOptions.fitBoundsOptions = { padding: 50, maxZoom: 16 };
   }
@@ -88,7 +91,7 @@ const Map = ({
         );
       }
 
-      onChange?.(featureCollection);
+      onChange?.(transformBufferedItems(featureCollection, false));
     }
 
     map.current.on('draw.create', onDrawChange);
