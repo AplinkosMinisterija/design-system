@@ -18,7 +18,6 @@ import { cloneDeep, mergeWith } from 'lodash';
 import { ThemeMapColors } from 'src/types';
 import { DragCircle, convertCircleToPoint, convertFeatureToCircle } from './modes';
 import { DirectSelect, SimpleSelect } from './modes';
-import circle from '@turf/circle';
 
 export const BASEMAP_URL = {
   LIGHT: 'https://basemap.startupgov.lt/vector/styles/bright/style.json',
@@ -96,7 +95,7 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styl
     // TODO: setup lines
     modes = Object.assign(modes, {
       draw_point: DragCircle(draw.buffer),
-      simple_select: SimpleSelect({ circle: draw.buffer }),
+      simple_select: SimpleSelect(),
       direct_select: DirectSelect({ circle: draw.buffer }),
     });
   }

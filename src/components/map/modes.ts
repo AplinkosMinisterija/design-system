@@ -125,7 +125,7 @@ export function DragCircle(opts: CircleOptions) {
     calculateCircleBuffersAndUpdate(state.polygon, e, opts);
   };
 
-  Mode.onMouseUp = Mode.onTouchEnd = function (state, e) {
+  Mode.onMouseUp = Mode.onTouchEnd = function (state) {
     dragPan.enable(this);
     return this.changeMode(MapboxDraw.constants.modes.SIMPLE_SELECT, {
       featureIds: [state.polygon.id],
@@ -154,7 +154,7 @@ export function DragCircle(opts: CircleOptions) {
   return Mode;
 }
 
-export function SimpleSelect(opts: { circle?: CircleOptions }) {
+export function SimpleSelect() {
   const Mode = { ...MapboxDraw.modes.simple_select };
 
   const defaultDragMove = MapboxDraw.modes.simple_select.dragMove;
@@ -176,7 +176,7 @@ export function SimpleSelect(opts: { circle?: CircleOptions }) {
     defaultDragMove.bind(this)(state, e);
   };
 
-  Mode.toDisplayFeatures = function (state, geojson, display) {
+  Mode.toDisplayFeatures = function (_, geojson, display) {
     geojson.properties.active = this.isSelected(geojson.properties.id)
       ? MapboxDraw.constants.activeStates.ACTIVE
       : MapboxDraw.constants.activeStates.INACTIVE;
