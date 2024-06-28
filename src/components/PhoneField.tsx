@@ -50,7 +50,7 @@ const PhoneField = ({
     });
 
     if (isPartialPhoneValid) {
-      onChange(input.replaceAll(',', '.'));
+      onChange(input);
     }
   };
 
