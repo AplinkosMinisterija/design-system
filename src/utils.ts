@@ -229,4 +229,6 @@ export const handleDateRestriction = (filter: FilterConfig, values: any) => {
 
 const phoneNumbersPrefixesPattern = phoneNumberPrefixes.join('|');
 
-export const phoneRegexPattern = new RegExp(`^(${phoneNumbersPrefixesPattern}|\\+370)\\d{8}$`);
+export const phoneNumberRegexPattern = new RegExp(
+  `^(${phoneNumbersPrefixesPattern}|\\+370)\\d{8}$`,
+);
