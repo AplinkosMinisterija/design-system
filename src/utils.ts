@@ -1,7 +1,6 @@
 import { format } from 'date-fns/format';
 import { useCallback, useEffect, useState } from 'react';
 import { matchPath, useLocation } from 'react-router';
-import { phoneNumberPrefixes } from './components/common/constants';
 import { AppRoute, FilterConfig } from './types';
 
 export const device = {
@@ -227,6 +226,4 @@ export const handleDateRestriction = (filter: FilterConfig, values: any) => {
   };
 };
 
-export const phoneNumberRegexPattern = new RegExp(
-  `^(${phoneNumberPrefixes.join('|')}|\\+370)\\d{8}$`,
-);
+export const phoneNumberRegexPattern = new RegExp(`^(\\+370|8|0)(3|4|5|6|7|8|9)\\d{7}$`);
