@@ -3,7 +3,6 @@ import AsyncSelectField from './components/AsyncSelectField';
 import Button from './components/Button';
 import ButtonsGroup from './components/ButtonsGroup';
 import CheckBox from './components/Checkbox';
-import ColumnButton from './components/tables/ColumnButton';
 import DesignSystemProvider from './components/common/DesignSystemProvider';
 import FieldWrapper from './components/common/FieldWrapper';
 import DatePicker from './components/DatePicker';
@@ -16,8 +15,10 @@ import Map from './components/map/Index';
 import MultiSelectField from './components/MultiSelectField';
 import NumericTextField from './components/NumericTextField';
 import PasswordField from './components/PasswordField';
+import PhoneField from './components/PhoneField';
 import SelectField from './components/SelectField';
 import Switch from './components/Switch';
+import ColumnButton from './components/tables/ColumnButton';
 import TableContainer from './components/tables/components/TableContainer';
 import DynamicFilter from './components/tables/DynamicFilter';
 import RecursiveTable from './components/tables/RecursiveTable';
@@ -57,4 +58,5 @@ export {
   TreeSelectField,
   ButtonsGroup,
   DesignSystemProvider,
+  PhoneField,
 };
