@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import FieldWrapper from '../common/FieldWrapper';
 import { Feature, LngLatBounds, MapOptions, Map as MaplibreMap, addProtocol } from 'maplibre-gl';
@@ -50,37 +50,42 @@ const Map = ({
   error,
   draw,
   onChange,
-  projection,
   value,
   preview,
   controls,
   basemapUrl,
+  projection = '3346',
   layers,
 }: MapProps) => {
   const mapContainer = useRef(null as HTMLDivElement | null);
   const map = useRef(null as MaplibreMap | null);
   const mapDraw = useRef(null as MapboxDraw | null);
-  const value4326 = useRef(undefined as AllGeoJSON | undefined);
+  // const value4326 = useRef(undefined as AllGeoJSON | undefined);
   const theme = useTheme();
+
+  const value4326: AllGeoJSON | undefined = useMemo(() => {
+    if (value) {
+      return transformBufferedItems(convertGeojsonToProjection(value, projection, MAP_PROJECTION));
+    }
+  }, [value, projection]);
+
+  const drawOptions = useMemo(() => parseDrawOptions(draw), [draw]);
 
   const protocol = new Protocol();
   addProtocol('pmtiles', protocol.tile);
-
-  projection = projection || '3346';
-  draw = parseDrawOptions(draw);
 
   const mapOptions: Partial<MapOptions> = {
     attributionControl: false,
     style: basemapUrl || BASEMAP_URL.LIGHT,
   };
 
-  if (value) {
-    value4326.current = transformBufferedItems(
-      convertGeojsonToProjection(value, projection, MAP_PROJECTION),
-    );
-    mapOptions.bounds = new LngLatBounds(bbox(value4326.current) as any);
-    mapOptions.fitBoundsOptions = { padding: 50, maxZoom: 16 };
-  }
+  useEffect(() => {
+    if (value4326 && map.current) {
+      console.log('hello there buddy');
+      mapOptions.bounds = new LngLatBounds(bbox(value4326) as any);
+      mapOptions.fitBoundsOptions = { padding: 50, maxZoom: 16 };
+    }
+  }, [value4326, map.current]);
 
   function addDrawEvents() {
     if (!map.current) return;
@@ -90,7 +95,7 @@ const Map = ({
 
       let featureCollection = mapDraw.current.getAll();
 
-      if (projection) {
+      if (projection && featureCollection) {
         featureCollection = convertGeojsonToProjection(
           featureCollection,
           MAP_PROJECTION,
@@ -105,7 +110,7 @@ const Map = ({
     map.current.on('draw.update', onDrawChange);
     map.current.on('draw.delete', onDrawChange);
 
-    if (!(draw as DrawOptions)?.multi) {
+    if (!(drawOptions as DrawOptions)?.multi) {
       map.current.on('draw.render', () => {
         const { features } = mapDraw.current.getAll();
         // TODO: filter out by coordinates (when at least one point is drawn)
@@ -148,11 +153,11 @@ const Map = ({
     addMapControls(map.current, controls);
     addDefaultLayers();
 
-    if (draw && !preview) {
-      mapDraw.current = enableDraw(map.current, draw, value4326.current, styles);
+    if (drawOptions && !preview) {
+      mapDraw.current = enableDraw(map.current, drawOptions, value4326, styles);
       addDrawEvents();
-    } else if (value4326.current) {
-      setupPreviewLayer(map.current, value4326.current, styles);
+    } else if (value4326) {
+      setupPreviewLayer(map.current, value4326, styles);
     }
 
     onLoad?.(map.current);
