@@ -5,6 +5,9 @@
   "type": "module",
   "license": "MIT",
   "sideEffects": false,
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
   "prettier": "@aplinkosministerija/biip-prettier-config",
   "keywords": [
     "react",
