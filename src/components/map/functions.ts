@@ -1,6 +1,7 @@
 import {
   ControlPosition,
   FullscreenControl,
+  GeoJSONSource,
   GeolocateControl,
   Map,
   NavigationControl,
@@ -155,7 +156,8 @@ export function transformBufferedItems(source: AllGeoJSON, toPolygons: boolean =
 
 export function setupPreviewLayer(map?: Map, value?: AllGeoJSON, styles?: any[]) {
   if (!map || !value) return;
-  map.on('load', () => {
+
+  const loadLayer = () => {
     map.addSource(PREVIEW_LAYER_ID, {
       type: 'geojson',
       data: value,
@@ -167,7 +169,25 @@ export function setupPreviewLayer(map?: Map, value?: AllGeoJSON, styles?: any[])
         source: PREVIEW_LAYER_ID,
       });
     });
-  });
+  };
+
+  const isLoaded = map.loaded();
+  if (!isLoaded) {
+    map.on('load', loadLayer);
+  } else {
+    loadLayer();
+  }
+}
+
+export function setPreviewLayerValue(map?: Map, value?: AllGeoJSON, styles?: any[]) {
+  if (!map || !value) return;
+
+  const source = map.getSource(PREVIEW_LAYER_ID) as GeoJSONSource;
+  if (!source) {
+    return setupPreviewLayer(map, value, styles);
+  }
+
+  source.setData(value);
 }
 
 export function addMapControls(map: Map, controls?: MapControls) {
