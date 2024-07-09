@@ -82,7 +82,7 @@ const locations = [
 export const MapDrawStory: Story = {
   name: 'Map',
   render: () => {
-    const [value, setValue] = useState<AllGeoJSON>(locations[0].value);
+    const [value, setValue] = useState<AllGeoJSON>(undefined);
     const [location, setLocation] = useState([]);
 
     return (

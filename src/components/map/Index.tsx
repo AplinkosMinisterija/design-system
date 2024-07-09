@@ -20,6 +20,7 @@ import {
   enableDraw,
   getMapStyles,
   parseDrawOptions,
+  setPreviewLayerValue,
   setupPreviewLayer,
   transformBufferedItems,
 } from './functions';
@@ -42,6 +43,7 @@ export interface MapProps {
   draw?: boolean | DrawOptions;
   basemapUrl?: string;
   layers?: string[];
+  zoomOnChange?: boolean;
 }
 
 const Map = ({
@@ -56,12 +58,14 @@ const Map = ({
   basemapUrl,
   projection = '3346',
   layers,
+  zoomOnChange = true,
 }: MapProps) => {
   const mapContainer = useRef(null as HTMLDivElement | null);
   const map = useRef(null as MaplibreMap | null);
   const mapDraw = useRef(null as MapboxDraw | null);
-  // const value4326 = useRef(undefined as AllGeoJSON | undefined);
+
   const theme = useTheme();
+  const styles = getMapStyles(theme.colors.map);
 
   const value4326: AllGeoJSON | undefined = useMemo(() => {
     if (value) {
@@ -79,13 +83,23 @@ const Map = ({
     style: basemapUrl || BASEMAP_URL.LIGHT,
   };
 
+  if (value4326) {
+    mapOptions.bounds = new LngLatBounds(bbox(value4326) as any);
+    mapOptions.fitBoundsOptions = { padding: 50, maxZoom: 16 };
+  }
+
   useEffect(() => {
-    if (value4326 && map.current) {
-      console.log('hello there buddy');
-      mapOptions.bounds = new LngLatBounds(bbox(value4326) as any);
-      mapOptions.fitBoundsOptions = { padding: 50, maxZoom: 16 };
+    if (!map.current || !value4326) return;
+
+    setPreviewLayerValue(map.current, value4326, styles);
+
+    if (zoomOnChange) {
+      map.current.fitBounds(new LngLatBounds(bbox(value4326) as any), {
+        padding: 50,
+        maxZoom: 16,
+      });
     }
-  }, [value4326, map.current]);
+  }, [value4326, zoomOnChange]);
 
   function addDrawEvents() {
     if (!map.current) return;
@@ -125,7 +139,6 @@ const Map = ({
       });
     }
   }
-  const styles = getMapStyles(theme.colors.map);
 
   function addDefaultLayers() {
     if (!map.current || !layers?.length) return;
