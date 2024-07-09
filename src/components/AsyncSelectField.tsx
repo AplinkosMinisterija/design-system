@@ -15,8 +15,8 @@ export interface AsyncSelectFieldProps {
   padding?: string;
   onChange: (option: any) => void;
   disabled?: boolean;
-  getOptionLabel: (option: any) => string | JSX.Element;
-  getInputValue: (option: any) => string;
+  getOptionLabel: (option: any) => string;
+  getOptionComponent?: (option: any) => string | JSX.Element;
   className?: string;
   placeholder?: string;
   hasBorder?: boolean;
@@ -40,7 +40,7 @@ const AsyncSelectField = ({
   name,
   disabled = false,
   getOptionLabel,
-  getInputValue,
+  getOptionComponent,
   loadOptions,
   dependantValue,
   placeholder = '',
@@ -69,8 +69,7 @@ const AsyncSelectField = ({
     name,
   });
 
-  const placeholderValue = value ? getInputValue(value) : placeholder;
-
+  const placeholderValue = value ? getOptionLabel(value) : placeholder;
   return (
     <FieldWrapper
       onClick={handleToggleSelect}
@@ -110,7 +109,7 @@ const AsyncSelectField = ({
         loading={loading}
         observerRef={observerRef}
         values={suggestions}
-        getOptionLabel={getOptionLabel}
+        getOptionLabel={getOptionComponent || getOptionLabel}
         showSelect={showSelect}
         handleClick={handleClick}
         texts={texts}
