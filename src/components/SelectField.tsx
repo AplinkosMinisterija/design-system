@@ -17,8 +17,8 @@ export interface SelectFieldProps {
   padding?: string;
   onChange: (option: any) => void;
   disabled?: boolean;
-  getOptionLabel: (option: any) => string | JSX.Element;
-  getInputValue: (option: any) => string;
+  getOptionLabel: (option: any) => string;
+  getOptionComponent?: (option: any) => string | JSX.Element;
   className?: string;
   placeholder?: string;
   dependantId?: string;
@@ -37,7 +37,7 @@ const SelectField = ({
   left,
   padding,
   getOptionLabel,
-  getInputValue,
+  getOptionComponent,
   onChange,
   disabled,
   dependantId,
@@ -95,12 +95,12 @@ const SelectField = ({
         }
         onChange={handleOnChange}
         disabled={disabled}
-        placeholder={(value && getInputValue(value)) || placeholder}
+        placeholder={(value && getOptionLabel(value)) || placeholder}
         selectedValue={value}
       />
       <OptionsContainer
         values={suggestions}
-        getOptionLabel={getOptionLabel}
+        getOptionLabel={getOptionComponent || getOptionLabel}
         loading={loading}
         showSelect={showSelect}
         handleClick={handleClick}

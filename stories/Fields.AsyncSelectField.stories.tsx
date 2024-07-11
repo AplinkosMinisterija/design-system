@@ -24,15 +24,15 @@ export const AsyncSelectFieldStory: Story = {
           onChange={(value) => {
             setValue(value);
           }}
-          getOptionLabel={(option) => (
+          getOptionLabel={(option) =>
+            option ? `${option?.name} (${option?.cadastralId}) - ${option?.municipality}` : '-'
+          }
+          getOptionComponent={(option) => (
             <span>
               {option.name}
               <OptionInfo>{` (${option.cadastralId}) - ${option.municipality}`}</OptionInfo>
             </span>
           )}
-          getInputValue={(option) =>
-            !!option ? `${option?.name} (${option?.cadastralId}) - ${option?.municipality}` : '-'
-          }
           value={value}
           loadOptions={async (input, page) => {
             const response = await fetch(`${testUrl}?search=${input}&page=${page}`);

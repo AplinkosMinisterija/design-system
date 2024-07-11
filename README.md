@@ -62,6 +62,7 @@ export default App;
 ### AsyncSelectField
 ### AsyncMultiSelectField
 ### MapField
+### Map
 ### SelectField
 ### MultiSelectField
 ### TextField
