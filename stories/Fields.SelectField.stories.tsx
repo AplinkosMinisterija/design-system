@@ -28,8 +28,8 @@ export const SelectFieldStory: Story = {
           ]}
           value={{ id: 1, label: 'Vilkas', age: 'Dvimetis', gender: 'Patinas' }}
           onChange={() => {}}
-          getInputValue={(option) => option.label}
-          getOptionLabel={(option) => (
+          getOptionLabel={(option) => option.label}
+          getOptionComponent={(option) => (
             <span>
               {option.label}
               <OptionInfo>{` (${option.gender}) - ${option.age}`}</OptionInfo>
