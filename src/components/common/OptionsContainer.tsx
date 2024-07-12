@@ -62,15 +62,15 @@ const OptionsContainer = ({
     );
   };
   return (
-    <OptionContainer display={display}>
+    <OptionContainer $display={display}>
       {renderOptions()}
-      {observerRef && <ObserverRef display={display} ref={observerRef} />}
+      {observerRef && <ObserverRef $display={display} ref={observerRef} />}
     </OptionContainer>
   );
 };
 
-const OptionContainer = styled.div<{ display: boolean }>`
-  display: ${({ display }) => (display ? 'block' : 'none')};
+const OptionContainer = styled.div<{ $display: boolean }>`
+  display: ${({ $display }) => ($display ? 'block' : 'none')};
   position: absolute;
   z-index: 29;
   width: 100%;
@@ -106,8 +106,8 @@ const Option = styled.div`
   }
 `;
 
-const ObserverRef = styled.div<{ display: boolean }>`
-  display: ${({ display }) => (display ? 'block' : 'none')};
+const ObserverRef = styled.div<{ $display: boolean }>`
+  display: ${({ $display }) => ($display ? 'block' : 'none')};
 `;
 
 export default OptionsContainer;

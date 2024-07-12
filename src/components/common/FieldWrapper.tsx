@@ -51,10 +51,10 @@ const FieldWrapper = ({
   );
 };
 
-const Container = styled.div<{ padding: string }>`
+const Container = styled.div<{ $padding: string }>`
   display: block;
   position: relative;
-  padding: ${({ padding }) => padding};
+  padding: ${({ $padding }) => $padding};
 `;
 
 const LabelRow = styled.div`

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import Table from '../src/components/tables/Table';
+import { TableItemWidth } from '../src';
 
 const meta: Meta<typeof Table> = {
   component: Table,
@@ -62,7 +63,7 @@ export const TabsStory: Story = {
               desktopOrder: 1,
               show: true,
               visible: true,
-              width: 'auto',
+              width: TableItemWidth.LARGE,
             },
             column2: {
               label: 'Column 2',
@@ -70,7 +71,7 @@ export const TabsStory: Story = {
               desktopOrder: 1,
               show: true,
               visible: true,
-              width: 'auto',
+              width: TableItemWidth.LARGE,
             },
           }}
           data={data}
@@ -78,7 +79,9 @@ export const TabsStory: Story = {
             text: 'Not found',
             url: '',
             urlText: 'not found',
+            onClick: () => {},
           }}
+          onPageChange={() => {}}
         />
       </StoryWrapper>
     );
