@@ -157,7 +157,6 @@ const Map = ({
   }
 
   useEffect(() => {
-    console.log('initialize map');
     // stops map from intializing more than once (or container not exists)
     if (map.current || !mapContainer?.current) return;
 
