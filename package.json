@@ -1,13 +1,14 @@
 {
   "name": "@aplinkosministerija/design-system",
   "description": "Shared Design System Components for React",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "type": "module",
   "license": "MIT",
   "sideEffects": false,
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
+  "style": "./dist/styles.css",
   "prettier": "@aplinkosministerija/biip-prettier-config",
   "keywords": [
     "react",
