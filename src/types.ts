@@ -207,3 +207,9 @@ export interface FilterConfig {
 }
 
 export type RowConfig = string[][];
+
+export enum PopupType {
+  FULL_SCREEN = 'FULL_SCREEN',
+  CENTER = 'CENTER',
+  BOTTOM = 'BOTTOM',
+}
