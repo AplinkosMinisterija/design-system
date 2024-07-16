@@ -11,6 +11,7 @@ import {
   MdSettings,
   MdTune,
   MdOutlineAccessTime,
+  MdUnfoldMore,
 } from 'react-icons/md';
 
 import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
@@ -31,6 +32,7 @@ export enum IconName {
   tableArrowUp = 'tableArrowUp',
   tableArrowDown = 'tableArrowDown',
   time = 'time',
+  showMore = 'showMore',
 }
 
 export interface IconProps {
@@ -89,6 +91,8 @@ const Icon = ({ name, className }: IconProps) => {
       return <MdOutlineCalendarToday className={className} />;
     case IconName.time:
       return <MdOutlineAccessTime className={className} />;
+    case 'showMore':
+      return <MdUnfoldMore className={className} />;
     default:
       return null;
   }

@@ -43,6 +43,24 @@ export interface DropDownColors {
   [key: string]: any;
 }
 
+export interface ProfileSelectorColors {
+  selector?: {
+    background?: string;
+    label?: string;
+    description?: string;
+    icon?: string;
+    [key: string]: any;
+  };
+  options?: {
+    container?: string;
+    hover?: string;
+    text?: string;
+    hoverText?: string;
+    [key: string]: any;
+  };
+  [key: string]: any;
+}
+
 interface ThemeColors {
   primary: string;
   secondary: string;
@@ -58,6 +76,7 @@ interface ThemeColors {
   };
   fields?: FieldsColors; // for inputs
   dropDown?: DropDownColors;
+  profileSelector?: ProfileSelectorColors;
   text?: {
     //use only for text elements
     primary: string; // for titles and headings
