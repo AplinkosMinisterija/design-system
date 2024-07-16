@@ -89,7 +89,7 @@ export const theme: Theme = {
         selector: {
           background: 'white',
           label: '#101010',
-          description: '#101010',
+          description: '#00000099',
           icon: '#53B1FD',
         },
         options: {
@@ -103,18 +103,10 @@ export const theme: Theme = {
         selector: {
           background: '#437783',
           label: 'white',
-          description: 'white',
+          description: '#FFFFFF99',
           icon: 'white',
         },
       },
-    },
-    buttonBackground: {
-      primary: '#53B1FD',
-      secondary: 'white',
-      tertiary: '#7A7E9F',
-      success: '#027A48',
-      danger: '#FE5B78',
-      transparent: 'transparent',
     },
     text: {
       primary: '#101010',
@@ -131,6 +123,7 @@ export const theme: Theme = {
     fields: 0.4,
     multiSelectFieldTag: 0.4,
     profileSelector: 0.8,
+    popup: 1,
   },
   height: {
     buttons: 4,

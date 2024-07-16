@@ -37,7 +37,7 @@ const ProfileSelector = ({
         <SelectorContainer onClick={() => setShowSelect(true)} $variant={variant}>
           <Column>
             <ModuleContainer>
-              <TenantLabel>{selected.label}</TenantLabel>
+              <TenantLabel $variant={variant}>{selected.label}</TenantLabel>
             </ModuleContainer>
             <SubText $variant={variant}>{selected.description}</SubText>
           </Column>
@@ -76,15 +76,13 @@ const RelativeContainer = styled.div`
   position: relative;
 `;
 
-const SelectorContainer = styled.div<{ $variant: string }>`
+const SelectorContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 56px;
   padding: 0px 16px 0 10px;
   margin-bottom: 4px;
-  color: ${({ theme, $variant }) =>
-    theme.colors.profileSelector?.[$variant]?.selector?.label || '#f8fafc'};
   background: #ffffff1f 0% 0% no-repeat padding-box;
   border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
   cursor: pointer;
@@ -102,7 +100,10 @@ const ModuleContainer = styled.div`
   cursor: pointer;
 `;
 
-const TenantLabel = styled.div`
+const TenantLabel = styled.div<{ $variant: string }>`
+  color: ${({ theme, $variant }) =>
+    theme.colors.profileSelector?.[$variant]?.selector?.label || 'red'};
+
   font-size: ${({ theme }) => theme.colors.fontSize?.profileSelector || 1.6}rem;
 `;
 
@@ -143,7 +144,8 @@ const Option = styled.div<{ $variant: string }>`
 const SubText = styled.div<{ $variant: string }>`
   font-family: 'Manrope', sans-serif;
   font-size: 1.2rem;
-  color: ${({ theme, $variant }) => theme.colors.profileSelector?.[$variant]?.selector?.description || '#a5b9c0'}
+  color: ${({ theme, $variant }) =>
+    theme.colors.profileSelector?.[$variant]?.selector?.description || '#a5b9c0'};
   letter-spacing: 0.1px;
 `;
 
