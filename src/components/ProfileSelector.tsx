@@ -15,6 +15,7 @@ const ProfileSelector = ({
   getOptionLabel,
   getSelectedOptionLabels,
   variant = 'primary',
+  className,
 }: {
   value: Option;
   options: Option[];
@@ -22,12 +23,14 @@ const ProfileSelector = ({
   getOptionLabel?: (option: Option) => string | JSX.Element;
   getSelectedOptionLabels: (option: Option) => { label: string; description?: string };
   variant?: string;
+  className?: string;
 }) => {
   const [showSelect, setShowSelect] = useState(false);
   const selected = getSelectedOptionLabels(value);
 
   return (
     <Container
+      className={className}
       tabIndex={1}
       onClick={() => setShowSelect(!showSelect)}
       onBlur={() => setShowSelect(false)}
@@ -143,7 +146,8 @@ const Option = styled.div<{ $variant: string }>`
 const SubText = styled.div<{ $variant: string }>`
   font-family: 'Manrope', sans-serif;
   font-size: 1.2rem;
-  color: ${({ theme, $variant }) => theme.colors.profileSelector?.[$variant]?.selector?.description || '#a5b9c0'}
+  color: ${({ theme, $variant }) =>
+    theme.colors.profileSelector?.[$variant]?.selector?.description || '#a5b9c0'}
   letter-spacing: 0.1px;
 `;
 
