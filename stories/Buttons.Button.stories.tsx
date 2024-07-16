@@ -4,7 +4,7 @@ import Button from '../src/components/Button';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import Icons, { IconName } from '../src/components/common/Icons';
 import styled from 'styled-components';
-import { ButtonVariants } from '../src';
+import { ButtonVariants } from '../.storybook/preview';
 
 const meta: Meta<typeof Button> = {
   component: Button,

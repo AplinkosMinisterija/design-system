@@ -191,15 +191,6 @@ export type ValidationMessages = {
 
 export type ChildrenType = string | JSX.Element | JSX.Element[];
 
-export enum ButtonVariants {
-  PRIMARY = 'primary',
-  SECONDARY = 'secondary',
-  TERTIARY = 'tertiary',
-  OUTLINE = 'outline',
-  TRANSPARENT = 'transparent',
-  COLUMNS = 'columns',
-}
-
 export interface FilterConfig {
   label: string;
   key: string;

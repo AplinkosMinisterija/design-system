@@ -1,7 +1,21 @@
 import type { Preview } from '@storybook/react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { withThemeFromJSXProvider } from '@storybook/addon-styling';
-import { ButtonVariants, Theme, globalStyles } from '../src';
+import { Theme, globalStyles } from '../src';
+
+export enum ButtonVariants {
+  PRIMARY = 'primary',
+  SECONDARY = 'secondary',
+  TERTIARY = 'tertiary',
+  OUTLINE = 'outline',
+  TRANSPARENT = 'transparent',
+  COLUMNS = 'columns',
+}
+
+export enum ProfileSelectorVariants {
+  PRIMARY = 'primary',
+  SECONDARY = 'secondary',
+}
 
 export const theme: Theme = {
   colors: {
@@ -71,17 +85,27 @@ export const theme: Theme = {
       hover: '',
     },
     profileSelector: {
-      selector: {
-        background: 'white',
-        label: '#101010',
-        description: '#101010',
-        icon: '#53B1FD',
+      [ProfileSelectorVariants.PRIMARY]: {
+        selector: {
+          background: 'white',
+          label: '#101010',
+          description: '#101010',
+          icon: '#53B1FD',
+        },
+        options: {
+          container: 'white',
+          hover: '#53B1FD',
+          text: '#101010',
+          hoverText: 'white',
+        },
       },
-      options: {
-        container: 'white',
-        hover: '#53B1FD',
-        text: '#101010',
-        hoverText: 'white',
+      [ProfileSelectorVariants.SECONDARY]: {
+        selector: {
+          background: '#437783',
+          label: 'white',
+          description: 'white',
+          icon: 'white',
+        },
       },
     },
     buttonBackground: {

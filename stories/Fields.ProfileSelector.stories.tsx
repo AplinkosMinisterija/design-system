@@ -82,6 +82,7 @@ export const Field: Story = {
             label: option.name,
             description: 'Medžiotojų būrelis',
           })}
+          variant={'secondary'}
         />
       </StoryWrapper>
     );
