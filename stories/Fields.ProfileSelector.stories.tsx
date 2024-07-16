@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ProfileSelector from '../src/components/ProfileSelector';
-import StoryWrapper from '../src/components/common/StoryWrapper';
 import styled from 'styled-components';
+import StoryWrapper from '../src/components/common/StoryWrapper';
+import ProfileSelector from '../src/components/ProfileSelector';
 
 const meta: Meta<typeof ProfileSelector> = {
   component: ProfileSelector,
@@ -73,7 +73,7 @@ export const Field: Story = {
             description: 'Medžiotojų būrelis',
           })}
         />
-        <ProfileSelector
+        <CustomProfile
           options={options}
           onChange={(e) => alert(e)}
           value={options[2]}
@@ -88,3 +88,7 @@ export const Field: Story = {
     );
   },
 };
+
+const CustomProfile = styled(ProfileSelector)`
+  height: 100px;
+`;

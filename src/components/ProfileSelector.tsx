@@ -147,7 +147,7 @@ const SubText = styled.div<{ $variant: string }>`
   font-family: 'Manrope', sans-serif;
   font-size: 1.2rem;
   color: ${({ theme, $variant }) =>
-    theme.colors.profileSelector?.[$variant]?.selector?.description || '#a5b9c0'}
+    theme.colors.profileSelector?.[$variant]?.selector?.description || '#a5b9c0'};
   letter-spacing: 0.1px;
 `;
 
