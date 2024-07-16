@@ -15,7 +15,7 @@ import proj4 from 'proj4';
 // @ts-ignore
 import epsg from 'epsg-index/all.json';
 import { coordEach, featureEach } from '@turf/meta';
-import { cloneDeep, mergeWith } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { ThemeMapColors } from 'src/types';
 import { DragCircle, convertCircleToPoint, convertFeatureToCircle } from './modes';
 import { DirectSelect, SimpleSelect } from './modes';
@@ -34,6 +34,7 @@ export type MapControls = {
   geolocate?: boolean | ControlPosition;
   fullscreen?: boolean | ControlPosition;
   navigation?: boolean | ControlPosition;
+  trash?: boolean | ControlPosition;
 };
 
 export type DrawOptions = {
@@ -75,13 +76,25 @@ export function parseDrawOptions(draw?: boolean | DrawOptions) {
     return defaultDrawOptions;
   }
 
-  return mergeWith(draw, defaultDrawOptions, (dist, src) => {
-    if (dist && typeof dist !== 'undefined') return dist;
-    return src;
-  }) as DrawOptions;
+  const merged = {
+    ...defaultDrawOptions,
+    ...draw,
+  };
+
+  return merged;
+  // return mergeWith(draw, defaultDrawOptions, (dist, src) => {
+  //   if (dist && typeof dist !== 'undefined') return dist;
+  //   return src;
+  // }) as DrawOptions;
 }
 
-export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styles?: any[]) {
+export function enableDraw(
+  map: Map,
+  draw: DrawOptions,
+  controls?: MapControls,
+  value?: AllGeoJSON,
+  styles?: any[],
+) {
   if (!draw || !map) return;
 
   if (draw.buffer) {
@@ -106,7 +119,7 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styl
       point: draw.types.includes(DrawType.POINT),
       line_string: draw.types.includes(DrawType.LINE),
       polygon: draw.types.includes(DrawType.POLYGON),
-      trash: draw.types.length > 1 || draw.multi,
+      trash: controls?.trash || draw.types.length > 1 || draw.multi,
     },
     modes,
     styles,

@@ -101,13 +101,19 @@ export const MapDrawStory: Story = {
           label={'Pažymėkite vietą'}
           error={'Laukas privalomas'}
           onChange={(value) => {
-            setValue(value);
+            if (value.features) console.log('new value', value);
+            setValue(value as any);
           }}
-          controls={{ fullscreen: 'top-right', geolocate: true, navigation: true }}
+          controls={{
+            fullscreen: 'top-right',
+            geolocate: true,
+            navigation: true,
+            trash: true,
+          }}
           draw={{
-            multi: true,
-            buffer: { min: 5000, max: 10000 },
-            types: [DrawType.POINT, DrawType.POLYGON],
+            multi: false,
+            // buffer: { min: 5000, max: 10000 },
+            types: [DrawType.POINT],
           }}
           value={value}
         />

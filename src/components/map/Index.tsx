@@ -116,8 +116,9 @@ const Map = ({
           projection,
         );
       }
+      const bufferedItems = transformBufferedItems(featureCollection, false);
 
-      onChange?.(transformBufferedItems(featureCollection, false));
+      onChange?.(bufferedItems);
     }
 
     map.current.on('draw.create', onDrawChange);
@@ -167,7 +168,7 @@ const Map = ({
     addDefaultLayers();
 
     if (drawOptions && !preview) {
-      mapDraw.current = enableDraw(map.current, drawOptions, value4326, styles);
+      mapDraw.current = enableDraw(map.current, drawOptions, controls, value4326, styles);
       addDrawEvents();
     } else if (value4326) {
       setupPreviewLayer(map.current, value4326, styles);
