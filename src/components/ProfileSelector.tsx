@@ -31,17 +31,17 @@ const ProfileSelector = ({
       tabIndex={1}
       onClick={() => setShowSelect(!showSelect)}
       onBlur={() => setShowSelect(false)}
-      $varinat={variant}
+      $variant={variant}
     >
       <RelativeContainer>
-        <SelectorContainer onClick={() => setShowSelect(true)} $varinat={variant}>
+        <SelectorContainer onClick={() => setShowSelect(true)} $variant={variant}>
           <Column>
             <ModuleContainer>
               <TenantLabel>{selected.label}</TenantLabel>
             </ModuleContainer>
-            <SubText $varinat={variant}>{selected.description}</SubText>
+            <SubText $variant={variant}>{selected.description}</SubText>
           </Column>
-          <StyledIcon name={IconName.showMore} $varinat={variant} />
+          <StyledIcon name={IconName.showMore} $variant={variant} />
         </SelectorContainer>
         {showSelect && (
           <OptionsContainer>
@@ -50,7 +50,7 @@ const ProfileSelector = ({
                 {getOptionLabel ? (
                   getOptionLabel(option)
                 ) : (
-                  <Option $varinat={variant}>{getSelectedOptionLabels(option).label}</Option>
+                  <Option $variant={variant}>{getSelectedOptionLabels(option).label}</Option>
                 )}
               </div>
             ))}
@@ -61,10 +61,10 @@ const ProfileSelector = ({
   );
 };
 
-const Container = styled.div<{ $varinat: string }>`
+const Container = styled.div<{ $variant: string }>`
   height: 56px;
-  background-color: ${({ theme, $varinat }) =>
-    theme.colors.profileSelector?.[$varinat]?.selector?.background || 'reds'};
+  background-color: ${({ theme, $variant }) =>
+    theme.colors.profileSelector?.[$variant]?.selector?.background || 'reds'};
   position: relative;
   cursor: pointer;
   width: 100%;
@@ -76,15 +76,15 @@ const RelativeContainer = styled.div`
   position: relative;
 `;
 
-const SelectorContainer = styled.div<{ $varinat: string }>`
+const SelectorContainer = styled.div<{ $variant: string }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 56px;
   padding: 0px 16px 0 10px;
   margin-bottom: 4px;
-  color: ${({ theme, $varinat }) =>
-    theme.colors.profileSelector?.[$varinat]?.selector?.label || '#f8fafc'};
+  color: ${({ theme, $variant }) =>
+    theme.colors.profileSelector?.[$variant]?.selector?.label || '#f8fafc'};
   background: #ffffff1f 0% 0% no-repeat padding-box;
   border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
   cursor: pointer;
@@ -106,10 +106,10 @@ const TenantLabel = styled.div`
   font-size: ${({ theme }) => theme.colors.fontSize?.profileSelector || 1.6}rem;
 `;
 
-const StyledIcon = styled(Icon)<{ $varinat: string }>`
+const StyledIcon = styled(Icon)<{ $variant: string }>`
   font-size: 2.4rem;
-  color: ${({ theme, $varinat }) =>
-    theme.colors.profileSelector?.[$varinat]?.selector?.icon || '#101010'};
+  color: ${({ theme, $variant }) =>
+    theme.colors.profileSelector?.[$variant]?.selector?.icon || '#101010'};
 `;
 
 const OptionsContainer = styled.div`
@@ -123,27 +123,27 @@ const OptionsContainer = styled.div`
   opacity: 1;
 `;
 
-const Option = styled.div<{ $varinat: string }>`
+const Option = styled.div<{ $variant: string }>`
   padding: 0 12px;
   font-size: ${({ theme }) => theme.colors.fontSize?.profileSelector || 1.6}rem;
   border-radius: ${({ theme }) => (theme.radius?.profileSelector || 0.4) / 2}rem;
   line-height: 36px;
   cursor: pointer;
-  color: ${({ theme, $varinat }) =>
-    theme.colors.profileSelector?.[$varinat]?.options?.text || '#101010'};
+  color: ${({ theme, $variant }) =>
+    theme.colors.profileSelector?.[$variant]?.options?.text || '#101010'};
   &:hover {
-    background: ${({ theme, $varinat }) =>
-        theme.colors.profileSelector?.[$varinat]?.options?.hover || '#f8fafc'}
+    background: ${({ theme, $variant }) =>
+        theme.colors.profileSelector?.[$variant]?.options?.hover || '#f8fafc'}
       0% 0% no-repeat padding-box;
-    color: ${({ theme, $varinat }) =>
-      theme.colors.profileSelector?.[$varinat]?.options?.hoverText || '#101010'};
+    color: ${({ theme, $variant }) =>
+      theme.colors.profileSelector?.[$variant]?.options?.hoverText || '#101010'};
   }
 `;
 
-const SubText = styled.div<{ $varinat: string }>`
+const SubText = styled.div<{ $variant: string }>`
   font-family: 'Manrope', sans-serif;
   font-size: 1.2rem;
-  color: ${({ theme, $varinat }) => theme.colors.profileSelector?.[$varinat]?.selector?.description || '#a5b9c0'}
+  color: ${({ theme, $variant }) => theme.colors.profileSelector?.[$variant]?.selector?.description || '#a5b9c0'}
   letter-spacing: 0.1px;
 `;
 
