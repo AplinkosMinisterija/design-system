@@ -15,6 +15,7 @@ const ProfileSelector = ({
   getOptionLabel,
   getSelectedOptionLabels,
   variant = 'primary',
+  className,
 }: {
   value: Option;
   options: Option[];
@@ -22,12 +23,14 @@ const ProfileSelector = ({
   getOptionLabel?: (option: Option) => string | JSX.Element;
   getSelectedOptionLabels: (option: Option) => { label: string; description?: string };
   variant?: string;
+  className?: string;
 }) => {
   const [showSelect, setShowSelect] = useState(false);
   const selected = getSelectedOptionLabels(value);
 
   return (
     <Container
+      className={className}
       tabIndex={1}
       onClick={() => setShowSelect(!showSelect)}
       onBlur={() => setShowSelect(false)}
