@@ -10,13 +10,16 @@ import ContentLayout from './components/layouts/ContentLayout';
 import DefaultLayout from './components/layouts/DefaultLayout';
 import Modal from './components/layouts/Modal';
 import SimpleContainer from './components/layouts/SimpleContainer';
-import MapField from './components/MapField';
 import Map from './components/map/Index';
+import MapField from './components/MapField';
 import MultiSelectField from './components/MultiSelectField';
+import Navigator from './components/Navigator';
 import NumericTextField from './components/NumericTextField';
 import PasswordField from './components/PasswordField';
 import PhoneField from './components/PhoneField';
+import ProfileSelector from './components/ProfileSelector';
 import SelectField from './components/SelectField';
+import SimpleSelect from './components/SimpleSelect';
 import Switch from './components/Switch';
 import ColumnButton from './components/tables/ColumnButton';
 import TableContainer from './components/tables/components/TableContainer';
@@ -26,10 +29,8 @@ import Table from './components/tables/Table';
 import Tabs from './components/Tabs';
 import TextAreaField from './components/TextAreaField';
 import TextField from './components/TextField';
-import TreeSelectField from './components/TreeSelectFiled';
-import SimpleSelect from './components/SimpleSelect';
 import TimePicker from './components/TimePicker';
-import ProfileSelector from './components/ProfileSelector';
+import TreeSelectField from './components/TreeSelectFiled';
 export * from './types';
 export * from './utils';
 export {
@@ -65,4 +66,5 @@ export {
   SimpleSelect,
   TimePicker,
   ProfileSelector,
+  Navigator,
 };
