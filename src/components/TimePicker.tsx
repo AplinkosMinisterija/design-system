@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import TextField from './TextField';
-import Icon from './common/Icons';
+import Icon, { IconName } from './common/Icons';
 
 export interface TimepickerProps {
   label?: string;
@@ -84,7 +84,7 @@ const TimePicker = ({
         padding={padding}
         value={time ? format(new Date(time), 'HH:mm') : ''}
         error={error}
-        rightIcon={<TimeIcon name={'time'} />}
+        right={<TimeIcon name={IconName.time} />}
         disabled={disabled}
       />
       {open && !disabled ? (
@@ -124,12 +124,12 @@ const TimeContainer = styled.div`
 
   position: relative;
   .react-datepicker {
-    top: 80px;
+    top: 60px;
     position: absolute;
     z-index: 8;
     background-color: ${({ theme }) => theme.colors.dropDown?.background || '#ffffff'};
     box-shadow: 0px 2px 16px #121a5529;
-    border-radius: 10px;
+    border-radius: 4px;
     border: none;
   }
   .react-datepicker--time-only {
