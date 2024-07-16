@@ -14,7 +14,7 @@ export const theme: Theme = {
     map: {
       primary: '#53B1FD',
       selected: '#a9d8fd',
-      outline: '#d7eafa'
+      outline: '#d7eafa',
     },
     buttons: {
       [ButtonVariants.PRIMARY]: {
@@ -64,6 +64,11 @@ export const theme: Theme = {
       border: '#d4d5de',
       borderFocus: '#4656f6',
       background: 'white',
+    },
+    dropDown: {
+      background: 'white',
+      label: '#101010',
+      hover: '',
     },
     buttonBackground: {
       primary: '#53B1FD',

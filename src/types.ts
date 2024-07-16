@@ -33,6 +33,14 @@ export interface ThemeMapColors {
   selected?: string;
   outline?: string;
   fill?: string;
+  [key: string]: any;
+}
+
+export interface DropDownColors {
+  background?: string;
+  label?: string;
+  hover?: string;
+  [key: string]: any;
 }
 
 interface ThemeColors {
@@ -49,6 +57,7 @@ interface ThemeColors {
     [key: string]: ButtonColors;
   };
   fields?: FieldsColors; // for inputs
+  dropDown?: DropDownColors;
   text?: {
     //use only for text elements
     primary: string; // for titles and headings

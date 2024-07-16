@@ -119,13 +119,13 @@ const AsyncSelectField = ({
 };
 
 const StyledIcon = styled(Icon)`
-  color: #cdd5df;
+  color: ${({ theme }) => theme.colors.fields?.icon || '#cdd5df'};
   font-size: 2.4rem;
   margin-right: 12px;
 `;
 
 const ClearIcon = styled(Icon)<{ $disabled: boolean }>`
-  color: #cdd5df;
+  color: ${({ theme }) => theme.colors.fields?.icon || '#cdd5df'};
   font-size: 2.4rem;
   margin-right: 12px;
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};

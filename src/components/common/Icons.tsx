@@ -10,7 +10,9 @@ import {
   MdOutlineVisibilityOff,
   MdSettings,
   MdTune,
+  MdOutlineAccessTime,
 } from 'react-icons/md';
+
 import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
 export enum IconName {
   visibleOn = 'visibleOn',
@@ -28,6 +30,7 @@ export enum IconName {
   settings = 'settings',
   tableArrowUp = 'tableArrowUp',
   tableArrowDown = 'tableArrowDown',
+  time = 'time',
 }
 
 export interface IconProps {
@@ -84,6 +87,8 @@ const Icon = ({ name, className }: IconProps) => {
       return <MdArrowBackIos className={className} />;
     case IconName.calendar:
       return <MdOutlineCalendarToday className={className} />;
+    case IconName.time:
+      return <MdOutlineAccessTime className={className} />;
     default:
       return null;
   }

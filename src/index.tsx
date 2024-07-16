@@ -27,6 +27,8 @@ import Tabs from './components/Tabs';
 import TextAreaField from './components/TextAreaField';
 import TextField from './components/TextField';
 import TreeSelectField from './components/TreeSelectFiled';
+import SimpleSelect from './components/SimpleSelect';
+import TimePicker from './components/TimePicker';
 export * from './types';
 export * from './utils';
 export {
@@ -59,4 +61,6 @@ export {
   ButtonsGroup,
   DesignSystemProvider,
   PhoneField,
+  SimpleSelect,
+  TimePicker,
 };
