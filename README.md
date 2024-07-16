@@ -20,6 +20,12 @@ yarn add @aplinkosministerija/design-system
 
 Before using our design system library, make sure to install and set up the styled-components package in your project. This package is essential for styling components within the design system, allowing for smooth integration and customization.
 
+To use the styles provided by the design-system library, you need to import the CSS file into your main React application file (usually index.js, or App.js). This ensures that all components from the library are styled correctly. Add the following import statement to the top of your main application file:
+
+```javascript
+import '@aplinkosministerija/design-system/dist/style.css';
+```
+
 For the library to function properly, ensure to utilize the Theme type provided by the design system library when configuring styled-components.
 ```javascript
 import { Theme } from '@aplinkosministerija/design-system';
@@ -56,23 +62,7 @@ export default App;
 ```
 ## Components
 
-### Button
-### Checkbox
-### Switch
-### AsyncSelectField
-### AsyncMultiSelectField
-### MapField
-### Map
-### SelectField
-### MultiSelectField
-### TextField
-### NumericTextField
-### TextAreaField
-### PasswordField
-### PhotoUploadField
-### Table
-### RecursiveTable
-### Tabs
+[Components Showcase](https://ui.startupgov.lt/?path=/story/design-system-buttons-button--button-story)
 
 
 ## License

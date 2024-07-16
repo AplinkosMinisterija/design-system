@@ -65,7 +65,7 @@ const ProfileSelector = ({
 };
 
 const Container = styled.div<{ $variant: string }>`
-  height: 56px;
+  height: 56px !important;
   background-color: ${({ theme, $variant }) =>
     theme.colors.profileSelector?.[$variant]?.selector?.background || 'white'};
   position: relative;
