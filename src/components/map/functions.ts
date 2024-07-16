@@ -52,6 +52,7 @@ export type DrawOptions = {
 
 export const PREVIEW_LAYER_ID = 'preview-layer';
 export const MAP_PROJECTION = '4326';
+export const LKS_PROJECTION = '3346';
 
 export const DrawType = MapboxDraw.constants.types;
 
