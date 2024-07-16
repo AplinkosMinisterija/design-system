@@ -9,6 +9,7 @@ import DatePicker from './components/DatePicker';
 import ContentLayout from './components/layouts/ContentLayout';
 import DefaultLayout from './components/layouts/DefaultLayout';
 import Modal from './components/layouts/Modal';
+import Popup from './components/layouts/Popup';
 import SimpleContainer from './components/layouts/SimpleContainer';
 import Map from './components/map/Index';
 import MapField from './components/MapField';
@@ -67,4 +68,5 @@ export {
   TimePicker,
   ProfileSelector,
   Navigator,
+  Popup,
 };
