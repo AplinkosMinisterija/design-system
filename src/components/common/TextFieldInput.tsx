@@ -85,7 +85,6 @@ const InputContainer = styled.div<{
 `;
 
 const StyledTextInput = styled.input<{
-  readOnly: boolean;
   $selectedValue: boolean;
 }>`
   border: none;

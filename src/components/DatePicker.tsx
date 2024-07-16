@@ -176,11 +176,9 @@ const DateField = ({
               if (maxDate && date > new Date(maxDate)) {
                 return onChange(new Date(maxDate));
               }
-
               if (minDate && date < new Date(minDate)) {
                 return onChange(new Date(minDate));
               }
-
               onChange(date);
               setOpen(false);
             }}
