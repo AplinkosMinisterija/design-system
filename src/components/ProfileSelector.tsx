@@ -119,7 +119,7 @@ const StyledIcon = styled(Icon)<{ $variant: string }>`
 const OptionsContainer = styled.div`
   display: block;
   position: absolute;
-  z-index: 9;
+  z-index: 9999999;
   width: 100%;
   padding: 9px 6px 11px 6px;
   background: #ffffff 0% 0% no-repeat padding-box;
