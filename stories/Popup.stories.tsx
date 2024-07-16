@@ -93,7 +93,7 @@ export const ButtonsGroupStory: Story = {
           onClose={() => setSelected(undefined)}
           left={<LeftComponent />}
         >
-          <PopupContent text={'Pranešimas mobiliam telefone atvaizduojamas per centrą'} />
+          <PopupContent text={'Pranešimas mobiliam telefone atvaizduojamas apačioje.'} />
         </Popup>
         <Popup
           type={PopupType.BOTTOM}
@@ -101,7 +101,7 @@ export const ButtonsGroupStory: Story = {
           onClose={() => setSelected(undefined)}
           left={<LeftComponent />}
         >
-          <PopupContent text={'Pranešimas mobiliam telefone atvaizduojamas apačioje'} />
+          <PopupContent text={'Pranešimas mobiliam telefone atvaizduojamas apačioje.'} />
         </Popup>
       </StoryWrapper>
     );
