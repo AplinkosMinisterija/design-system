@@ -1,23 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import SelectField from '../src/components/SelectField';
+import SimpleSelect from '../src/components/SimpleSelect';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import styled from 'styled-components';
 
-const meta: Meta<typeof SelectField> = {
-  component: SelectField,
-  title: 'Design system/Fields/Select Field',
+const meta: Meta<typeof SimpleSelect> = {
+  component: SimpleSelect,
+  title: 'Design system/Fields/Simple Select',
 };
 
 export default meta;
-type Story = StoryObj<typeof SelectField>;
+type Story = StoryObj<typeof SimpleSelect>;
 
 export const SelectFieldStory: Story = {
-  name: 'SelectField',
+  name: 'SimpleSelect',
   render: () => {
     return (
       <StoryWrapper>
-        <SelectField
+        <SimpleSelect
           options={[
             { id: 1, label: 'Vilkas', age: 'Dvimetis', gender: 'Patinas' },
             { id: 2, label: 'Bebras', age: 'Jauniklis', gender: 'Patele' },
@@ -26,15 +26,10 @@ export const SelectFieldStory: Story = {
             { id: 5, label: 'Stirna', age: 'Suauges', gender: 'Patele' },
             { id: 6, label: 'Kiškis', age: 'Suages', gender: 'Patinas' },
           ]}
-          value={{ id: 1, label: 'Vilkas', age: 'Dvimetis', gender: 'Patinas' }}
+          value={{ id: 2, label: 'Bebras', age: 'Jauniklis', gender: 'Patele' }}
           onChange={() => {}}
           getOptionLabel={(option) => option.label}
-          getOptionComponent={(option) => (
-            <span>
-              {option.label}
-              <OptionInfo>{` (${option.gender}) - ${option.age}`}</OptionInfo>
-            </span>
-          )}
+          disabled={false}
         />
       </StoryWrapper>
     );

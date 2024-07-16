@@ -27,6 +27,40 @@ export interface FieldsColors {
   label?: string;
   [key: string]: any;
 }
+
+export interface ThemeMapColors {
+  primary: string;
+  selected?: string;
+  outline?: string;
+  fill?: string;
+  [key: string]: any;
+}
+
+export interface DropDownColors {
+  background?: string;
+  label?: string;
+  hover?: string;
+  [key: string]: any;
+}
+
+export interface ProfileSelectorColors {
+  selector?: {
+    background?: string;
+    label?: string;
+    description?: string;
+    icon?: string;
+    [key: string]: any;
+  };
+  options?: {
+    container?: string;
+    hover?: string;
+    text?: string;
+    hoverText?: string;
+    [key: string]: any;
+  };
+  [key: string]: any;
+}
+
 interface ThemeColors {
   primary: string;
   secondary: string;
@@ -34,12 +68,15 @@ interface ThemeColors {
   transparent: string;
   danger: string;
   success: string;
+  map?: ThemeMapColors;
   buttons?: {
     // configure your own button variants
     primary: ButtonColors;
     [key: string]: ButtonColors;
   };
   fields?: FieldsColors; // for inputs
+  dropDown?: DropDownColors;
+  profileSelector?: ProfileSelectorColors;
   text?: {
     //use only for text elements
     primary: string; // for titles and headings

@@ -10,8 +10,11 @@ import {
   MdOutlineVisibilityOff,
   MdSettings,
   MdTune,
+  MdOutlineAccessTime,
+  MdUnfoldMore,
 } from 'react-icons/md';
 
+import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
 export enum IconName {
   visibleOn = 'visibleOn',
   filter = 'filter',
@@ -26,6 +29,10 @@ export enum IconName {
   backward = 'backward',
   calendar = 'calendar',
   settings = 'settings',
+  tableArrowUp = 'tableArrowUp',
+  tableArrowDown = 'tableArrowDown',
+  time = 'time',
+  showMore = 'showMore',
 }
 
 export interface IconProps {
@@ -35,6 +42,10 @@ export interface IconProps {
 
 const Icon = ({ name, className }: IconProps) => {
   switch (name) {
+    case IconName.tableArrowDown:
+      return <RiArrowDownSFill className={className} />;
+    case IconName.tableArrowUp:
+      return <RiArrowUpSFill className={className} />;
     case IconName.filter:
       return <MdTune className={className} />;
     case IconName.settings:
@@ -78,6 +89,10 @@ const Icon = ({ name, className }: IconProps) => {
       return <MdArrowBackIos className={className} />;
     case IconName.calendar:
       return <MdOutlineCalendarToday className={className} />;
+    case IconName.time:
+      return <MdOutlineAccessTime className={className} />;
+    case 'showMore':
+      return <MdUnfoldMore className={className} />;
     default:
       return null;
   }

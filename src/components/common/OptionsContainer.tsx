@@ -62,15 +62,15 @@ const OptionsContainer = ({
     );
   };
   return (
-    <OptionContainer display={display}>
+    <OptionContainer $display={display}>
       {renderOptions()}
-      {observerRef && <ObserverRef display={display} ref={observerRef} />}
+      {observerRef && <ObserverRef $display={display} ref={observerRef} />}
     </OptionContainer>
   );
 };
 
-const OptionContainer = styled.div<{ display: boolean }>`
-  display: ${({ display }) => (display ? 'block' : 'none')};
+const OptionContainer = styled.div<{ $display: boolean }>`
+  display: ${({ $display }) => ($display ? 'block' : 'none')};
   position: absolute;
   z-index: 29;
   width: 100%;
@@ -79,7 +79,8 @@ const OptionContainer = styled.div<{ display: boolean }>`
   overflow-y: auto;
   overflow-x: hidden;
   border: none;
-  background: #ffffff 0% 0% no-repeat padding-box;
+  background: ${({ theme }) => theme.colors.dropDown?.background || '#ffffff'} 0% 0% no-repeat
+    padding-box;
   box-shadow: 0px 2px 16px #121a5529;
 
   > * {
@@ -101,13 +102,15 @@ const Option = styled.div`
   font-size: 1.6rem;
   line-height: 20px;
   padding: 8px 12px;
+  color: ${({ theme }) => theme.colors.dropDown?.label || '#101010'};
   &:hover {
-    background: #f3f3f7 0% 0% no-repeat padding-box;
+    background: ${({ theme }) => theme.colors.dropDown?.hover || '#f3f3f7'} 0% 0% no-repeat
+      padding-box;
   }
 `;
 
-const ObserverRef = styled.div<{ display: boolean }>`
-  display: ${({ display }) => (display ? 'block' : 'none')};
+const ObserverRef = styled.div<{ $display: boolean }>`
+  display: ${({ $display }) => ($display ? 'block' : 'none')};
 `;
 
 export default OptionsContainer;

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../../types';
-import NotFoundInfo from '../../tables/components/NotFoundInfo';
 import Icon, { IconName } from '../../common/Icons';
+import NotFoundInfo from '../../tables/components/NotFoundInfo';
 
 export interface DesktopTableProps {
   data?: TableRow[];
@@ -11,6 +11,7 @@ export interface DesktopTableProps {
   tableRowStyle?: any;
   customPageName?: string;
   isFilterApplied?: boolean;
+  onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
   onClick?: (id: string) => void;
   texts?: {
     notFound: string;
@@ -24,6 +25,7 @@ const MobileTable = ({
   tableRowStyle,
   isFilterApplied = false,
   onClick,
+  onColumnSort,
   texts,
 }: DesktopTableProps) => {
   const keys = Object.keys(columns);
@@ -31,11 +33,31 @@ const MobileTable = ({
   const mainLabelsLength = isFirstSmallColumn ? 3 : 2;
   const mainLabels = Object.keys(columns).slice(0, mainLabelsLength);
   const restLabels = Object.keys(columns).slice(mainLabelsLength);
+  const [sortedColumn, setSortedColumn] = useState<{
+    key?: string;
+    direction?: 'asc' | 'desc';
+  }>({});
 
   const handleRowClick = (row: TableRow) => {
     if (onClick && row.id) {
       onClick(`${row.id}`);
     }
+  };
+
+  const canSort = !!onColumnSort && !!data?.length;
+
+  const handleColumnClick = (key) => {
+    if (!canSort) return;
+
+    const direction =
+      sortedColumn.key === key ? (sortedColumn?.direction === 'asc' ? 'desc' : 'asc') : 'asc';
+
+    onColumnSort({ key, direction });
+
+    setSortedColumn({
+      key,
+      direction,
+    });
   };
 
   const RenderRow = (row: TableRow, index: number) => {
@@ -134,7 +156,30 @@ const MobileTable = ({
           >
             <ArrowTh />
             {mainLabels.map((key: any, i: number) => {
-              return <TH key={`tr-th-${i}`}>{columns[key].label}</TH>;
+              const column = columns[key];
+              const label = column?.label;
+              const isSelectedKey = key === sortedColumn.key;
+              const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
+              const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
+
+              return (
+                <TH
+                  onClick={() => {
+                    handleColumnClick(key);
+                  }}
+                  key={`tr-th-${i}`}
+                >
+                  <LabelContainer>
+                    {label}
+                    {canSort && (
+                      <IconContainer>
+                        <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
+                        <ArrowIconDown $isActive={isSelectedDown} name={IconName.tableArrowDown} />
+                      </IconContainer>
+                    )}
+                  </LabelContainer>
+                </TH>
+              );
             })}
           </MainTR>
         </THEAD>
@@ -144,6 +189,26 @@ const MobileTable = ({
     </TableContainer>
   );
 };
+
+const IconContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  gap: 4px;
+  align-items: center;
+`;
+
+const ArrowIconUp = styled(Icon)<{ $isActive: boolean }>`
+  opacity: ${({ $isActive }) => ($isActive ? '1' : '0.4')};
+`;
+
+const ArrowIconDown = styled(Icon)<{ $isActive: boolean }>`
+  margin-top: -6px;
+  opacity: ${({ $isActive }) => ($isActive ? '1' : '0.4')};
+`;
 
 const ExpandedColumnName = styled.div`
   font-size: 1.2rem;

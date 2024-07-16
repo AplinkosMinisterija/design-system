@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+import Icon, { IconName } from '../../../components/common/Icons';
 import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../../types';
 import NotFoundInfo from '../../tables/components/NotFoundInfo';
 
@@ -9,6 +11,7 @@ export interface DesktopTableProps {
   tableRowStyle?: any;
   customPageName?: string;
   isFilterApplied?: boolean;
+  onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
   onClick?: (id: string) => void;
   texts?: {
     notFound: string;
@@ -23,13 +26,34 @@ const DesktopTable = ({
   isFilterApplied = false,
   onClick,
   texts,
+  onColumnSort,
 }: DesktopTableProps) => {
   const keys = Object.keys(columns);
+  const [sortedColumn, setSortedColumn] = useState<{
+    key?: string;
+    direction?: 'asc' | 'desc';
+  }>({});
 
   const handleRowClick = (row: TableRow) => {
     if (onClick && row.id) {
       onClick(`${row.id}`);
     }
+  };
+
+  const canSort = !!onColumnSort && !!data?.length;
+
+  const handleColumnClick = (key) => {
+    if (!canSort) return;
+
+    const direction =
+      sortedColumn.key === key ? (sortedColumn?.direction === 'asc' ? 'desc' : 'asc') : 'asc';
+
+    onColumnSort({ key, direction });
+
+    setSortedColumn({
+      key,
+      direction,
+    });
   };
 
   const GenerateTableContent = ({ data }: { data: TableRow[] }) => {
@@ -81,12 +105,31 @@ const DesktopTable = ({
         <THEAD>
           <TR $pointer={false}>
             {keys.map((key: any, i: number) => {
-              const item = columns[key]?.label;
-              const width = columns[key]?.width || TableItemWidth.LARGE;
+              const column = columns[key];
+              const label = column?.label;
+              const width = column?.width || TableItemWidth.LARGE;
+              const isSelectedKey = key === sortedColumn.key;
+              const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
+              const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
 
               return (
-                <TH width={width} key={`large-th-${i}`}>
-                  {item}
+                <TH
+                  $pointer={!!onColumnSort}
+                  onClick={() => {
+                    handleColumnClick(key);
+                  }}
+                  width={width}
+                  key={`large-th-${i}`}
+                >
+                  <LabelContainer>
+                    {label}
+                    {canSort && (
+                      <IconContainer>
+                        <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
+                        <ArrowIconDown $isActive={isSelectedDown} name={IconName.tableArrowDown} />
+                      </IconContainer>
+                    )}
+                  </LabelContainer>
                 </TH>
               );
             })}
@@ -100,6 +143,26 @@ const DesktopTable = ({
     </TableContainer>
   );
 };
+
+const IconContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ArrowIconUp = styled(Icon)<{ $isActive: boolean }>`
+  opacity: ${({ $isActive }) => ($isActive ? '1' : '0.4')};
+`;
+
+const ArrowIconDown = styled(Icon)<{ $isActive: boolean }>`
+  margin-top: -6px;
+  opacity: ${({ $isActive }) => ($isActive ? '1' : '0.4')};
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  gap: 4px;
+  align-items: center;
+`;
 
 const StyledTbody = styled.tbody``;
 
@@ -120,7 +183,9 @@ const TD = styled.td`
   color: #121926;
 `;
 
-const TH = styled.th`
+const TH = styled.th<{
+  $pointer: boolean;
+}>`
   padding: 18px 22px;
   height: 44px;
   text-align: left;
@@ -128,6 +193,7 @@ const TH = styled.th`
   font-weight: bold;
   letter-spacing: 0.29px;
   color: #9aa4b2;
+  cursor: ${({ $pointer }) => ($pointer ? 'pointer' : 'default')};
 `;
 
 const TdSecond = styled.td`

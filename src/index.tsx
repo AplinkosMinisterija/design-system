@@ -3,7 +3,6 @@ import AsyncSelectField from './components/AsyncSelectField';
 import Button from './components/Button';
 import ButtonsGroup from './components/ButtonsGroup';
 import CheckBox from './components/Checkbox';
-import ColumnButton from './components/tables/ColumnButton';
 import DesignSystemProvider from './components/common/DesignSystemProvider';
 import FieldWrapper from './components/common/FieldWrapper';
 import DatePicker from './components/DatePicker';
@@ -12,11 +11,14 @@ import DefaultLayout from './components/layouts/DefaultLayout';
 import Modal from './components/layouts/Modal';
 import SimpleContainer from './components/layouts/SimpleContainer';
 import MapField from './components/MapField';
+import Map from './components/map/Index';
 import MultiSelectField from './components/MultiSelectField';
 import NumericTextField from './components/NumericTextField';
 import PasswordField from './components/PasswordField';
+import PhoneField from './components/PhoneField';
 import SelectField from './components/SelectField';
 import Switch from './components/Switch';
+import ColumnButton from './components/tables/ColumnButton';
 import TableContainer from './components/tables/components/TableContainer';
 import DynamicFilter from './components/tables/DynamicFilter';
 import RecursiveTable from './components/tables/RecursiveTable';
@@ -25,6 +27,9 @@ import Tabs from './components/Tabs';
 import TextAreaField from './components/TextAreaField';
 import TextField from './components/TextField';
 import TreeSelectField from './components/TreeSelectFiled';
+import SimpleSelect from './components/SimpleSelect';
+import TimePicker from './components/TimePicker';
+import ProfileSelector from './components/ProfileSelector';
 export * from './types';
 export * from './utils';
 export {
@@ -35,6 +40,7 @@ export {
   PasswordField,
   Tabs,
   MapField,
+  Map,
   FieldWrapper,
   DefaultLayout,
   ContentLayout,
@@ -55,4 +61,8 @@ export {
   TreeSelectField,
   ButtonsGroup,
   DesignSystemProvider,
+  PhoneField,
+  SimpleSelect,
+  TimePicker,
+  ProfileSelector,
 };

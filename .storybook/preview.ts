@@ -11,6 +11,11 @@ export const theme: Theme = {
     transparent: 'transparent',
     danger: '#FE5B78',
     success: '#027A48',
+    map: {
+      primary: '#53B1FD',
+      selected: '#a9d8fd',
+      outline: '#d7eafa',
+    },
     buttons: {
       [ButtonVariants.PRIMARY]: {
         background: '#53B1FD',
@@ -60,6 +65,25 @@ export const theme: Theme = {
       borderFocus: '#4656f6',
       background: 'white',
     },
+    dropDown: {
+      background: 'white',
+      label: '#101010',
+      hover: '',
+    },
+    profileSelector: {
+      selector: {
+        background: 'white',
+        label: '#101010',
+        description: '#101010',
+        icon: '#53B1FD',
+      },
+      options: {
+        container: 'white',
+        hover: '#53B1FD',
+        text: '#101010',
+        hoverText: 'white',
+      },
+    },
     buttonBackground: {
       primary: '#53B1FD',
       secondary: 'white',
@@ -82,6 +106,7 @@ export const theme: Theme = {
     buttons: 0.4,
     fields: 0.4,
     multiSelectFieldTag: 0.4,
+    profileSelector: 0.8,
   },
   height: {
     buttons: 4,
@@ -91,6 +116,7 @@ export const theme: Theme = {
     buttons: 1.6,
     fields: 1.6,
     fieldLabels: 1.6,
+    profileSelector: 1.6,
   },
   fontWeight: {
     fields: 400,

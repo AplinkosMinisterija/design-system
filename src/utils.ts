@@ -181,6 +181,30 @@ export function useStorage<T>(
   return { value: storedValue, setValue, resetValue };
 }
 
+export const useIsOnline = () => {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  const handleOnline = useCallback(() => {
+    setIsOnline(true);
+  }, []);
+
+  const handleOffline = useCallback(() => {
+    setIsOnline(false);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [handleOffline, handleOnline]);
+
+  return isOnline;
+};
+
 export const formatDate = (date?: Date | string) =>
   date ? format(new Date(date), 'yyyy-MM-dd') : '-';
 
@@ -201,3 +225,5 @@ export const handleDateRestriction = (filter: FilterConfig, values: any) => {
       }),
   };
 };
+
+export const phoneNumberRegexPattern = new RegExp(`^(\\+370|8|0)(3|4|5|6|7|8|9)\\d{7}$`);

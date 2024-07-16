@@ -21,22 +21,20 @@ export interface TextFieldProps {
   disabled?: boolean;
 }
 
-const TextAreaField = (props: TextFieldProps) => {
-  const {
-    value,
-    name,
-    error,
-    showError = true,
-    label,
-    className,
-    onChange,
-    onClick,
-    rows = 5,
-    placeholder,
-    padding,
-    disabled = false,
-  } = props;
-
+const TextAreaField = ({
+  value,
+  name,
+  error,
+  showError = true,
+  label,
+  className,
+  onChange,
+  onClick,
+  rows = 5,
+  placeholder,
+  padding,
+  disabled = false,
+}: TextFieldProps) => {
   const { width, ref } = useResizeDetector();
 
   useEffect(() => {
