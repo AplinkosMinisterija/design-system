@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
-import ColumnButton, { Columns } from '../src/components/tables/ColumnButton';
+import ColumnButton from '../src/components/tables/ColumnButton';
 import StoryWrapper from '../src/components/common/StoryWrapper';
-import { ButtonVariants } from '../src';
+import { ButtonVariants } from '../.storybook/preview';
+import { Columns } from '../src';
 
 const meta: Meta<typeof ColumnButton> = {
   component: ColumnButton,
