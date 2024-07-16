@@ -13,6 +13,7 @@ import { AllGeoJSON } from '@turf/helpers';
 import {
   BASEMAP_URL,
   DrawOptions,
+  LKS_PROJECTION,
   MAP_PROJECTION,
   MapControls,
   addMapControls,
@@ -56,7 +57,7 @@ const Map = ({
   preview,
   controls,
   basemapUrl,
-  projection = '3346',
+  projection = LKS_PROJECTION,
   layers,
   zoomOnChange = true,
 }: MapProps) => {
