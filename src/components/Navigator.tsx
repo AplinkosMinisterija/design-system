@@ -33,7 +33,7 @@ const Navigator = ({
 
 export default Navigator;
 
-const Container = styled.span`
+const Container = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
