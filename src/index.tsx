@@ -34,6 +34,14 @@ import TimePicker from './components/TimePicker';
 import TreeSelectField from './components/TreeSelectFiled';
 export * from './types';
 export * from './utils';
+
+export {
+  convertGeojsonToProjection,
+  BASEMAP_URL,
+  MAP_PROJECTION,
+  LKS_PROJECTION,
+} from './components/map/functions';
+
 export {
   Button,
   CheckBox,
