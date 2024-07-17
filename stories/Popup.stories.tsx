@@ -1,9 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 // @ts-ignore
 import React, { useState } from 'react';
-import ButtonsGroup from '../src/components/ButtonsGroup';
 import Popup from '../src/components/layouts/Popup';
-import { CheckBox } from '../src';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import styled from 'styled-components';
 import { Button, PopupType } from '../src';
