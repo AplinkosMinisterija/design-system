@@ -45,7 +45,7 @@ export interface MapProps {
   basemapUrl?: string;
   layers?: string[];
   zoomOnChange?: boolean;
-  bbox: [number, number, number, number];
+  bbox?: [number, number, number, number];
 }
 
 const Map = ({
