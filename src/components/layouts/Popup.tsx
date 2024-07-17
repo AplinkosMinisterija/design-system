@@ -75,7 +75,7 @@ const getInnerContainerCss = ($type) => {
         marginTop: 'auto',
         height: 'fit-content',
         maxHeight: '100%',
-        overflow: 'scroll',
+        overflow: 'auto',
       };
 
     case PopupType.CENTER:
@@ -84,7 +84,7 @@ const getInnerContainerCss = ($type) => {
         marginBottom: 'auto',
         height: 'fit-content',
         maxHeight: '100%',
-        overflow: 'scroll',
+        overflow: 'auto',
       };
     default:
       return {
@@ -92,7 +92,7 @@ const getInnerContainerCss = ($type) => {
         marginBottom: 'auto',
         flexGrow: 1,
         maxHeight: '100%',
-        overflow: 'scroll',
+        overflow: 'auto',
         borderRadius: 0,
       };
   }
@@ -147,7 +147,6 @@ const IconContainer = styled.div`
 `;
 
 const Content = styled.div`
-  overflow-y: scroll;
   height: fit-content;
 `;
 
