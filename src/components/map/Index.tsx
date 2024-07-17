@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import FieldWrapper from '../common/FieldWrapper';
-import { Feature, LngLatBounds, MapOptions, Map as MaplibreMap, addProtocol } from 'maplibre-gl';
+import { Feature, MapOptions, Map as MaplibreMap, addProtocol } from 'maplibre-gl';
 
 // @ts-ignore
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
