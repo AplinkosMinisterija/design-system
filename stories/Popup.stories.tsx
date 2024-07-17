@@ -1,9 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 // @ts-ignore
 import React, { useState } from 'react';
-import ButtonsGroup from '../src/components/ButtonsGroup';
 import Popup from '../src/components/layouts/Popup';
-
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import styled from 'styled-components';
 import { Button, PopupType } from '../src';
@@ -57,51 +55,59 @@ const LeftComponent = () => {
   return <Initials>M</Initials>;
 };
 
-const labels = {
-  [PopupType.FULL_SCREEN]: 'Per visą ekraną',
-  [PopupType.CENTER]: 'Centre',
-  [PopupType.BOTTOM]: 'Apačioje',
-};
+const largeText =
+  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 
-export const ButtonsGroupStory: Story = {
+export const PopupStory1: Story = {
   name: 'Popup',
-  render: () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [selected, setSelected] = useState();
-
+  argTypes: {
+    visible: {
+      control: 'boolean',
+    },
+    type: {
+      control: 'radio',
+      options: Object.values(PopupType),
+      defaultValue: PopupType.BOTTOM,
+    },
+  },
+  args: {
+    visible: true,
+    type: PopupType.BOTTOM,
+    onClose: () => {},
+  },
+  render: (args) => {
     return (
       <StoryWrapper>
-        Pranešimo vieta
-        <ButtonsGroup
-          options={Object.values(PopupType)}
-          onChange={(value) => setSelected(value)}
-          isSelected={(option) => option === selected}
-          getOptionLabel={(option) => labels[option]}
-        />
-        <Popup
-          type={PopupType.FULL_SCREEN}
-          visible={selected === PopupType.FULL_SCREEN}
-          onClose={() => setSelected(undefined)}
-          left={<LeftComponent />}
-        >
-          {' '}
-          <PopupContent text={'Pranešimas mobiliam telefone atvaizduojams per visą ekraną'} />
+        <Popup {...args} left={<LeftComponent />}>
+          <PopupContent text={'Pranešimas mobiliam telefone atvaizduojams per visą ekraną'} />,
         </Popup>
-        <Popup
-          type={PopupType.CENTER}
-          visible={selected === PopupType.CENTER}
-          onClose={() => setSelected(undefined)}
-          left={<LeftComponent />}
-        >
-          <PopupContent text={'Pranešimas mobiliam telefone atvaizduojamas per centrą'} />
-        </Popup>
-        <Popup
-          type={PopupType.BOTTOM}
-          visible={selected === PopupType.BOTTOM}
-          onClose={() => setSelected(undefined)}
-          left={<LeftComponent />}
-        >
-          <PopupContent text={'Pranešimas mobiliam telefone atvaizduojamas apačioje'} />
+      </StoryWrapper>
+    );
+  },
+};
+
+export const PopupStory2: Story = {
+  name: 'Popup (Large content)',
+  argTypes: {
+    visible: {
+      control: 'boolean',
+    },
+    type: {
+      control: 'radio',
+      options: Object.values(PopupType),
+      defaultValue: PopupType.FULL_SCREEN,
+    },
+  },
+  args: {
+    visible: true,
+    type: PopupType.FULL_SCREEN,
+    onClose: () => {},
+  },
+  render: (args) => {
+    return (
+      <StoryWrapper>
+        <Popup {...args} left={<LeftComponent />}>
+          <PopupContent text={largeText} />
         </Popup>
       </StoryWrapper>
     );
