@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import FieldWrapper from '../common/FieldWrapper';
-import { Feature, LngLatBounds, MapOptions, Map as MaplibreMap, addProtocol } from 'maplibre-gl';
+import { Feature, MapOptions, Map as MaplibreMap, addProtocol } from 'maplibre-gl';
 
 // @ts-ignore
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 
 import 'maplibre-gl/dist/maplibre-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import bbox from '@turf/bbox';
+import turfBbox from '@turf/bbox';
 import { AllGeoJSON } from '@turf/helpers';
 import {
   BASEMAP_URL,
@@ -45,6 +45,7 @@ export interface MapProps {
   basemapUrl?: string;
   layers?: string[];
   zoomOnChange?: boolean;
+  bbox: [number, number, number, number];
 }
 
 const Map = ({
@@ -60,6 +61,7 @@ const Map = ({
   projection = LKS_PROJECTION,
   layers,
   zoomOnChange = true,
+  bbox,
 }: MapProps) => {
   const mapContainer = useRef(null as HTMLDivElement | null);
   const map = useRef(null as MaplibreMap | null);
@@ -67,6 +69,7 @@ const Map = ({
 
   const theme = useTheme();
   const styles = getMapStyles(theme.colors.map);
+  const fitBoundsOptions = { padding: 50, maxZoom: 16 };
 
   const value4326: AllGeoJSON | undefined = useMemo(() => {
     if (value) {
@@ -84,10 +87,11 @@ const Map = ({
     style: basemapUrl || BASEMAP_URL.LIGHT,
   };
 
-  if (value4326) {
-    mapOptions.bounds = new LngLatBounds(bbox(value4326) as any);
-    mapOptions.fitBoundsOptions = { padding: 50, maxZoom: 16 };
-  }
+  mapOptions.fitBoundsOptions = fitBoundsOptions;
+
+  if (value4326) mapOptions.bounds = turfBbox(value4326) as any;
+
+  if (bbox) mapOptions.bounds = bbox;
 
   useEffect(() => {
     if (!map.current || !value4326) return;
@@ -95,10 +99,7 @@ const Map = ({
     setPreviewLayerValue(map.current, value4326, styles);
 
     if (zoomOnChange) {
-      map.current.fitBounds(new LngLatBounds(bbox(value4326) as any), {
-        padding: 50,
-        maxZoom: 16,
-      });
+      map.current.fitBounds(turfBbox(value4326) as any, fitBoundsOptions);
     }
   }, [value4326, zoomOnChange]);
 
