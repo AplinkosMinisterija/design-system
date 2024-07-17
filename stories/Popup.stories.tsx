@@ -74,13 +74,13 @@ export const PopupStory1: Story = {
     visible: true,
     type: PopupType.BOTTOM,
     onClose: () => {},
-    left: <LeftComponent />,
-    children: <PopupContent text={'Pranešimas mobiliam telefone atvaizduojams per visą ekraną'} />,
   },
   render: (args) => {
     return (
       <StoryWrapper>
-        <Popup {...args} />
+        <Popup {...args} left={<LeftComponent />}>
+          <PopupContent text={'Pranešimas mobiliam telefone atvaizduojams per visą ekraną'} />,
+        </Popup>
       </StoryWrapper>
     );
   },
@@ -102,13 +102,13 @@ export const PopupStory2: Story = {
     visible: true,
     type: PopupType.FULL_SCREEN,
     onClose: () => {},
-    left: <LeftComponent />,
-    children: <PopupContent text={largeText} />,
   },
   render: (args) => {
     return (
       <StoryWrapper>
-        <Popup {...args} />
+        <Popup {...args} left={<LeftComponent />}>
+          <PopupContent text={largeText} />
+        </Popup>
       </StoryWrapper>
     );
   },
