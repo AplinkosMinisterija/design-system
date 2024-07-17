@@ -31,7 +31,9 @@ const Popup = ({
               <StyledIcon name="close" />
             </IconContainer>
           </Header>
-          <div>{children}</div>
+          <Content>
+            <div>{children}</div>
+          </Content>
         </InnerContainer>
       </Container>
     </Modal>
@@ -44,21 +46,24 @@ const getContainerCss = ($type) => {
       return {
         width: '100%',
         height: '100%',
-        padding: '0 16px',
+        padding: '1.6rem',
+        maxHeight: '100%',
       };
 
     case PopupType.CENTER:
       return {
         width: '100%',
-        padding: '0 16px',
-        height: 'fit-content',
+        height: '100%',
+        padding: '1.6rem',
+        maxHeight: '100%',
       };
     default:
       return {
-        'border-radius': '0px',
+        borderRadius: '0',
         width: '100%',
         height: '100%',
-        padding: 0,
+        padding: '0',
+        maxHeight: '100%',
       };
   }
 };
@@ -68,20 +73,26 @@ const getInnerContainerCss = ($type) => {
     case PopupType.BOTTOM:
       return {
         marginTop: 'auto',
-        marginBottom: '1.6rem',
         height: 'fit-content',
+        maxHeight: '100%',
+        overflow: 'scroll',
       };
 
     case PopupType.CENTER:
       return {
-        height: 'fit-content',
         marginTop: 'auto',
         marginBottom: 'auto',
+        height: 'fit-content',
+        maxHeight: '100%',
+        overflow: 'scroll',
       };
     default:
       return {
-        height: '100%',
-        width: '100%',
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        flexGrow: 1,
+        maxHeight: '100%',
+        overflow: 'scroll',
         borderRadius: 0,
       };
   }
@@ -100,7 +111,7 @@ const Container = styled.div<{ width?: string; $type: PopupType }>`
   margin: auto;
   display: flex;
   @media ${device.desktop} {
-    min-width: 440px;
+    max-width: 440px;
   }
   @media ${device.mobileL} {
     ${({ $type }) => css(getContainerCss($type))}
@@ -113,7 +124,6 @@ const InnerContainer = styled.div<{ $type: PopupType }>`
   border-radius: ${({ theme }) => theme.radius.popup || 0.2}rem;
   width: 100%;
   height: 100%;
-
   @media ${device.mobileL} {
     ${({ $type }) => css(getInnerContainerCss($type))}
   }
@@ -134,6 +144,11 @@ const IconContainer = styled.div`
   margin: 0 0 0 auto;
   padding: 24px;
   width: fit-content;
+`;
+
+const Content = styled.div`
+  overflow-y: scroll;
+  height: fit-content;
 `;
 
 export default Popup;
