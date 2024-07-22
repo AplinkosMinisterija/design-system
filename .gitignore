@@ -72,3 +72,4 @@ dist/
 # Remove generated files
 generated-sources
 storybook-static
+/stats.html

@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type PluginOption } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import dts from 'vite-plugin-dts';
-import path from 'path';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   build: {
@@ -24,5 +24,5 @@ export default defineConfig({
     sourcemap: false,
     emptyOutDir: true,
   },
-  plugins: [react(), dts({ rollupTypes: true })],
+  plugins: [react(), dts({ rollupTypes: true }), visualizer({ brotliSize: true }) as PluginOption],
 });
