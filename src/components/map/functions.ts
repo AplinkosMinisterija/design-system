@@ -13,13 +13,20 @@ import { AllGeoJSON } from '@turf/helpers';
 // @ts-ignore
 import proj4 from 'proj4';
 // @ts-ignore
-import epsg from 'epsg-index/all.json';
+import epsg3346 from 'epsg-index/s/3346.json';
+// @ts-ignore
+import epsg4326 from 'epsg-index/s/4326.json';
+
 import { coordEach, featureEach } from '@turf/meta';
 import { cloneDeep, mergeWith } from 'lodash';
 import { ThemeMapColors } from 'src/types';
 import { DragCircle, convertCircleToPoint, convertFeatureToCircle } from './modes';
 import { DirectSelect, SimpleSelect } from './modes';
 
+const epsg = {
+  3346: epsg3346,
+  4326: epsg4326,
+}
 export const BASEMAP_URL = {
   LIGHT: 'https://basemap.startupgov.lt/vector/styles/bright/style.json',
   GRAY: 'https://basemap.startupgov.lt/vector/styles/positron/style.json',
