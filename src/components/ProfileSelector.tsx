@@ -85,7 +85,6 @@ const SelectorContainer = styled.div`
   height: 56px;
   padding: 0px 16px 0 10px;
   margin-bottom: 4px;
-  background: #ffffff1f 0% 0% no-repeat padding-box;
   border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
   cursor: pointer;
 `;
