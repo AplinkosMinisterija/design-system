@@ -83,6 +83,23 @@ export const Field: Story = {
             description: 'Medžiotojų būrelis',
           })}
           variant={'secondary'}
+          alignRight={true}
+          showIcon={true}
+          disabled={true}
+        />
+        <CustomProfile
+          options={options}
+          onChange={(e) => alert(e)}
+          value={options[2]}
+          getOptionLabel={(option) => <Option option={option} selected={option.id === 2} />}
+          getSelectedOptionLabels={(option) => ({
+            label: option.name,
+            description: 'Medžiotojų būrelis',
+          })}
+          variant={'secondary'}
+          alignRight={true}
+          showIcon={false}
+          disabled={false}
         />
       </StoryWrapper>
     );

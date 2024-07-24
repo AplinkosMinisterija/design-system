@@ -15,6 +15,9 @@ const ProfileSelector = ({
   getOptionLabel,
   getSelectedOptionLabels,
   variant = 'primary',
+  alignRight = false,
+  showIcon = true,
+  disabled = false,
   className,
 }: {
   value: Option;
@@ -23,6 +26,9 @@ const ProfileSelector = ({
   getOptionLabel?: (option: Option) => string | JSX.Element;
   getSelectedOptionLabels: (option: Option) => { label: string; description?: string };
   variant?: string;
+  alignRight?: boolean;
+  showIcon?: boolean;
+  disabled?: boolean;
   className?: string;
 }) => {
   const [showSelect, setShowSelect] = useState(false);
@@ -38,15 +44,15 @@ const ProfileSelector = ({
     >
       <RelativeContainer>
         <SelectorContainer onClick={() => setShowSelect(true)} $variant={variant}>
-          <Column>
+          <Column $alignRight={alignRight}>
             <ModuleContainer>
               <TenantLabel $variant={variant}>{selected.label}</TenantLabel>
             </ModuleContainer>
             <SubText $variant={variant}>{selected.description}</SubText>
           </Column>
-          <StyledIcon name={IconName.showMore} $variant={variant} />
+          {showIcon && <StyledIcon name={IconName.showMore} $variant={variant} />}
         </SelectorContainer>
-        {showSelect && (
+        {!disabled && showSelect && (
           <OptionsContainer $variant={variant}>
             {options?.map((option, index) => (
               <div key={`profile_select_option_${index}`} onClick={() => onChange(option)}>
@@ -89,11 +95,12 @@ const SelectorContainer = styled.div`
   gap: 0.8rem;
 `;
 
-const Column = styled.div`
+const Column = styled.div<{ $alignRight: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  width: fit-content;
+  width: 100%;
+  align-items: ${({ $alignRight }) => ($alignRight ? 'flex-end' : 'flex-start')};
 `;
 
 const ModuleContainer = styled.div`
