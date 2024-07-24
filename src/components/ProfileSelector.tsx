@@ -46,9 +46,13 @@ const ProfileSelector = ({
         <SelectorContainer onClick={() => setShowSelect(true)} $variant={variant}>
           <Column $alignRight={alignRight}>
             <ModuleContainer>
-              <TenantLabel $variant={variant}>{selected.label}</TenantLabel>
+              <TenantLabel $variant={variant} $alignRight={alignRight}>
+                {selected.label}
+              </TenantLabel>
             </ModuleContainer>
-            <SubText $variant={variant}>{selected.description}</SubText>
+            <SubText $variant={variant} $alignRight={alignRight}>
+              {selected.description}
+            </SubText>
           </Column>
           {showIcon && <StyledIcon name={IconName.showMore} $variant={variant} />}
         </SelectorContainer>
@@ -109,10 +113,10 @@ const ModuleContainer = styled.div`
   cursor: pointer;
 `;
 
-const TenantLabel = styled.div<{ $variant: string }>`
+const TenantLabel = styled.div<{ $variant: string; $alignRight: boolean }>`
   color: ${({ theme, $variant }) =>
     theme.colors.profileSelector?.[$variant]?.selector?.label || 'red'};
-
+  text-align: ${({ $alignRight }) => ($alignRight ? 'end' : 'start')};
   font-size: ${({ theme }) => theme.colors.fontSize?.profileSelector || 1.6}rem;
 `;
 
@@ -153,12 +157,13 @@ const Option = styled.div<{ $variant: string }>`
   }
 `;
 
-const SubText = styled.div<{ $variant: string }>`
+const SubText = styled.div<{ $variant: string; $alignRight: boolean }>`
   font-family: 'Manrope', sans-serif;
   font-size: 1.4rem;
   color: ${({ theme, $variant }) =>
     theme.colors.profileSelector?.[$variant]?.selector?.description || '#a5b9c0'};
   letter-spacing: 0.1px;
+  text-align: ${({ $alignRight }) => ($alignRight ? 'end' : 'start')};
 `;
 
 export default ProfileSelector;
