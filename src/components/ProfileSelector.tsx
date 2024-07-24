@@ -47,7 +47,7 @@ const ProfileSelector = ({
           <StyledIcon name={IconName.showMore} $variant={variant} />
         </SelectorContainer>
         {showSelect && (
-          <OptionsContainer>
+          <OptionsContainer $variant={variant}>
             {options?.map((option, index) => (
               <div key={`profile_select_option_${index}`} onClick={() => onChange(option)}>
                 {getOptionLabel ? (
@@ -65,13 +65,13 @@ const ProfileSelector = ({
 };
 
 const Container = styled.div<{ $variant: string }>`
-  height: 56px !important;
   background-color: ${({ theme, $variant }) =>
     theme.colors.profileSelector?.[$variant]?.selector?.background || 'white'};
   position: relative;
   cursor: pointer;
   width: 100%;
   border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
+  height: fit-content !important;
 `;
 
 const RelativeContainer = styled.div`
@@ -82,17 +82,18 @@ const SelectorContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
-  padding: 0px 16px 0 10px;
-  margin-bottom: 4px;
+  min-height: 56px;
+  padding: 8px 16px 8px 10px;
   border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
   cursor: pointer;
+  gap: 0.8rem;
 `;
 
 const Column = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  width: fit-content;
 `;
 
 const ModuleContainer = styled.div`
@@ -114,15 +115,18 @@ const StyledIcon = styled(Icon)<{ $variant: string }>`
     theme.colors.profileSelector?.[$variant]?.selector?.icon || '#101010'};
 `;
 
-const OptionsContainer = styled.div`
+const OptionsContainer = styled.div<{ $variant: string }>`
   display: block;
   position: absolute;
   z-index: 9999999;
   width: 100%;
   padding: 9px 6px 11px 6px;
-  background: #ffffff 0% 0% no-repeat padding-box;
+  background: ${({ theme, $variant }) =>
+    theme.colors.profileSelector?.[$variant]?.options?.container || 'white'};
   border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
   opacity: 1;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.02);
+  margin-top: 0.4rem;
 `;
 
 const Option = styled.div<{ $variant: string }>`
@@ -144,7 +148,7 @@ const Option = styled.div<{ $variant: string }>`
 
 const SubText = styled.div<{ $variant: string }>`
   font-family: 'Manrope', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: ${({ theme, $variant }) =>
     theme.colors.profileSelector?.[$variant]?.selector?.description || '#a5b9c0'};
   letter-spacing: 0.1px;
