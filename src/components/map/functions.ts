@@ -84,7 +84,7 @@ export function parseDrawOptions(draw?: boolean | DrawOptions) {
   }
 
   return mergeWith(draw, defaultDrawOptions, (dist, src) => {
-    if (dist && typeof dist !== 'undefined') return dist;
+    if (typeof dist !== 'undefined') return dist;
     return src;
   }) as DrawOptions;
 }
