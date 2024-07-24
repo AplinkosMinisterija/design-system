@@ -72,7 +72,6 @@ const Container = styled.div<{ $variant: string }>`
   cursor: pointer;
   width: 100%;
   border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
-  margin-bottom: 20px;
 `;
 
 const RelativeContainer = styled.div`
