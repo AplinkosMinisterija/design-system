@@ -146,6 +146,9 @@ export function useStorage<T>(
   }, []);
 
   useEffect(() => {
+    const val = localStorage.getItem(key);
+    setStoredValue(val ? JSON.parse(val) : initialValue);
+
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === key) {
         setStoredValue(JSON.parse(event.newValue as string));
@@ -157,8 +160,7 @@ export function useStorage<T>(
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, []);
-
+  }, [key]);
   const updateStorage = (newValue: T) => {
     setStoredValue(newValue);
     localStorage.setItem(key, JSON.stringify(newValue));

@@ -18,7 +18,7 @@ type Story = StoryObj<typeof Popup>;
 const PopupContent = ({ text }) => {
   const Container = styled.div`
     display: flex;
-    width: 100%;
+    //width: 100%;
     align-items: center;
     justify-content: center;
     flex-direction: column;

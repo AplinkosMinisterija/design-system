@@ -47,15 +47,19 @@ const Option = ({ option, selected }: any) => {
 const options = [
   {
     id: 1,
-    name: 'Didelis Būrelis',
+    name: 'Didelis būrelis',
   },
   {
     id: 2,
-    name: 'Gausus Būrelis',
+    name: 'Gausus būrelis',
   },
   {
     id: 3,
-    name: 'Mažas Būrelis',
+    name: 'Mažas būrelis',
+  },
+  {
+    id: 3,
+    name: 'Mažas būrelis su labai ilgu pavadinmu',
   },
 ];
 
@@ -83,6 +87,23 @@ export const Field: Story = {
             description: 'Medžiotojų būrelis',
           })}
           variant={'secondary'}
+          alignRight={true}
+          showIcon={true}
+          disabled={true}
+        />
+        <CustomProfile
+          options={options}
+          onChange={(e) => alert(e)}
+          value={options[3]}
+          getOptionLabel={(option) => <Option option={option} selected={option.id === 2} />}
+          getSelectedOptionLabels={(option) => ({
+            label: option.name,
+            description: 'Medžiotojų būrelis',
+          })}
+          variant={'secondary'}
+          alignRight={true}
+          showIcon={false}
+          disabled={false}
         />
       </StoryWrapper>
     );
