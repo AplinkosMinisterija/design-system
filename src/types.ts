@@ -100,6 +100,9 @@ export interface Theme {
     buttons?: number;
     [key: string]: any;
   };
+  padding?: {
+    buttons?: string;
+  };
   fontSize?: {
     fields: number;
     fieldLabels?: number;
