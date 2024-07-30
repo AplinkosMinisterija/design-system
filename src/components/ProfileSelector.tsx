@@ -101,7 +101,7 @@ const SelectorContainer = styled.div`
 const Column = styled.div<{ $alignRight: boolean }>`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2px;
   width: 100%;
   align-items: ${({ $alignRight }) => ($alignRight ? 'flex-end' : 'flex-start')};
   padding: 8px;
@@ -136,7 +136,7 @@ const OptionsContainer = styled.div<{ $variant: string }>`
     theme.colors.profileSelector?.[$variant]?.options?.container || 'white'};
   border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
   opacity: 1;
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.05) !important;
   margin-top: 4px;
 `;
 
