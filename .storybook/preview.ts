@@ -1,7 +1,7 @@
+import { withThemeFromJSXProvider } from '@storybook/addon-styling';
 import type { Preview } from '@storybook/react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { withThemeFromJSXProvider } from '@storybook/addon-styling';
-import { Theme, globalStyles } from '../src';
+import { globalStyles, Theme } from '../src';
 
 export enum ButtonVariants {
   PRIMARY = 'primary',
@@ -126,8 +126,10 @@ export const theme: Theme = {
     popup: 1,
   },
   height: {
-    buttons: 4,
     fields: 5.6,
+  },
+  padding: {
+    buttons: '2rem 2rem',
   },
   fontSize: {
     buttons: 1.6,
