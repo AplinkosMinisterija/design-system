@@ -19,7 +19,7 @@ const Option = ({ option, selected }: any) => {
     flex-direction: row;
     align-items: center;
     gap: 8px;
-    border-radius: 4px;
+    border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
     background-color: ${({ $selected }) => ($selected ? '#437783' : 'white')};
     color: ${({ $selected }) => ($selected ? 'white' : '#437783')};
   `;
