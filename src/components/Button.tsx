@@ -56,7 +56,7 @@ const StyledButton = styled.button<{
   justify-content: center;
   gap: 1rem;
   align-items: center;
-  height:auto
+  height: auto;
   border-radius: ${({ theme }) => theme.radius?.buttons || 0.4}rem;
   padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
   background-color: ${({ $variant, theme }) =>
