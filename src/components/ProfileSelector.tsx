@@ -131,7 +131,7 @@ const OptionsContainer = styled.div<{ $variant: string }>`
   position: absolute;
   z-index: 9999999;
   width: 100%;
-  padding: 9px 6px 11px 6px;
+  padding: 8px;
   background: ${({ theme, $variant }) =>
     theme.colors.profileSelector?.[$variant]?.options?.container || 'white'};
   border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
