@@ -6,6 +6,7 @@ import StoryWrapper from '../src/components/common/StoryWrapper';
 import styled from 'styled-components';
 import { Button, PopupType } from '../src';
 import { ButtonVariants } from '../.storybook/preview';
+import { useArgs } from '@storybook/preview-api';
 
 const meta: Meta<typeof Popup> = {
   component: Popup,
@@ -75,10 +76,16 @@ export const PopupStory1: Story = {
     onClose: () => {},
   },
   render: (args) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [{ visible }, updateArgs] = useArgs();
+
+    const handleClose = () => {
+      updateArgs({ visible: false });
+    };
     return (
       <StoryWrapper>
-        <Popup {...args} left={<LeftComponent />}>
-          <PopupContent text={'Pranešimas mobiliam telefone atvaizduojams per visą ekraną'} />,
+        <Popup {...args} visible={visible} onClose={handleClose} left={<LeftComponent />}>
+          <PopupContent text={'Pranešimas mobiliam telefone atvaizduojams per visą ekraną'} />
         </Popup>
       </StoryWrapper>
     );
@@ -100,12 +107,18 @@ export const PopupStory2: Story = {
   args: {
     visible: true,
     type: PopupType.FULL_SCREEN,
-    onClose: () => {},
   },
   render: (args) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [{ visible }, updateArgs] = useArgs();
+
+    const handleClose = () => {
+      updateArgs({ visible: false });
+    };
+
     return (
       <StoryWrapper>
-        <Popup {...args} left={<LeftComponent />}>
+        <Popup {...args} visible={visible} onClose={handleClose} left={<LeftComponent />}>
           <PopupContent text={largeText} />
         </Popup>
       </StoryWrapper>
