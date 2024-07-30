@@ -97,8 +97,10 @@ export interface Theme {
   };
   height?: {
     fields?: number;
-    buttons?: number;
     [key: string]: any;
+  };
+  padding?: {
+    buttons?: string;
   };
   fontSize?: {
     fields: number;
