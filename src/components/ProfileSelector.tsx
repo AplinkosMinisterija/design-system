@@ -93,7 +93,7 @@ const SelectorContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   min-height: 56px;
-  padding: 0.8rem;
+  padding: 8px;
   border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
   cursor: pointer;
 `;
@@ -101,10 +101,10 @@ const SelectorContainer = styled.div`
 const Column = styled.div<{ $alignRight: boolean }>`
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 8px;
   width: 100%;
   align-items: ${({ $alignRight }) => ($alignRight ? 'flex-end' : 'flex-start')};
-  padding: 0.8rem;
+  padding: 8px;
 `;
 
 const ModuleContainer = styled.div`
@@ -137,7 +137,7 @@ const OptionsContainer = styled.div<{ $variant: string }>`
   border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
   opacity: 1;
   box-shadow: 0 0 16px rgba(0, 0, 0, 0.02);
-  margin-top: 0.4rem;
+  margin-top: 4px;
 `;
 
 const Option = styled.div<{ $variant: string }>`
