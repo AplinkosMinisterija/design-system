@@ -2,6 +2,7 @@ import { format } from 'date-fns/format';
 import { useCallback, useEffect, useState } from 'react';
 import { matchPath, useLocation } from 'react-router';
 import { AppRoute, FilterConfig } from './types';
+import _ = require('lodash');
 
 export const device = {
   mobileS: `(max-width: 320px)`,
@@ -229,3 +230,59 @@ export const handleDateRestriction = (filter: FilterConfig, values: any) => {
 };
 
 export const phoneNumberRegexPattern = new RegExp(`^(\\+370|8|0)(3|4|5|6|7|8|9)\\d{7}$`);
+
+export const b64decode = (str: string): ArrayBuffer => {
+  const binary_string = window.atob(str);
+  const len = binary_string.length;
+  const bytes = new Uint8Array(new ArrayBuffer(len));
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binary_string.charCodeAt(i);
+  }
+  return bytes;
+};
+
+export const compressJSON = async (data: any) => {
+  const stream = new Blob([JSON.stringify(data)], {
+    type: 'application/json',
+  }).stream();
+
+  const compressedReadableStream = stream.pipeThrough(new CompressionStream('gzip'));
+  const compressedResponse = new Response(compressedReadableStream);
+  // Get response Blob
+  const blob = await compressedResponse.blob();
+  // Get the ArrayBuffer
+  const buffer = await blob.arrayBuffer();
+
+  // convert ArrayBuffer to base64 encoded string
+  const compressedBase64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+  return compressedBase64;
+};
+
+export const decompressJSON = async (compressedBase64) => {
+  const stream = new Blob([b64decode(compressedBase64)], {
+    type: 'application/json',
+  }).stream();
+
+  const compressedReadableStream = stream.pipeThrough(new DecompressionStream('gzip'));
+  const resp = new Response(compressedReadableStream);
+  const blob = await resp.blob();
+  const data = JSON.parse(await blob.text());
+  return data;
+};
+
+export const cleanObj = (el) => {
+  const internalClean = (el) => {
+    return _.transform(el, (result: any, value, key) => {
+      const isCollection = _.isObject(value);
+      const cleaned = isCollection ? internalClean(value) : value;
+
+      if (isCollection && _.isEmpty(cleaned)) {
+        return;
+      }
+
+      _.isArray(result) ? result.push(cleaned) : (result[key] = cleaned);
+    });
+  };
+
+  return _.isObject(el) ? internalClean(el) : el;
+};
