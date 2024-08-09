@@ -46,7 +46,7 @@ const getContainerCss = ($type) => {
       return {
         width: '100%',
         height: '100%',
-        padding: '1.6rem',
+        padding: '1rem',
         maxHeight: '100%',
       };
 
@@ -54,7 +54,7 @@ const getContainerCss = ($type) => {
       return {
         width: '100%',
         height: '100%',
-        padding: '1.6rem',
+        padding: '1rem',
         maxHeight: '100%',
       };
     default:
