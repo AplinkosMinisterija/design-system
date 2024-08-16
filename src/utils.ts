@@ -1,8 +1,8 @@
 import { format } from 'date-fns/format';
+import * as _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import { matchPath, useLocation } from 'react-router';
 import { AppRoute, FilterConfig } from './types';
-import _ = require('lodash');
 
 export const device = {
   mobileS: `(max-width: 320px)`,
