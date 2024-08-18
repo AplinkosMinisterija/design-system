@@ -101,6 +101,7 @@ export interface Theme {
   };
   padding?: {
     buttons?: string;
+    mobilePopup?: string;
   };
   fontSize?: {
     fields: number;
