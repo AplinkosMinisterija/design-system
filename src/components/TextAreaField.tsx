@@ -53,7 +53,7 @@ const TextAreaField = ({
       error={error}
       showError={showError}
     >
-      <InputContainer disabled={disabled} error={!!error}>
+      <InputContainer $error={!!error} $disabled={disabled}>
         <StyledTextArea
           ref={ref}
           disabled={disabled}
@@ -77,14 +77,14 @@ const InputContainer = styled.div<{ $error: boolean; $disabled: boolean }>`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.colors.fields?.background || 'white'};
   border: 1px solid
-    ${({ theme, $error }) =>
-      $error ? theme.colors.error || '#FE5B78' : theme.colors.fields?.border || '#d4d5de'};
+    ${({ theme, $error }) => ($error ? '#FE5B78' : theme.colors.fields?.border || '#d4d5de')};
   opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
   border-radius: ${({ theme }) => theme.radius?.fields || 0.4}rem;
-  :focus-within {
-    //TODO: fix focus style
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 4px ${({ theme }) => `${theme.colors.primary}33`};
+  &:focus-within {
+    border-color: ${({ theme }) =>
+      theme.colors.fields?.borderFocus || theme.colors.fields?.border || '#d4d5de'};
+    box-shadow: ${({ theme }) =>
+      theme.colors.fields?.borderFocus ? `0 0 0 4px ${theme.colors.fields.borderFocus}33` : 'none'};
   }
 `;
 
@@ -97,7 +97,7 @@ const StyledTextArea = styled.textarea`
   font-size: ${({ theme }) => theme.fontSize?.fields || 1.6}rem;
   color: ${({ theme }) => theme.colors.fields?.text || '#101010'};
   background-color: ${({ theme }) => theme.colors.fields?.background || 'white'};
-  :focus {
+  &:focus {
     outline: none;
   }
 `;
