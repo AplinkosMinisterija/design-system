@@ -64,8 +64,8 @@ const StyledButton = styled.button<{
   justify-content: center;
 
   align-items: center;
-  height: 40px;
-  padding: 12px;
+
+  padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
   background-color: ${({ selected, theme }) =>
     selected ? `${theme.colors.primary}33` : 'inherit'};
 
