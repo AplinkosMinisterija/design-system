@@ -40,13 +40,13 @@ const Popup = ({
   );
 };
 
-const getContainerCss = ($type) => {
+const getContainerCss = ($type, theme) => {
   switch ($type) {
     case PopupType.BOTTOM:
       return {
         width: '100%',
         height: '100%',
-        padding: '1.6rem',
+        padding: theme.padding.mobilePopup || '1rem',
         maxHeight: '100%',
       };
 
@@ -54,7 +54,7 @@ const getContainerCss = ($type) => {
       return {
         width: '100%',
         height: '100%',
-        padding: '1.6rem',
+        padding: theme.padding.mobilePopup || '1rem',
         maxHeight: '100%',
       };
     default:
@@ -114,7 +114,7 @@ const Container = styled.div<{ width?: string; $type: PopupType }>`
     max-width: 440px;
   }
   @media ${device.mobileL} {
-    ${({ $type }) => css(getContainerCss($type))}
+    ${({ $type, theme }) => css(getContainerCss($type, theme))}
   }
 `;
 

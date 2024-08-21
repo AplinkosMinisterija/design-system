@@ -130,6 +130,7 @@ export const theme: Theme = {
   },
   padding: {
     buttons: '2rem 2rem',
+    mobilePopup: '1rem',
   },
   fontSize: {
     buttons: 1.6,
