@@ -73,7 +73,6 @@ const StyledButton = styled.button<{
   border-style: solid;
   font-weight: normal;
   font-size: 1.4rem;
-  line-height: 13px;
   opacity: ${({ disabled }) => (disabled ? 0.48 : 1)};
   :hover {
     opacity: ${({ disabled }) => (disabled ? 0.48 : 0.6)};
