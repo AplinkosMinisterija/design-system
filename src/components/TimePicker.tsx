@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
-import TextField from './TextField';
 import Icon, { IconName } from './common/Icons';
+import TextField from './TextField';
 
 export interface TimepickerProps {
   label?: string;
@@ -16,6 +16,7 @@ export interface TimepickerProps {
   className?: string;
   maxDate?: Date;
   minDate?: Date;
+  showError?: boolean;
 }
 
 const TimePicker = ({
@@ -26,6 +27,7 @@ const TimePicker = ({
   disabled,
   padding,
   className,
+  showError = true,
   minDate,
   maxDate,
 }: TimepickerProps) => {
@@ -79,13 +81,13 @@ const TimePicker = ({
     >
       <StyledTextInput
         readOnly={true}
-        showError={true}
         label={label}
         padding={padding}
         value={time ? format(new Date(time), 'HH:mm') : ''}
         error={error}
         right={<TimeIcon name={IconName.time} />}
         disabled={disabled}
+        showError={showError}
       />
       {open && !disabled ? (
         <DatePicker

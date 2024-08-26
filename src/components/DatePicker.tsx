@@ -25,6 +25,7 @@ export interface DateFieldProps {
   minDate?: Date | string;
   bottom?: boolean;
   placeHolder?: string;
+  showError?: boolean;
 }
 
 const DateField = ({
@@ -36,6 +37,7 @@ const DateField = ({
   disabled = false,
   padding,
   className,
+  showError = true,
   maxDate,
   minDate,
 }: DateFieldProps) => {
@@ -138,6 +140,7 @@ const DateField = ({
           label={label}
           padding={padding}
           value={textValue}
+          showError={showError}
           error={error}
           right={
             <>
