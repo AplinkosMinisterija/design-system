@@ -1,7 +1,7 @@
 import { format } from 'date-fns/format';
 import * as _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
-import { matchPath, useLocation } from 'react-router';
+import { matchPath, useLocation } from 'react-router-dom';
 import { AppRoute, FilterConfig } from './types';
 
 export const device = {

@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import DynamicFilter from '../src/components/tables/DynamicFilter';
-import StoryWrapper from '../src/components/common/StoryWrapper';
-import { withRouter } from 'storybook-addon-react-router-v6';
 import { FilterConfig, FilterInputTypes } from '../src';
+import StoryWrapper from '../src/components/common/StoryWrapper';
+import DynamicFilter from '../src/components/tables/DynamicFilter';
 
 const meta: Meta<typeof DynamicFilter> = {
   component: DynamicFilter,
@@ -53,5 +52,4 @@ export const TabsStory: Story = {
       </StoryWrapper>
     );
   },
-  decorators: [withRouter],
 };

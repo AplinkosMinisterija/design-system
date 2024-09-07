@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
-import { withRouter } from 'storybook-addon-react-router-v6';
+import { TableItemWidth } from '../src';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import Table from '../src/components/tables/Table';
-import { TableItemWidth } from '../src';
 
 const meta: Meta<typeof Table> = {
   component: Table,
@@ -86,5 +85,4 @@ export const TabsStory: Story = {
       </StoryWrapper>
     );
   },
-  decorators: [withRouter],
 };

@@ -12,7 +12,7 @@ export interface DesktopTableProps {
   customPageName?: string;
   isFilterApplied?: boolean;
   onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
-  onClick?: (id: string) => void;
+  onClick?: (item:any) => void;
   texts?: {
     notFound: string;
   };
@@ -39,8 +39,8 @@ const MobileTable = ({
   }>({});
 
   const handleRowClick = (row: TableRow) => {
-    if (onClick && row.id) {
-      onClick(`${row.id}`);
+    if (onClick && row?.id) {
+      onClick(row);
     }
   };
 

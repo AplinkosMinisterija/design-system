@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { device, useWindowSize } from '../../../utils';
 import Icon from '../../common/Icons';
@@ -11,26 +13,38 @@ export interface TableLayoutProps {
   data?: TableData;
   pageName?: string;
   loading?: boolean;
-  onPageChange: (page: number) => void;
   children: ChildrenType;
 }
 
-const TableContainer = ({
-  data,
-  pageName = 'page',
-  loading,
-  children,
-  onPageChange,
-}: TableLayoutProps) => {
-  const params = Object.fromEntries(new URLSearchParams(window.location.search));
+const TableContainer = ({ data, pageName = 'page', loading, children }: TableLayoutProps) => {
+  const [searchParams] = useSearchParams();
+  const params = Object.fromEntries([...Array.from(searchParams)]);
   const totalPages = data?.totalPages || 0;
   const showPagination = !!data?.data?.length;
   const isMobile = useWindowSize(device.mobileL);
   const pageRange = isMobile ? 1 : 3;
   const pageMargin = isMobile ? 1 : 3;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const currentPage = parseInt(params?.page);
+
+    if (!loading && totalPages < currentPage) {
+      navigateToPage(1);
+    }
+  }, [searchParams, data, loading]);
+
+  const navigateToPage = (pageNumber) => {
+    navigate({
+      search: `?${createSearchParams({
+        ...params,
+        [pageName]: pageNumber.toString(),
+      })}`,
+    });
+  };
 
   const handlePageChange = (e) => {
-    onPageChange(e.selected + 1);
+    navigateToPage(e.selected + 1);
   };
 
   if (loading) return <LoaderComponent />;
