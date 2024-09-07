@@ -80,7 +80,6 @@ export const TabsStory: Story = {
             urlText: 'not found',
             onClick: () => {},
           }}
-          onPageChange={() => {}}
         />
       </StoryWrapper>
     );

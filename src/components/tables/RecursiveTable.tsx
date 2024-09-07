@@ -24,7 +24,6 @@ export interface RecursiveTableProps {
   texts?: {
     notFound: string;
   };
-  onPageChange: (page: number) => void;
 }
 
 const RecursiveTable = ({
@@ -37,7 +36,6 @@ const RecursiveTable = ({
   loading,
   isFilterApplied = false,
   texts,
-  onPageChange = () => {},
 }: RecursiveTableProps) => {
   const activeColumns = getActiveColumns(columns);
   const keys = Object.keys(activeColumns);
@@ -91,7 +89,7 @@ const RecursiveTable = ({
   if (loading) return <LoaderComponent />;
 
   return (
-    <TableContainer data={data} pageName={pageName} loading={loading} onPageChange={onPageChange}>
+    <TableContainer data={data} pageName={pageName} loading={loading}>
       <Table>
         <THEAD>
           <TR $pointer={false}>
