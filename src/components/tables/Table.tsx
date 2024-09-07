@@ -15,7 +15,6 @@ export interface LoginLayoutProps {
   pageName?: string;
   isFilterApplied?: boolean;
   loading?: boolean;
-  onPageChange: (page: number) => void;
   onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
 }
 
@@ -28,7 +27,6 @@ const Table = ({
   pageName,
   loading,
   isFilterApplied = false,
-  onPageChange = () => {},
   onColumnSort,
 }: LoginLayoutProps) => {
   const isMobile = useWindowSize(device.mobileL);
@@ -37,7 +35,7 @@ const Table = ({
   if (loading) return <LoaderComponent />;
 
   return (
-    <TableContainer data={data} pageName={pageName} loading={loading} onPageChange={onPageChange}>
+    <TableContainer data={data} pageName={pageName} loading={loading}>
       {isMobile ? (
         <MobileTable
           data={data?.data}

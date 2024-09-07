@@ -17,7 +17,7 @@ export interface NotFoundInfoProps {
   text?: string;
   url?: string;
   urlText?: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export enum TableItemWidth {
