@@ -5,6 +5,7 @@ import ButtonsGroup from './components/ButtonsGroup';
 import CheckBox from './components/Checkbox';
 import DesignSystemProvider from './components/common/DesignSystemProvider';
 import FieldWrapper from './components/common/FieldWrapper';
+import CreatableMultiSelect from './components/CreatableMultiSelect';
 import DatePicker from './components/DatePicker';
 import ContentLayout from './components/layouts/ContentLayout';
 import DefaultLayout from './components/layouts/DefaultLayout';
@@ -32,22 +33,21 @@ import TextAreaField from './components/TextAreaField';
 import TextField from './components/TextField';
 import TimePicker from './components/TimePicker';
 import TreeSelectField from './components/TreeSelectFiled';
+export {
+  BASEMAP_URL,
+  convertGeojsonToProjection,
+  LKS_PROJECTION,
+  MAP_PROJECTION,
+} from './components/map/functions';
 export * from './types';
 export * from './utils';
-
-export {
-  convertGeojsonToProjection,
-  BASEMAP_URL,
-  MAP_PROJECTION,
-  LKS_PROJECTION,
-} from './components/map/functions';
-
 export {
   Button,
   CheckBox,
   Switch,
   TextField,
   PasswordField,
+  CreatableMultiSelect,
   Tabs,
   MapField,
   Map,
