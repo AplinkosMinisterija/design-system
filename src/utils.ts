@@ -1,7 +1,8 @@
 import { format } from 'date-fns/format';
-import * as _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
+import { matchPath, useLocation } from 'react-router';
 import { AppRoute, FilterConfig } from './types';
+import _ = require('lodash');
 
 export const device = {
   mobileS: `(max-width: 320px)`,
@@ -44,6 +45,13 @@ export const useWindowSize = (width: string) => {
   }, [handleResize]);
 
   return isInRange;
+};
+
+export const useGetCurrentRoute = (routes: AppRoute[]) => {
+  const currentLocation = useLocation();
+  return routes?.find(
+    (route: any) => !!matchPath({ path: route.slug, end: true }, currentLocation.pathname),
+  );
 };
 
 export const filterRoutes = (routes: AppRoute[], loggedIn: boolean) => {
