@@ -46,7 +46,7 @@ const getContainerCss = ($type, theme) => {
       return {
         width: '100%',
         height: '100%',
-        padding: theme.padding.mobilePopup || '1rem',
+        padding: theme.padding?.mobilePopup || '1rem',
         maxHeight: '100%',
       };
 
@@ -54,7 +54,7 @@ const getContainerCss = ($type, theme) => {
       return {
         width: '100%',
         height: '100%',
-        padding: theme.padding.mobilePopup || '1rem',
+        padding: theme.padding?.mobilePopup || '1rem',
         maxHeight: '100%',
       };
     default:
