@@ -2,7 +2,7 @@ import { format } from 'date-fns/format';
 import { useCallback, useEffect, useState } from 'react';
 import { matchPath, useLocation } from 'react-router';
 import { AppRoute, FilterConfig } from './types';
-import _ = require('lodash');
+import { isArray, isEmpty, isObject, transform } from 'lodash';
 
 export const device = {
   mobileS: `(max-width: 320px)`,
@@ -272,17 +272,17 @@ export const decompressJSON = async (compressedBase64) => {
 
 export const cleanObj = (el) => {
   const internalClean = (el) => {
-    return _.transform(el, (result: any, value, key) => {
-      const isCollection = _.isObject(value);
+    return transform(el, (result: any, value, key) => {
+      const isCollection = isObject(value);
       const cleaned = isCollection ? internalClean(value) : value;
 
-      if (isCollection && _.isEmpty(cleaned)) {
+      if (isCollection && isEmpty(cleaned)) {
         return;
       }
 
-      _.isArray(result) ? result.push(cleaned) : (result[key] = cleaned);
+      isArray(result) ? result.push(cleaned) : (result[key] = cleaned);
     });
   };
 
-  return _.isObject(el) ? internalClean(el) : el;
+  return isObject(el) ? internalClean(el) : el;
 };
