@@ -1,7 +1,7 @@
 {
   "name": "@aplinkosministerija/design-system",
   "description": "Shared Design System Components for React",
-  "version": "0.0.83",
+  "version": "0.0.84",
   "type": "module",
   "license": "MIT",
   "sideEffects": false,
@@ -45,6 +45,7 @@
     "date-fns": "^3.6.0",
     "epsg-index": "^2.0.0",
     "formik": "^2.4.6",
+    "lodash": "^4.17.21",
     "maplibre-gl": "^4.3.2",
     "numeral": "^2.0.6",
     "pmtiles": "^3.0.6",
