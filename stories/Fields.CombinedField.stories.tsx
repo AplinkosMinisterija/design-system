@@ -20,6 +20,7 @@ export const Field: Story = {
           value={{ input: '', option: 'kg' }}
           options={['kg', 'l', 'ml']}
           placeholder="4"
+          numeric={true}
         />
       </StoryWrapper>
     );

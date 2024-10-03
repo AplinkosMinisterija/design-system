@@ -3,6 +3,7 @@ import FieldWrapper from './common/FieldWrapper';
 import { JSX, useState } from 'react';
 import OptionsContainer from './common/OptionsContainer';
 import styled from 'styled-components';
+import NumericTextField from './NumericTextField';
 
 export interface CombinedFieldProps {
   value: { input: string; option: string };
@@ -20,6 +21,7 @@ export interface CombinedFieldProps {
   optionsWidth?: number;
   showError?: boolean;
   className?: string;
+  numeric?: boolean;
 }
 
 const CombinedField = ({
@@ -41,6 +43,7 @@ const CombinedField = ({
   optionsWidth,
   className,
   showError = false,
+  numeric,
 }: CombinedFieldProps) => {
   const [showSelect, setShowSelect] = useState(false);
 
@@ -53,33 +56,63 @@ const CombinedField = ({
 
   return (
     <FieldWrapper className={className} label={label} error={error} showError={showError}>
-      <TextFieldInput
-        value={value?.input}
-        name={name}
-        error={error}
-        right={
-          <OptionsWrapper>
-            <SelectedOption onClick={() => setShowSelect(!showSelect)} $width={optionsWidth}>
-              {value?.option}
-            </SelectedOption>
-            <StyledOptionsContainer
-              values={options}
-              getOptionLabel={(option) =>
-                getOptionLabel ? getOptionLabel(option) : <Option>{option}</Option>
-              }
-              showSelect={showSelect}
-              handleClick={(option) => {
-                handleChange({ option: getOptionValue ? getOptionValue(option) : option });
-              }}
-            />
-          </OptionsWrapper>
-        }
-        onChange={(input) => handleChange({ input })}
-        disabled={disabled}
-        height={height}
-        onInputClick={onInputClick}
-        placeholder={placeholder}
-      />
+      {numeric ? (
+        <NumericTextField
+          value={value?.input}
+          name={name}
+          error={error}
+          right={
+            <OptionsWrapper>
+              <SelectedOption onClick={() => setShowSelect(!showSelect)} $width={optionsWidth}>
+                {value?.option}
+              </SelectedOption>
+              <StyledOptionsContainer
+                values={options}
+                getOptionLabel={(option) =>
+                  getOptionLabel ? getOptionLabel(option) : <Option>{option}</Option>
+                }
+                showSelect={showSelect}
+                handleClick={(option) => {
+                  handleChange({ option: getOptionValue ? getOptionValue(option) : option });
+                }}
+              />
+            </OptionsWrapper>
+          }
+          onChange={(input) => handleChange({ input })}
+          disabled={disabled}
+          height={height}
+          onInputClick={onInputClick}
+          placeholder={placeholder}
+        />
+      ) : (
+        <TextFieldInput
+          value={value?.input}
+          name={name}
+          error={error}
+          right={
+            <OptionsWrapper>
+              <SelectedOption onClick={() => setShowSelect(!showSelect)} $width={optionsWidth}>
+                {value?.option}
+              </SelectedOption>
+              <StyledOptionsContainer
+                values={options}
+                getOptionLabel={(option) =>
+                  getOptionLabel ? getOptionLabel(option) : <Option>{option}</Option>
+                }
+                showSelect={showSelect}
+                handleClick={(option) => {
+                  handleChange({ option: getOptionValue ? getOptionValue(option) : option });
+                }}
+              />
+            </OptionsWrapper>
+          }
+          onChange={(input) => handleChange({ input })}
+          disabled={disabled}
+          height={height}
+          onInputClick={onInputClick}
+          placeholder={placeholder}
+        />
+      )}
     </FieldWrapper>
   );
 };
