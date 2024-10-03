@@ -8,7 +8,7 @@ export interface CombinedFieldProps {
     value: {input: string; option: string};
     onChange: (option: {input: string; option: string}) => void;
     name?: string;
-    lable?: string;
+    label?: string;
     error?: string;
     disabled?: boolean;
     height?: number;
@@ -18,6 +18,7 @@ export interface CombinedFieldProps {
     getOptionLabel?: (option: any) => string | JSX.Element;
     optionsWidth?: number;
     showError?: boolean;
+    className?: string;
 }
 
 const CombinedField = ({
