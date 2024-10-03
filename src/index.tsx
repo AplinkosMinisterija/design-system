@@ -33,6 +33,8 @@ import TextAreaField from './components/TextAreaField';
 import TextField from './components/TextField';
 import TimePicker from './components/TimePicker';
 import TreeSelectField from './components/TreeSelectFiled';
+import DragAndDropUploadField from './components/DragAndDropUploadField';
+
 export {
   BASEMAP_URL,
   convertGeojsonToProjection,
@@ -77,4 +79,5 @@ export {
   ProfileSelector,
   Navigator,
   Popup,
+  DragAndDropUploadField,
 };
