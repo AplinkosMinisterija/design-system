@@ -34,6 +34,7 @@ import TextField from './components/TextField';
 import TimePicker from './components/TimePicker';
 import TreeSelectField from './components/TreeSelectFiled';
 import DragAndDropUploadField from './components/DragAndDropUploadField';
+import CombinedField from './components/CombinedField'
 
 export {
   BASEMAP_URL,
@@ -80,4 +81,5 @@ export {
   Navigator,
   Popup,
   DragAndDropUploadField,
+    CombinedField
 };
