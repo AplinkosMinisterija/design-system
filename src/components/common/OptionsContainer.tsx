@@ -21,7 +21,7 @@ export interface OptionsContainerProps {
   handleClick: (option: any) => any;
   texts?: OptionContainerTexts;
   observerRef?: any;
-  className: string;
+  className?: string;
 }
 
 const OptionsContainer = ({
