@@ -46,11 +46,42 @@ const CombinedField = ({
 }: CombinedFieldProps) => {
   const [showSelect, setShowSelect] = useState(false);
 
+  const handleBlur = (event: any) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setShowSelect(false);
+    }
+  };
+
   const handleChange = (input) => {
+    setShowSelect(false);
     onChange({
       ...value,
       ...input,
     });
+  };
+
+  const renderOptions = () => {
+    return (
+      <OptionsWrapper>
+        <SelectedOption
+          onBlur={handleBlur}
+          onClick={() => setShowSelect(!showSelect)}
+          $width={optionsWidth}
+        >
+          {value?.option}
+        </SelectedOption>
+        <StyledOptionsContainer
+          values={options}
+          getOptionLabel={(option) =>
+            getOptionLabel ? getOptionLabel(option) : <Option>{option}</Option>
+          }
+          showSelect={showSelect}
+          handleClick={(option) => {
+            handleChange({ option: getOptionValue ? getOptionValue(option) : option });
+          }}
+        />
+      </OptionsWrapper>
+    );
   };
 
   return (
@@ -63,23 +94,7 @@ const CombinedField = ({
           value={value?.input}
           name={name}
           error={error}
-          right={
-            <OptionsWrapper>
-              <SelectedOption onClick={() => setShowSelect(!showSelect)} $width={optionsWidth}>
-                {value?.option}
-              </SelectedOption>
-              <StyledOptionsContainer
-                values={options}
-                getOptionLabel={(option) =>
-                  getOptionLabel ? getOptionLabel(option) : <Option>{option}</Option>
-                }
-                showSelect={showSelect}
-                handleClick={(option) => {
-                  handleChange({ option: getOptionValue ? getOptionValue(option) : option });
-                }}
-              />
-            </OptionsWrapper>
-          }
+          right={renderOptions()}
           onChange={(input) => handleChange({ input })}
           disabled={disabled}
           height={height}
@@ -94,23 +109,7 @@ const CombinedField = ({
           value={value?.input}
           name={name}
           error={error}
-          right={
-            <OptionsWrapper>
-              <SelectedOption onClick={() => setShowSelect(!showSelect)} $width={optionsWidth}>
-                {value?.option}
-              </SelectedOption>
-              <StyledOptionsContainer
-                values={options}
-                getOptionLabel={(option) =>
-                  getOptionLabel ? getOptionLabel(option) : <Option>{option}</Option>
-                }
-                showSelect={showSelect}
-                handleClick={(option) => {
-                  handleChange({ option: getOptionValue ? getOptionValue(option) : option });
-                }}
-              />
-            </OptionsWrapper>
-          }
+          right={renderOptions()}
           onChange={(input) => handleChange({ input })}
           disabled={disabled}
           height={height}
