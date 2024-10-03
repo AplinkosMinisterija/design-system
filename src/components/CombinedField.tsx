@@ -1,9 +1,8 @@
-import TextFieldInput from './common/TextFieldInput';
-import FieldWrapper from './common/FieldWrapper';
 import { JSX, useState } from 'react';
 import OptionsContainer from './common/OptionsContainer';
 import styled from 'styled-components';
 import NumericTextField from './NumericTextField';
+import { TextField } from '../index';
 
 export interface CombinedFieldProps {
   value: { input: string; option: string };
@@ -55,9 +54,12 @@ const CombinedField = ({
   };
 
   return (
-    <FieldWrapper className={className} label={label} error={error} showError={showError}>
+    <>
       {numeric ? (
         <NumericTextField
+          className={className}
+          label={label}
+          showError={showError}
           value={value?.input}
           name={name}
           error={error}
@@ -85,7 +87,10 @@ const CombinedField = ({
           placeholder={placeholder}
         />
       ) : (
-        <TextFieldInput
+        <TextField
+          className={className}
+          label={label}
+          showError={showError}
           value={value?.input}
           name={name}
           error={error}
@@ -113,7 +118,7 @@ const CombinedField = ({
           placeholder={placeholder}
         />
       )}
-    </FieldWrapper>
+    </>
   );
 };
 
