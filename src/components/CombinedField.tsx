@@ -70,7 +70,7 @@ const CombinedField = ({
                 values={options}
                 getOptionLabel={(option) => (<Option>{option}</Option>)}
                 showSelect={showSelect}
-                handleClick={(option)=> getOptionLabel ? getOptionLabel(option) : handleChange({ option: getOptionValue(option) })}
+                handleClick={(option)=> getOptionLabel ? getOptionLabel(option) : handleChange({ option: getOptionValue ? getOptionValue(option) : option })}
             />
           </OptionsWrapper>
         }
