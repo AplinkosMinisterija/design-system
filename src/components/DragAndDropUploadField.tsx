@@ -2,7 +2,7 @@ import { map } from 'lodash';
 import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { bytesToMb, device, validateFileSizes, validateFileTypes } from '../utils';
-import Icon from './common/Icons';
+import Icon, { IconName } from './common/Icons';
 import LoaderComponent from './common/LoaderComponent';
 import FieldWrapper from './common/FieldWrapper';
 
@@ -24,9 +24,11 @@ export interface FileFieldProps {
   error?: string;
   showError?: boolean;
   multiple?: boolean;
-  pressToWantText?: string;
-  uploadOrDragFilesHereText?: string;
-  fileTypesAndMaxSizeText?: string;
+  text?: {
+    pressToWant?: string;
+    uploadOrDragFilesHere?: string;
+    fileTypesAndMaxSize?: string;
+  };
   maxFileSizeMB?: number;
   availableMimeTypes?: string[];
   availableExtensionsTypes?: string[];
@@ -41,9 +43,11 @@ const DragAndDropUploadField = ({
   disabled = false,
   error,
   showError = false,
-  pressToWantText = 'Paspauskite norėdami',
-  uploadOrDragFilesHereText = 'įkelti arba įtempkite failus čia',
-  fileTypesAndMaxSizeText = 'PDF, PNG, JPEG, JPG (maks. 20MB)',
+  text = {
+    pressToWant: 'Paspauskite norėdami',
+    uploadOrDragFilesHere: 'įkelti arba įtempkite failus čia',
+    fileTypesAndMaxSize: 'PDF, PNG, JPEG, JPG (maks. 20MB)',
+  },
   handleError = () => {},
   maxFileSizeMB = 20,
   availableMimeTypes = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'],
@@ -103,7 +107,7 @@ const DragAndDropUploadField = ({
       <FieldWrapper error={error} showError={showError} label={label}>
         {!disabled && (
           <UploadFileContainer
-            error={!!error}
+            $error={!!error}
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
             onClick={onButtonClick}
@@ -115,11 +119,12 @@ const DragAndDropUploadField = ({
               multiple={multiple}
               onChange={handleChange}
             />
+            <BigIcon name={IconName.upload} />
             <TextRow>
-              <BoldText>{pressToWantText}</BoldText>
-              <Text>{uploadOrDragFilesHereText}</Text>
+              <BoldText>{text.pressToWant}</BoldText>
+              <Text>{text.uploadOrDragFilesHere}</Text>
             </TextRow>
-            <Text>{fileTypesAndMaxSizeText}</Text>
+            <Text>{text.fileTypesAndMaxSize}</Text>
           </UploadFileContainer>
         )}
       </FieldWrapper>
@@ -134,7 +139,7 @@ const DragAndDropUploadField = ({
               <FileSize>{bytesToMb(file.size)}</FileSize>
             </FileInnerContainer>
             <IconContainer href={file?.url} target="_blank" download={file?.name}>
-              <StyledIcon name="download" />
+              <StyledIcon name={IconName.download} />
             </IconContainer>
             {!disabled && (
               <IconContainer
@@ -142,7 +147,7 @@ const DragAndDropUploadField = ({
                   handleDelete(e, index);
                 }}
               >
-                <StyledIcon name="remove" />
+                <StyledIcon name={IconName.remove} />
               </IconContainer>
             )}
           </FileContainer>
@@ -170,6 +175,13 @@ const StyledIcon = styled(Icon)`
   @media ${device.mobileL} {
     margin: 8px 0 16px 0;
   }
+`;
+
+const BigIcon = styled(Icon)`
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  color: #9aa4b2;
 `;
 
 const Text = styled.div`
@@ -229,10 +241,10 @@ const TextRow = styled.div`
   }
 `;
 
-const UploadFileContainer = styled.div<{ error: boolean }>`
+const UploadFileContainer = styled.div<{ $error: boolean }>`
   cursor: pointer;
   background-color: #eeebe53d;
-  border: 2px dashed ${({ theme, error }) => (error ? theme.colors.error : theme.colors.border)};
+  border: 2px dashed ${({ theme, $error }) => ($error ? theme.colors.error : theme.colors.border)};
   border-radius: 4px;
   display: flex;
   flex-direction: column;

@@ -1,5 +1,5 @@
 import { FaChevronRight } from 'react-icons/fa6';
-import { FiArrowLeft, FiMenu, FiDownload } from 'react-icons/fi';
+import { FiArrowLeft, FiMenu, FiDownload, FiUpload } from 'react-icons/fi';
 import { IoCloseOutline } from 'react-icons/io5';
 import {
   MdArrowBackIos,
@@ -36,6 +36,7 @@ export enum IconName {
   showMore = 'showMore',
   download = 'download',
   remove = 'remove',
+  upload = 'upload',
 }
 
 export interface IconProps {
@@ -100,6 +101,8 @@ const Icon = ({ name, className }: IconProps) => {
       return <FiDownload className={className} />;
     case IconName.remove:
       return <FaTrash className={className} />;
+    case IconName.upload:
+      return <FiUpload className={className} />;
     default:
       return null;
   }

@@ -15,7 +15,7 @@ export const Field: Story = {
   render: () => {
     return (
       <StoryWrapper>
-        <DragAndDropUploadField />
+        <DragAndDropUploadField backgroundColor="white" />
       </StoryWrapper>
     );
   },
