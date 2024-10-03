@@ -79,6 +79,7 @@ const CreatableMultiSelect = ({
           setInputValue(input);
         }}
         getOptionLabel={(option) => `${option}`}
+        hideDropdown={true}
       />
       <OptionsContainer
         values={[isExist ? 'Toks reikšmė jau egzistuoja' : `Sukurti: ${input}`]}

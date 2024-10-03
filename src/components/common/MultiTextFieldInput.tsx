@@ -15,6 +15,7 @@ export interface MultiTextFieldProps {
   backgroundColor?: string;
   height?: number;
   name?: string;
+  hideDropdown?: boolean;
 }
 
 const MultiTextField = ({
@@ -30,6 +31,7 @@ const MultiTextField = ({
   disabled,
   name,
   height = 56,
+  hideDropdown = false,
 }: MultiTextFieldProps) => {
   const inputRef = useRef<any>(null);
 
@@ -76,9 +78,11 @@ const MultiTextField = ({
           />
         )}
       </InnerContainer>
-      <DropdownIconContainer>
-        <StyledIcons name="dropdownArrow" />
-      </DropdownIconContainer>
+      {!hideDropdown && (
+        <DropdownIconContainer>
+          <StyledIcons name="dropdownArrow" />
+        </DropdownIconContainer>
+      )}
     </InputContainer>
   );
 };
