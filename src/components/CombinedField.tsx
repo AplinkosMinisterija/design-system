@@ -16,6 +16,7 @@ export interface CombinedFieldProps {
     placeholder?: string;
     options?: any[];
     getOptionLabel?: (option: any) => string | JSX.Element;
+    getOptionValue?: (option: any) => any
     optionsWidth?: number;
     showError?: boolean;
     className?: string;
