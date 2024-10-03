@@ -46,8 +46,9 @@ const ButtonsGroup = ({
 
 const Container = styled.div`
   border-radius: 4px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   &:focus {
     outline: none;
     box-shadow: none;
@@ -62,7 +63,7 @@ const StyledButton = styled.button<{
 }>`
   display: flex;
   justify-content: center;
-
+  flex-grow: 1;
   align-items: center;
 
   padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
