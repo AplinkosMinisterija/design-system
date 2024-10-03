@@ -13,11 +13,6 @@ export type FileProps = {
   main?: boolean;
 };
 
-export type FileExtension = {
-  extension: string;
-  mime: string;
-};
-
 export interface FileFieldProps {
   handleError?: (error: 'fileSizesExceeded' | 'badFileTypes') => void;
   onDelete?: (files: File[]) => void;
