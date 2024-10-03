@@ -1,5 +1,5 @@
 import { FaChevronRight } from 'react-icons/fa6';
-import { FiArrowLeft, FiMenu } from 'react-icons/fi';
+import { FiArrowLeft, FiMenu, FiDownload } from 'react-icons/fi';
 import { IoCloseOutline } from 'react-icons/io5';
 import {
   MdArrowBackIos,
@@ -13,8 +13,9 @@ import {
   MdOutlineAccessTime,
   MdUnfoldMore,
 } from 'react-icons/md';
-
+import { FaTrash } from 'react-icons/fa';
 import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
+
 export enum IconName {
   visibleOn = 'visibleOn',
   filter = 'filter',
@@ -33,6 +34,8 @@ export enum IconName {
   tableArrowDown = 'tableArrowDown',
   time = 'time',
   showMore = 'showMore',
+  download = 'download',
+  remove = 'remove',
 }
 
 export interface IconProps {
@@ -91,8 +94,12 @@ const Icon = ({ name, className }: IconProps) => {
       return <MdOutlineCalendarToday className={className} />;
     case IconName.time:
       return <MdOutlineAccessTime className={className} />;
-    case 'showMore':
+    case IconName.showMore:
       return <MdUnfoldMore className={className} />;
+    case IconName.download:
+      return <FiDownload className={className} />;
+    case IconName.remove:
+      return <FaTrash className={className} />;
     default:
       return null;
   }
