@@ -24,9 +24,9 @@ export interface FileFieldProps {
   error?: string;
   showError?: boolean;
   multiple?: boolean;
-  pressToWantText: string;
-  uploadOrDragFilesHereText: string;
-  fileTypesAndMaxSizeText: string;
+  pressToWantText?: string;
+  uploadOrDragFilesHereText?: string;
+  fileTypesAndMaxSizeText?: string;
   maxFileSizeMB?: number;
   availableMimeTypes?: string[];
   availableExtensionsTypes?: string[];
