@@ -1,40 +1,10 @@
 import { map } from 'lodash';
 import { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { handleError } from '../../utils/functions';
-import LoaderComponent from '../other/LoaderComponent';
-import FieldWrapper from './components/FieldWrapper';
-import { device } from 'src/utils';
+import { bytesToMb, device, validateFileSizes, validateFileTypes } from '../utils';
 import Icon from './common/Icons';
-
-export const bytesToMb = (bytes: number) => {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-  if (bytes === 0) return 'n/a';
-
-  const sizeArrayIndex = parseInt(`${Math.floor(Math.log(bytes) / Math.log(1024))}`, 10);
-  if (sizeArrayIndex === 0) return `${bytes} ${sizes[sizeArrayIndex]})`;
-  return `${(bytes / 1024 ** sizeArrayIndex).toFixed(1)} ${sizes[sizeArrayIndex]}`;
-};
-
-export const validateFileSizes = (files: File[]) => {
-  const maxSize = 20;
-  for (let i = 0; i < files.length; i++) {
-    const fileSizeToMb = files[i].size / 1024 / 1024;
-    if (fileSizeToMb > maxSize) {
-      return false;
-    }
-  }
-
-  return true;
-};
-
-export const validateFileTypes = (files: File[], availableMimeTypes: string[]) => {
-  for (let i = 0; i < files.length; i++) {
-    const availableType = availableMimeTypes.find((type) => type == files[i].type);
-    if (!availableType) return false;
-  }
-  return true;
-};
+import LoaderComponent from './common/LoaderComponent';
+import FieldWrapper from './common/FieldWrapper';
 
 export type FileProps = {
   url: string;
@@ -43,30 +13,28 @@ export type FileProps = {
   main?: boolean;
 };
 
+export type FileExtension = {
+  extension: string;
+  mime: string;
+};
+
 export interface FileFieldProps {
+  handleError?: (error: 'fileSizesExceeded' | 'badFileTypes') => void;
   onDelete?: (files: File[]) => void;
   onUpload?: (files: File[]) => Promise<void>;
   files: FileProps[] | File[] | any[];
   loading?: boolean;
-  label: string;
-  disabled: boolean;
+  label?: string;
+  disabled?: boolean;
   error?: string;
   showError?: boolean;
   multiple?: boolean;
-  pressToWant: string;
-  uploadOrDragFilesHere: string;
-  fileTypesAndMaxSize: string;
-}
-
-export const availableMimeTypes = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'];
-
-const availableExtensionsTypes = ['.png', '.jpg', '.jpeg', '.pdf'];
-
-export enum FileExtensionTypes {
-  PNG = '.png',
-  JPG = '.jpg',
-  JPEG = '.jpeg',
-  PDF = '.pdf',
+  pressToWantText: string;
+  uploadOrDragFilesHereText: string;
+  fileTypesAndMaxSizeText: string;
+  maxFileSizeMB?: number;
+  availableMimeTypes?: string[];
+  availableExtensionsTypes?: string[];
 }
 
 const DragAndDropUploadField = ({
@@ -75,12 +43,16 @@ const DragAndDropUploadField = ({
   multiple = true,
   files,
   label,
-  disabled,
+  disabled = false,
   error,
   showError = false,
-  pressToWant = 'Paspauskite norėdami',
-  uploadOrDragFilesHere = 'įkelti arba įtempkite failus čia',
-  fileTypesAndMaxSize = 'PDF, PNG, JPEG, JPG (maks. 20MB)',
+  pressToWantText = 'Paspauskite norėdami',
+  uploadOrDragFilesHereText = 'įkelti arba įtempkite failus čia',
+  fileTypesAndMaxSizeText = 'PDF, PNG, JPEG, JPG (maks. 20MB)',
+  handleError = () => {},
+  maxFileSizeMB = 20,
+  availableMimeTypes = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'],
+  availableExtensionsTypes = ['.png', '.jpg', '.jpeg', '.pdf'],
 }: FileFieldProps) => {
   const inputRef = useRef<any>(null);
 
@@ -89,7 +61,7 @@ const DragAndDropUploadField = ({
   const handleSetFiles = async (currentFiles: File[]) => {
     const isValidFileTypes = validateFileTypes(currentFiles, availableMimeTypes);
     if (!isValidFileTypes) return handleError('badFileTypes');
-    const isValidFileSizes = validateFileSizes(currentFiles);
+    const isValidFileSizes = validateFileSizes(currentFiles, maxFileSizeMB);
     if (!isValidFileSizes) return handleError('fileSizesExceeded');
 
     if (onUpload) {
@@ -149,10 +121,10 @@ const DragAndDropUploadField = ({
               onChange={handleChange}
             />
             <TextRow>
-              ,<BoldText>{pressToWant}</BoldText>
-              <Text>{uploadOrDragFilesHere}</Text>
+              <BoldText>{pressToWantText}</BoldText>
+              <Text>{uploadOrDragFilesHereText}</Text>
             </TextRow>
-            <Text>{fileTypesAndMaxSize}</Text>
+            <Text>{fileTypesAndMaxSizeText}</Text>
           </UploadFileContainer>
         )}
       </FieldWrapper>
