@@ -286,3 +286,31 @@ export const cleanObj = (el) => {
 
   return isObject(el) ? internalClean(el) : el;
 };
+
+export const bytesToMb = (bytes: number) => {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes === 0) return 'n/a';
+
+  const sizeArrayIndex = parseInt(`${Math.floor(Math.log(bytes) / Math.log(1024))}`, 10);
+  if (sizeArrayIndex === 0) return `${bytes} ${sizes[sizeArrayIndex]})`;
+  return `${(bytes / 1024 ** sizeArrayIndex).toFixed(1)} ${sizes[sizeArrayIndex]}`;
+};
+
+export const validateFileSizes = (files: File[], maxSize: number) => {
+  for (let i = 0; i < files.length; i++) {
+    const fileSizeToMb = files[i].size / 1024 / 1024;
+    if (fileSizeToMb > maxSize) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+export const validateFileTypes = (files: File[], availableMimeTypes: string[]) => {
+  for (let i = 0; i < files.length; i++) {
+    const availableType = availableMimeTypes.find((type) => type == files[i].type);
+    if (!availableType) return false;
+  }
+  return true;
+};
