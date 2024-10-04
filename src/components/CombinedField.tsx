@@ -140,12 +140,11 @@ const IconContainer = styled.div<{ $disabled: boolean }>`
 const OptionsWrapper = styled.div``;
 const SelectedOption = styled.div<{ $width?: number }>`
   display: flex;
-  padding-left: 20px;
-  gap: 8px;
+  justify-content: space-between;
+  padding: 0 9px 0 16px;
   width: ${({ $width }) => $width || 8}rem;
   height: ${({ theme }) => `${theme.height?.fields || 5.6}rem`};
   border-left: ${({ theme }) => `1px solid ${theme.colors.border}`};
-  justify-content: center;
   align-items: center;
   cursor: pointer;
 `;
