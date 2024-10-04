@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import StoryWrapper from '../src/components/common/StoryWrapper';
+import { useState } from 'react';
 import CombinedField from '../src/components/CombinedField';
+import StoryWrapper from '../src/components/common/StoryWrapper';
 
 const meta: Meta<typeof CombinedField> = {
   component: CombinedField,
@@ -13,11 +14,12 @@ type Story = StoryObj<typeof CombinedField>;
 export const Field: Story = {
   name: 'CombinedField',
   render: () => {
+    const [value, setValue] = useState({ input: '', option: 'kg' });
     return (
       <StoryWrapper>
         <CombinedField
-          onChange={(e) => alert(JSON.stringify(e))}
-          value={{ input: '', option: 'kg' }}
+          onChange={setValue}
+          value={value}
           options={['kg', 'l', 'ml']}
           placeholder="4"
           numeric={true}
