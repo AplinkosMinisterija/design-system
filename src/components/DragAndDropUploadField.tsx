@@ -103,7 +103,7 @@ const DragAndDropUploadField = ({
   };
 
   return (
-    <>
+    <Wrapper>
       <FieldWrapper error={error} showError={showError} label={label}>
         {!disabled && (
           <UploadFileContainer
@@ -119,16 +119,23 @@ const DragAndDropUploadField = ({
               multiple={multiple}
               onChange={handleChange}
             />
-            <BigIcon name={IconName.upload} />
-            <TextRow>
-              <BoldText>{text.pressToWant}</BoldText>
-              <Text>{text.uploadOrDragFilesHere}</Text>
-            </TextRow>
-            <Text>{text.fileTypesAndMaxSize}</Text>
+            {uploadLoading ? (
+              <LoaderComponent />
+            ) : (
+              <>
+                <BigIcon name={IconName.upload} />
+                <div>
+                  <TextRow>
+                    <BoldText>{text.pressToWant}</BoldText>
+                    <Text>{text.uploadOrDragFilesHere}</Text>
+                  </TextRow>
+                  <Text>{text.fileTypesAndMaxSize}</Text>
+                </div>
+              </>
+            )}
           </UploadFileContainer>
         )}
       </FieldWrapper>
-      {uploadLoading && <LoaderComponent />}
       {map(files, (file, index) => {
         if (!file) return <></>;
 
@@ -153,9 +160,14 @@ const DragAndDropUploadField = ({
           </FileContainer>
         );
       })}
-    </>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const IconContainer = styled.a`
   margin-top: auto;
@@ -244,13 +256,15 @@ const TextRow = styled.div`
 const UploadFileContainer = styled.div<{ $error: boolean }>`
   cursor: pointer;
   background-color: #eeebe53d;
-  border: 2px dashed ${({ theme, $error }) => ($error ? theme.colors.error : theme.colors.border)};
+  border: 2px dashed ${({ theme, $error }) => ($error ? theme.colors.danger : theme.colors.border)};
   border-radius: 4px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 77px;
+  padding: 8px 0;
+  gap: 4px;
+  min-height: 77px;
 `;
 
 export default DragAndDropUploadField;
