@@ -1,8 +1,9 @@
 import { JSX, useState } from 'react';
-import OptionsContainer from './common/OptionsContainer';
 import styled from 'styled-components';
-import NumericTextField from './NumericTextField';
 import { TextField } from '../index';
+import Icon, { IconName } from './common/Icons';
+import OptionsContainer from './common/OptionsContainer';
+import NumericTextField from './NumericTextField';
 
 export interface CombinedFieldProps {
   value: { input: string; option: string };
@@ -69,6 +70,9 @@ const CombinedField = ({
           $width={optionsWidth}
         >
           {value?.option}
+          <IconContainer>
+            <StyledIcon name={IconName.dropdownArrow} />
+          </IconContainer>
         </SelectedOption>
         <StyledOptionsContainer
           values={options}
@@ -121,14 +125,29 @@ const CombinedField = ({
   );
 };
 
+const StyledIcon = styled(Icon)`
+  color: #cdd5df;
+  font-size: 2.4rem;
+`;
+
+const IconContainer = styled.div<{ $disabled: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+`;
+
 const OptionsWrapper = styled.div``;
 const SelectedOption = styled.div<{ $width?: number }>`
   display: flex;
+  padding-left: 20px;
+  gap: 8px;
   width: ${({ $width }) => $width || 8}rem;
   height: ${({ theme }) => `${theme.height?.fields || 5.6}rem`};
   border-left: ${({ theme }) => `1px solid ${theme.colors.border}`};
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 
 const StyledOptionsContainer = styled(OptionsContainer)<{ $width?: number }>`
