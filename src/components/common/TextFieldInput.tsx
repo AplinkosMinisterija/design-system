@@ -72,6 +72,8 @@ const CustomPlaceholder = styled.div`
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
+  width: 96%;
+  overflow-x: hidden;
 `;
 
 const InputWrapper = styled.div`
