@@ -40,25 +40,47 @@ const TextFieldInput = ({
   return (
     <InputContainer $error={!!error} $height={height} $disabled={disabled || false}>
       {left}
-      <StyledTextInput
-        $selectedValue={selectedValue}
-        onClick={() => (onInputClick ? onInputClick() : null)}
-        readOnly={readOnly}
-        type={type}
-        name={name}
-        autoComplete="off"
-        value={value || ''}
-        onChange={(e: any) => onChange && onChange(e?.target?.value || '')}
-        placeholder={placeholder}
-        disabled={disabled}
-        onFocus={onFocus}
-        inputMode={inputMode}
-        {...rest}
-      />
+      <InputWrapper>
+        {!value && typeof placeholder !== 'string' && (
+          <CustomPlaceholder>{placeholder}</CustomPlaceholder>
+        )}
+
+        <StyledTextInput
+          $selectedValue={selectedValue}
+          onClick={() => (onInputClick ? onInputClick() : null)}
+          readOnly={readOnly}
+          type={type}
+          name={name}
+          autoComplete="off"
+          value={value || ''}
+          onChange={(e: any) => onChange && onChange(e?.target?.value || '')}
+          placeholder={typeof placeholder === 'string' ? placeholder : ''}
+          disabled={disabled}
+          onFocus={onFocus}
+          inputMode={inputMode}
+          {...rest}
+        />
+      </InputWrapper>
       {right}
     </InputContainer>
   );
 };
+
+const CustomPlaceholder = styled.div`
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
+  flex-grow: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+`;
 
 const InputContainer = styled.div<{
   $error: boolean;
