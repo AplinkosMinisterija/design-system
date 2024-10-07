@@ -95,7 +95,13 @@ const SelectField = ({
         }
         onChange={handleOnChange}
         disabled={disabled}
-        placeholder={(value && getOptionLabel(value)) || placeholder}
+        placeholder={
+          value
+            ? getOptionComponent
+              ? getOptionComponent(value)
+              : getOptionLabel(value)
+            : placeholder
+        }
         selectedValue={value}
       />
       <OptionsContainer
