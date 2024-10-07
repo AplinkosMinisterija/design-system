@@ -10,7 +10,7 @@ export interface TextFieldProps {
   height?: number;
   readOnly?: boolean;
   onInputClick?: () => void;
-  placeholder?: string;
+  placeholder?: string | JSX.Element;
   type?: string;
   inputMode?: any;
   selectedValue?: boolean;
