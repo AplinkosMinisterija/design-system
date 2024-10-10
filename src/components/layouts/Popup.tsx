@@ -121,7 +121,7 @@ const Container = styled.div<{ width?: string; $type: PopupType }>`
 const InnerContainer = styled.div<{ $type: PopupType }>`
   background-color: white;
   border: 1px solid #dfdfdf;
-  border-radius: ${({ theme }) => theme.radius.popup || 0.2}rem;
+  border-radius: ${({ theme }) => theme.radius?.popup || 0.2}rem;
   width: 100%;
   height: 100%;
   @media ${device.mobileL} {

@@ -114,10 +114,10 @@ const OptionContainer = styled.div`
 
 const StyledIcon = styled(Icon)<{ $variant: string }>`
   color: ${({ theme, $variant }) =>
-    theme.colors.buttons[$variant]?.icon ||
-    theme.colors.buttons[$variant || 'primary']?.text ||
+    theme.colors.buttons?.[$variant]?.icon ||
+    theme.colors.buttons?.[$variant || 'primary']?.text ||
     '#9aa4b2'};
-  font-size: ${({ theme }) => theme.fontSize.buttons || 1.6}rem;
+  font-size: ${({ theme }) => theme.fontSize?.buttons || 1.6}rem;
   cursor: pointer;
 `;
 
