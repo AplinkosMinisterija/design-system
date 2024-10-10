@@ -77,8 +77,10 @@ const Container = styled.div<{
   display: grid;
   grid-template-columns: repeat(${({ $cols }) => $cols}, 1fr);
   gap: ${({ $gap, theme }) => $gap ?? theme.gap?.buttonMultiSelect ?? 0.8}rem;
-  padding-top: ${({ $labelVisible, $gap }) => ($labelVisible ? ($gap ?? 1.6) : 0)}rem;
-  padding-bottom: ${({ $errorVisible, $gap }) => ($errorVisible ? ($gap ?? 1.6) / 2 : 0)}rem;
+  padding-top: ${({ $labelVisible, theme }) =>
+    $labelVisible ? (theme.padding?.buttonMultiSelect ?? 0.8) : 0}rem;
+  padding-bottom: ${({ $errorVisible, theme }) =>
+    $errorVisible ? (theme.padding?.buttonMultiSelect ?? 0.8) / 2 : 0}rem;
 `;
 
 export default ButtonMultiSelect;

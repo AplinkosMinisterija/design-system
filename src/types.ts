@@ -105,6 +105,7 @@ export interface Theme {
   padding?: {
     buttons?: string;
     mobilePopup?: string;
+    buttonMultiSelect?: number;
   };
   fontSize?: {
     fields: number;
