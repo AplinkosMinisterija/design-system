@@ -142,7 +142,7 @@ const RealativeFieldWrapper = styled(FieldWrapper)`
   position: relative;
 `;
 
-const StyledTreeSelect = styled(TreeSelect)<{ error: boolean }>`
+const StyledTreeSelect = styled(TreeSelect)<{ $error: boolean }>`
   .ant-select-selector,
   .ant-select-selection-search-input {
     height: ${({ theme }) => `${theme.height?.fields || 5.6}rem`} !important;
@@ -156,7 +156,8 @@ const StyledTreeSelect = styled(TreeSelect)<{ error: boolean }>`
   }
 
   .ant-select-selector {
-    border: 1px solid ${({ theme, error }) => (error ? theme.colors.error : theme.colors.border)} !important;
+    border: 1px solid ${({ theme, $error }) =>
+      $error ? theme.colors.error : theme.colors.border} !important;
     border-radius: ${({ theme }) => theme.radius?.fields || 0.4}rem; !important;
     background-color: ${({ theme }) => theme.colors.fields?.background || 'white'};
     color: ${({ theme }) => theme.colors.fields?.text || '#101010'};
