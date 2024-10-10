@@ -1,7 +1,7 @@
 {
   "name": "@aplinkosministerija/design-system",
   "description": "Shared Design System Components for React",
-  "version": "0.0.99",
+  "version": "0.0.100",
   "type": "module",
   "license": "MIT",
   "sideEffects": false,
@@ -85,7 +85,7 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "eslint-plugin-storybook": "^0.6.13",
     "lint-staged": "^15.2.2",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.22.2",
@@ -95,7 +95,7 @@
     "storybook-addon-react-router-v6": "^2.0.10",
     "styled-components": "^6.1.8",
     "typescript": "^5.0.2",
-    "vite": "^5.1.2",
+    "vite": "^5.4.6",
     "vite-plugin-dts": "^3.7.3"
   },
   "eslintConfig": {

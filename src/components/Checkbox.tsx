@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export interface CheckboxProps {
   value?: boolean;
@@ -10,10 +10,13 @@ export interface CheckboxProps {
   error?: boolean;
   className?: string;
   intermediate?: boolean;
+  displayAsButton?: boolean;
+  variant?: string;
+  width?: string;
 }
 
 const Checkbox = ({
-  value,
+  value = false,
   name,
   onChange,
   disabled = false,
@@ -22,44 +25,81 @@ const Checkbox = ({
   error,
   className,
   intermediate,
+  displayAsButton,
+  variant = 'primary',
+  width,
 }: CheckboxProps) => {
   return (
-    <>
+    <Wrapper $width={width} $displayAsButton={displayAsButton}>
       <Container
-        disabled={disabled}
         className={className}
-        onClick={() => {
-          !disabled && onChange(!value);
-        }}
+        $disabled={disabled}
+        $displayAsButton={displayAsButton}
+        $variant={variant}
+        $checked={value}
+        for={name}
       >
         <InnerContainer
-          intermediate={intermediate}
-          disabled={disabled}
-          error={error}
-          checked={value}
+          $intermediate={intermediate}
+          $disabled={disabled}
+          $error={error}
+          $checked={value}
+          $hidden={displayAsButton}
         >
           <CheckBox
             type="checkbox"
+            id={name}
             name={name}
             checked={value || false}
             disabled={disabled}
-            onChange={() => {}} //To prevent console errors
+            onChange={(v) => {
+              onChange(v.target.checked);
+            }}
+            $displayAsButton={displayAsButton}
           />
           <Label checked={value || false} intermediate={intermediate} disabled={disabled} />
         </InnerContainer>
-        <Column>
+        <Column $displayAsButton={displayAsButton}>
           <TextLabel>{label}</TextLabel>
           {description && <Description>{description}</Description>}
         </Column>
       </Container>
-    </>
+    </Wrapper>
   );
 };
 
-const Container = styled.div<{ disabled: boolean }>`
+const Wrapper = styled.div<{ $displayAsButton; $width: string }>`
+  width: ${({ $width, $displayAsButton }) => ($displayAsButton && $width) || 'fit-content'};
+`;
+
+const buttonStyle = css<{ $variant: string; $disabled: boolean; $checked: boolean }>`
+  background-color: ${({ $variant, $checked, theme }) =>
+    ($checked ? theme.colors.buttons?.[$variant]?.checked : undefined) ||
+    theme.colors.buttons?.[$variant]?.background ||
+    '#53B1FD'};
+  color: ${({ $variant, $checked, theme }) =>
+    ($checked ? theme.colors.buttons?.[$variant]?.checkedText : undefined) ||
+    theme.colors.buttons?.[$variant]?.text ||
+    'white'};
+  border: 1px solid
+    ${({ $variant, $checked, theme }) =>
+      ($checked ? theme.colors.buttons?.[$variant]?.checkedBorder : undefined) ||
+      theme.colors.buttons?.[$variant]?.border ||
+      'transparent'};
+  border-radius: ${({ theme }) => theme.radius?.buttons || 0.4}rem;
+  padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
+`;
+
+const Container = styled.label<{
+  $displayAsButton: boolean;
+  $variant: string;
+  $disabled: boolean;
+  $checked: boolean;
+}>`
   display: grid;
-  grid-template-columns: 28px 1fr;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  grid-template-columns: ${({ $displayAsButton }) => ($displayAsButton ? '1fr' : '28px 1fr')};
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  ${({ $displayAsButton }) => ($displayAsButton ? buttonStyle : '')}
 `;
 
 const TextLabel = styled.div`
@@ -74,33 +114,36 @@ const Description = styled.div`
   color: #4b5565;
 `;
 
-const Column = styled.div`
+const Column = styled.div<{ $displayAsButton: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 4px;
   justify-content: center;
+  align-items: ${({ $displayAsButton }) => ($displayAsButton ? 'center' : 'flex-start')};
 `;
 
 const InnerContainer = styled.div<{
-  checked?: boolean;
-  error?: boolean;
-  disabled?: boolean;
-  intermediate?: boolean;
+  $checked?: boolean;
+  $error?: boolean;
+  $disabled?: boolean;
+  $intermediate?: boolean;
+  $hidden?: boolean;
 }>`
+  visibility: ${({ $hidden }) => ($hidden ? 'hidden' : 'visible')};
   position: relative;
-  width: 18px;
-  height: 18px;
+  width: ${({ $hidden }) => ($hidden ? '0' : '18px')};
+  height: ${({ $hidden }) => ($hidden ? '0' : '18px')};
   border-radius: 2px;
-  background-color: ${({ theme, checked, error, intermediate }) =>
-    checked || intermediate
+  background-color: ${({ theme, $checked, $error, $intermediate }) =>
+    $checked || $intermediate
       ? theme.colors.primary
-      : error
+      : $error
       ? theme.colors.danger
       : theme.colors.border};
-  opacity: ${({ disabled }) => (disabled ? 0.48 : 1)};
+  opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
 `;
 
-const Label = styled.label<{
+const Label = styled.div<{
   disabled: boolean;
   checked: boolean;
   intermediate?: boolean;
@@ -156,10 +199,12 @@ const Label = styled.label<{
     transform: rotate(${({ intermediate }) => `${intermediate ? 0 : -45}deg`});
   }
 `;
-const CheckBox = styled.input<{ disabled: boolean }>`
+
+const CheckBox = styled.input<{ $disabled: boolean; $displayAsButton: boolean }>`
+  visibility: ${({ $displayAsButton }) => ($displayAsButton ? 'hidden' : 'visible')};
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: ${({ $displayAsButton }) => ($displayAsButton ? '0' : '20px')};
+  height: ${({ $displayAsButton }) => ($displayAsButton ? '0' : '20px')};
   top: -4px;
   left: -4px;
   z-index: 1;

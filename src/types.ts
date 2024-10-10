@@ -13,6 +13,9 @@ export interface ButtonColors {
     background: string;
     text: string;
   };
+  checked?: string;
+  checkedText?: string;
+  checkedBorder?: string;
   [key: string]: any;
 }
 export interface FieldsColors {
@@ -114,6 +117,9 @@ export interface Theme {
     fieldLabels?: number;
     buttons?: number;
     [key: string]: any;
+  };
+  gap?: {
+    buttonMultiSelect?: number;
   };
   [key: string]: any;
 }
