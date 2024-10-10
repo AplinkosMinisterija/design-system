@@ -40,7 +40,7 @@ const Checkbox = ({
         $variant={variant}
         $checked={value}
         $radius={radius}
-        for={name}
+        htmlFor={name}
       >
         <InnerContainer
           $intermediate={intermediate}
