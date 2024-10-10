@@ -13,6 +13,7 @@ export interface CheckboxProps {
   displayAsButton?: boolean;
   variant?: string;
   width?: string;
+  radius?: number;
 }
 
 const Checkbox = ({
@@ -28,6 +29,7 @@ const Checkbox = ({
   displayAsButton,
   variant = 'primary',
   width,
+  radius,
 }: CheckboxProps) => {
   return (
     <Wrapper $width={width} $displayAsButton={displayAsButton}>
@@ -37,6 +39,7 @@ const Checkbox = ({
         $displayAsButton={displayAsButton}
         $variant={variant}
         $checked={value}
+        $radius={radius}
         for={name}
       >
         <InnerContainer
@@ -72,7 +75,12 @@ const Wrapper = styled.div<{ $displayAsButton; $width: string }>`
   width: ${({ $width, $displayAsButton }) => ($displayAsButton && $width) || 'fit-content'};
 `;
 
-const buttonStyle = css<{ $variant: string; $disabled: boolean; $checked: boolean }>`
+const buttonStyle = css<{
+  $variant: string;
+  $disabled: boolean;
+  $checked: boolean;
+  $radius: number;
+}>`
   background-color: ${({ $variant, $checked, theme }) =>
     ($checked ? theme.colors.buttons?.[$variant]?.checked : undefined) ||
     theme.colors.buttons?.[$variant]?.background ||
@@ -86,7 +94,7 @@ const buttonStyle = css<{ $variant: string; $disabled: boolean; $checked: boolea
       ($checked ? theme.colors.buttons?.[$variant]?.checkedBorder : undefined) ||
       theme.colors.buttons?.[$variant]?.border ||
       'transparent'};
-  border-radius: ${({ theme }) => theme.radius?.buttons || 0.4}rem;
+  border-radius: ${({ theme, $radius }) => $radius || theme.radius?.buttons || 0.4}rem;
   padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
 `;
 
@@ -95,6 +103,7 @@ const Container = styled.label<{
   $variant: string;
   $disabled: boolean;
   $checked: boolean;
+  $radius: number;
 }>`
   display: grid;
   grid-template-columns: ${({ $displayAsButton }) => ($displayAsButton ? '1fr' : '28px 1fr')};
@@ -138,8 +147,8 @@ const InnerContainer = styled.div<{
     $checked || $intermediate
       ? theme.colors.primary
       : $error
-      ? theme.colors.danger
-      : theme.colors.border};
+        ? theme.colors.danger
+        : theme.colors.border};
   opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
 `;
 

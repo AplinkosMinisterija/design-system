@@ -10,6 +10,7 @@ const ButtonMultiSelect = ({
   variant,
   name,
   gap,
+  radius,
 }: {
   options: string[];
   values: string[];
@@ -19,6 +20,7 @@ const ButtonMultiSelect = ({
   variant?: string;
   name?: string;
   gap?: number;
+  radius?: number;
 }) => {
   const handleSelect = (option, selected) => {
     let updatedValues = values;
@@ -43,6 +45,7 @@ const ButtonMultiSelect = ({
             displayAsButton={true}
             variant={variant}
             width={'100%'}
+            radius={radius}
             value={values?.includes(option)}
           />
         );

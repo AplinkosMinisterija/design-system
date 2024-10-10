@@ -31,6 +31,7 @@ const StoryComponent = () => {
           test7: 'Sekmadienis',
         }}
         variant={ButtonVariants.OUTLINE}
+        radius={1.2}
       />
     </StoryWrapper>
   );
