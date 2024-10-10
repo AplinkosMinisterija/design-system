@@ -59,7 +59,7 @@ const MultiSelectField = ({
     <FieldWrapper onClick={handleToggleSelect} label={label} error={error} handleBlur={handleBlur}>
       <MultiTextField
         values={values}
-        input={input}
+        input={input || ''}
         error={error}
         onRemove={({ index }) => {
           handleRemove(index, onChange, values);

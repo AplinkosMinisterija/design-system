@@ -151,14 +151,14 @@ const SelectedOption = styled.div<{ $width?: number }>`
 
 const StyledOptionsContainer = styled(OptionsContainer)<{ $width?: number }>`
   width: ${({ $width }) => $width || 8}rem;
-  font-size: ${({ theme }) => theme.fontSize.fields || 1.6}rem;
+  font-size: ${({ theme }) => theme.fontSize?.fields || 1.6}rem;
 `;
 
 const Option = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-  font-size: ${({ theme }) => theme.fontSize.fields || 1.6}rem;
+  font-size: ${({ theme }) => theme.fontSize?.fields || 1.6}rem;
 `;
 
 export default CombinedField;

@@ -119,7 +119,9 @@ const InputContainer = styled.div<{
     border-color: ${({ theme }) =>
       theme.colors.fields?.borderFocus || theme.colors.fields?.border || '#d4d5de'};
     box-shadow: ${({ theme }) =>
-      theme.colors.fields?.borderFocus ? `0 0 0 4px ${theme.colors.fields.borderFocus}33` : 'none'};
+      theme.colors.fields?.borderFocus
+        ? `0 0 0 4px ${theme.colors.fields?.borderFocus}33`
+        : 'none'};
   }
   width: 100%;
 `;
@@ -181,7 +183,7 @@ const SimpleCard = styled.label<{ disabled: boolean }>`
   border-radius: 2px;
   color: ${({ theme }) => theme.colors.fields?.tagText || '#333333'};
   background-color: ${({ theme }) => theme.colors.fields?.tag || '#e8eeef'};
-  border-radius: ${({ theme }) => theme.radius.multiSelectFieldTag || 0.2}rem;
+  border-radius: ${({ theme }) => theme.radius?.multiSelectFieldTag || 0.2}rem;
   display: flex;
   justify-content: center;
   align-items: center;

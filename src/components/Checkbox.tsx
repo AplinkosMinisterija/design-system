@@ -6,6 +6,7 @@ export interface CheckboxProps {
   onChange: (value: boolean) => void;
   disabled?: boolean;
   label?: any;
+  description?: string;
   error?: boolean;
   className?: string;
   intermediate?: boolean;
@@ -17,6 +18,7 @@ const Checkbox = ({
   onChange,
   disabled = false,
   label,
+  description,
   error,
   className,
   intermediate,
@@ -45,7 +47,10 @@ const Checkbox = ({
           />
           <Label checked={value || false} intermediate={intermediate} disabled={disabled} />
         </InnerContainer>
-        <TextLabel>{label}</TextLabel>
+        <Column>
+          <TextLabel>{label}</TextLabel>
+          {description && <Description>{description}</Description>}
+        </Column>
       </Container>
     </>
   );
@@ -59,8 +64,21 @@ const Container = styled.div<{ disabled: boolean }>`
 
 const TextLabel = styled.div`
   text-align: left;
-  font-size: 1.4rem;
+  font-size: ${({ theme }) => theme.fonts?.fieldLabels || 1.4}rem;
   color: #4b5565;
+`;
+
+const Description = styled.div`
+  text-align: left;
+  font-size: ${({ theme }) => theme.fonts?.fieldLabels - 0.2 || 1.2}rem;
+  color: #4b5565;
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
 `;
 
 const InnerContainer = styled.div<{
@@ -77,8 +95,8 @@ const InnerContainer = styled.div<{
     checked || intermediate
       ? theme.colors.primary
       : error
-        ? theme.colors.danger
-        : theme.colors.border};
+      ? theme.colors.danger
+      : theme.colors.border};
   opacity: ${({ disabled }) => (disabled ? 0.48 : 1)};
 `;
 
