@@ -32,7 +32,7 @@ const FieldWrapper = ({
       tabIndex={-1}
       onBlur={handleBlur}
       className={className}
-      padding={padding}
+      $padding={padding}
       onClick={onClick}
     >
       <LabelRow>

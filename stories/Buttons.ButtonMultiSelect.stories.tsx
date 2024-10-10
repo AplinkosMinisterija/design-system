@@ -18,6 +18,7 @@ const StoryComponent = () => {
   return (
     <StoryWrapper>
       <ButtonMultiSelect
+        label={'Pasirinkite darbo dienas'}
         options={['test1', 'test2', 'test3', 'test4', 'test5', 'test6', 'test7']}
         values={selected}
         onChange={setSelected}
@@ -32,6 +33,7 @@ const StoryComponent = () => {
         }}
         variant={ButtonVariants.OUTLINE}
         radius={1.2}
+        gap={1.6}
       />
     </StoryWrapper>
   );
