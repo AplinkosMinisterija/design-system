@@ -60,10 +60,10 @@ const Checkbox = ({
             }}
             $displayAsButton={displayAsButton}
           />
-          <Label checked={value || false} intermediate={intermediate} disabled={disabled} />
+          <CheckMark checked={value || false} intermediate={intermediate} disabled={disabled} />
         </InnerContainer>
         <Column $displayAsButton={displayAsButton}>
-          <TextLabel>{label}</TextLabel>
+          <Label>{label}</Label>
           {description && <Description>{description}</Description>}
         </Column>
       </Container>
@@ -111,7 +111,7 @@ const Container = styled.label<{
   ${({ $displayAsButton }) => ($displayAsButton ? buttonStyle : '')}
 `;
 
-const TextLabel = styled.div`
+const Label = styled.div`
   text-align: left;
   font-size: ${({ theme }) => theme.fonts?.fieldLabels || 1.4}rem;
   color: #4b5565;
@@ -152,7 +152,7 @@ const InnerContainer = styled.div<{
   opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
 `;
 
-const Label = styled.div<{
+const CheckMark = styled.div<{
   disabled: boolean;
   checked: boolean;
   intermediate?: boolean;
