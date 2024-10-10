@@ -36,6 +36,7 @@ export const theme: Theme = {
         text: 'white',
         border: 'transparent',
         hover: '#a9d8fd',
+        checked: '#008bff',
       },
       [ButtonVariants.SECONDARY]: {
         background: 'white',
@@ -43,6 +44,7 @@ export const theme: Theme = {
         border: 'transparent',
         hover: '#53B1FD',
         hoverText: 'white',
+        checked: '#a9d8fd',
       },
       [ButtonVariants.OUTLINE]: {
         background: 'transparent',
@@ -51,6 +53,9 @@ export const theme: Theme = {
         hover: 'transparent',
         hoverText: '#525469',
         hoverBorder: '#525469',
+        checked: '#a9d8fd',
+        checkedBorder: '#53B1FD',
+        checkedText: '#525469',
       },
       [ButtonVariants.TRANSPARENT]: {
         background: 'transparent',
@@ -58,6 +63,7 @@ export const theme: Theme = {
         border: 'transparent',
         hover: 'transparent',
         hoverText: '#53B1FD',
+        checkedText: '#008bff',
       },
       [ButtonVariants.COLUMNS]: {
         background: 'white',
@@ -70,6 +76,8 @@ export const theme: Theme = {
           text: 'white',
           background: '#53B1FD',
         },
+        checkedText: '#53B1FD',
+        checkedBorder: '#53B1FD',
       },
     },
     fields: {
@@ -142,6 +150,9 @@ export const theme: Theme = {
     fields: 400,
     fieldLabels: 400,
     buttons: 400,
+  },
+  gap: {
+    buttonMultiSelect: 1.2,
   },
 };
 
