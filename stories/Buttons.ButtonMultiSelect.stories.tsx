@@ -34,6 +34,8 @@ const StoryComponent = () => {
         variant={ButtonVariants.OUTLINE}
         radius={1.2}
         gap={1.6}
+        error={'Pasirinkite bent vieną  darbo dieną'}
+        showError={true}
       />
     </StoryWrapper>
   );

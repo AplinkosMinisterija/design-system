@@ -13,6 +13,8 @@ const ButtonMultiSelect = ({
   gap,
   radius,
   label,
+  error,
+  showError,
 }: {
   options: string[];
   values: string[];
@@ -24,6 +26,8 @@ const ButtonMultiSelect = ({
   gap?: number;
   radius?: number;
   label?: string;
+  error?: string;
+  showError?: boolean;
 }) => {
   const handleSelect = (option, selected) => {
     let updatedValues = values;
@@ -36,8 +40,13 @@ const ButtonMultiSelect = ({
   };
 
   return (
-    <FieldWrapper label={label}>
-      <Container $cols={columns} $gap={gap} $labelVisible={!!label}>
+    <FieldWrapper label={label} error={error} showError={showError}>
+      <Container
+        $cols={columns}
+        $gap={gap}
+        $labelVisible={!!label}
+        $errorVisible={!!error && !!showError}
+      >
         {options.map((option) => {
           return (
             <Checkbox
@@ -59,11 +68,17 @@ const ButtonMultiSelect = ({
   );
 };
 
-const Container = styled.div<{ $cols: number; $gap: number; $labelVisible: boolean }>`
+const Container = styled.div<{
+  $cols: number;
+  $gap: number;
+  $labelVisible: boolean;
+  $errorVisible: boolean;
+}>`
   display: grid;
   grid-template-columns: repeat(${({ $cols }) => $cols}, 1fr);
-  gap: ${({ $gap, theme }) => $gap || theme.gap?.buttonMultiSelect || 0.8}rem;
-  padding-top: ${({ $labelVisible, $gap }) => ($labelVisible ? $gap || 1.6 : 0)}rem;
+  gap: ${({ $gap, theme }) => $gap ?? theme.gap?.buttonMultiSelect ?? 0.8}rem;
+  padding-top: ${({ $labelVisible, $gap }) => ($labelVisible ? ($gap ?? 1.6) : 0)}rem;
+  padding-bottom: ${({ $errorVisible, $gap }) => ($errorVisible ? ($gap ?? 1.6) / 2 : 0)}rem;
 `;
 
 export default ButtonMultiSelect;
