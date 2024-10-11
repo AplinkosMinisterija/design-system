@@ -93,10 +93,10 @@ export interface ThemeColors {
 export interface Theme {
   colors: ThemeColors;
   radius?: {
-    fields: number;
-    buttons: number;
-    multiSelectFieldTag: number;
-    checkBoxButton: number;
+    fields?: number;
+    buttons?: number;
+    multiSelectFieldTag?: number;
+    checkBoxButton?: number;
     [key: string]: any;
   };
   height?: {
