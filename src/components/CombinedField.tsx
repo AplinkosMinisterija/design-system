@@ -83,6 +83,7 @@ const CombinedField = ({
           handleClick={(option) => {
             handleChange({ option: getOptionValue ? getOptionValue(option) : option });
           }}
+          $width={optionsWidth}
         />
       </OptionsWrapper>
     );

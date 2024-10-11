@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import Checkbox from './Checkbox';
 import { FieldWrapper } from '../index';
+// @ts-ignore
+import React from 'react';
 
 const ButtonMultiSelect = ({
   options,
@@ -16,7 +18,10 @@ const ButtonMultiSelect = ({
   error,
   showError,
   disabled,
-}: {
+  padding,
+  className,
+  buttonWidth,
+}: React.FC<{
   options: string[];
   values: string[];
   onChange: (data: string[]) => void;
@@ -30,7 +35,9 @@ const ButtonMultiSelect = ({
   error?: string;
   showError?: boolean;
   disabled?: boolean;
-}) => {
+  padding?: string;
+  buttonWidth?: string;
+}>) => {
   const handleSelect = (option, selected) => {
     let updatedValues = values;
     if (selected) {
@@ -42,7 +49,13 @@ const ButtonMultiSelect = ({
   };
 
   return (
-    <FieldWrapper label={label} error={error} showError={showError}>
+    <FieldWrapper
+      label={label}
+      error={error}
+      showError={showError}
+      padding={padding}
+      className={className}
+    >
       <Container
         $cols={columns}
         $gap={gap}
@@ -59,7 +72,7 @@ const ButtonMultiSelect = ({
               label={labels?.[option] || option}
               displayAsButton={true}
               variant={variant}
-              width={'100%'}
+              width={buttonWidth}
               radius={radius}
               value={values?.includes(option)}
               disabled={disabled}
@@ -77,13 +90,10 @@ const Container = styled.div<{
   $labelVisible: boolean;
   $errorVisible: boolean;
 }>`
-  display: grid;
-  grid-template-columns: repeat(${({ $cols }) => $cols}, 1fr);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: ${({ $gap, theme }) => $gap ?? theme.gap?.buttonMultiSelect ?? 0.8}rem;
-  padding-top: ${({ $labelVisible, theme }) =>
-    $labelVisible ? (theme.padding?.buttonMultiSelect ?? 0.8) : 0}rem;
-  padding-bottom: ${({ $errorVisible, theme }) =>
-    $errorVisible ? (theme.padding?.buttonMultiSelect ?? 0.8) / 2 : 0}rem;
 `;
 
 export default ButtonMultiSelect;
