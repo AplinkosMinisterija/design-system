@@ -91,11 +91,14 @@ const buttonStyle = css<{
     'white'};
   border: 1px solid
     ${({ $variant, $checked, theme }) =>
-      ($checked ? theme.colors.buttons?.[$variant]?.checkedBorder : undefined) ||
-      theme.colors.buttons?.[$variant]?.border ||
-      'transparent'};
-  border-radius: ${({ theme, $radius }) => $radius || theme.radius?.buttons || 0.4}rem;
+      ($checked ? theme.colors.buttons?.[$variant]?.checkedBorder : undefined) ??
+      (theme.colors.buttons?.[$variant]?.border || 'transparent')};
+  border-radius: ${({ theme, $radius }) =>
+    $radius ?? theme.radius?.checkBoxButton ?? theme.radius?.buttons ?? 0.4}rem;
   padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
+  &:hover {
+    opacity: ${({ $disabled }) => ($disabled ? 0.48 : 0.6)};
+  }
 `;
 
 const Container = styled.label<{
@@ -108,6 +111,7 @@ const Container = styled.label<{
   display: grid;
   grid-template-columns: ${({ $displayAsButton }) => ($displayAsButton ? '1fr' : '28px 1fr')};
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
   ${({ $displayAsButton }) => ($displayAsButton ? buttonStyle : '')}
 `;
 

@@ -64,7 +64,7 @@ export interface ProfileSelectorColors {
   [key: string]: any;
 }
 
-interface ThemeColors {
+export interface ThemeColors {
   primary: string;
   secondary: string;
   tertiary: string;
@@ -96,6 +96,7 @@ export interface Theme {
     fields: number;
     buttons: number;
     multiSelectFieldTag: number;
+    checkBoxButton: number;
     [key: string]: any;
   };
   height?: {
