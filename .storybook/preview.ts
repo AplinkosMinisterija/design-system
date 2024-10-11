@@ -130,6 +130,7 @@ export const theme: Theme = {
     buttons: 0.4,
     fields: 0.4,
     multiSelectFieldTag: 0.4,
+    checkBoxButton: 0.4,
     profileSelector: 0.8,
     popup: 1,
   },

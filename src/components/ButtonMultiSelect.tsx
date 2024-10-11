@@ -15,6 +15,7 @@ const ButtonMultiSelect = ({
   label,
   error,
   showError,
+  disabled,
 }: {
   options: string[];
   values: string[];
@@ -28,6 +29,7 @@ const ButtonMultiSelect = ({
   label?: string;
   error?: string;
   showError?: boolean;
+  disabled?: boolean;
 }) => {
   const handleSelect = (option, selected) => {
     let updatedValues = values;
@@ -60,6 +62,7 @@ const ButtonMultiSelect = ({
               width={'100%'}
               radius={radius}
               value={values?.includes(option)}
+              disabled={disabled}
             />
           );
         })}
