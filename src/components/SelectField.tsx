@@ -62,6 +62,19 @@ const SelectField = ({
     value,
   });
 
+  const getPlaceHolder = () => {
+    if (!!value) {
+      if (!!getOptionComponent) {
+        return getOptionComponent(value);
+      }
+      if (!!getOptionLabel) {
+        return getOptionLabel(value);
+      }
+    }
+
+    return placeholder;
+  };
+
   return (
     <FieldWrapper
       onClick={handleToggleSelect}
@@ -95,13 +108,7 @@ const SelectField = ({
         }
         onChange={handleOnChange}
         disabled={disabled}
-        placeholder={
-          value
-            ? getOptionComponent
-              ? getOptionComponent(value)
-              : getOptionLabel(value)
-            : placeholder
-        }
+        placeholder={getPlaceHolder()}
         selectedValue={value}
       />
       <OptionsContainer
