@@ -4,6 +4,8 @@ import { matchPath, useLocation } from 'react-router';
 import { AppRoute, FilterConfig } from '../types';
 import { isArray, isEmpty, isObject, transform } from 'lodash';
 
+export * as Boundaries from './boundaries';
+
 export const device = {
   mobileS: `(max-width: 320px)`,
   mobileM: `(max-width: 425px)`,
