@@ -1,7 +1,7 @@
 {
   "name": "@aplinkosministerija/design-system",
   "description": "Shared Design System Components for React",
-  "version": "0.0.98",
+  "version": "1.0.0",
   "type": "module",
   "license": "MIT",
   "sideEffects": false,
@@ -23,7 +23,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "openapi-ts:boundaries": "openapi-ts -f openapi-ts.boundaries.config.ts"
   },
   "peerDependencies": {
     "react": "^18.2.0",
@@ -48,6 +49,7 @@
     "lodash": "^4.17.21",
     "maplibre-gl": "^4.3.2",
     "numeral": "^2.0.6",
+    "openapi-fetch": "^0.12.2",
     "pmtiles": "^3.0.6",
     "proj4": "^2.11.0",
     "react-datepicker": "^6.9.0",
@@ -63,6 +65,7 @@
   "devDependencies": {
     "@aplinkosministerija/biip-prettier-config": "^1.1.0",
     "@aplinkosministerija/eslint-config-biip-react": "^1.0.0",
+    "@hey-api/openapi-ts": "^0.53.11",
     "@storybook/addon-controls": "^8.0.6",
     "@storybook/addon-essentials": "^7.3.2",
     "@storybook/addon-interactions": "^7.3.2",
@@ -85,7 +88,7 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "eslint-plugin-storybook": "^0.6.13",
     "lint-staged": "^15.2.2",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.22.2",
@@ -95,7 +98,7 @@
     "storybook-addon-react-router-v6": "^2.0.10",
     "styled-components": "^6.1.8",
     "typescript": "^5.0.2",
-    "vite": "^5.1.2",
+    "vite": "^5.4.6",
     "vite-plugin-dts": "^3.7.3"
   },
   "eslintConfig": {

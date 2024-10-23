@@ -14,5 +14,6 @@ const Container = styled.label`
   overflow: hidden;
   text-overflow: ellipsis;
   height: 2.4rem;
+  line-height: 2.4rem;
   margin-bottom: 8px;
 `;

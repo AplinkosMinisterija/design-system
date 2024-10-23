@@ -1,8 +1,12 @@
 import { format } from 'date-fns/format';
 import { useCallback, useEffect, useState } from 'react';
 import { matchPath, useLocation } from 'react-router';
-import { AppRoute, FilterConfig } from './types';
+import { AppRoute, FilterConfig } from '../types';
 import { isArray, isEmpty, isObject, transform } from 'lodash';
+
+import * as Boundaries from './boundaries';
+
+export { Boundaries };
 
 export const device = {
   mobileS: `(max-width: 320px)`,

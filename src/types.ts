@@ -13,6 +13,9 @@ export interface ButtonColors {
     background: string;
     text: string;
   };
+  checked?: string;
+  checkedText?: string;
+  checkedBorder?: string;
   [key: string]: any;
 }
 export interface FieldsColors {
@@ -61,7 +64,7 @@ export interface ProfileSelectorColors {
   [key: string]: any;
 }
 
-interface ThemeColors {
+export interface ThemeColors {
   primary: string;
   secondary: string;
   tertiary: string;
@@ -90,9 +93,10 @@ interface ThemeColors {
 export interface Theme {
   colors: ThemeColors;
   radius?: {
-    fields: number;
-    buttons: number;
-    multiSelectFieldTag: number;
+    fields?: number;
+    buttons?: number;
+    multiSelectFieldTag?: number;
+    checkBoxButton?: number;
     [key: string]: any;
   };
   height?: {
@@ -102,6 +106,7 @@ export interface Theme {
   padding?: {
     buttons?: string;
     mobilePopup?: string;
+    buttonMultiSelect?: number;
   };
   fontSize?: {
     fields: number;
@@ -114,6 +119,9 @@ export interface Theme {
     fieldLabels?: number;
     buttons?: number;
     [key: string]: any;
+  };
+  gap?: {
+    buttonMultiSelect?: number;
   };
   [key: string]: any;
 }

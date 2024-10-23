@@ -242,7 +242,7 @@ const ClearButton = styled.button`
   height: ${({ theme }) => theme.height?.buttons || 4}rem;
   padding: 1.1rem 2rem;
   color: ${({ theme }) => theme.colors.link || '#101010'};
-  font-size: ${({ theme }) => theme.fontSize.link || 1.6}rem;
+  font-size: ${({ theme }) => theme.fontSize?.link || 1.6}rem;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
   text-decoration: underline;

@@ -34,7 +34,8 @@ import TextField from './components/TextField';
 import TimePicker from './components/TimePicker';
 import TreeSelectField from './components/TreeSelectFiled';
 import DragAndDropUploadField from './components/DragAndDropUploadField';
-import CombinedField from './components/CombinedField'
+import CombinedField from './components/CombinedField';
+import ButtonMultiSelect from './components/ButtonMultiSelect';
 
 export {
   BASEMAP_URL,
@@ -81,5 +82,6 @@ export {
   Navigator,
   Popup,
   DragAndDropUploadField,
-    CombinedField
+  CombinedField,
+  ButtonMultiSelect,
 };
