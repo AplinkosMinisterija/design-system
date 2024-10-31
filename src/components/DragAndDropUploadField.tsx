@@ -147,18 +147,20 @@ const DragAndDropUploadField = ({
               <FileName>{file?.name}</FileName>
               <FileSize>{bytesToMb(file.size)}</FileSize>
             </FileInnerContainer>
-            <IconContainer href={file?.url} target="_blank" download={file?.name}>
-              <StyledIcon name={IconName.download} />
-            </IconContainer>
-            {!disabled && (
-              <IconContainer
-                onClick={(e) => {
-                  handleDelete(e, index);
-                }}
-              >
-                {customDeleteIcon || <StyledIcon name={IconName.remove} />}
+            <FileInnerRow>
+              <IconContainer href={file?.url} target="_blank" download={file?.name}>
+                <StyledIcon name={IconName.download} />
               </IconContainer>
-            )}
+              {!disabled && (
+                <IconContainer
+                  onClick={(e) => {
+                    handleDelete(e, index);
+                  }}
+                >
+                  {customDeleteIcon || <StyledIcon name={IconName.remove} />}
+                </IconContainer>
+              )}
+            </FileInnerRow>
           </FileContainer>
         );
       })}
@@ -185,7 +187,7 @@ const StyledIcon = styled(Icon)`
   cursor: pointer;
   font-size: 1.8rem;
   color: #9aa4b2;
-  margin: auto 0 auto 16px;
+  margin: auto 0 auto 0px;
   @media ${device.mobileL} {
     margin: 8px 0 16px 0;
   }
@@ -233,7 +235,7 @@ const Input = styled.input`
 `;
 
 const FileContainer = styled.div<{ opacity?: number }>`
-  margin-top: 4px;
+  margin-top: 8px;
   opacity: ${({ opacity }) => opacity || 1};
   position: relative;
   background-color: white;
@@ -244,6 +246,11 @@ const FileContainer = styled.div<{ opacity?: number }>`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+`;
+
+const FileInnerRow = styled.div`
+  display: flex;
+  gap: 16px;
 `;
 
 const TextRow = styled.div`
