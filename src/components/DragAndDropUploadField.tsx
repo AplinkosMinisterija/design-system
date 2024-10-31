@@ -2,9 +2,9 @@ import { map } from 'lodash';
 import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { bytesToMb, device, validateFileSizes, validateFileTypes } from '../utils';
+import FieldWrapper from './common/FieldWrapper';
 import Icon, { IconName } from './common/Icons';
 import LoaderComponent from './common/LoaderComponent';
-import FieldWrapper from './common/FieldWrapper';
 
 export type FileProps = {
   url: string;
@@ -21,6 +21,7 @@ export interface FileFieldProps {
   loading?: boolean;
   label?: string;
   disabled?: boolean;
+  customDeleteIcon?: JSX.Element | string;
   error?: string;
   showError?: boolean;
   multiple?: boolean;
@@ -38,6 +39,7 @@ const DragAndDropUploadField = ({
   onDelete,
   onUpload,
   multiple = true,
+  customDeleteIcon,
   files,
   label,
   disabled = false,
@@ -154,7 +156,7 @@ const DragAndDropUploadField = ({
                   handleDelete(e, index);
                 }}
               >
-                <StyledIcon name={IconName.remove} />
+                {customDeleteIcon || <StyledIcon name={IconName.remove} />}
               </IconContainer>
             )}
           </FileContainer>
