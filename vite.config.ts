@@ -1,8 +1,8 @@
-import { defineConfig, type PluginOption } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
-import dts from 'vite-plugin-dts';
 import { visualizer } from 'rollup-plugin-visualizer';
+import { defineConfig, type PluginOption } from 'vite';
+import dts from 'vite-plugin-dts';
 
 export default defineConfig({
   build: {
@@ -12,7 +12,13 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'styled-components'],
+      external: [
+        'react',
+        'react-dom',
+        'styled-components',
+        'react-router-dom',
+        '@tanstack/react-query',
+      ],
       output: {
         globals: {
           react: 'React',
