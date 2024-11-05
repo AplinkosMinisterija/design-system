@@ -1,7 +1,7 @@
 {
   "name": "@aplinkosministerija/design-system",
   "description": "Shared Design System Components for React",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "license": "MIT",
   "sideEffects": false,
@@ -31,7 +31,8 @@
     "react-dom": "^18.2.0",
     "react-router": "^6.22.2",
     "react-router-dom": "^6.26.1",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "@tanstack/react-query": "^5.20.5"
   },
   "dependencies": {
     "@mapbox/mapbox-gl-draw": "^1.4.3",
