@@ -1,10 +1,13 @@
+import { BrowserRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import DesignSystemProvider from './DesignSystemProvider';
 
 const StoryWrapper = ({ children }: any) => {
   return (
     <DesignSystemProvider>
-      <InnerContainer>{children}</InnerContainer>
+      <BrowserRouter>
+        <InnerContainer>{children}</InnerContainer>
+      </BrowserRouter>
     </DesignSystemProvider>
   );
 };
