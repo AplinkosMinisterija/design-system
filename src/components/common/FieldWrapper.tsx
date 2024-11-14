@@ -12,6 +12,7 @@ export interface FieldWrapperProps {
   subLabel?: string;
   secondLabel?: JSX.Element;
   children: any;
+  labelButton?: JSX.Element;
 }
 
 const FieldWrapper = ({
@@ -26,6 +27,7 @@ const FieldWrapper = ({
   bottomLabel,
   secondLabel,
   children,
+  labelButton,
 }: FieldWrapperProps) => {
   return (
     <Container
@@ -43,6 +45,7 @@ const FieldWrapper = ({
           </LabelContainer>
         )}
         {secondLabel}
+        {labelButton}
       </LabelRow>
       {children}
       {showError && <ErrorMessage error={error} />}

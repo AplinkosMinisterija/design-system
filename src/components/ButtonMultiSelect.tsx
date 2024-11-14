@@ -21,6 +21,7 @@ const ButtonMultiSelect = ({
   padding,
   className,
   buttonWidth,
+  labelButton,
 }: React.FC<{
   options: string[];
   values: string[];
@@ -37,6 +38,7 @@ const ButtonMultiSelect = ({
   disabled?: boolean;
   padding?: string;
   buttonWidth?: string;
+  labelButton?: JSX.Element;
 }>) => {
   const handleSelect = (option, selected) => {
     let updatedValues = values;
@@ -55,6 +57,7 @@ const ButtonMultiSelect = ({
       showError={showError}
       padding={padding}
       className={className}
+      labelButton={labelButton}
     >
       <Container
         $cols={columns}
@@ -62,9 +65,10 @@ const ButtonMultiSelect = ({
         $labelVisible={!!label}
         $errorVisible={!!error && !!showError}
       >
-        {options.map((option) => {
+        {options.map((option, index) => {
           return (
             <Checkbox
+              key={`button-multi-select${index}`}
               onChange={(selected) => {
                 handleSelect(option, selected);
               }}
