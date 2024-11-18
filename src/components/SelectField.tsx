@@ -22,6 +22,7 @@ export interface SelectFieldProps {
   className?: string;
   placeholder?: string;
   dependantId?: string;
+  clearable?: boolean;
   refreshOptions?: (dependantId?: string) => any;
 }
 
@@ -31,6 +32,7 @@ const SelectField = ({
   name,
   error,
   showError = true,
+  clearable = true,
   placeholder,
   options,
   className,
@@ -79,7 +81,7 @@ const SelectField = ({
         left={left}
         right={
           <RightContainer>
-            {value && !disabled && (
+            {value && clearable && !disabled && (
               <IconContainer
                 $disabled={disabled}
                 onClick={(e) => {
