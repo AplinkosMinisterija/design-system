@@ -81,7 +81,7 @@ const SelectField = ({
         left={left}
         right={
           <RightContainer>
-            {value && clearable && !disabled && (
+            {!!value && !!clearable && !disabled && (
               <IconContainer
                 $disabled={disabled}
                 onClick={(e) => {
