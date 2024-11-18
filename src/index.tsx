@@ -1,12 +1,17 @@
 import AsyncMultiSelectField from './components/AsyncMultiSelectField';
 import AsyncSelectField from './components/AsyncSelectField';
 import Button from './components/Button';
+import ButtonMultiSelect from './components/ButtonMultiSelect';
 import ButtonsGroup from './components/ButtonsGroup';
 import CheckBox from './components/Checkbox';
+import CombinedField from './components/CombinedField';
 import DesignSystemProvider from './components/common/DesignSystemProvider';
 import FieldWrapper from './components/common/FieldWrapper';
+import MultiTextField from './components/common/MultiTextFieldInput';
+import TextFieldInput from './components/common/TextFieldInput';
 import CreatableMultiSelect from './components/CreatableMultiSelect';
 import DatePicker from './components/DatePicker';
+import DragAndDropUploadField from './components/DragAndDropUploadField';
 import ContentLayout from './components/layouts/ContentLayout';
 import DefaultLayout from './components/layouts/DefaultLayout';
 import Modal from './components/layouts/Modal';
@@ -33,9 +38,6 @@ import TextAreaField from './components/TextAreaField';
 import TextField from './components/TextField';
 import TimePicker from './components/TimePicker';
 import TreeSelectField from './components/TreeSelectFiled';
-import DragAndDropUploadField from './components/DragAndDropUploadField';
-import CombinedField from './components/CombinedField';
-import ButtonMultiSelect from './components/ButtonMultiSelect';
 
 export {
   BASEMAP_URL,
@@ -46,6 +48,8 @@ export {
 export * from './types';
 export * from './utils';
 export {
+  MultiTextField,
+  TextFieldInput,
   Button,
   CheckBox,
   Switch,
