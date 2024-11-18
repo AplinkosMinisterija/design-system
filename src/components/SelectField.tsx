@@ -78,7 +78,7 @@ const SelectField = ({
         error={error}
         left={left}
         right={
-          <>
+          <RightContainer>
             {value && !disabled && (
               <IconContainer
                 $disabled={disabled}
@@ -91,7 +91,7 @@ const SelectField = ({
               </IconContainer>
             )}
             <StyledIcon name={IconName.dropdownArrow} />
-          </>
+          </RightContainer>
         }
         onChange={handleOnChange}
         disabled={disabled}
@@ -115,10 +115,14 @@ const SelectField = ({
   );
 };
 
+const RightContainer = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
 const ClearIcon = styled(Icon)<{ $disabled: boolean }>`
   color: #cdd5df;
   font-size: 2.4rem;
-  margin-right: 12px;
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
 `;
 
