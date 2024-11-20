@@ -38,7 +38,7 @@ const Button = ({
         {...rest}
       >
         {left}
-        {loading ? <Loader color="white" /> : children}
+        {loading ? <Loader size={"24"} color="white" /> : children}
         {right}
       </StyledButton>
     </ButtonWrapper>
