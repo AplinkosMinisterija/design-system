@@ -107,8 +107,8 @@ const MobileTable = ({
 
             const expandedItem = (
               <ExpandedColumnContainer key={`tr-td-${i}`}>
-                <ExpandedColumnName>{columns[column]?.label || ' '}</ExpandedColumnName>
-                <ExpandedColumnValue>{row[column] || '-'}</ExpandedColumnValue>
+                <ExpandedColumnName>{columns?.[column]?.label || ' '}</ExpandedColumnName>
+                <ExpandedColumnValue>{row?.[column] || '-'}</ExpandedColumnValue>
               </ExpandedColumnContainer>
             );
 
@@ -153,9 +153,9 @@ const MobileTable = ({
           <TR $checkable={checkable} $expandable={true} $pointer={false} $index={0}>
             <ArrowTh />
             {mainLabels.map((key: any, i: number) => {
-              const column = columns[key];
+              const column = columns?.[key];
               const label = column?.label;
-              const isSelectedKey = key === sortedColumn.key;
+              const isSelectedKey = key === sortedColumn?.key;
               const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
               const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
 
