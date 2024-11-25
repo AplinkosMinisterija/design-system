@@ -21,6 +21,7 @@ export interface NumericTextFieldProps {
   onInputClick?: () => void;
   placeholder?: string;
   wholeNumber?: boolean;
+  negativeNumber?: boolean;
   secondLabel?: JSX.Element;
   subLabel?: string;
 }
@@ -40,6 +41,7 @@ const NumericTextField = ({
   height,
   showError,
   wholeNumber = false,
+  negativeNumber = false,
   onInputClick,
   bottomLabel,
   subLabel,
@@ -55,7 +57,11 @@ const NumericTextField = ({
   };
 
   const handleChange = (input) => {
-    const regex = wholeNumber ? /^[0-9]{0,11}$/ : /^\d{0,100}$|(?=^.{1,10}$)^\d+[.,]\d{0,10}$/;
+    const regex = new RegExp(
+      wholeNumber
+        ? `${negativeNumber ? '-?' : '^'}[0-9]{0,11}$`
+        : `${negativeNumber ? '-?' : '^'}\\d{0,100}$|(?=^.{1,10}$)^\\d+[.,]\\d{0,10}$`,
+    );
 
     if (regex.test(input)) {
       onChange(input.replaceAll(',', '.'));
