@@ -41,6 +41,9 @@ const NumericTextField = ({
   showError,
   wholeNumber = false,
   onInputClick,
+  bottomLabel,
+  subLabel,
+  secondLabel,
 }: NumericTextFieldProps) => {
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
@@ -65,6 +68,9 @@ const NumericTextField = ({
       padding={padding}
       className={className}
       label={label}
+      bottomLabel={bottomLabel}
+      subLabel={subLabel}
+      secondLabel={secondLabel}
       error={error}
       showError={showError}
     >
