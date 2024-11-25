@@ -68,7 +68,7 @@ const MobileTable = ({
   const RenderRow = (row: TableRow, index: number) => {
     const [expand, setExpand] = useState(false);
     return (
-      <MainTR
+      <TR
         $expandable={true}
         $pointer={!!onClick}
         key={`tr-${index}`}
@@ -120,7 +120,7 @@ const MobileTable = ({
               </>
             );
           })}
-      </MainTR>
+      </TR>
     );
   };
 
@@ -150,7 +150,7 @@ const MobileTable = ({
     <TableContainer>
       <CustomTable>
         <THEAD>
-          <MainTR $checkable={checkable} $expandable={true} $pointer={false} $index={0}>
+          <TR $checkable={checkable} $expandable={true} $pointer={false} $index={0}>
             <ArrowTh />
             {mainLabels.map((key: any, i: number) => {
               const column = columns[key];
@@ -178,7 +178,7 @@ const MobileTable = ({
                 </TH>
               );
             })}
-          </MainTR>
+          </TR>
         </THEAD>
 
         <tbody>{generateTableContent()}</tbody>
@@ -278,7 +278,7 @@ const THEAD = styled.thead`
   width: 100%;
 `;
 
-const MainTR = styled.tr<{
+const TR = styled.tr<{
   $index: number;
   $hide_border?: boolean;
   $pointer: boolean;
@@ -290,36 +290,6 @@ const MainTR = styled.tr<{
   display: grid;
   grid-template-columns: 32px 1fr 1fr ${({ $checkable }) => ($checkable ? '40px' : '')};
   align-items: center;
-
-  border-bottom: ${({ $hide_border }) => ($hide_border ? 'none' : '1px solid #cdd5df')} !important;
-  cursor: ${({ $pointer }) => ($pointer ? 'pointer' : 'default')};
-
-  ${({ $index }) =>
-    $index % 2 !== 0 &&
-    `
-    background-color: #F8FAFC;
-  `}
-`;
-
-const TR = styled.tr<{
-  $index: number;
-  $hide_border?: boolean;
-  $pointer: boolean;
-  $expandable: boolean;
-}>`
-  width: 100%;
-  border: none !important;
-  display: grid;
-  grid-template-columns: 32px 1fr 1fr 40px;
-  align-items: center;
-
-  ${({ $expandable }) =>
-    $expandable &&
-    `
-    display: grid;
-    grid-template-columns: 32px 1fr 1fr;
-    align-items: center;
-  `}
 
   border-bottom: ${({ $hide_border }) => ($hide_border ? 'none' : '1px solid #cdd5df')} !important;
   cursor: ${({ $pointer }) => ($pointer ? 'pointer' : 'default')};
