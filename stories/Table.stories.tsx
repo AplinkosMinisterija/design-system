@@ -35,6 +35,7 @@ export const TabsStory: Story = {
     };
 
     const [data, setData] = useState(initData);
+    const [selectedItemsIds, setSelectedRowsIds] = useState([]);
 
     const handleColumnSort = ({ key, direction }) => {
       const sortedData = data.data.sort((a, b) => {
@@ -55,6 +56,10 @@ export const TabsStory: Story = {
       <StoryWrapper>
         <Table
           onColumnSort={handleColumnSort}
+          selectedItemsIds={selectedItemsIds}
+          onSetSelectedItemIds={(ids) => {
+            setSelectedRowsIds(ids);
+          }}
           columns={{
             column1: {
               label: 'Column 1',
@@ -66,6 +71,46 @@ export const TabsStory: Story = {
             },
             column2: {
               label: 'Column 2',
+              mobileOrder: 1,
+              desktopOrder: 1,
+              show: true,
+              visible: true,
+              width: TableItemWidth.LARGE,
+            },
+            column3: {
+              label: 'Column 3',
+              mobileOrder: 1,
+              desktopOrder: 1,
+              show: true,
+              visible: true,
+              width: TableItemWidth.LARGE,
+            },
+            column4: {
+              label: 'Column 4',
+              mobileOrder: 1,
+              desktopOrder: 1,
+              show: true,
+              visible: true,
+              width: TableItemWidth.LARGE,
+            },
+            column5: {
+              label: 'Column 5',
+              mobileOrder: 1,
+              desktopOrder: 1,
+              show: true,
+              visible: true,
+              width: TableItemWidth.LARGE,
+            },
+            column6: {
+              label: 'Column 6',
+              mobileOrder: 1,
+              desktopOrder: 1,
+              show: true,
+              visible: true,
+              width: TableItemWidth.LARGE,
+            },
+            column7: {
+              label: 'Column 7',
               mobileOrder: 1,
               desktopOrder: 1,
               show: true,
