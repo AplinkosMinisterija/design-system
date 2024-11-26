@@ -66,11 +66,12 @@ const CombinedField = ({
       <OptionsWrapper>
         <SelectedOption
           onBlur={handleBlur}
-          onClick={() => setShowSelect(!showSelect)}
+          onClick={() => !disabled && setShowSelect(!showSelect)}
           $width={optionsWidth}
+          $disabled={disabled}
         >
           {value?.option}
-          <IconContainer>
+          <IconContainer $disabled={disabled}>
             <StyledIcon name={IconName.dropdownArrow} />
           </IconContainer>
         </SelectedOption>
@@ -139,15 +140,15 @@ const IconContainer = styled.div<{ $disabled: boolean }>`
 `;
 
 const OptionsWrapper = styled.div``;
-const SelectedOption = styled.div<{ $width?: number }>`
+const SelectedOption = styled.div<{ $width?: number; $disabled: boolean }>`
   display: flex;
   justify-content: space-between;
   padding: 0 9px 0 16px;
   width: ${({ $width }) => $width || 8}rem;
   height: ${({ theme }) => `${theme.height?.fields || 5.6}rem`};
   border-left: ${({ theme }) => `1px solid ${theme.colors.border}`};
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
   align-items: center;
-  cursor: pointer;
 `;
 
 const StyledOptionsContainer = styled(OptionsContainer)<{ $width?: number }>`
