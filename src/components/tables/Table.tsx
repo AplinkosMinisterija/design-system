@@ -17,8 +17,8 @@ export interface TableProps {
   isFilterApplied?: boolean;
   loading?: boolean;
   onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
-  selectedItemIds: (string | number | undefined)[];
-  onSetSelectedItemIds: (ids: (string | number | undefined)[]) => void;
+  selectedItemIds?: (string | number | undefined)[];
+  onSetSelectedItemIds?: (ids: (string | number | undefined)[]) => void;
 }
 
 const Table = ({
@@ -31,7 +31,7 @@ const Table = ({
   loading,
   isFilterApplied = false,
   onColumnSort,
-  selectedItemIds,
+  selectedItemIds = [],
   onSetSelectedItemIds,
 }: TableProps) => {
   const isMobile = useWindowSize(device.mobileL);
