@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Columns, NotFoundInfoProps, TableData } from '../../types';
 import { device, useWindowSize } from '../../utils';
 import LoaderComponent from '../common/LoaderComponent';
@@ -6,7 +7,7 @@ import MobileTable from '../tables/components/MobileTable';
 import TableContainer from '../tables/components/TableContainer';
 import { getActiveColumns } from './components/functions';
 
-export interface LoginLayoutProps {
+export interface TableProps {
   data?: TableData;
   columns: Columns;
   notFoundInfo: NotFoundInfoProps;
@@ -16,6 +17,8 @@ export interface LoginLayoutProps {
   isFilterApplied?: boolean;
   loading?: boolean;
   onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
+  selectedItemIds: (string | number | undefined)[];
+  onSetSelectedItemIds: (ids: (string | number | undefined)[]) => void;
 }
 
 const Table = ({
@@ -28,11 +31,33 @@ const Table = ({
   loading,
   isFilterApplied = false,
   onColumnSort,
-}: LoginLayoutProps) => {
+  selectedItemIds,
+  onSetSelectedItemIds,
+}: TableProps) => {
   const isMobile = useWindowSize(device.mobileL);
-  const activeColumns = getActiveColumns(columns);
+  const [selectedItemIdsSet, setSelectedItemIdsSet] = useState<Set<string | number | undefined>>(
+    new Set(selectedItemIds),
+  );
+
+  useEffect(() => {
+    setSelectedItemIdsSet(new Set(selectedItemIds));
+  }, [selectedItemIds]);
 
   if (loading) return <LoaderComponent />;
+
+  const activeColumns = getActiveColumns(columns);
+
+  const handleToggleItem = (id: string | number | undefined) => {
+    if (!onSetSelectedItemIds) return;
+
+    if (selectedItemIdsSet.has(id)) {
+      selectedItemIdsSet.delete(id);
+    } else {
+      selectedItemIdsSet.add(id);
+    }
+
+    onSetSelectedItemIds(Array.from(selectedItemIdsSet));
+  };
 
   return (
     <TableContainer data={data} pageName={pageName} loading={loading}>
@@ -45,6 +70,9 @@ const Table = ({
           notFoundInfo={notFoundInfo}
           isFilterApplied={isFilterApplied}
           onColumnSort={onColumnSort}
+          handleToggleItem={handleToggleItem}
+          selectedItemIdsSet={selectedItemIdsSet}
+          checkable={!!onSetSelectedItemIds}
         />
       ) : (
         <DesktopTable
@@ -55,6 +83,9 @@ const Table = ({
           notFoundInfo={notFoundInfo}
           isFilterApplied={isFilterApplied}
           onColumnSort={onColumnSort}
+          handleToggleItem={handleToggleItem}
+          selectedItemIdsSet={selectedItemIdsSet}
+          checkable={!!onSetSelectedItemIds}
         />
       )}
     </TableContainer>

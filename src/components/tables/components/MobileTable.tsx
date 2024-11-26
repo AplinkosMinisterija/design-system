@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../../types';
+import CheckBox from '../../Checkbox';
 import Icon, { IconName } from '../../common/Icons';
 import NotFoundInfo from '../../tables/components/NotFoundInfo';
 
@@ -12,10 +13,13 @@ export interface DesktopTableProps {
   customPageName?: string;
   isFilterApplied?: boolean;
   onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
-  onClick?: (item:any) => void;
+  onClick?: (item: any) => void;
   texts?: {
     notFound: string;
   };
+  selectedItemIdsSet: Set<string | number | undefined>;
+  handleToggleItem: (id: string | number | undefined) => void;
+  checkable: boolean;
 }
 
 const MobileTable = ({
@@ -27,10 +31,11 @@ const MobileTable = ({
   onClick,
   onColumnSort,
   texts,
+  selectedItemIdsSet,
+  handleToggleItem,
+  checkable,
 }: DesktopTableProps) => {
-  const keys = Object.keys(columns);
-  const isFirstSmallColumn = columns[keys[0]].width === TableItemWidth.SMALL;
-  const mainLabelsLength = isFirstSmallColumn ? 3 : 2;
+  const mainLabelsLength = 2;
   const mainLabels = Object.keys(columns).slice(0, mainLabelsLength);
   const restLabels = Object.keys(columns).slice(mainLabelsLength);
   const [sortedColumn, setSortedColumn] = useState<{
@@ -62,16 +67,15 @@ const MobileTable = ({
 
   const RenderRow = (row: TableRow, index: number) => {
     const [expand, setExpand] = useState(false);
-
     return (
-      <MainTR
-        $hasSmallColumnLabel={isFirstSmallColumn}
+      <TR
         $expandable={true}
         $pointer={!!onClick}
         key={`tr-${index}`}
         $index={index}
         onClick={() => handleRowClick(row)}
         style={tableRowStyle}
+        $checkable={checkable}
       >
         <RowTD>
           {restLabels?.length ? (
@@ -88,37 +92,35 @@ const MobileTable = ({
         {mainLabels.map((label: any, i: number) => {
           return <TD key={`tr-td-${i}`}>{row[label] || '-'}</TD>;
         })}
+        {checkable && (
+          <TD width={TableItemWidth.SMALL}>
+            <CheckBox
+              value={selectedItemIdsSet.has(row.id)}
+              onChange={() => handleToggleItem(row.id)}
+            />
+          </TD>
+        )}
 
         {expand &&
           restLabels?.map((column: any, i: number) => {
+            const isEven = i % 2 === 0;
+
             const expandedItem = (
               <ExpandedColumnContainer key={`tr-td-${i}`}>
-                <ExpandedColumnName>{columns[column].label || ' '}</ExpandedColumnName>
-                <ExpandedColumnValue>{row[column] || '-'}</ExpandedColumnValue>
+                <ExpandedColumnName>{columns?.[column]?.label || ' '}</ExpandedColumnName>
+                <ExpandedColumnValue>{row?.[column] || '-'}</ExpandedColumnValue>
               </ExpandedColumnContainer>
             );
 
-            if (i % 2 == 0 && isFirstSmallColumn) {
-              return (
-                <>
-                  <RowTD />
-                  <RowTD />
-                  {expandedItem}
-                </>
-              );
-            }
-
-            if (i % 2 == 0) {
-              return (
-                <>
-                  <RowTD />
-                  {expandedItem}
-                </>
-              );
-            }
-            return expandedItem;
+            return (
+              <>
+                {isEven && <RowTD />}
+                {expandedItem}
+                {!isEven && checkable && <RowTD />}
+              </>
+            );
           })}
-      </MainTR>
+      </TR>
     );
   };
 
@@ -148,17 +150,12 @@ const MobileTable = ({
     <TableContainer>
       <CustomTable>
         <THEAD>
-          <MainTR
-            $hasSmallColumnLabel={isFirstSmallColumn}
-            $expandable={true}
-            $pointer={false}
-            $index={0}
-          >
+          <TR $checkable={checkable} $expandable={true} $pointer={false} $index={0}>
             <ArrowTh />
             {mainLabels.map((key: any, i: number) => {
-              const column = columns[key];
+              const column = columns?.[key];
               const label = column?.label;
-              const isSelectedKey = key === sortedColumn.key;
+              const isSelectedKey = key === sortedColumn?.key;
               const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
               const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
 
@@ -181,7 +178,7 @@ const MobileTable = ({
                 </TH>
               );
             })}
-          </MainTR>
+          </TR>
         </THEAD>
 
         <tbody>{generateTableContent()}</tbody>
@@ -281,56 +278,18 @@ const THEAD = styled.thead`
   width: 100%;
 `;
 
-const MainTR = styled.tr<{
-  $index: number;
-  $hide_border?: boolean;
-  $hasSmallColumnLabel?: boolean;
-  $pointer: boolean;
-  $expandable: boolean;
-}>`
-  width: 100%;
-  border: none !important;
-  display: grid;
-  grid-template-columns: 32px 40px 1fr 1fr;
-  align-items: center;
-
-  ${({ $expandable, $hasSmallColumnLabel }) =>
-    $expandable &&
-    `
-    display: grid;
-    grid-template-columns: 32px ${$hasSmallColumnLabel ? '40px' : ''}  1fr 1fr;
-    align-items: center;
-  `}
-
-  border-bottom: ${({ $hide_border }) => ($hide_border ? 'none' : '1px solid #cdd5df')} !important;
-  cursor: ${({ $pointer }) => ($pointer ? 'pointer' : 'default')};
-
-  ${({ $index }) =>
-    $index % 2 !== 0 &&
-    `
-    background-color: #F8FAFC;
-  `}
-`;
-
 const TR = styled.tr<{
   $index: number;
   $hide_border?: boolean;
   $pointer: boolean;
   $expandable: boolean;
+  $checkable: boolean;
 }>`
   width: 100%;
   border: none !important;
   display: grid;
-  grid-template-columns: 32px 40px 1fr 1fr;
+  grid-template-columns: 32px 1fr 1fr ${({ $checkable }) => ($checkable ? '40px' : '')};
   align-items: center;
-
-  ${({ $expandable }) =>
-    $expandable &&
-    `
-    display: grid;
-    grid-template-columns: 32px 1fr 1fr;
-    align-items: center;
-  `}
 
   border-bottom: ${({ $hide_border }) => ($hide_border ? 'none' : '1px solid #cdd5df')} !important;
   cursor: ${({ $pointer }) => ($pointer ? 'pointer' : 'default')};
