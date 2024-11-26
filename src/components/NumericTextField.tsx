@@ -45,17 +45,19 @@ const NumericTextField = ({
   subLabel,
   secondLabel,
 }: NumericTextFieldProps) => {
+  // Ensure value is set to "" if it's falsy
+  const normalizedValue = value === 0 || value ? value.toString() : '';
+
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
-      const inputValue = value?.toString();
-      if (inputValue?.endsWith('.')) {
-        onChange(inputValue.replaceAll('.', ''));
+      if (normalizedValue) {
+        onChange(Number(normalizedValue));
       }
     }
   };
 
-  const handleChange = (input) => {
-    const regex = wholeNumber ? /^[0-9]{0,11}$/ : /^\d{0,100}$|(?=^.{1,10}$)^\d+[.,]\d{0,10}$/;
+  const handleChange = (input = '') => {
+    const regex = wholeNumber ? /^[0-9]{0,11}$/ : /^\d{0,100}$|(?=^.{1,10}$)^\d+[\.\,]\d{0,10}$/;
 
     if (regex.test(input)) {
       onChange(input.replaceAll(',', '.'));
