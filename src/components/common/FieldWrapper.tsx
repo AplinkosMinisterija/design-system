@@ -47,7 +47,7 @@ const FieldWrapper = ({
         {secondLabel}
         {labelButton}
       </LabelRow>
-      {children}
+      <div className="fieldWrapperChildren">{children}</div>
       {showError && <ErrorMessage error={error} />}
       {bottomLabel && <BottomLabel>{bottomLabel}</BottomLabel>}
     </Container>
