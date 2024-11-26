@@ -31,7 +31,7 @@ const Table = ({
   loading,
   isFilterApplied = false,
   onColumnSort,
-  selectedItemIds = [],
+  selectedItemIds,
   onSetSelectedItemIds,
 }: TableProps) => {
   const isMobile = useWindowSize(device.mobileL);

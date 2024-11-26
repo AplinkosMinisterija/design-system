@@ -1,7 +1,7 @@
 {
   "name": "@aplinkosministerija/design-system",
   "description": "Shared Design System Components for React",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "type": "module",
   "license": "MIT",
   "sideEffects": false,
