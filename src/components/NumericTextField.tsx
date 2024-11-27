@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import FieldWrapper from './common/FieldWrapper';
 import TextFieldInput from './common/TextFieldInput';
 
@@ -48,12 +49,12 @@ const NumericTextField = ({
   secondLabel,
 }: NumericTextFieldProps) => {
   // Ensure value is set to "" if it's falsy
-  const normalizedValue = value === 0 || value ? value.toString() : '';
+  const [inputValue, setInputValue] = useState(value?.toString() || '');
 
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
-      if (normalizedValue) {
-        onChange(Number(normalizedValue));
+      if (inputValue) {
+        onChange(Number(inputValue));
       }
     }
   };
@@ -67,7 +68,11 @@ const NumericTextField = ({
     const regex = new RegExp(regexPattern);
 
     if (regex.test(input)) {
-      onChange(input.replaceAll(',', '.'));
+      const fixed = input.replaceAll(',', '.');
+      const number = Number(fixed);
+
+      setInputValue(fixed);
+      onChange(Number.isNaN(number) ? undefined : number);
     }
   };
 
@@ -84,7 +89,7 @@ const NumericTextField = ({
       showError={showError}
     >
       <TextFieldInput
-        value={normalizedValue}
+        value={inputValue}
         name={name}
         error={error}
         left={left}
