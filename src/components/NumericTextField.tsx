@@ -54,6 +54,9 @@ const NumericTextField = ({
       const number = inputValue ? Number(inputValue) : NaN;
       if (!Number.isNaN(number) && number !== 0) {
         onChange(number);
+        if (inputValue.endsWith('.')) {
+          setInputValue(inputValue.replace('.', ''));
+        }
       } else {
         setInputValue('');
         onChange(undefined);
