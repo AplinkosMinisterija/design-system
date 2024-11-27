@@ -21,7 +21,7 @@ const StoryComponent = () => {
         value={value}
         wholeNumber={false}
         negativeNumber={true}
-        bottomLabel={`${value || ''}`}
+        bottomLabel={`${value?.toString() || ''}`}
       />
     </StoryWrapper>
   );
