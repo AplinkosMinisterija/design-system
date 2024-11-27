@@ -48,13 +48,18 @@ const NumericTextField = ({
   subLabel,
   secondLabel,
 }: NumericTextFieldProps) => {
-  // Ensure value is set to "" if it's falsy
   const [inputValue, setInputValue] = useState(value?.toString() || '');
 
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
-      if (inputValue) {
-        onChange(Number(inputValue));
+      const number = Number(inputValue);
+
+      if (!Number.isNaN(number)) {
+        if (inputValue.endsWith('.')) {
+          setInputValue(inputValue.replace('.', ''));
+        }
+      } else {
+        setInputValue('');
       }
     }
   };
