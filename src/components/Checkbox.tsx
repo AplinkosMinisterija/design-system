@@ -58,6 +58,9 @@ const Checkbox = ({
             onChange={(v) => {
               onChange(v.target.checked);
             }}
+            onClick={(e) => {
+              e?.stopPropagation();
+            }}
             $displayAsButton={displayAsButton}
           />
           <CheckMark checked={value || false} intermediate={intermediate} disabled={disabled} />
