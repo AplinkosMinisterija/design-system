@@ -52,7 +52,7 @@ const NumericTextField = ({
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       const number = inputValue ? Number(inputValue) : NaN;
-      if (!Number.isNaN(number) && number !== 0) {
+      if (!Number.isNaN(number)) {
         onChange(number);
         if (inputValue.endsWith('.')) {
           setInputValue(inputValue.replace('.', ''));
