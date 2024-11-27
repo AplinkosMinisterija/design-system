@@ -11,7 +11,7 @@ export interface TableProps {
   data?: TableData;
   columns: Columns;
   notFoundInfo: NotFoundInfoProps;
-  onClick?: (id: string) => void;
+  onClick?: (item: any) => void;
   tableRowStyle?: any;
   pageName?: string;
   isFilterApplied?: boolean;
