@@ -1,5 +1,6 @@
 import FieldWrapper from './common/FieldWrapper';
 import TextFieldInput from './common/TextFieldInput';
+import { useState } from 'react';
 
 export interface NumericTextFieldProps {
   value?: string | number;
@@ -21,6 +22,7 @@ export interface NumericTextFieldProps {
   onInputClick?: () => void;
   placeholder?: string;
   wholeNumber?: boolean;
+  negativeNumber?: boolean;
   secondLabel?: JSX.Element;
   subLabel?: string;
 }
@@ -40,27 +42,44 @@ const NumericTextField = ({
   height,
   showError,
   wholeNumber = false,
+  negativeNumber = false,
   onInputClick,
   bottomLabel,
   subLabel,
   secondLabel,
 }: NumericTextFieldProps) => {
-  // Ensure value is set to "" if it's falsy
-  const normalizedValue = value === 0 || value ? value.toString() : '';
-
+  const [inputValue, setInputValue] = useState(value.toString());
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
-      if (normalizedValue) {
-        onChange(Number(normalizedValue));
+      const number = inputValue ? Number(inputValue) : NaN;
+      if (!Number.isNaN(number) && number !== 0) {
+        onChange(number);
+        if (inputValue.endsWith('.')) {
+          setInputValue(inputValue.replace('.', ''));
+        }
+      } else {
+        setInputValue('');
+        onChange(undefined);
       }
     }
   };
 
-  const handleChange = (input = '') => {
-    const regex = wholeNumber ? /^[0-9]{0,11}$/ : /^\d{0,100}$|(?=^.{1,10}$)^\d+[\.\,]\d{0,10}$/;
+  const handleChange = (input) => {
+    const regex = new RegExp(
+      wholeNumber
+        ? `^${negativeNumber ? '-?' : ''}[0-9]{0,11}$`
+        : `^${negativeNumber ? '-?' : ''}\\d*([.,]\\d*)?$`,
+    );
 
     if (regex.test(input)) {
-      onChange(input.replaceAll(',', '.'));
+      const fixed = input.replaceAll(',', '.');
+      const number = input ? Number(fixed) : NaN;
+      setInputValue(fixed);
+      if (!Number.isNaN(number)) {
+        onChange(number);
+      } else {
+        onChange(undefined);
+      }
     }
   };
 
@@ -77,7 +96,7 @@ const NumericTextField = ({
       showError={showError}
     >
       <TextFieldInput
-        value={value}
+        value={inputValue}
         name={name}
         error={error}
         left={left}
