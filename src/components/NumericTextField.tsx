@@ -74,7 +74,7 @@ const NumericTextField = ({
 
     if (regex.test(input)) {
       const fixed = input.replaceAll(',', '.');
-      const number = Number(fixed);
+      const number = input ? Number(fixed) : NaN;
 
       setInputValue(fixed);
       onChange(Number.isNaN(number) ? undefined : number);
