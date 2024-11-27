@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import FieldWrapper from './common/FieldWrapper';
 import TextFieldInput from './common/TextFieldInput';
-import { useState } from 'react';
 
 export interface NumericTextFieldProps {
   value?: string | number;
@@ -49,35 +49,27 @@ const NumericTextField = ({
   secondLabel,
 }: NumericTextFieldProps) => {
   const [inputValue, setInputValue] = useState(value?.toString() || '');
+
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
-      const number = inputValue ? Number(inputValue) : NaN;
-      if (!Number.isNaN(number)) {
-        if (inputValue.endsWith('.')) {
-          setInputValue(inputValue.replace('.', ''));
-        }
-      } else {
-        setInputValue('');
-      }
+      setInputValue(value?.toString() || '');
     }
   };
 
-  const handleChange = (input) => {
-    const regex = new RegExp(
-      wholeNumber
-        ? `^${negativeNumber ? '-?' : ''}[0-9]{0,11}$`
-        : `^${negativeNumber ? '-?' : ''}\\d*([.,]\\d*)?$`,
-    );
+  const handleChange = (input = '') => {
+    const basePattern = negativeNumber ? '-?' : '';
+    const regexPattern = wholeNumber
+      ? `^${basePattern}[0-9]{0,11}$`
+      : `^${basePattern}\\d*([.,]\\d*)?$`;
+
+    const regex = new RegExp(regexPattern);
 
     if (regex.test(input)) {
       const fixed = input.replaceAll(',', '.');
       const number = input ? Number(fixed) : NaN;
+
       setInputValue(fixed);
-      if (!Number.isNaN(number)) {
-        onChange(number);
-      } else {
-        onChange(undefined);
-      }
+      onChange(Number.isNaN(number) ? undefined : number);
     }
   };
 
