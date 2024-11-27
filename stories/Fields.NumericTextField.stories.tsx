@@ -10,21 +10,23 @@ const meta: Meta<typeof NumericTextField> = {
 
 export default meta;
 type Story = StoryObj<typeof NumericTextField>;
-const component = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+
+const StoryComponent = () => {
   const [value, setValue] = useState(65.99);
+
   return (
     <StoryWrapper>
       <NumericTextField
         onChange={setValue}
         value={value}
-        wholeNumber={true}
+        wholeNumber={false}
         negativeNumber={true}
+        bottomLabel={`${value || ''}`}
       />
     </StoryWrapper>
   );
 };
 export const Field: Story = {
   name: 'NumericTextField',
-  render: component,
+  render: StoryComponent,
 };

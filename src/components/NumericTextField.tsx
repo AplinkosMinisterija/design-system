@@ -1,5 +1,6 @@
 import FieldWrapper from './common/FieldWrapper';
 import TextFieldInput from './common/TextFieldInput';
+import { useState } from 'react';
 
 export interface NumericTextFieldProps {
   value?: string | number;
@@ -47,6 +48,7 @@ const NumericTextField = ({
   subLabel,
   secondLabel,
 }: NumericTextFieldProps) => {
+  const [inputValue, setInputValue] = useState(value);
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       const inputValue = value?.toString();
@@ -59,12 +61,19 @@ const NumericTextField = ({
   const handleChange = (input) => {
     const regex = new RegExp(
       wholeNumber
-        ? `${negativeNumber ? '-?' : '^'}[0-9]{0,11}$`
-        : `${negativeNumber ? '-?' : '^'}\\d{0,100}$|(?=^.{1,10}$)^\\d+[.,]\\d{0,10}$`,
+        ? `^${negativeNumber ? '-?' : ''}[0-9]{0,11}$`
+        : `^${negativeNumber ? '-?' : ''}\\d*([.,]\\d*)?$`,
     );
 
     if (regex.test(input)) {
-      onChange(input.replaceAll(',', '.'));
+      const fixed = input.replaceAll(',', '.');
+      const number = input ? Number(fixed) : NaN;
+      setInputValue(fixed);
+      if (!Number.isNaN(number)) {
+        onChange(number);
+      } else {
+        onChange(undefined);
+      }
     }
   };
 
@@ -81,7 +90,7 @@ const NumericTextField = ({
       showError={showError}
     >
       <TextFieldInput
-        value={value}
+        value={inputValue}
         name={name}
         error={error}
         left={left}
