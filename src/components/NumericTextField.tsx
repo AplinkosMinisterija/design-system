@@ -1,6 +1,5 @@
 import FieldWrapper from './common/FieldWrapper';
 import TextFieldInput from './common/TextFieldInput';
-import { useState } from 'react';
 
 export interface NumericTextFieldProps {
   value?: string | number;
@@ -48,38 +47,27 @@ const NumericTextField = ({
   subLabel,
   secondLabel,
 }: NumericTextFieldProps) => {
-  const [inputValue, setInputValue] = useState(value.toString());
+  // Ensure value is set to "" if it's falsy
+  const normalizedValue = value === 0 || value ? value.toString() : '';
+
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
-      const number = inputValue ? Number(inputValue) : NaN;
-      if (!Number.isNaN(number) && number !== 0) {
-        onChange(number);
-        if (inputValue.endsWith('.')) {
-          setInputValue(inputValue.replace('.', ''));
-        }
-      } else {
-        setInputValue('');
-        onChange(undefined);
+      if (normalizedValue) {
+        onChange(Number(normalizedValue));
       }
     }
   };
 
-  const handleChange = (input) => {
-    const regex = new RegExp(
-      wholeNumber
-        ? `^${negativeNumber ? '-?' : ''}[0-9]{0,11}$`
-        : `^${negativeNumber ? '-?' : ''}\\d*([.,]\\d*)?$`,
-    );
+  const handleChange = (input = '') => {
+    const basePattern = negativeNumber ? '-?' : '';
+    const regexPattern = wholeNumber
+      ? `^${basePattern}[0-9]{0,11}$`
+      : `^${basePattern}\\d*([.,]\\d*)?$`;
+
+    const regex = new RegExp(regexPattern);
 
     if (regex.test(input)) {
-      const fixed = input.replaceAll(',', '.');
-      const number = input ? Number(fixed) : NaN;
-      setInputValue(fixed);
-      if (!Number.isNaN(number)) {
-        onChange(number);
-      } else {
-        onChange(undefined);
-      }
+      onChange(input.replaceAll(',', '.'));
     }
   };
 
@@ -96,7 +84,7 @@ const NumericTextField = ({
       showError={showError}
     >
       <TextFieldInput
-        value={inputValue}
+        value={normalizedValue}
         name={name}
         error={error}
         left={left}
