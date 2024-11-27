@@ -33,7 +33,7 @@ const FieldWrapper = ({
     <Container
       tabIndex={-1}
       onBlur={handleBlur}
-      className={className}
+      className={`${className} fieldWrapper`}
       $padding={padding}
       onClick={onClick}
     >
@@ -47,7 +47,7 @@ const FieldWrapper = ({
         {secondLabel}
         {labelButton}
       </LabelRow>
-      {children}
+      <div className="fieldWrapperChildren">{children}</div>
       {showError && <ErrorMessage error={error} />}
       {bottomLabel && <BottomLabel>{bottomLabel}</BottomLabel>}
     </Container>

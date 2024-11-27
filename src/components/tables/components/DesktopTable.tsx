@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import CheckBox from '../../Checkbox';
 import styled from 'styled-components';
 import Icon, { IconName } from '../../../components/common/Icons';
 import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../../types';
@@ -16,6 +17,9 @@ export interface DesktopTableProps {
   texts?: {
     notFound: string;
   };
+  selectedItemIdsSet: Set<string | number | undefined>;
+  handleToggleItem: (id: string | number | undefined) => void;
+  checkable: boolean;
 }
 
 const DesktopTable = ({
@@ -27,6 +31,9 @@ const DesktopTable = ({
   onClick,
   texts,
   onColumnSort,
+  selectedItemIdsSet,
+  handleToggleItem,
+  checkable,
 }: DesktopTableProps) => {
   const keys = Object.keys(columns);
   const [sortedColumn, setSortedColumn] = useState<{
@@ -77,6 +84,14 @@ const DesktopTable = ({
                     </TD>
                   );
                 })}
+                {checkable && (
+                  <TD width={TableItemWidth.SMALL}>
+                    <CheckBox
+                      value={selectedItemIdsSet.has(row.id)}
+                      onChange={() => handleToggleItem(row.id)}
+                    />
+                  </TD>
+                )}
               </TR>
             );
           })}
