@@ -132,7 +132,9 @@ const MobileTable = ({
     if (isFilterApplied) {
       return (
         <TR $expandable={false} $pointer={false} $hide_border={true} $index={0}>
-          <TdSecond colSpan={mainLabels.length}>{texts?.filteredItemsNotFound || ''}</TdSecond>
+          <TdSecond colSpan={mainLabels.length}>
+            {texts?.filteredItemsNotFound || 'Atsiprašome nieko neradome pagal pasirinktus filtrus'}
+          </TdSecond>
         </TR>
       );
     }

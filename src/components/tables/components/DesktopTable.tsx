@@ -100,7 +100,9 @@ const DesktopTable = ({
     } else if (isFilterApplied) {
       return (
         <TR $pointer={false} $hide_border={true}>
-          <TdSecond colSpan={keys.length}>{texts?.filteredItemsNotFound || ''}</TdSecond>
+          <TdSecond colSpan={keys.length}>
+            {texts?.filteredItemsNotFound || 'Atsiprašome nieko neradome pagal pasirinktus filtrus'}
+          </TdSecond>
         </TR>
       );
     } else {
