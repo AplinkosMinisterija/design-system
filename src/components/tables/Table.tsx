@@ -19,6 +19,9 @@ export interface TableProps {
   onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
   selectedItemIds?: (string | number | undefined)[];
   onSetSelectedItemIds?: (ids: (string | number | undefined)[]) => void;
+  texts?: {
+    filteredItemsNotFound: string;
+  };
 }
 
 const Table = ({
@@ -33,6 +36,7 @@ const Table = ({
   onColumnSort,
   selectedItemIds,
   onSetSelectedItemIds,
+  texts,
 }: TableProps) => {
   const isMobile = useWindowSize(device.mobileL);
   const [selectedItemIdsSet, setSelectedItemIdsSet] = useState<Set<string | number | undefined>>(
@@ -73,6 +77,7 @@ const Table = ({
           handleToggleItem={handleToggleItem}
           selectedItemIdsSet={selectedItemIdsSet}
           checkable={!!onSetSelectedItemIds}
+          texts={texts}
         />
       ) : (
         <DesktopTable
@@ -86,6 +91,7 @@ const Table = ({
           handleToggleItem={handleToggleItem}
           selectedItemIdsSet={selectedItemIdsSet}
           checkable={!!onSetSelectedItemIds}
+          texts={texts}
         />
       )}
     </TableContainer>

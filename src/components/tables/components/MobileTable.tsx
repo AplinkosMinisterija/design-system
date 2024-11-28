@@ -15,7 +15,7 @@ export interface DesktopTableProps {
   onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
   onClick?: (item: any) => void;
   texts?: {
-    notFound: string;
+    filteredItemsNotFound: string;
   };
   selectedItemIdsSet: Set<string | number | undefined>;
   handleToggleItem: (id: string | number | undefined) => void;
@@ -132,7 +132,7 @@ const MobileTable = ({
     if (isFilterApplied) {
       return (
         <TR $expandable={false} $pointer={false} $hide_border={true} $index={0}>
-          <TdSecond colSpan={mainLabels.length}>{texts?.notFound || ''}</TdSecond>
+          <TdSecond colSpan={mainLabels.length}>{texts?.filteredItemsNotFound || ''}</TdSecond>
         </TR>
       );
     }

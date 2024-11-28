@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import CheckBox from '../../Checkbox';
 import styled from 'styled-components';
 import Icon, { IconName } from '../../../components/common/Icons';
 import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../../types';
+import CheckBox from '../../Checkbox';
 import NotFoundInfo from '../../tables/components/NotFoundInfo';
 
 export interface DesktopTableProps {
@@ -15,7 +15,7 @@ export interface DesktopTableProps {
   onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
   onClick?: (item: any) => void;
   texts?: {
-    notFound: string;
+    filteredItemsNotFound: string;
   };
   selectedItemIdsSet: Set<string | number | undefined>;
   handleToggleItem: (id: string | number | undefined) => void;
@@ -100,7 +100,7 @@ const DesktopTable = ({
     } else if (isFilterApplied) {
       return (
         <TR $pointer={false} $hide_border={true}>
-          <TdSecond colSpan={keys.length}>{texts?.notFound || ''}</TdSecond>
+          <TdSecond colSpan={keys.length}>{texts?.filteredItemsNotFound || ''}</TdSecond>
         </TR>
       );
     } else {
