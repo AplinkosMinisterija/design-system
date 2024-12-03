@@ -89,9 +89,6 @@ const MobileTable = ({
             </StyledIconContainer>
           ) : null}
         </RowTD>
-        {mainLabels.map((label: any, i: number) => {
-          return <TD key={`tr-td-${i}`}>{row[label] || '-'}</TD>;
-        })}
         {checkable && (
           <TD width={TableItemWidth.SMALL}>
             <CheckBox
@@ -100,6 +97,9 @@ const MobileTable = ({
             />
           </TD>
         )}
+        {mainLabels.map((label: any, i: number) => {
+          return <TD key={`tr-td-${i}`}>{row[label] || '-'}</TD>;
+        })}
 
         {expand &&
           restLabels?.map((column: any, i: number) => {
@@ -115,8 +115,8 @@ const MobileTable = ({
             return (
               <>
                 {isEven && <RowTD />}
+                {isEven && checkable && <RowTD />}
                 {expandedItem}
-                {!isEven && checkable && <RowTD />}
               </>
             );
           })}
@@ -154,6 +154,7 @@ const MobileTable = ({
         <THEAD>
           <TR $checkable={checkable} $expandable={true} $pointer={false} $index={0}>
             <ArrowTh />
+            {checkable && <ArrowTh />}
             {mainLabels.map((key: any, i: number) => {
               const column = columns?.[key];
               const label = column?.label;
@@ -290,7 +291,7 @@ const TR = styled.tr<{
   width: 100%;
   border: none !important;
   display: grid;
-  grid-template-columns: 32px 1fr 1fr ${({ $checkable }) => ($checkable ? '40px' : '')};
+  grid-template-columns: 32px ${({ $checkable }) => ($checkable ? '40px' : '')} 1fr 1fr;
   align-items: center;
 
   border-bottom: ${({ $hide_border }) => ($hide_border ? 'none' : '1px solid #cdd5df')} !important;
