@@ -75,6 +75,14 @@ const DesktopTable = ({
                 onClick={() => handleRowClick(row)}
                 style={tableRowStyle}
               >
+                {checkable && (
+                  <TD width={TableItemWidth.SMALL}>
+                    <CheckBox
+                      value={selectedItemIdsSet.has(row.id)}
+                      onChange={() => handleToggleItem(row.id)}
+                    />
+                  </TD>
+                )}
                 {keys.map((label, i: number) => {
                   const item = row[label] || '-';
                   const width = columns[label]?.width || TableItemWidth.LARGE;
@@ -84,14 +92,6 @@ const DesktopTable = ({
                     </TD>
                   );
                 })}
-                {checkable && (
-                  <TD width={TableItemWidth.SMALL}>
-                    <CheckBox
-                      value={selectedItemIdsSet.has(row.id)}
-                      onChange={() => handleToggleItem(row.id)}
-                    />
-                  </TD>
-                )}
               </TR>
             );
           })}
@@ -121,6 +121,8 @@ const DesktopTable = ({
       <Table>
         <THEAD>
           <TR $pointer={false}>
+            {checkable && <TH width={TableItemWidth.SMALL} />}
+
             {keys.map((key: any, i: number) => {
               const column = columns[key];
               const label = column?.label;
