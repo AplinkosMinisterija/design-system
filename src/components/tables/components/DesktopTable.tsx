@@ -88,7 +88,7 @@ const DesktopTable = ({
                     <CheckBox
                       value={selectedItemIdsSet.has(row.id)}
                       onChange={() => handleToggleItem(row.id)}
-                      aria-label={`Select row with ID ${row.id}`}
+                      aria-label={`Select row with id ${row.id}`}
                     />
                   </TD>
                 )}
