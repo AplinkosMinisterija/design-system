@@ -43,8 +43,10 @@ const FieldWrapper = ({
       <LabelRow>
         {!!label && (
           <LabelContainer>
-            <Label htmlFor={label}>{label}</Label>
-            {!!subLabel && <SubLabel>{subLabel}</SubLabel>}
+            <Label aria-label={label} htmlFor={label}>
+              {label}
+            </Label>
+            {!!subLabel && <SubLabel aria-label={subLabel}>{subLabel}</SubLabel>}
           </LabelContainer>
         )}
         {secondLabel}

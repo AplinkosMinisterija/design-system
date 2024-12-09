@@ -61,7 +61,7 @@ const Checkbox = ({
           $hidden={displayAsButton}
           role="checkbox"
           aria-checked={ariaChecked}
-          aria-labelledby={inputId}
+          aria-label={inputId}
           aria-describedby={description ? description : undefined}
         >
           <CheckBox

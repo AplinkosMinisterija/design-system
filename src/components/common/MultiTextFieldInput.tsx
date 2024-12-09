@@ -95,7 +95,7 @@ const MultiTextField = ({
         {!disabled && (
           <Input
             id={inputId}
-            aria-labelledby={!values?.length ? `${inputId}-placeholder` : undefined}
+            aria-label={!values?.length ? `${inputId}-placeholder` : undefined}
             onKeyDown={handleKeyDown}
             name={name}
             ref={inputRef}
@@ -103,7 +103,6 @@ const MultiTextField = ({
             disabled={disabled}
             value={input}
             onChange={(e) => handleInputChange(e?.target?.value)}
-            aria-label={label || name}
           />
         )}
       </InnerContainer>
