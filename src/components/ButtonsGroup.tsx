@@ -77,14 +77,19 @@ const StyledButton = styled.button<{
   font-weight: normal;
   font-size: 1.4rem;
   opacity: ${({ disabled }) => (disabled ? 0.48 : 1)};
-  :hover {
+  &:hover {
     opacity: ${({ disabled }) => (disabled ? 0.48 : 0.6)};
   }
+  &:focus {
+    border: 1px solid ${({ theme }) => theme.colors.primary};
+  }
+
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   background-color: ${({ selected, theme }) => (selected ? theme.colors.primary + '1F' : 'white')};
   color: #121926;
   justify-content: center;
   border-width: 1px;
+
   &:first-child {
     border-top-left-radius: ${({ theme }) => theme.radius?.fields || 0}rem;
     border-bottom-left-radius: ${({ theme }) => theme.radius?.fields || 0}rem;

@@ -137,7 +137,7 @@ const Option = styled.div`
   }
 
   &:focus {
-    outline: 2px solid ${({ theme }) => theme.colors.primary || '#000'};
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
   }
 `;
 
