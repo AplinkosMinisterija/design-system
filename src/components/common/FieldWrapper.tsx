@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { ErrorMessage } from './ErrorMessage';
+import { useKeyAction } from './hooks';
 export interface FieldWrapperProps {
   error?: string;
   showError?: boolean;
@@ -18,7 +19,7 @@ export interface FieldWrapperProps {
 const FieldWrapper = ({
   error,
   showError = true,
-  label,
+  label = '',
   className,
   padding = '0',
   onClick,
@@ -29,6 +30,7 @@ const FieldWrapper = ({
   children,
   labelButton,
 }: FieldWrapperProps) => {
+  const handleOnKeyDown = useKeyAction(() => !!onClick && onClick());
   return (
     <Container
       tabIndex={-1}
@@ -36,12 +38,15 @@ const FieldWrapper = ({
       className={`${className} fieldWrapper`}
       $padding={padding}
       onClick={onClick}
+      onKeyDown={handleOnKeyDown()}
     >
       <LabelRow>
         {!!label && (
           <LabelContainer>
-            <Label htmlFor={label}>{label}</Label>
-            {!!subLabel && <SubLabel>{subLabel}</SubLabel>}
+            <Label aria-labelledby={label} htmlFor={label}>
+              {label}
+            </Label>
+            {!!subLabel && <SubLabel aria-labelledby={subLabel}>{subLabel}</SubLabel>}
           </LabelContainer>
         )}
         {secondLabel}

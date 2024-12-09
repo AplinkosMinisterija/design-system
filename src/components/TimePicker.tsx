@@ -74,7 +74,9 @@ const TimePicker = ({
 
   return (
     <TimeContainer
-      onClick={() => setOpen(!open)}
+      onClick={() => {
+        setOpen(!open);
+      }}
       className={className}
       tabIndex={1}
       onBlur={handleBlur}

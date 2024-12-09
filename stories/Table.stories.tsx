@@ -57,6 +57,7 @@ export const TabsStory: Story = {
         <Table
           onColumnSort={handleColumnSort}
           selectedItemsIds={selectedItemsIds}
+          onClick={() => {}}
           onSetSelectedItemIds={(ids) => {
             setSelectedRowsIds(ids);
           }}

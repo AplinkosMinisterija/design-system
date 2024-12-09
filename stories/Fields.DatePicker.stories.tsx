@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import DatePicker from '../src/components/DatePicker';
+import { useState } from 'react';
 import StoryWrapper from '../src/components/common/StoryWrapper';
+import DatePicker from '../src/components/DatePicker';
 
 const meta: Meta<typeof DatePicker> = {
   component: DatePicker,
@@ -14,9 +15,10 @@ type Story = StoryObj<typeof DatePicker>;
 export const SelectFieldStory: Story = {
   name: 'DatePicker',
   render: () => {
+    const [value, setValue] = useState();
     return (
       <StoryWrapper>
-        <DatePicker onChange={() => {}} />
+        <DatePicker onChange={setValue} value={value} />
       </StoryWrapper>
     );
   },

@@ -5,6 +5,7 @@ import Datepicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import { device, useWindowSize } from '../utils';
+import { useKeyAction } from './common/hooks';
 import Icon, { IconName } from './common/Icons';
 import TextField from './TextField';
 
@@ -47,7 +48,8 @@ const DateField = ({
   const [inputValue, setInputValue] = useState('');
   const [isBottomVisible, setIsBottomVisible] = useState(true);
   const invisibleDivRef = useRef(null);
-
+  const handleOnKeyDown = useKeyAction(() => onChange(undefined), disabled);
+  const handleToggleOnKeyDown = useKeyAction(() => setOpen(!open), disabled);
   useEffect(() => {
     const checkVisibility = (entries) => {
       const isDivBottomVisible = entries[0].isIntersecting;
@@ -128,11 +130,16 @@ const DateField = ({
     <Container
       className={className}
       $bottom={!isBottomVisible}
-      tabIndex={1}
+      aria-haspopup="dialog"
       onBlur={handleBlur}
       $disabled={disabled}
     >
-      <div tabIndex={2} onBlur={handleBlurInput} onClick={() => setOpen(!open)}>
+      <div
+        tabIndex={0}
+        onBlur={handleBlurInput}
+        onClick={() => setOpen(!open)}
+        onKeyDown={handleToggleOnKeyDown()}
+      >
         <TextField
           placeholder={placeHolder}
           className={className}
@@ -146,10 +153,16 @@ const DateField = ({
             <>
               {value && !disabled && (
                 <IconContainer
-                  $disabled={disabled}
-                  onClick={() => !disabled && onChange(undefined)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onChange(undefined);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Remove ${textValue}`}
+                  onKeyDown={handleOnKeyDown()}
                 >
-                  <ClearIcon $disabled={disabled!} name={IconName.close} />
+                  <ClearIcon name={IconName.close} />
                 </IconContainer>
               )}
               <IconContainer $disabled={disabled}>

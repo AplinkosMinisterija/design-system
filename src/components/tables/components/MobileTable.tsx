@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useKeyAction } from '../../../components/common/hooks';
 import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../../types';
 import CheckBox from '../../Checkbox';
 import Icon, { IconName } from '../../common/Icons';
@@ -51,7 +52,7 @@ const MobileTable = ({
 
   const canSort = !!onColumnSort && !!data?.length;
 
-  const handleColumnClick = (key) => {
+  const handleColumnClick = (key: string) => {
     if (!canSort) return;
 
     const direction =
@@ -65,8 +66,13 @@ const MobileTable = ({
     });
   };
 
+  const handleColumnOnKeyDown = useKeyAction(handleColumnClick);
+
+  const handleOnKeyDown = useKeyAction(handleRowClick);
   const RenderRow = (row: TableRow, index: number) => {
     const [expand, setExpand] = useState(false);
+    const handleExpandOnKeyDown = useKeyAction(() => setExpand(!expand));
+
     return (
       <TR
         $expandable={true}
@@ -76,6 +82,10 @@ const MobileTable = ({
         onClick={() => handleRowClick(row)}
         style={tableRowStyle}
         $checkable={checkable}
+        tabIndex={0}
+        onKeyDown={handleOnKeyDown(row)}
+        aria-label={`Row ${index + 1}`}
+        role="row"
       >
         <RowTD>
           {restLabels?.length ? (
@@ -84,6 +94,10 @@ const MobileTable = ({
                 e.stopPropagation();
                 setExpand(!expand);
               }}
+              aria-expanded={expand}
+              role="button"
+              tabIndex={0}
+              onKeyDown={handleExpandOnKeyDown()}
             >
               <StyledIcon expanded={expand} name={IconName.dropdownArrow} />
             </StyledIconContainer>
@@ -94,12 +108,15 @@ const MobileTable = ({
             <CheckBox
               value={selectedItemIdsSet.has(row.id)}
               onChange={() => handleToggleItem(row.id)}
+              aria-label={`Select row with id ${row.id}`}
             />
           </TD>
         )}
-        {mainLabels.map((label: any, i: number) => {
-          return <TD key={`tr-td-${i}`}>{row[label] || '-'}</TD>;
-        })}
+        {mainLabels.map((label: any, i: number) => (
+          <TD key={`tr-td-${i}`} role="cell">
+            {row[label] || '-'}
+          </TD>
+        ))}
 
         {expand &&
           restLabels?.map((column: any, i: number) => {
@@ -132,7 +149,7 @@ const MobileTable = ({
     if (isFilterApplied) {
       return (
         <TR $expandable={false} $pointer={false} $hide_border={true} $index={0}>
-          <TdSecond colSpan={mainLabels.length}>
+          <TdSecond colSpan={mainLabels.length} role="cell" aria-live="polite" aria-relevant="text">
             {texts?.filteredItemsNotFound || 'Atsiprašome nieko neradome pagal pasirinktus filtrus'}
           </TdSecond>
         </TR>
@@ -141,7 +158,7 @@ const MobileTable = ({
 
     return (
       <TR $expandable={false} $pointer={false} $hide_border={true} $index={0}>
-        <TdSecond colSpan={mainLabels.length}>
+        <TdSecond colSpan={mainLabels.length} role="cell" aria-live="polite" aria-relevant="text">
           <NotFoundInfo {...notFoundInfo} />
         </TdSecond>
       </TR>
@@ -150,9 +167,9 @@ const MobileTable = ({
 
   return (
     <TableContainer>
-      <CustomTable>
+      <CustomTable role="table">
         <THEAD>
-          <TR $checkable={checkable} $expandable={true} $pointer={false} $index={0}>
+          <TR $checkable={checkable} $expandable={true} $pointer={false} $index={0} role="row">
             <ArrowTh />
             {checkable && <ArrowTh />}
             {mainLabels.map((key: any, i: number) => {
@@ -164,10 +181,12 @@ const MobileTable = ({
 
               return (
                 <TH
-                  onClick={() => {
-                    handleColumnClick(key);
-                  }}
+                  onClick={() => handleColumnClick(key)}
                   key={`tr-th-${i}`}
+                  aria-sort={isSelectedKey ? (isSelectedUp ? 'ascending' : 'descending') : 'none'}
+                  role="columnheader"
+                  tabIndex={0}
+                  onKeyDown={handleColumnOnKeyDown(key)}
                 >
                   <LabelContainer>
                     {label}

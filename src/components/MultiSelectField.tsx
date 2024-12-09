@@ -1,8 +1,8 @@
-import OptionsContainer from './common/OptionsContainer';
 import FieldWrapper from './common/FieldWrapper';
-import MultiTextField from './common/MultiTextFieldInput';
 import { filterSelectedOptions, handleRemove } from './common/functions';
 import { useSelectData } from './common/hooks';
+import MultiTextField from './common/MultiTextFieldInput';
+import OptionsContainer from './common/OptionsContainer';
 
 export interface SelectOption {
   id?: string | number;
@@ -59,6 +59,7 @@ const MultiSelectField = ({
     <FieldWrapper onClick={handleToggleSelect} label={label} error={error} handleBlur={handleBlur}>
       <MultiTextField
         values={values}
+        label={label}
         input={input || ''}
         error={error}
         onRemove={({ index }) => {
@@ -69,7 +70,7 @@ const MultiSelectField = ({
         getOptionLabel={getOptionLabel}
       />
       <OptionsContainer
-        values={filterSelectedOptions(suggestions, values, getOptionValue)}
+        options={filterSelectedOptions(suggestions, values, getOptionValue)}
         getOptionLabel={getOptionLabel}
         showSelect={showSelect}
         handleClick={handleClick}
