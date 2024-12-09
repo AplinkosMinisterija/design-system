@@ -93,7 +93,7 @@ const SelectField = ({
                 }}
                 role="button"
                 tabIndex={0}
-                aria-label={`Remove ${getOptionLabel(value)}`}
+                aria-labelledby={`Remove ${getOptionLabel(value)}`}
                 onKeyDown={handleOnKeyDown()}
               >
                 <ClearIcon name={IconName.close} />

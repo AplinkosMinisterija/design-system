@@ -80,7 +80,7 @@ const DesktopTable = ({
                 onKeyDown={handleOnKeyDown(row)}
                 tabIndex={onClick ? 0 : undefined}
                 style={tableRowStyle}
-                aria-label={`Row with ID ${row?.id}`}
+                aria-labelledby={`Row with ID ${row?.id}`}
                 role="row"
               >
                 {checkable && (
@@ -88,7 +88,7 @@ const DesktopTable = ({
                     <CheckBox
                       value={selectedItemIdsSet.has(row.id)}
                       onChange={() => handleToggleItem(row.id)}
-                      aria-label={`Select row with id ${row.id}`}
+                      aria-labelledby={`Select row with id ${row.id}`}
                     />
                   </TD>
                 )}
@@ -101,7 +101,7 @@ const DesktopTable = ({
                       width={width}
                       key={`tr-td-${i}`}
                       role="cell"
-                      aria-label={`${columns[label]?.label}: ${item}`}
+                      aria-labelledby={`${columns[label]?.label}: ${item}`}
                     >
                       {item}
                     </TD>

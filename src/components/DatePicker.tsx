@@ -159,7 +159,7 @@ const DateField = ({
                   }}
                   role="button"
                   tabIndex={0}
-                  aria-label={`Remove ${textValue}`}
+                  aria-labelledby={`Remove ${textValue}`}
                   onKeyDown={handleOnKeyDown()}
                 >
                   <ClearIcon name={IconName.close} />

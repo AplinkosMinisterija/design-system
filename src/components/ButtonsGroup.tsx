@@ -26,7 +26,7 @@ const ButtonsGroup = ({
   return (
     <div>
       <FieldWrapper className={className} label={label}>
-        <Container className={className} role="radiogroup" aria-label={label}>
+        <Container className={className} role="radiogroup" aria-labelledby={label}>
           {map(options, (option, index) => (
             <StyledButton
               type="button"

@@ -57,7 +57,7 @@ const PasswordField = ({
         right={
           <IconContainer
             onClick={() => setShow(!show)}
-            aria-label={show ? 'Hide password' : 'Show password'}
+            aria-labelledby={show ? 'Hide password' : 'Show password'}
             aria-pressed={show}
             role="button"
             tabIndex={0}

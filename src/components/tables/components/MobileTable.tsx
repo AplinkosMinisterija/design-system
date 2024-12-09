@@ -84,7 +84,7 @@ const MobileTable = ({
         $checkable={checkable}
         tabIndex={0}
         onKeyDown={handleOnKeyDown(row)}
-        aria-label={`Row ${index + 1}`}
+        aria-labelledby={`Row ${index + 1}`}
         role="row"
       >
         <RowTD>
@@ -108,7 +108,7 @@ const MobileTable = ({
             <CheckBox
               value={selectedItemIdsSet.has(row.id)}
               onChange={() => handleToggleItem(row.id)}
-              aria-label={`Select row with id ${row.id}`}
+              aria-labelledby={`Select row with id ${row.id}`}
             />
           </TD>
         )}

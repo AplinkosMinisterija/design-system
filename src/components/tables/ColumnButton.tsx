@@ -86,7 +86,7 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
                   handleToggle(key);
                 }}
                 aria-checked={columns[key].show}
-                aria-label={columns[key].label}
+                aria-labelledby={columns[key].label}
               />
             </div>
           ))}

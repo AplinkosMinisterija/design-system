@@ -33,7 +33,7 @@ const Modal = ({ visible, children, onClose }: ModalProps) => {
     <ModalContainer
       role="dialog"
       aria-modal="true"
-      aria-label={'Modal'}
+      aria-labelledby={'Modal'}
       tabIndex={-1}
       onClick={(e) => {
         if (e.target === e.currentTarget) {

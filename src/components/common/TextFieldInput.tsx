@@ -58,7 +58,7 @@ const TextFieldInput = ({
 
         <StyledTextInput
           id={inputId}
-          aria-label={
+          aria-labelledby={
             placeholder && typeof placeholder === 'string' ? `${inputId}-placeholder` : undefined
           }
           $selectedValue={selectedValue}
