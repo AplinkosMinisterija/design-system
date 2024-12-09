@@ -61,7 +61,6 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
     setIsOpen(!isOpen);
   };
 
-  const handleCheckboxOnKeyDown = useKeyAction(handleToggle);
   const handleOnKeyDown = useKeyAction(handleButtonClick);
 
   return (
@@ -86,7 +85,6 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
                 onChange={() => {
                   handleToggle(key);
                 }}
-                onKeyDown={handleCheckboxOnKeyDown(key)}
                 aria-checked={columns[key].show}
                 aria-label={columns[key].label}
               />

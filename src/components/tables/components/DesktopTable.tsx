@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Icon, { IconName } from '../../../components/common/Icons';
 import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../../types';
 import CheckBox from '../../Checkbox';
+import { useKeyAction } from '../../common/hooks';
 import NotFoundInfo from '../../tables/components/NotFoundInfo';
 
 export interface DesktopTableProps {
@@ -36,6 +37,7 @@ const DesktopTable = ({
   checkable,
 }: DesktopTableProps) => {
   const keys = Object.keys(columns);
+
   const [sortedColumn, setSortedColumn] = useState<{
     key?: string;
     direction?: 'asc' | 'desc';
@@ -46,6 +48,7 @@ const DesktopTable = ({
       onClick(row);
     }
   };
+  const handleOnKeyDown = useKeyAction(handleRowClick);
 
   const canSort = !!onColumnSort && !!data?.length;
 
@@ -62,6 +65,7 @@ const DesktopTable = ({
       direction,
     });
   };
+  const handleColumnOnKeyDown = useKeyAction(handleColumnClick);
 
   const GenerateTableContent = ({ data }: { data: TableRow[] }) => {
     if (data?.length) {
@@ -73,21 +77,32 @@ const DesktopTable = ({
                 $pointer={!!onClick}
                 key={`tr-${index}`}
                 onClick={() => handleRowClick(row)}
+                onKeyDown={handleOnKeyDown(row)}
+                tabIndex={onClick ? 0 : undefined}
                 style={tableRowStyle}
+                aria-label={`Row with ID ${row?.id}`}
+                role="row"
               >
                 {checkable && (
                   <TD width={TableItemWidth.SMALL}>
                     <CheckBox
                       value={selectedItemIdsSet.has(row.id)}
                       onChange={() => handleToggleItem(row.id)}
+                      aria-label={`Select row with ID ${row.id}`}
                     />
                   </TD>
                 )}
                 {keys.map((label, i: number) => {
                   const item = row[label] || '-';
                   const width = columns[label]?.width || TableItemWidth.LARGE;
+
                   return (
-                    <TD width={width} key={`tr-td-${i}`}>
+                    <TD
+                      width={width}
+                      key={`tr-td-${i}`}
+                      role="cell"
+                      aria-label={`${columns[label]?.label}: ${item}`}
+                    >
                       {item}
                     </TD>
                   );
@@ -99,16 +114,16 @@ const DesktopTable = ({
       );
     } else if (isFilterApplied) {
       return (
-        <TR $pointer={false} $hide_border={true}>
-          <TdSecond colSpan={keys.length}>
+        <TR role="row" $pointer={false} $hide_border={true}>
+          <TdSecond colSpan={keys.length} role="cell" aria-live="polite" aria-relevant="text">
             {texts?.filteredItemsNotFound || 'Atsiprašome nieko neradome pagal pasirinktus filtrus'}
           </TdSecond>
         </TR>
       );
     } else {
       return (
-        <TR $pointer={false} $hide_border={true}>
-          <TdSecond colSpan={keys.length}>
+        <TR role="row" $pointer={false} $hide_border={true}>
+          <TdSecond colSpan={keys.length} role="cell" aria-live="polite" aria-relevant="text">
             <NotFoundInfo {...notFoundInfo} />
           </TdSecond>
         </TR>
@@ -118,10 +133,10 @@ const DesktopTable = ({
 
   return (
     <TableContainer>
-      <Table>
+      <Table role="table">
         <THEAD>
-          <TR $pointer={false}>
-            {checkable && <TH width={TableItemWidth.SMALL} />}
+          <TR role="row" $pointer={false}>
+            {checkable && <TH width={TableItemWidth.SMALL} role="columnheader" />}
 
             {keys.map((key: any, i: number) => {
               const column = columns[key];
@@ -133,10 +148,20 @@ const DesktopTable = ({
 
               return (
                 <TH
+                  role="columnheader"
+                  aria-sort={
+                    isSelectedKey
+                      ? sortedColumn.direction === 'asc'
+                        ? 'ascending'
+                        : 'descending'
+                      : 'none'
+                  }
                   $pointer={!!onColumnSort}
                   onClick={() => {
                     handleColumnClick(key);
                   }}
+                  onKeyDown={handleColumnOnKeyDown(key)}
+                  tabIndex={onColumnSort ? 0 : undefined}
                   width={width}
                   key={`large-th-${i}`}
                 >

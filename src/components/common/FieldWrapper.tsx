@@ -30,7 +30,7 @@ const FieldWrapper = ({
   children,
   labelButton,
 }: FieldWrapperProps) => {
-  const handleToggleAction = useKeyAction(() => !!onClick && onClick());
+  const handleOnKeyDown = useKeyAction(() => !!onClick && onClick());
   return (
     <Container
       tabIndex={-1}
@@ -38,7 +38,7 @@ const FieldWrapper = ({
       className={`${className} fieldWrapper`}
       $padding={padding}
       onClick={onClick}
-      onKeyDown={handleToggleAction()}
+      onKeyDown={handleOnKeyDown()}
     >
       <LabelRow>
         {!!label && (

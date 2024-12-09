@@ -38,7 +38,7 @@ const OptionsContainer = ({
 }: OptionsContainerProps) => {
   const display = showSelect && !disabled;
   const optionsLength = options.length;
-  const handleKeyAction = useKeyAction(handleClick);
+  const handleOnKeyDown = useKeyAction(handleClick);
 
   const renderOptions = () => {
     if (!options.length) {
@@ -61,7 +61,7 @@ const OptionsContainer = ({
             onClick={() => {
               handleClick(option);
             }}
-            onKeyDown={handleKeyAction(option)}
+            onKeyDown={handleOnKeyDown(option)}
           >
             {getOptionLabel && getOptionLabel(option)}
           </Option>
