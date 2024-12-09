@@ -1,6 +1,7 @@
 import { map } from 'lodash';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
+import { useKeyAction } from './common/hooks';
 
 export interface ButtonsGroupProps {
   options: any[];
@@ -21,6 +22,7 @@ const ButtonsGroup = ({
   label = '',
   getOptionLabel,
 }: ButtonsGroupProps) => {
+  const handleOnKeyDown = useKeyAction(onChange, disabled);
   return (
     <div>
       <FieldWrapper className={className} label={label}>
@@ -33,6 +35,7 @@ const ButtonsGroup = ({
               aria-checked={isSelected(option)}
               disabled={disabled}
               selected={isSelected(option)}
+              onKeyDown={handleOnKeyDown(option)}
               onClick={() => (disabled ? {} : onChange(option))}
               tabIndex={0}
             >
