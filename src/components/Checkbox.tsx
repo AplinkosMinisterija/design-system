@@ -35,6 +35,7 @@ const Checkbox = ({
 }: CheckboxProps) => {
   const ariaChecked = intermediate ? 'intermediate' : value;
   const handleOnKeyDown = useKeyAction(onChange);
+  const inputId = label || name;
 
   return (
     <Wrapper
@@ -60,7 +61,7 @@ const Checkbox = ({
           $hidden={displayAsButton}
           role="checkbox"
           aria-checked={ariaChecked}
-          aria-labelledby={name}
+          aria-labelledby={inputId}
           aria-describedby={description ? description : undefined}
         >
           <CheckBox
