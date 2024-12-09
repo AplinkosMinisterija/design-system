@@ -81,7 +81,7 @@ const StyledButton = styled.button<{
     opacity: ${({ disabled }) => (disabled ? 0.48 : 0.6)};
   }
   &:focus {
-    border: 1px solid ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
