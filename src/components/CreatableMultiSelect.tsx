@@ -49,12 +49,6 @@ const CreatableMultiSelect = ({
     clear();
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      handleAdd();
-    }
-  };
-
   return (
     <FieldWrapper
       showError={showError}
@@ -70,7 +64,6 @@ const CreatableMultiSelect = ({
         placeholder={placeholder}
         input={input}
         error={error}
-        handleKeyDown={handleKeyDown}
         onRemove={({ index }) => {
           handleRemove(index, onChange, values);
         }}
