@@ -22,7 +22,7 @@ export interface TextFieldProps {
 
 const TextFieldInput = ({
   value,
-  label,
+  label = '',
   name,
   error,
   readOnly = false,

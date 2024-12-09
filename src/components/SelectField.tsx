@@ -27,7 +27,7 @@ export interface SelectFieldProps {
 }
 
 const SelectField = ({
-  label = '',
+  label,
   value,
   name,
   error,

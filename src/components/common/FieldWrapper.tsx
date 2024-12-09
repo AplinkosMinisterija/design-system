@@ -19,7 +19,7 @@ export interface FieldWrapperProps {
 const FieldWrapper = ({
   error,
   showError = true,
-  label,
+  label = '',
   className,
   padding = '0',
   onClick,

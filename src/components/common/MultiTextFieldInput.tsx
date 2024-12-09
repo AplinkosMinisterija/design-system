@@ -23,7 +23,7 @@ export interface MultiTextFieldProps {
 const MultiTextField = ({
   values = [],
   backgroundColor,
-  label,
+  label = '',
   error,
   handleInputChange,
   getOptionLabel,
