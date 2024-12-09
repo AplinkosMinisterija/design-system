@@ -7,6 +7,7 @@ export interface MultiTextFieldProps {
   error?: string;
   className?: string;
   onRemove: ({ value, index }: any) => void;
+  handleKeyDown?: (event?: any) => void;
   disabled?: boolean;
   handleInputChange: (event: any) => void;
   getOptionLabel: (option: any) => string;
@@ -30,6 +31,7 @@ const MultiTextField = ({
   placeholder = '',
   input = '',
   disabled,
+  handleKeyDown,
   name,
   height = 56,
   hideDropdown = false,
@@ -88,6 +90,7 @@ const MultiTextField = ({
           <Input
             id={inputId}
             aria-labelledby={!values?.length ? `${inputId}-placeholder` : undefined}
+            onKeyDown={handleKeyDown}
             name={name}
             ref={inputRef}
             placeholder={!values?.length ? placeholder : ''}
