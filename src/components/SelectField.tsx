@@ -66,7 +66,6 @@ const SelectField = ({
   });
 
   const showDeleteIcon = !!value && !!clearable && !disabled;
-  const optionsLength = suggestions?.length || 0;
 
   return (
     <FieldWrapper

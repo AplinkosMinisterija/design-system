@@ -53,7 +53,19 @@ const PasswordField = ({
         name={name}
         error={error}
         right={
-          <IconContainer onClick={() => setShow(!show)}>
+          <IconContainer
+            onClick={() => setShow(!show)}
+            aria-label={show ? 'Hide password' : 'Show password'}
+            aria-pressed={show}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setShow(!show);
+              }
+            }}
+          >
             <StyledIcon name={show ? 'visibleOn' : 'visibleOff'} />
           </IconContainer>
         }

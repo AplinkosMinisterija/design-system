@@ -38,7 +38,6 @@ const MultiTextField = ({
 }: MultiTextFieldProps) => {
   const inputRef = useRef<any>(null);
   const inputId = `multi-text-field-${label || name}`;
-  const errorId = `error-${inputId}`;
 
   const handleClick = () => {
     if (!inputRef?.current) return;
