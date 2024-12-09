@@ -60,7 +60,7 @@ const Checkbox = ({
           $hidden={displayAsButton}
           role="checkbox"
           aria-checked={ariaChecked}
-          aria-labelledby={`${name}-label`}
+          aria-labelledby={name}
           aria-describedby={description ? description : undefined}
         >
           <CheckBox
@@ -81,8 +81,8 @@ const Checkbox = ({
           <CheckMark checked={value || false} intermediate={intermediate} disabled={disabled} />
         </InnerContainer>
         <Column $displayAsButton={displayAsButton}>
-          <Label id={`${name}-label`}>{label}</Label>
-          {description && <Description id={`${name}-description`}>{description}</Description>}
+          <Label>{label}</Label>
+          {description && <Description>{description}</Description>}
         </Column>
       </Container>
     </Wrapper>

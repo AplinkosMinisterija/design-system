@@ -35,7 +35,7 @@ const MultiTextField = ({
   hideDropdown = false,
 }: MultiTextFieldProps) => {
   const inputRef = useRef<any>(null);
-  const inputId = `multi-text-field-${label || name}`;
+  const inputId = label || name;
 
   const handleClick = () => {
     if (!inputRef?.current) return;
@@ -86,14 +86,15 @@ const MultiTextField = ({
         ))}
         {!disabled && (
           <Input
+            id={inputId}
+            aria-labelledby={!values?.length ? `${inputId}-placeholder` : undefined}
             name={name}
             ref={inputRef}
             placeholder={!values?.length ? placeholder : ''}
             disabled={disabled}
             value={input}
             onChange={(e) => handleInputChange(e?.target?.value)}
-            aria-label={inputId}
-            aria-describedby={error ? `${name}-error` : undefined}
+            aria-label={label || name}
           />
         )}
       </InnerContainer>
@@ -102,7 +103,7 @@ const MultiTextField = ({
           <StyledIcons name="dropdownArrow" />
         </DropdownIconContainer>
       )}
-      {error && <ErrorText id={`${name}-error`}>{error}</ErrorText>}
+      {error && <ErrorText>{error}</ErrorText>}
     </InputContainer>
   );
 };
