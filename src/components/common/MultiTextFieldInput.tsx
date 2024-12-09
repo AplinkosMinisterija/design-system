@@ -52,6 +52,7 @@ const MultiTextField = ({
 
   return (
     <InputContainer
+      className="inputContainer"
       onClick={handleClick}
       $hasBorder={true}
       $backgroundColor={backgroundColor}
