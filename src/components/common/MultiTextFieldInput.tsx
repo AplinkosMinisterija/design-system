@@ -107,7 +107,6 @@ const MultiTextField = ({
           <StyledIcons name="dropdownArrow" />
         </DropdownIconContainer>
       )}
-      {error && <ErrorText>{error}</ErrorText>}
     </InputContainer>
   );
 };
@@ -136,6 +135,9 @@ const InputContainer = styled.div<{
   align-items: center;
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
+  &:focus {
+    outline: none;
+  }
   &:focus-within {
     border-color: ${({ theme }) =>
       theme.colors.fields?.borderFocus || theme.colors.fields?.border || '#d4d5de'};
@@ -154,17 +156,30 @@ const Input = styled.input`
   min-width: 50px;
   width: 100%;
   height: 100%;
+  ::-webkit-inner-spin-button,
+  ::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
   flex: 1;
   background-color: transparent;
   font-size: 1.6rem;
   color: ${({ theme }) => theme.colors.fields?.text || '#101010'};
+  ::-webkit-input-placeholder {
+    color: ${({ theme }) => (theme.colors.fields?.text || '#101010') + '8F'};
+  }
+  ::-moz-placeholder {
+    color: ${({ theme }) => (theme.colors.fields?.text || '#101010') + '8F'};
+  }
   ::placeholder {
     color: ${({ theme }) => (theme.colors.fields?.text || '#101010') + '8F'};
   }
   :focus {
     outline: none;
+    border: none;
   }
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  width: 100%;
 `;
 
 const InnerContainer = styled.div`
@@ -187,7 +202,7 @@ const IconContainer = styled.div`
   justify-content: center;
 `;
 
-const SimpleCard = styled.div<{ disabled: boolean }>`
+const SimpleCard = styled.label<{ disabled: boolean }>`
   border-radius: 2px;
   color: ${({ theme }) => theme.colors.fields?.tagText || '#333333'};
   background-color: ${({ theme }) => theme.colors.fields?.tag || '#e8eeef'};
@@ -208,17 +223,10 @@ const StyledIcons = styled(Icon)`
   color: ${({ theme }) => theme.colors.fields?.icon || '#cdd5df'};
   font-size: 2.4rem;
 `;
-
 const DropdownIconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
-
-const ErrorText = styled.div`
-  font-size: 1.2rem;
-  color: ${({ theme }) => theme.colors.error || '#FE5B78'};
-  margin-top: 4px;
 `;
 
 export default MultiTextField;

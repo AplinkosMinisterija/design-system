@@ -77,7 +77,6 @@ const TextFieldInput = ({
         />
       </InputWrapper>
       {right}
-      {error && <ErrorText>{error}</ErrorText>}
     </InputContainer>
   );
 };
@@ -164,12 +163,6 @@ const StyledTextInput = styled.input<{
     color: ${({ theme, $selectedValue }) =>
       (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
   }
-`;
-
-const ErrorText = styled.div`
-  font-size: 1.2rem;
-  color: ${({ theme }) => theme.colors.error || '#FE5B78'};
-  margin-top: 4px;
 `;
 
 export default TextFieldInput;
