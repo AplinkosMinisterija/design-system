@@ -50,6 +50,13 @@ const MultiTextField = ({
     onRemove({ value, index });
   };
 
+  const handleRemoveOnKeyDown = (e, value, index) => {
+    const keysToRemove = ['Enter', 'Backspace', 'Delete'];
+    if (keysToRemove.includes(e.key)) {
+      handleRemove(e, value, index);
+    }
+  };
+
   return (
     <InputContainer
       className="inputContainer"
@@ -75,9 +82,7 @@ const MultiTextField = ({
             <IconContainer
               onClick={(e) => handleRemove(e, value, index)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === 'Backspace' || e.key === 'Delete') {
-                  handleRemove(e, value, index);
-                }
+                handleRemoveOnKeyDown(e, value, index);
               }}
               role="button"
               tabIndex={0}
