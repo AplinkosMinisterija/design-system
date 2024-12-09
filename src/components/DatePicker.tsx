@@ -155,7 +155,7 @@ const DateField = ({
                 <IconContainer
                   onClick={(e) => {
                     e.stopPropagation();
-                    !disabled && onChange(undefined);
+                    onChange(undefined);
                   }}
                   role="button"
                   tabIndex={0}
