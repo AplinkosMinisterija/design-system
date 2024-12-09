@@ -75,7 +75,7 @@ const MultiTextField = ({
             key={index}
             disabled={!!disabled}
             role="listitem"
-            aria-labelledby={`Tag: ${getOptionLabel(value)}`}
+            aria-label={`Tag: ${getOptionLabel(value)}`}
             tabIndex={0}
           >
             <Name>{getOptionLabel(value)}</Name>
@@ -86,7 +86,7 @@ const MultiTextField = ({
               }}
               role="button"
               tabIndex={0}
-              aria-labelledby={`Remove ${getOptionLabel(value)}`}
+              aria-label={`Remove ${getOptionLabel(value)}`}
             >
               <StyledCloseIcon name="close" />
             </IconContainer>
