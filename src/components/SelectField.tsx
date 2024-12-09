@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
-import { useSelectData } from './common/hooks';
+import { useKeyAction, useSelectData } from './common/hooks';
 import Icon, { IconName } from './common/Icons';
 import OptionsContainer from './common/OptionsContainer';
 import TextFieldInput from './common/TextFieldInput';
@@ -49,7 +49,6 @@ const SelectField = ({
     suggestions,
     input,
     handleToggleSelect,
-    handleFocusSelect,
     showSelect,
     handleBlur,
     handleClick,
@@ -65,12 +64,12 @@ const SelectField = ({
     value,
   });
 
+  const handleOnKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const showDeleteIcon = !!value && !!clearable && !disabled;
 
   return (
     <FieldWrapper
       onClick={handleToggleSelect}
-      onFocus={handleFocusSelect}
       handleBlur={handleBlur}
       padding={padding}
       className={className}
@@ -95,12 +94,7 @@ const SelectField = ({
                 role="button"
                 tabIndex={0}
                 aria-label={`Remove ${getOptionLabel(value)}`}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    !disabled && onChange(undefined);
-                  }
-                }}
+                onKeyDown={handleOnKeyDown()}
               >
                 <ClearIcon name={IconName.close} />
               </IconContainer>

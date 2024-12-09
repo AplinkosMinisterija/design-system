@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { intersectionObserverConfig } from '../../utils';
 import { getFilteredOptions } from '../common/functions';
 
@@ -75,15 +75,10 @@ export const useSelectData = ({
     !disabled && setShowSelect(!showSelect);
   };
 
-  const handleFocusSelect = () => {
-    setShowSelect(true);
-  };
-
   return {
     suggestions,
     input,
     handleToggleSelect,
-    handleFocusSelect,
     showSelect,
     handleBlur,
     handleClick,
@@ -160,9 +155,6 @@ export const useAsyncSelectData = ({
   const handleToggleSelect = () => {
     !disabled && setShowSelect(!showSelect);
   };
-  const handleFocusSelect = () => {
-    setShowSelect(true);
-  };
 
   const handleInputChange = (input: string) => {
     setShowSelect(!!input.length);
@@ -182,10 +174,22 @@ export const useAsyncSelectData = ({
     input,
     handleInputChange,
     handleToggleSelect,
-    handleFocusSelect,
     showSelect,
     handleBlur,
     observerRef,
     handleClick,
   };
+};
+
+export const useKeyAction = (action: (option?: any) => void, disabled = false) => {
+  return useCallback(
+    (option?: any) => (e: React.KeyboardEvent) => {
+      if ((e.key === 'Enter' || e.key === ' ') && !disabled) {
+        e.stopPropagation();
+        e.preventDefault();
+        action(option);
+      }
+    },
+    [action, disabled],
+  );
 };

@@ -4,6 +4,7 @@ export interface CheckboxProps {
   value?: boolean;
   name?: string;
   onChange: (value: boolean) => void;
+  onKeyDown?: () => void;
   disabled?: boolean;
   label?: any;
   description?: string;
@@ -29,12 +30,13 @@ const Checkbox = ({
   displayAsButton,
   variant = 'primary',
   width,
+  onKeyDown,
   radius,
 }: CheckboxProps) => {
   const ariaChecked = intermediate ? 'intermediate' : value;
 
   return (
-    <Wrapper $width={width} $displayAsButton={displayAsButton}>
+    <Wrapper tabIndex={0} onKeyDown={onKeyDown} $width={width} $displayAsButton={displayAsButton}>
       <Container
         className={className}
         $disabled={disabled}

@@ -10,7 +10,6 @@ export interface MultiTextFieldProps {
   disabled?: boolean;
   handleInputChange: (event: any) => void;
   getOptionLabel: (option: any) => string;
-  handleKeyDown?: (event: any) => void;
   placeholder?: string;
   input: string;
   backgroundColor?: string;
@@ -28,7 +27,6 @@ const MultiTextField = ({
   handleInputChange,
   getOptionLabel,
   onRemove,
-  handleKeyDown,
   placeholder = '',
   input = '',
   disabled,
@@ -68,18 +66,18 @@ const MultiTextField = ({
             disabled={!!disabled}
             role="listitem"
             aria-label={`Tag: ${getOptionLabel(value)}`}
-            tabIndex={disabled ? -1 : 0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === 'Backspace' || e.key === 'Delete') {
-                handleRemove(e, value, index);
-              }
-            }}
+            tabIndex={0}
           >
             <Name>{getOptionLabel(value)}</Name>
             <IconContainer
               onClick={(e) => handleRemove(e, value, index)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === 'Backspace' || e.key === 'Delete') {
+                  handleRemove(e, value, index);
+                }
+              }}
               role="button"
-              tabIndex={-1}
+              tabIndex={0}
               aria-label={`Remove ${getOptionLabel(value)}`}
             >
               <StyledCloseIcon name="close" />
@@ -94,7 +92,6 @@ const MultiTextField = ({
             disabled={disabled}
             value={input}
             onChange={(e) => handleInputChange(e?.target?.value)}
-            onKeyDown={handleKeyDown}
             aria-label={inputId}
             aria-describedby={error ? `${name}-error` : undefined}
           />

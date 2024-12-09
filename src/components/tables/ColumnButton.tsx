@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import Button from '../Button';
 import CheckBox from '../Checkbox';
 import { ErrorMessage } from '../common/ErrorMessage';
+import { useKeyAction } from '../common/hooks';
 import Icon, { IconName } from '../common/Icons';
-import Button from '../Button';
 import { Columns } from './components/types';
 
 export interface ColumnButtonTexts {
@@ -56,17 +57,27 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
     onToggle(updatedColumns);
   };
 
+  const handleButtonClick = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleCheckboxOnKeyDown = useKeyAction(handleToggle);
+  const handleOnKeyDown = useKeyAction(handleButtonClick);
+
   return (
-    <Container tabIndex={1} onBlur={handleBlur}>
+    <Container tabIndex={0} onBlur={handleBlur} onKeyDown={handleOnKeyDown()}>
       <Button
         variant={variant}
         left={<StyledIcon $variant={variant} name={IconName.settings} />}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleButtonClick}
+        aria-expanded={isOpen}
+        aria-controls="column-options-menu"
+        aria-haspopup="true"
       >
         {texts.columns}
       </Button>
       {isOpen && (
-        <OptionContainer>
+        <OptionContainer id="column-options-menu">
           {visibleColumnsKeys.map((key) => (
             <div key={`column-${key}`}>
               <StyledCheckbox
@@ -75,10 +86,13 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
                 onChange={() => {
                   handleToggle(key);
                 }}
+                onKeyDown={handleCheckboxOnKeyDown(key)}
+                aria-checked={columns[key].show}
+                aria-label={columns[key].label}
               />
             </div>
           ))}
-          <ErrorMessage error={error} />
+          <ErrorMessage error={error} aria-live="assertive" />
         </OptionContainer>
       )}
     </Container>

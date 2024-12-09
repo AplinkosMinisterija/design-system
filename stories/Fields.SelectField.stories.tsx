@@ -30,7 +30,6 @@ export const SelectFieldStory: Story = {
           ]}
           value={value}
           onChange={(val) => {
-            console.log(val, 'val');
             setValue(val);
           }}
           getOptionLabel={(option) => option.label}

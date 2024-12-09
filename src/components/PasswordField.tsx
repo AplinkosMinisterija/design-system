@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
+import { useKeyAction } from './common/hooks';
 import Icon from './common/Icons';
 import TextFieldInput from './common/TextFieldInput';
 export interface TextFieldProps {
@@ -36,6 +37,7 @@ const PasswordField = ({
   onInputClick,
 }: TextFieldProps) => {
   const [show, setShow] = useState(false);
+  const handleKeyAction = useKeyAction(() => setShow(!show));
 
   return (
     <FieldWrapper
@@ -59,12 +61,7 @@ const PasswordField = ({
             aria-pressed={show}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                setShow(!show);
-              }
-            }}
+            onKeyDown={handleKeyAction()}
           >
             <StyledIcon name={show ? 'visibleOn' : 'visibleOff'} />
           </IconContainer>

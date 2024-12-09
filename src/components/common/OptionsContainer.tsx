@@ -1,6 +1,7 @@
 import { JSX } from 'react';
 import styled from 'styled-components';
 import LoaderComponent from '../common/LoaderComponent';
+import { useKeyAction } from './hooks';
 
 export interface SelectOption {
   id?: string;
@@ -37,6 +38,7 @@ const OptionsContainer = ({
 }: OptionsContainerProps) => {
   const display = showSelect && !disabled;
   const optionsLength = options.length;
+  const handleKeyAction = useKeyAction(handleClick);
 
   const renderOptions = () => {
     if (!options.length) {
@@ -59,12 +61,7 @@ const OptionsContainer = ({
             onClick={() => {
               handleClick(option);
             }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handleClick(option);
-              }
-            }}
+            onKeyDown={handleKeyAction(option)}
           >
             {getOptionLabel && getOptionLabel(option)}
           </Option>
