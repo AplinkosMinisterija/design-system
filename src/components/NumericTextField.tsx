@@ -86,6 +86,7 @@ const NumericTextField = ({
       showError={showError}
     >
       <TextFieldInput
+        label={label}
         value={inputValue}
         name={name}
         error={error}

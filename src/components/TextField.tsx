@@ -57,6 +57,7 @@ const TextField = ({
       bottomLabel={bottomLabel}
     >
       <TextFieldInput
+        label={label}
         value={value}
         name={name}
         error={error}

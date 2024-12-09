@@ -66,6 +66,7 @@ const CreatableMultiSelect = ({
     >
       <MultiTextField
         values={values}
+        label={label}
         placeholder={placeholder}
         input={input}
         error={error}
@@ -82,7 +83,7 @@ const CreatableMultiSelect = ({
         hideDropdown={true}
       />
       <OptionsContainer
-        values={[isExist ? 'Toks reikšmė jau egzistuoja' : `Sukurti: ${input}`]}
+        options={[isExist ? 'Toks reikšmė jau egzistuoja' : `Sukurti: ${input}`]}
         getOptionLabel={(option) => `${option}`}
         showSelect={showSelect}
         handleClick={handleAdd}

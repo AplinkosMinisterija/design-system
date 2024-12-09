@@ -27,7 +27,7 @@ export interface SelectFieldProps {
 }
 
 const SelectField = ({
-  label,
+  label = '',
   value,
   name,
   error,
@@ -49,6 +49,7 @@ const SelectField = ({
     suggestions,
     input,
     handleToggleSelect,
+    handleFocusSelect,
     showSelect,
     handleBlur,
     handleClick,
@@ -64,9 +65,13 @@ const SelectField = ({
     value,
   });
 
+  const showDeleteIcon = !!value && !!clearable && !disabled;
+  const optionsLength = suggestions?.length || 0;
+
   return (
     <FieldWrapper
       onClick={handleToggleSelect}
+      onFocus={handleFocusSelect}
       handleBlur={handleBlur}
       padding={padding}
       className={className}
@@ -75,21 +80,30 @@ const SelectField = ({
       showError={showError}
     >
       <TextFieldInput
+        label={label}
         value={input}
         name={name}
         error={error}
         left={left}
         right={
           <RightContainer>
-            {!!value && !!clearable && !disabled && (
+            {showDeleteIcon && (
               <IconContainer
-                $disabled={disabled}
                 onClick={(e) => {
                   e.stopPropagation();
                   !disabled && onChange(undefined);
                 }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Remove ${getOptionLabel(value)}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    !disabled && onChange(undefined);
+                  }
+                }}
               >
-                <ClearIcon $disabled={disabled!} name={IconName.close} />
+                <ClearIcon name={IconName.close} />
               </IconContainer>
             )}
             <StyledIcon name={IconName.dropdownArrow} />
@@ -107,7 +121,7 @@ const SelectField = ({
         selectedValue={value}
       />
       <OptionsContainer
-        values={suggestions}
+        options={suggestions}
         getOptionLabel={getOptionComponent || getOptionLabel}
         loading={loading}
         showSelect={showSelect}
@@ -125,14 +139,14 @@ const RightContainer = styled.div`
 const ClearIcon = styled(Icon)<{ $disabled: boolean }>`
   color: #cdd5df;
   font-size: 2.4rem;
-  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  cursor: pointer;
 `;
 
 const IconContainer = styled.div<{ $disabled: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  cursor: pointer;
 `;
 
 const StyledIcon = styled(Icon)`

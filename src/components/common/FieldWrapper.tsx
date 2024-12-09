@@ -7,6 +7,7 @@ export interface FieldWrapperProps {
   className?: string;
   padding?: string;
   onClick?: () => void;
+  onFocus?: () => void;
   handleBlur?: (event: any) => void;
   bottomLabel?: string;
   subLabel?: string;
@@ -23,6 +24,7 @@ const FieldWrapper = ({
   padding = '0',
   onClick,
   handleBlur,
+  onFocus,
   subLabel,
   bottomLabel,
   secondLabel,
@@ -36,6 +38,7 @@ const FieldWrapper = ({
       className={`${className} fieldWrapper`}
       $padding={padding}
       onClick={onClick}
+      onFocus={onFocus}
     >
       <LabelRow>
         {!!label && (

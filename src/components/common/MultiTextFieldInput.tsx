@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import styled from 'styled-components';
 import Icon from '../common/Icons';
+
 export interface MultiTextFieldProps {
   values: any[];
   error?: string;
@@ -16,11 +17,13 @@ export interface MultiTextFieldProps {
   height?: number;
   name?: string;
   hideDropdown?: boolean;
+  label?: string;
 }
 
 const MultiTextField = ({
   values = [],
   backgroundColor,
+  label,
   error,
   handleInputChange,
   getOptionLabel,
@@ -34,33 +37,51 @@ const MultiTextField = ({
   hideDropdown = false,
 }: MultiTextFieldProps) => {
   const inputRef = useRef<any>(null);
+  const inputId = `multi-text-field-${label || name}`;
+  const errorId = `error-${inputId}`;
 
   const handleClick = () => {
     if (!inputRef?.current) return;
     inputRef?.current?.focus();
   };
 
+  const handleRemove = (e: React.KeyboardEvent | React.MouseEvent, value: any, index: number) => {
+    e.stopPropagation();
+    if (disabled) return;
+    onRemove({ value, index });
+  };
+
   return (
     <InputContainer
-      className="inputContainer"
       onClick={handleClick}
       $hasBorder={true}
       $backgroundColor={backgroundColor}
-      $readOnly={false}
       $error={!!error}
       $disabled={disabled || false}
       $height={height}
+      aria-disabled={disabled}
+      aria-invalid={!!error}
     >
       <InnerContainer>
         {values?.map((value: any, index) => (
-          <SimpleCard key={value + index} disabled={!!disabled}>
+          <SimpleCard
+            key={index}
+            disabled={!!disabled}
+            role="listitem"
+            aria-label={`Tag: ${getOptionLabel(value)}`}
+            tabIndex={disabled ? -1 : 0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === 'Backspace' || e.key === 'Delete') {
+                handleRemove(e, value, index);
+              }
+            }}
+          >
             <Name>{getOptionLabel(value)}</Name>
             <IconContainer
-              onClick={(e) => {
-                e.stopPropagation();
-                if (disabled) return;
-                onRemove({ value, index });
-              }}
+              onClick={(e) => handleRemove(e, value, index)}
+              role="button"
+              tabIndex={-1}
+              aria-label={`Remove ${getOptionLabel(value)}`}
             >
               <StyledCloseIcon name="close" />
             </IconContainer>
@@ -75,6 +96,8 @@ const MultiTextField = ({
             value={input}
             onChange={(e) => handleInputChange(e?.target?.value)}
             onKeyDown={handleKeyDown}
+            aria-label={inputId}
+            aria-describedby={error ? `${name}-error` : undefined}
           />
         )}
       </InnerContainer>
@@ -83,13 +106,13 @@ const MultiTextField = ({
           <StyledIcons name="dropdownArrow" />
         </DropdownIconContainer>
       )}
+      {error && <ErrorText id={`${name}-error`}>{error}</ErrorText>}
     </InputContainer>
   );
 };
 
 const InputContainer = styled.div<{
   $error: boolean;
-  $readOnly: boolean;
   $disabled: boolean;
   $hasBorder: boolean;
   $backgroundColor: string;
@@ -112,9 +135,6 @@ const InputContainer = styled.div<{
   align-items: center;
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
-  &:focus {
-    outline: none;
-  }
   &:focus-within {
     border-color: ${({ theme }) =>
       theme.colors.fields?.borderFocus || theme.colors.fields?.border || '#d4d5de'};
@@ -133,30 +153,17 @@ const Input = styled.input`
   min-width: 50px;
   width: 100%;
   height: 100%;
-  ::-webkit-inner-spin-button,
-  ::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
   flex: 1;
   background-color: transparent;
   font-size: 1.6rem;
   color: ${({ theme }) => theme.colors.fields?.text || '#101010'};
-  ::-webkit-input-placeholder {
-    color: ${({ theme }) => (theme.colors.fields?.text || '#101010') + '8F'};
-  }
-  ::-moz-placeholder {
-    color: ${({ theme }) => (theme.colors.fields?.text || '#101010') + '8F'};
-  }
   ::placeholder {
     color: ${({ theme }) => (theme.colors.fields?.text || '#101010') + '8F'};
   }
   :focus {
     outline: none;
-    border: none;
   }
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  width: 100%;
 `;
 
 const InnerContainer = styled.div`
@@ -179,7 +186,7 @@ const IconContainer = styled.div`
   justify-content: center;
 `;
 
-const SimpleCard = styled.label<{ disabled: boolean }>`
+const SimpleCard = styled.div<{ disabled: boolean }>`
   border-radius: 2px;
   color: ${({ theme }) => theme.colors.fields?.tagText || '#333333'};
   background-color: ${({ theme }) => theme.colors.fields?.tag || '#e8eeef'};
@@ -200,10 +207,17 @@ const StyledIcons = styled(Icon)`
   color: ${({ theme }) => theme.colors.fields?.icon || '#cdd5df'};
   font-size: 2.4rem;
 `;
+
 const DropdownIconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const ErrorText = styled.div`
+  font-size: 1.2rem;
+  color: ${({ theme }) => theme.colors.error || '#FE5B78'};
+  margin-top: 4px;
 `;
 
 export default MultiTextField;

@@ -56,7 +56,7 @@ export const useSelectData = ({
     setShowSelect(false);
     setInputValue('');
 
-    if (getOptionLabel(value) === getOptionLabel(option)) return;
+    if (value && getOptionLabel(value) === getOptionLabel(option)) return;
 
     onChange(option);
   };
@@ -75,10 +75,15 @@ export const useSelectData = ({
     !disabled && setShowSelect(!showSelect);
   };
 
+  const handleFocusSelect = () => {
+    setShowSelect(true);
+  };
+
   return {
     suggestions,
     input,
     handleToggleSelect,
+    handleFocusSelect,
     showSelect,
     handleBlur,
     handleClick,
@@ -155,6 +160,9 @@ export const useAsyncSelectData = ({
   const handleToggleSelect = () => {
     !disabled && setShowSelect(!showSelect);
   };
+  const handleFocusSelect = () => {
+    setShowSelect(true);
+  };
 
   const handleInputChange = (input: string) => {
     setShowSelect(!!input.length);
@@ -174,6 +182,7 @@ export const useAsyncSelectData = ({
     input,
     handleInputChange,
     handleToggleSelect,
+    handleFocusSelect,
     showSelect,
     handleBlur,
     observerRef,

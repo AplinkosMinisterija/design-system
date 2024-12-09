@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 export interface TextFieldProps {
   value?: string | number;
   name?: string;
@@ -16,10 +17,12 @@ export interface TextFieldProps {
   selectedValue?: boolean;
   onFocus?: any;
   variant?: string;
+  label?: string;
 }
 
 const TextFieldInput = ({
   value,
+  label,
   name,
   error,
   readOnly = false,
@@ -37,15 +40,27 @@ const TextFieldInput = ({
   variant = 'default',
   ...rest
 }: TextFieldProps) => {
+  const inputId = label || name;
+
   return (
-    <InputContainer $error={!!error} $height={height} $disabled={disabled || false}>
+    <InputContainer
+      $error={!!error}
+      $height={height}
+      $disabled={disabled || false}
+      aria-disabled={disabled}
+      aria-invalid={!!error}
+    >
       {left}
       <InputWrapper>
         {!value && typeof placeholder !== 'string' && (
-          <CustomPlaceholder>{placeholder}</CustomPlaceholder>
+          <CustomPlaceholder id={`${inputId}-placeholder`}>{placeholder}</CustomPlaceholder>
         )}
 
         <StyledTextInput
+          id={inputId}
+          aria-labelledby={
+            placeholder && typeof placeholder === 'string' ? `${inputId}-placeholder` : undefined
+          }
           $selectedValue={selectedValue}
           onClick={() => (onInputClick ? onInputClick() : null)}
           readOnly={readOnly}
@@ -62,6 +77,7 @@ const TextFieldInput = ({
         />
       </InputWrapper>
       {right}
+      {error && <ErrorText>{error}</ErrorText>}
     </InputContainer>
   );
 };
@@ -148,6 +164,12 @@ const StyledTextInput = styled.input<{
     color: ${({ theme, $selectedValue }) =>
       (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
   }
+`;
+
+const ErrorText = styled.div`
+  font-size: 1.2rem;
+  color: ${({ theme }) => theme.colors.error || '#FE5B78'};
+  margin-top: 4px;
 `;
 
 export default TextFieldInput;

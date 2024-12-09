@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
-import TextFieldInput from './common/TextFieldInput';
 import Icon from './common/Icons';
+import TextFieldInput from './common/TextFieldInput';
 export interface TextFieldProps {
   value?: string | number;
   name?: string;
@@ -47,6 +47,7 @@ const PasswordField = ({
       showError={showError}
     >
       <TextFieldInput
+        label={label}
         value={value}
         type={show ? 'text' : 'password'}
         name={name}

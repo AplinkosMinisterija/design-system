@@ -31,6 +31,8 @@ const Checkbox = ({
   width,
   radius,
 }: CheckboxProps) => {
+  const ariaChecked = intermediate ? 'intermediate' : value;
+
   return (
     <Wrapper $width={width} $displayAsButton={displayAsButton}>
       <Container
@@ -48,6 +50,10 @@ const Checkbox = ({
           $error={error}
           $checked={value}
           $hidden={displayAsButton}
+          role="checkbox"
+          aria-checked={ariaChecked}
+          aria-labelledby={`${name}-label`}
+          aria-describedby={description ? description : undefined}
         >
           <CheckBox
             type="checkbox"
@@ -62,12 +68,13 @@ const Checkbox = ({
               e?.stopPropagation();
             }}
             $displayAsButton={displayAsButton}
+            aria-checked={ariaChecked}
           />
           <CheckMark checked={value || false} intermediate={intermediate} disabled={disabled} />
         </InnerContainer>
         <Column $displayAsButton={displayAsButton}>
-          <Label>{label}</Label>
-          {description && <Description>{description}</Description>}
+          <Label id={`${name}-label`}>{label}</Label>
+          {description && <Description id={`${name}-description`}>{description}</Description>}
         </Column>
       </Container>
     </Wrapper>
