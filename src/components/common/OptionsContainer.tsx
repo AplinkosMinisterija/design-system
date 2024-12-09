@@ -43,7 +43,7 @@ const OptionsContainer = ({
   const renderOptions = () => {
     if (!options.length) {
       return loading ? (
-        <LoaderComponent aria-live="polite" />
+        <LoaderComponent />
       ) : (
         <Option key="no-options" role="option" aria-disabled="true">
           {texts.noOptions}
@@ -66,7 +66,7 @@ const OptionsContainer = ({
             {getOptionLabel && getOptionLabel(option)}
           </Option>
         ))}
-        {loading && <LoaderComponent aria-live="polite" />}
+        {loading && <LoaderComponent />}
       </>
     );
   };
