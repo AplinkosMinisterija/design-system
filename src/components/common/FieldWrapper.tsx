@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { ErrorMessage } from './ErrorMessage';
 import { useKeyAction } from './hooks';
+
 export interface FieldWrapperProps {
   error?: string;
   showError?: boolean;
@@ -31,6 +32,11 @@ const FieldWrapper = ({
   labelButton,
 }: FieldWrapperProps) => {
   const handleOnKeyDown = useKeyAction(() => !!onClick && onClick());
+
+  const fieldId = label ? `field-${label}` : undefined;
+  const errorId = error ? `${fieldId}-error` : undefined;
+  const subLabelId = subLabel ? `${subLabel}-sublabel` : undefined;
+
   return (
     <Container
       tabIndex={-1}
@@ -43,17 +49,23 @@ const FieldWrapper = ({
       <LabelRow>
         {!!label && (
           <LabelContainer>
-            <Label aria-labelledby={label} htmlFor={label}>
+            <Label id={fieldId} htmlFor={fieldId}>
               {label}
             </Label>
-            {!!subLabel && <SubLabel aria-labelledby={subLabel}>{subLabel}</SubLabel>}
+            {!!subLabel && (
+              <SubLabel id={subLabelId} aria-labelledby={subLabelId}>
+                {subLabel}
+              </SubLabel>
+            )}
           </LabelContainer>
         )}
         {secondLabel}
         {labelButton}
       </LabelRow>
-      <div className="fieldWrapperChildren">{children}</div>
-      {showError && <ErrorMessage error={error} />}
+      <div className="fieldWrapperChildren" aria-labelledby={fieldId}>
+        {children}
+      </div>
+      {showError && error && <ErrorMessage errorId={errorId} error={error} />}
       {bottomLabel && <BottomLabel>{bottomLabel}</BottomLabel>}
     </Container>
   );
