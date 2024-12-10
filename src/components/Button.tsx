@@ -13,6 +13,7 @@ export interface ButtonProps {
   signature?: boolean;
   disabled?: boolean;
   width?: string;
+  label?: string;
 }
 
 const Button = ({
@@ -21,13 +22,16 @@ const Button = ({
   children,
   left,
   right,
-  type,
+  type = 'button',
   loading = false,
   className,
   disabled = false,
+  label = '',
   width,
   ...rest
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+  const areaLabel = (label || typeof children === 'string' ? children : type)?.toString();
+
   return (
     <ButtonWrapper $width={width}>
       <StyledButton
@@ -36,6 +40,7 @@ const Button = ({
         type={type}
         disabled={disabled}
         {...rest}
+        aria-label={areaLabel}
       >
         {left}
         {loading ? <Loader size={'24'} color="white" /> : children}
@@ -66,6 +71,7 @@ const StyledButton = styled.button<{
     ${({ $variant, theme }) => theme.colors.buttons?.[$variant]?.border || 'transparent'};
   font-weight: ${({ theme }) => theme.fontWeight?.buttons || 400};
   font-size: ${({ theme }) => theme.fontSize?.buttons || 1.6}rem;
+  &:focus,
   &:hover {
     color: ${({ $variant, theme }) =>
       theme.colors.buttons?.[$variant]?.hoverText ||
