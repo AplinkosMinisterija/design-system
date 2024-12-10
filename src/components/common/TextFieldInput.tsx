@@ -40,7 +40,7 @@ const TextFieldInput = ({
   variant = 'default',
   ...rest
 }: TextFieldProps) => {
-  const inputId = label || name;
+  const ariaValue = label || name;
 
   return (
     <InputContainer
@@ -53,13 +53,13 @@ const TextFieldInput = ({
       {left}
       <InputWrapper>
         {!value && typeof placeholder !== 'string' && (
-          <CustomPlaceholder id={`${inputId}-placeholder`}>{placeholder}</CustomPlaceholder>
+          <CustomPlaceholder id={`${ariaValue}-placeholder`}>{placeholder}</CustomPlaceholder>
         )}
 
         <StyledTextInput
-          id={inputId}
+          id={ariaValue}
           aria-labelledby={
-            placeholder && typeof placeholder === 'string' ? `${inputId}-placeholder` : undefined
+            placeholder && typeof placeholder === 'string' ? `${ariaValue}-placeholder` : undefined
           }
           $selectedValue={selectedValue}
           onClick={() => (onInputClick ? onInputClick() : null)}

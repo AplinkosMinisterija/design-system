@@ -37,7 +37,7 @@ const MultiTextField = ({
   hideDropdown = false,
 }: MultiTextFieldProps) => {
   const inputRef = useRef<any>(null);
-  const inputId = label || name;
+  const ariaValue = label || name;
 
   const handleClick = () => {
     if (!inputRef?.current) return;
@@ -94,8 +94,8 @@ const MultiTextField = ({
         ))}
         {!disabled && (
           <Input
-            id={inputId}
-            aria-labelledby={!values?.length ? `${inputId}-placeholder` : undefined}
+            id={ariaValue}
+            aria-labelledby={!values?.length ? `${ariaValue}-placeholder` : undefined}
             onKeyDown={handleKeyDown}
             name={name}
             ref={inputRef}
