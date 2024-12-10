@@ -33,9 +33,9 @@ const FieldWrapper = ({
 }: FieldWrapperProps) => {
   const handleOnKeyDown = useKeyAction(() => !!onClick && onClick());
 
-  const fieldId = label ? `field-${label}` : undefined;
-  const errorId = error ? `${fieldId}-error` : undefined;
-  const subLabelId = subLabel ? `${subLabel}-sublabel` : undefined;
+  const labelAriaValue = label ? `field-${label}` : undefined;
+  const errorAriaValue = error ? `${labelAriaValue}-error` : undefined;
+  const subLabelAriaValue = subLabel ? `${subLabel}-sublabel` : undefined;
 
   return (
     <Container
@@ -49,11 +49,11 @@ const FieldWrapper = ({
       <LabelRow>
         {!!label && (
           <LabelContainer>
-            <Label id={fieldId} htmlFor={fieldId}>
+            <Label id={labelAriaValue} htmlFor={labelAriaValue}>
               {label}
             </Label>
             {!!subLabel && (
-              <SubLabel id={subLabelId} aria-labelledby={subLabelId}>
+              <SubLabel id={subLabelAriaValue} aria-labelledby={subLabelAriaValue}>
                 {subLabel}
               </SubLabel>
             )}
@@ -62,10 +62,10 @@ const FieldWrapper = ({
         {secondLabel}
         {labelButton}
       </LabelRow>
-      <div className="fieldWrapperChildren" aria-labelledby={fieldId}>
+      <div className="fieldWrapperChildren" aria-labelledby={labelAriaValue}>
         {children}
       </div>
-      {showError && error && <ErrorMessage errorId={errorId} error={error} />}
+      {showError && error && <ErrorMessage errorAriaValue={errorAriaValue} error={error} />}
       {bottomLabel && <BottomLabel>{bottomLabel}</BottomLabel>}
     </Container>
   );
