@@ -41,7 +41,7 @@ const DragAndDropUploadField = ({
   multiple = true,
   customDeleteIcon,
   files,
-  label,
+  label = '',
   disabled = false,
   error,
   showError = false,
@@ -57,7 +57,7 @@ const DragAndDropUploadField = ({
 }: FileFieldProps) => {
   const inputRef = useRef<any>(null);
   const [uploadLoading, setUploadLoading] = useState(false);
-  const ariaValue = 'upload-instructions';
+  const ariaValue = `${label}-upload-instructions`;
 
   const handleSetFiles = async (currentFiles: File[]) => {
     const isValidFileTypes = validateFileTypes(currentFiles, availableMimeTypes);
