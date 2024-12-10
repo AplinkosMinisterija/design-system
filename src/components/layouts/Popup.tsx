@@ -21,7 +21,7 @@ const Popup = ({
 }: PopupProps) => {
   return (
     <Modal visible={visible} onClose={onClose}>
-      <Container $type={type} aria-labelledby="popup-title" role="dialog" aria-modal="true">
+      <Container $type={type} aria-label="popup" role="dialog" aria-modal="true">
         <InnerContainer $type={type}>
           <Header>
             <LeftContainer>{left}</LeftContainer>
