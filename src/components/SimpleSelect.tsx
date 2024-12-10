@@ -1,9 +1,9 @@
 import { JSX, useState } from 'react';
+import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
+import Icon, { IconName } from './common/Icons';
 import OptionsContainer from './common/OptionsContainer';
 import TextFieldInput from './common/TextFieldInput';
-import Icon, { IconName } from './common/Icons';
-import styled from 'styled-components';
 
 interface SimpleSelectProps {
   name?: string;
@@ -63,6 +63,7 @@ const SimpleSelect = ({
       showError={showError}
     >
       <TextFieldInput
+        label={label}
         value={value ? getOptionLabel(value) : undefined}
         name={name}
         error={error}
@@ -73,7 +74,7 @@ const SimpleSelect = ({
         placeholder={placeholder}
       />
       <OptionsContainer
-        values={options}
+        options={options}
         getOptionLabel={getOptionComponent || getOptionLabel}
         showSelect={showSelect}
         handleClick={handleClick}

@@ -1,8 +1,19 @@
 import styled from 'styled-components';
 
-export const ErrorMessage = ({ error }: { error?: string }) => {
-  if (!error) return <></>;
-  return <Container>{error}</Container>;
+export const ErrorMessage = ({
+  error,
+  errorAriaValue = '',
+}: {
+  error?: string;
+  errorAriaValue?: string;
+}) => {
+  if (!error) return null;
+
+  return (
+    <Container role="alert" id={errorAriaValue} aria-labelledby={errorAriaValue}>
+      {error}
+    </Container>
+  );
 };
 
 const Container = styled.label`

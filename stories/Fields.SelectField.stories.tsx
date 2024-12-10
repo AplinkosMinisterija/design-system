@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 
-import SelectField from '../src/components/SelectField';
-import StoryWrapper from '../src/components/common/StoryWrapper';
 import styled from 'styled-components';
+import StoryWrapper from '../src/components/common/StoryWrapper';
+import SelectField from '../src/components/SelectField';
 
 const meta: Meta<typeof SelectField> = {
   component: SelectField,
@@ -15,6 +16,7 @@ type Story = StoryObj<typeof SelectField>;
 export const SelectFieldStory: Story = {
   name: 'SelectField',
   render: () => {
+    const [value, setValue] = useState();
     return (
       <StoryWrapper>
         <SelectField
@@ -26,8 +28,10 @@ export const SelectFieldStory: Story = {
             { id: 5, label: 'Stirna', age: 'Suauges', gender: 'Patele' },
             { id: 6, label: 'Kiškis', age: 'Suages', gender: 'Patinas' },
           ]}
-          value={{ id: 1, label: 'Vilkas', age: 'Dvimetis', gender: 'Patinas' }}
-          onChange={() => {}}
+          value={value}
+          onChange={(val) => {
+            setValue(val);
+          }}
           getOptionLabel={(option) => option.label}
           getOptionComponent={(option) => (
             <span>

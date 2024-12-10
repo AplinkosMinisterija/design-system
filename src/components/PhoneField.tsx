@@ -65,6 +65,7 @@ const PhoneField = ({
       showError={showError}
     >
       <TextFieldInput
+        label={label}
         type="tel"
         inputMode={'tel'}
         value={value}

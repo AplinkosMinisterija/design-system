@@ -81,6 +81,7 @@ const AsyncSelectField = ({
       showError={showError}
     >
       <TextFieldInput
+        label={label}
         value={input}
         name={name}
         error={error}
@@ -108,7 +109,7 @@ const AsyncSelectField = ({
       <OptionsContainer
         loading={loading}
         observerRef={observerRef}
-        values={suggestions}
+        options={suggestions}
         getOptionLabel={getOptionComponent || getOptionLabel}
         showSelect={showSelect}
         handleClick={handleClick}

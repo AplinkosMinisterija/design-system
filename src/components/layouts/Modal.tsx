@@ -1,6 +1,7 @@
-import { useCallback, useEffect, Fragment } from 'react';
+import { Fragment, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { device } from '../../utils';
+
 interface ModalProps {
   visible: boolean;
   onClose?: () => void;
@@ -9,7 +10,7 @@ interface ModalProps {
 
 const Modal = ({ visible, children, onClose }: ModalProps) => {
   const handleCloseOnEscape = useCallback(
-    (event: any) => {
+    (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose && onClose();
       }
@@ -18,19 +19,26 @@ const Modal = ({ visible, children, onClose }: ModalProps) => {
   );
 
   useEffect(() => {
-    window.addEventListener('keydown', handleCloseOnEscape);
-    return () => window.removeEventListener('keydown', handleCloseOnEscape);
+    if (visible) {
+      window.addEventListener('keydown', handleCloseOnEscape);
+      return () => window.removeEventListener('keydown', handleCloseOnEscape);
+    }
   }, [visible, handleCloseOnEscape]);
 
   if (!visible) {
     return <Fragment />;
   }
+
   return (
     <ModalContainer
+      role="dialog"
+      aria-modal="true"
+      aria-label="Modal"
+      tabIndex={-1}
       onClick={(e) => {
-        if (e.target !== e.currentTarget) return;
-
-        onClose && onClose();
+        if (e.target === e.currentTarget) {
+          onClose && onClose();
+        }
       }}
     >
       {children}
@@ -45,14 +53,14 @@ const ModalContainer = styled.div`
   top: 0;
   left: 0;
   margin: auto;
-  background-color: #0b1b607a;
+  background-color: rgba(11, 27, 96, 0.48);
   z-index: 1001;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: auto;
-  overflow-y: auto;
   padding: 16px;
+
   @media ${device.mobileL} {
     padding: 0px;
   }

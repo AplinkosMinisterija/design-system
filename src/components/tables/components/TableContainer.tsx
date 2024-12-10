@@ -27,14 +27,13 @@ const TableContainer = ({ data, pageName = 'page', loading, children }: TableLay
   const navigate = useNavigate();
 
   useEffect(() => {
-    const currentPage = parseInt(params?.page);
-
-    if (!loading && totalPages < currentPage) {
+    const currentPage = parseInt(params?.[pageName]) || 1;
+    if (!loading && (currentPage > totalPages || currentPage < 1)) {
       navigateToPage(1);
     }
   }, [searchParams, data, loading]);
 
-  const navigateToPage = (pageNumber) => {
+  const navigateToPage = (pageNumber: number) => {
     navigate({
       search: `?${createSearchParams({
         ...params,
@@ -43,7 +42,7 @@ const TableContainer = ({ data, pageName = 'page', loading, children }: TableLay
     });
   };
 
-  const handlePageChange = (e) => {
+  const handlePageChange = (e: { selected: number }) => {
     navigateToPage(e.selected + 1);
   };
 
@@ -69,8 +68,9 @@ const TableContainer = ({ data, pageName = 'page', loading, children }: TableLay
           breakClassName="page-item"
           nextClassName="page-item"
           previousClassName="page-item"
-          previousLabel={<StyledIcon name="backward" />}
-          nextLabel={<StyledIcon name="forward" />}
+          aria-label="Pagination navigation"
+          previousLabel={<StyledIcon name="backward" aria-label="Previous page" />}
+          nextLabel={<StyledIcon name="forward" aria-label="Next page" />}
         />
       )}
     </Container>
@@ -87,6 +87,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: flex-end;
   overflow-x: auto;
+
   @media ${device.mobileL} {
     align-items: center;
   }

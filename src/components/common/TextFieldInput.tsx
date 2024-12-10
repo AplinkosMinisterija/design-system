@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 export interface TextFieldProps {
   value?: string | number;
   name?: string;
@@ -16,10 +17,12 @@ export interface TextFieldProps {
   selectedValue?: boolean;
   onFocus?: any;
   variant?: string;
+  label?: string;
 }
 
 const TextFieldInput = ({
   value,
+  label = '',
   name,
   error,
   readOnly = false,
@@ -37,15 +40,27 @@ const TextFieldInput = ({
   variant = 'default',
   ...rest
 }: TextFieldProps) => {
+  const ariaValue = label || name;
+
   return (
-    <InputContainer $error={!!error} $height={height} $disabled={disabled || false}>
+    <InputContainer
+      $error={!!error}
+      $height={height}
+      $disabled={disabled || false}
+      aria-disabled={disabled}
+      aria-invalid={!!error}
+    >
       {left}
       <InputWrapper>
         {!value && typeof placeholder !== 'string' && (
-          <CustomPlaceholder>{placeholder}</CustomPlaceholder>
+          <CustomPlaceholder id={`${ariaValue}-placeholder`}>{placeholder}</CustomPlaceholder>
         )}
 
         <StyledTextInput
+          id={ariaValue}
+          aria-labelledby={
+            placeholder && typeof placeholder === 'string' ? `${ariaValue}-placeholder` : undefined
+          }
           $selectedValue={selectedValue}
           onClick={() => (onInputClick ? onInputClick() : null)}
           readOnly={readOnly}

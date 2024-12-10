@@ -1,43 +1,60 @@
 import { useRef } from 'react';
 import styled from 'styled-components';
 import Icon from '../common/Icons';
+
 export interface MultiTextFieldProps {
   values: any[];
   error?: string;
   className?: string;
   onRemove: ({ value, index }: any) => void;
+  handleKeyDown?: (event?: any) => void;
   disabled?: boolean;
   handleInputChange: (event: any) => void;
   getOptionLabel: (option: any) => string;
-  handleKeyDown?: (event: any) => void;
   placeholder?: string;
   input: string;
   backgroundColor?: string;
   height?: number;
   name?: string;
   hideDropdown?: boolean;
+  label?: string;
 }
 
 const MultiTextField = ({
   values = [],
   backgroundColor,
+  label = '',
   error,
   handleInputChange,
   getOptionLabel,
   onRemove,
-  handleKeyDown,
   placeholder = '',
   input = '',
   disabled,
+  handleKeyDown,
   name,
   height = 56,
   hideDropdown = false,
 }: MultiTextFieldProps) => {
   const inputRef = useRef<any>(null);
+  const ariaValue = label || name;
 
   const handleClick = () => {
     if (!inputRef?.current) return;
     inputRef?.current?.focus();
+  };
+
+  const handleRemove = (e: React.KeyboardEvent | React.MouseEvent, value: any, index: number) => {
+    e.stopPropagation();
+    if (disabled) return;
+    onRemove({ value, index });
+  };
+
+  const handleRemoveOnKeyDown = (e, value, index) => {
+    const keysToRemove = ['Enter', 'Backspace', 'Delete'];
+    if (keysToRemove.includes(e.key)) {
+      handleRemove(e, value, index);
+    }
   };
 
   return (
@@ -46,21 +63,30 @@ const MultiTextField = ({
       onClick={handleClick}
       $hasBorder={true}
       $backgroundColor={backgroundColor}
-      $readOnly={false}
       $error={!!error}
       $disabled={disabled || false}
       $height={height}
+      aria-disabled={disabled}
+      aria-invalid={!!error}
     >
       <InnerContainer>
         {values?.map((value: any, index) => (
-          <SimpleCard key={value + index} disabled={!!disabled}>
+          <SimpleCard
+            key={index}
+            disabled={!!disabled}
+            role="listitem"
+            aria-label={`Tag: ${getOptionLabel(value)}`}
+            tabIndex={0}
+          >
             <Name>{getOptionLabel(value)}</Name>
             <IconContainer
-              onClick={(e) => {
-                e.stopPropagation();
-                if (disabled) return;
-                onRemove({ value, index });
+              onClick={(e) => handleRemove(e, value, index)}
+              onKeyDown={(e) => {
+                handleRemoveOnKeyDown(e, value, index);
               }}
+              role="button"
+              tabIndex={0}
+              aria-label={`Remove ${getOptionLabel(value)}`}
             >
               <StyledCloseIcon name="close" />
             </IconContainer>
@@ -68,13 +94,15 @@ const MultiTextField = ({
         ))}
         {!disabled && (
           <Input
+            id={ariaValue}
+            aria-labelledby={!values?.length ? `${ariaValue}-placeholder` : undefined}
+            onKeyDown={handleKeyDown}
             name={name}
             ref={inputRef}
             placeholder={!values?.length ? placeholder : ''}
             disabled={disabled}
             value={input}
             onChange={(e) => handleInputChange(e?.target?.value)}
-            onKeyDown={handleKeyDown}
           />
         )}
       </InnerContainer>
@@ -89,7 +117,6 @@ const MultiTextField = ({
 
 const InputContainer = styled.div<{
   $error: boolean;
-  $readOnly: boolean;
   $disabled: boolean;
   $hasBorder: boolean;
   $backgroundColor: string;

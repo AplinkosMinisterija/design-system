@@ -1,10 +1,8 @@
 import styled, { css } from 'styled-components';
-import Modal from './Modal';
-import Icon from '../common/Icons';
-import { device } from '../../utils';
-// @ts-ignore
-import React, { JSX, useEffect } from 'react';
 import { PopupType } from '../../types';
+import { device } from '../../utils';
+import Icon from '../common/Icons';
+import Modal from './Modal';
 
 export interface PopupProps {
   onClose: () => void;
@@ -23,11 +21,11 @@ const Popup = ({
 }: PopupProps) => {
   return (
     <Modal visible={visible} onClose={onClose}>
-      <Container $type={type}>
+      <Container $type={type} aria-label="popup" role="dialog" aria-modal="true">
         <InnerContainer $type={type}>
           <Header>
             <LeftContainer>{left}</LeftContainer>
-            <IconContainer onClick={onClose}>
+            <IconContainer onClick={onClose} aria-label="Close popup" role="button" tabIndex={0}>
               <StyledIcon name="close" />
             </IconContainer>
           </Header>

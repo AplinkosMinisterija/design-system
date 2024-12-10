@@ -1,6 +1,7 @@
 import { map } from 'lodash';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
+import { useKeyAction } from './common/hooks';
 
 export interface ButtonsGroupProps {
   options: any[];
@@ -18,22 +19,25 @@ const ButtonsGroup = ({
   disabled,
   isSelected,
   className,
-  label,
+  label = '',
   getOptionLabel,
 }: ButtonsGroupProps) => {
+  const handleOnKeyDown = useKeyAction(onChange, disabled);
   return (
     <div>
       <FieldWrapper className={className} label={label}>
-        <Container className={className}>
+        <Container className={className} role="radiogroup" aria-labelledby={label}>
           {map(options, (option, index) => (
             <StyledButton
               type="button"
+              key={`group-button-${index}`}
+              role="radio"
+              aria-checked={isSelected(option)}
               disabled={disabled}
-              key={`group-button${index}`}
-              left={index === 0}
-              right={index === options.length - 1}
               selected={isSelected(option)}
+              onKeyDown={handleOnKeyDown(option)}
               onClick={() => (disabled ? {} : onChange(option))}
+              tabIndex={0}
             >
               {getOptionLabel ? getOptionLabel(option) : option.name}
             </StyledButton>
@@ -56,8 +60,6 @@ const Container = styled.div`
 `;
 
 const StyledButton = styled.button<{
-  left: boolean;
-  right: boolean;
   selected: boolean;
   disabled?: boolean;
 }>`
@@ -75,18 +77,28 @@ const StyledButton = styled.button<{
   font-weight: normal;
   font-size: 1.4rem;
   opacity: ${({ disabled }) => (disabled ? 0.48 : 1)};
-  :hover {
+  &:hover {
     opacity: ${({ disabled }) => (disabled ? 0.48 : 0.6)};
   }
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
+
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   background-color: ${({ selected, theme }) => (selected ? theme.colors.primary + '1F' : 'white')};
   color: #121926;
   justify-content: center;
   border-width: 1px;
-  border-top-left-radius: ${({ left, theme }) => (left ? theme.radius?.fields : 0)}rem;
-  border-bottom-left-radius: ${({ left, theme }) => (left ? theme.radius?.fields : 0)}rem;
-  border-top-right-radius: ${({ right, theme }) => (right ? theme.radius?.fields : 0)}rem;
-  border-bottom-right-radius: ${({ right, theme }) => (right ? theme.radius?.fields : 0)}rem;
+
+  &:first-child {
+    border-top-left-radius: ${({ theme }) => theme.radius?.fields || 0}rem;
+    border-bottom-left-radius: ${({ theme }) => theme.radius?.fields || 0}rem;
+  }
+
+  &:last-child {
+    border-top-right-radius: ${({ theme }) => theme.radius?.fields || 0}rem;
+    border-bottom-right-radius: ${({ theme }) => theme.radius?.fields || 0}rem;
+  }
 `;
 
 export default ButtonsGroup;

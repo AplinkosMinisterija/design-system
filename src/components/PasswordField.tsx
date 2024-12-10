@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
-import TextFieldInput from './common/TextFieldInput';
+import { useKeyAction } from './common/hooks';
 import Icon from './common/Icons';
+import TextFieldInput from './common/TextFieldInput';
 export interface TextFieldProps {
   value?: string | number;
   name?: string;
@@ -36,6 +37,7 @@ const PasswordField = ({
   onInputClick,
 }: TextFieldProps) => {
   const [show, setShow] = useState(false);
+  const handleOnKeyDown = useKeyAction(() => setShow(!show));
 
   return (
     <FieldWrapper
@@ -47,12 +49,20 @@ const PasswordField = ({
       showError={showError}
     >
       <TextFieldInput
+        label={label}
         value={value}
         type={show ? 'text' : 'password'}
         name={name}
         error={error}
         right={
-          <IconContainer onClick={() => setShow(!show)}>
+          <IconContainer
+            onClick={() => setShow(!show)}
+            aria-label={show ? 'Hide password' : 'Show password'}
+            aria-pressed={show}
+            role="button"
+            tabIndex={0}
+            onKeyDown={handleOnKeyDown()}
+          >
             <StyledIcon name={show ? 'visibleOn' : 'visibleOff'} />
           </IconContainer>
         }

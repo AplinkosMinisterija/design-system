@@ -41,7 +41,7 @@ const DragAndDropUploadField = ({
   multiple = true,
   customDeleteIcon,
   files,
-  label,
+  label = '',
   disabled = false,
   error,
   showError = false,
@@ -56,8 +56,8 @@ const DragAndDropUploadField = ({
   availableExtensionsTypes = ['.png', '.jpg', '.jpeg', '.pdf'],
 }: FileFieldProps) => {
   const inputRef = useRef<any>(null);
-
   const [uploadLoading, setUploadLoading] = useState(false);
+  const ariaValue = `${label}-upload-instructions`;
 
   const handleSetFiles = async (currentFiles: File[]) => {
     const isValidFileTypes = validateFileTypes(currentFiles, availableMimeTypes);
@@ -92,13 +92,11 @@ const DragAndDropUploadField = ({
 
   const onButtonClick = () => {
     if (disabled) return;
-
     inputRef?.current?.click();
   };
 
   const handleDelete = (e, index) => {
     e.stopPropagation();
-
     if (onDelete) {
       onDelete([...files.slice(0, index), ...files.slice(index + 1)]);
     }
@@ -113,6 +111,9 @@ const DragAndDropUploadField = ({
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
             onClick={onButtonClick}
+            role="button"
+            tabIndex={0}
+            aria-labelledby={ariaValue}
           >
             <Input
               ref={inputRef}
@@ -125,9 +126,9 @@ const DragAndDropUploadField = ({
               <LoaderComponent />
             ) : (
               <>
-                <BigIcon name={IconName.upload} />
+                <BigIcon name={IconName.upload} aria-hidden="true" />
                 <div>
-                  <TextRow>
+                  <TextRow id={ariaValue}>
                     <BoldText>{text.pressToWant}</BoldText>
                     <Text>{text.uploadOrDragFilesHere}</Text>
                   </TextRow>
@@ -148,14 +149,22 @@ const DragAndDropUploadField = ({
               <FileSize>{bytesToMb(file.size)}</FileSize>
             </FileInnerContainer>
             <FileInnerRow>
-              <IconContainer href={file?.url} target="_blank" download={file?.name}>
+              <IconContainer
+                href={file?.url}
+                target="_blank"
+                download={file?.name}
+                tabIndex={0}
+                role="button"
+                aria-label={`Download ${file?.name}`}
+              >
                 <StyledIcon name={IconName.download} />
               </IconContainer>
               {!disabled && (
                 <IconContainer
-                  onClick={(e) => {
-                    handleDelete(e, index);
-                  }}
+                  onClick={(e) => handleDelete(e, index)}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Remove ${file?.name}`}
                 >
                   {customDeleteIcon || <StyledIcon name={IconName.remove} />}
                 </IconContainer>

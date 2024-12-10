@@ -78,6 +78,7 @@ const AsyncMultiSelectField = ({
     >
       <MultiTextField
         name={name}
+        label={label}
         placeholder={placeholder}
         values={values}
         onRemove={({ index }) => {
@@ -90,7 +91,7 @@ const AsyncMultiSelectField = ({
         getOptionLabel={getOptionLabel}
       />
       <OptionsContainer
-        values={filterSelectedOptions(suggestions, values, getOptionValue)}
+        options={filterSelectedOptions(suggestions, values, getOptionValue)}
         getOptionLabel={getOptionLabel}
         loading={loading}
         observerRef={observerRef}
