@@ -41,6 +41,8 @@ const Button = ({
         disabled={disabled}
         {...rest}
         aria-label={areaLabel}
+        role="button"
+        tabIndex={0}
       >
         {left}
         {loading ? <Loader size={'24'} color="white" /> : children}
