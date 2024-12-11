@@ -21,15 +21,15 @@ const MapField = ({
   onChange,
   ...rest
 }: MapFieldProps) => {
-  const iframeRef = useRef<any>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const handleSaveGeom = useCallback(
-    (event: any) => {
-      if (event.origin === mapHost) {
-        onChange(JSON.parse(event?.data?.mapIframeMsg?.data));
+    (event: MessageEvent) => {
+      if (event.origin === mapHost && event?.data?.mapIframeMsg?.data) {
+        onChange(JSON.parse(event.data.mapIframeMsg.data));
       }
     },
-    [onChange],
+    [mapHost, onChange],
   );
 
   useEffect(() => {
@@ -52,8 +52,9 @@ const MapField = ({
         width={'100%'}
         allowFullScreen={true}
         onLoad={handleLoadMap}
-        aria-hidden="false"
-        tabIndex={1}
+        aria-label={`Interactive map ${label}`}
+        aria-describedby={error ? `${label}-error` : undefined}
+        tabIndex={0}
       />
     </FieldWrapper>
   );

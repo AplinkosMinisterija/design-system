@@ -1,6 +1,7 @@
 import { map } from 'lodash';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useKeyAction } from '../../../components/common/hooks';
 import { FilterConfig, RowConfig } from '../../../types';
 import { device, FilterInputTypes, formatDate, useWindowSize } from '../../../utils';
 import Icon, { IconName } from '../../common/Icons';
@@ -89,6 +90,10 @@ const DynamicFilter = ({
     filter: 'Filtruoti',
   },
 }: DynamicFilterProps) => {
+  const handleFilterOnKeyDown = useKeyAction(() => setShowFilters(true), disabled);
+  const handleRemoveFilterOnKeyDown = useKeyAction((appliedFilter) => {
+    handleClearFilter(appliedFilter);
+  }, disabled);
   const isMobile = useWindowSize(device.mobileL);
 
   const [showFilters, setShowFilters] = useState(false);
@@ -99,40 +104,59 @@ const DynamicFilter = ({
     setAppliedFilters(mapFilters(filterConfig, filters));
   }, [filters, filterConfig]);
 
+  const handleClearFilter = (appliedFilter) => {
+    const { [appliedFilter.key]: key, ...rest } = filters;
+    if (appliedFilter.id) {
+      onSetFilters({
+        ...rest,
+        [appliedFilter.key]: key.filter((filter) => filter.id !== appliedFilter.id),
+      });
+
+      return;
+    }
+    onSetFilters(rest);
+  };
+
   return (
     <>
       <Container>
         {!isMobile &&
           map(appliedFilters, (appliedFilter, index) => (
-            <Tag key={`${appliedFilter}_${index}`}>
+            <Tag
+              key={`${appliedFilter}_${index}`}
+              aria-label={`Applied filter: ${appliedFilter?.label}`}
+            >
               <TextContainer>{appliedFilter?.label}</TextContainer>
               <CloseIconContainer
-                onClick={() => {
-                  const { [appliedFilter.key]: key, ...rest } = filters;
-                  if (appliedFilter.id) {
-                    onSetFilters({
-                      ...rest,
-                      [appliedFilter.key]: key.filter((filter) => filter.id !== appliedFilter.id),
-                    });
-
-                    return;
-                  }
-                  onSetFilters(rest);
-                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Remove filter: ${appliedFilter?.label}`}
+                onClick={() => handleClearFilter(appliedFilter)}
+                onKeyDown={handleRemoveFilterOnKeyDown(appliedFilter)}
               >
-                <CloseIcon name={IconName.close} />{' '}
+                <CloseIcon name={IconName.close} />
               </CloseIconContainer>
             </Tag>
           ))}
-        <Wrapper className={className} disabled={disabled} onClick={() => setShowFilters(true)}>
-          <StyledButton disabled={disabled}>
+        <Wrapper
+          className={className}
+          disabled={disabled}
+          onClick={() => setShowFilters(true)}
+          role="button"
+          tabIndex={0}
+          aria-label="Open filter menu"
+          onKeyDown={handleFilterOnKeyDown()}
+        >
+          <StyledButton disabled={disabled} aria-disabled={disabled}>
             <StyledIcon name={IconName.filter} />
             {loading ? <Loader color="white" /> : 'Filtrai'}
-            <Count>{appliedFilters.length}</Count>
+            <Count aria-label={`${appliedFilters.length} filters applied`}>
+              {appliedFilters.length}
+            </Count>
           </StyledButton>
         </Wrapper>
       </Container>
-      <Popup visible={showFilters} onClose={() => setShowFilters(false)}>
+      <Popup ariaLabel="Filter" visible={showFilters} onClose={() => setShowFilters(false)}>
         <FilterWraper>
           <Filter
             values={filters}
