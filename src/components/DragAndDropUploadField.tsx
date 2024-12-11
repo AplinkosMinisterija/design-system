@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { bytesToMb, device, validateFileSizes, validateFileTypes } from '../utils';
 import FieldWrapper from './common/FieldWrapper';
+import { useKeyAction } from './common/hooks';
 import Icon, { IconName } from './common/Icons';
 import LoaderComponent from './common/LoaderComponent';
 
@@ -58,7 +59,8 @@ const DragAndDropUploadField = ({
   const inputRef = useRef<any>(null);
   const [uploadLoading, setUploadLoading] = useState(false);
   const ariaValue = `${label}-upload-instructions`;
-
+  const handleUploadOnKeyDown = useKeyAction(() => onButtonClick(), disabled);
+  const handleDownloadOnKeyDown = useKeyAction((index) => handleDelete(index), disabled);
   const handleSetFiles = async (currentFiles: File[]) => {
     const isValidFileTypes = validateFileTypes(currentFiles, availableMimeTypes);
     if (!isValidFileTypes) return handleError('badFileTypes');
@@ -95,8 +97,7 @@ const DragAndDropUploadField = ({
     inputRef?.current?.click();
   };
 
-  const handleDelete = (e, index) => {
-    e.stopPropagation();
+  const handleDelete = (index) => {
     if (onDelete) {
       onDelete([...files.slice(0, index), ...files.slice(index + 1)]);
     }
@@ -111,6 +112,7 @@ const DragAndDropUploadField = ({
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
             onClick={onButtonClick}
+            onKeyDown={handleUploadOnKeyDown()}
             role="button"
             tabIndex={0}
             aria-labelledby={ariaValue}
@@ -161,7 +163,11 @@ const DragAndDropUploadField = ({
               </IconContainer>
               {!disabled && (
                 <IconContainer
-                  onClick={(e) => handleDelete(e, index)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(index);
+                  }}
+                  onKeyDown={handleDownloadOnKeyDown(index)}
                   tabIndex={0}
                   role="button"
                   aria-label={`Remove ${file?.name}`}
