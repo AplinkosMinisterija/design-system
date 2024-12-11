@@ -25,7 +25,7 @@ const MapField = ({
 
   const handleSaveGeom = useCallback(
     (event: MessageEvent) => {
-      if (event.origin === mapHost && event.data?.mapIframeMsg?.data) {
+      if (event.origin === mapHost && event?.data?.mapIframeMsg?.data) {
         onChange(JSON.parse(event.data.mapIframeMsg.data));
       }
     },
@@ -39,7 +39,7 @@ const MapField = ({
 
   const handleLoadMap = () => {
     if (!value) return;
-    iframeRef.current?.contentWindow?.postMessage({ geom: value }, '*');
+    iframeRef?.current?.contentWindow?.postMessage({ geom: value }, '*');
   };
 
   return (
