@@ -82,6 +82,7 @@ const StyledButton = styled.button<{
   }
   &:focus {
     border-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.text?.focus || '#121926'};
   }
 
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
