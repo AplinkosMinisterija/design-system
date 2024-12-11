@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import DragAndDropUploadField from '../src/components/DragAndDropUploadField';
-import StoryWrapper from '../src/components/common/StoryWrapper';
 import { useState } from 'react';
+import StoryWrapper from '../src/components/common/StoryWrapper';
+import DragAndDropUploadField from '../src/components/DragAndDropUploadField';
 
 const meta: Meta<typeof DragAndDropUploadField> = {
   component: DragAndDropUploadField,
@@ -14,17 +14,23 @@ type Story = StoryObj<typeof DragAndDropUploadField>;
 export const Field: Story = {
   name: 'DragAndDropUploadField',
   render: () => {
-    const [files, setFiles] = useState([]);
+    const [files, setFiles] = useState<any>([]);
 
     return (
       <StoryWrapper>
         <DragAndDropUploadField
           multiple
-          onDelete={() => setFiles([])}
+          onDelete={(files) => setFiles(files)}
           onUpload={async (files) => {
             return new Promise((resolve) => {
               setTimeout(() => {
-                setFiles(files);
+                const updatedFiles = files.map((file) => ({
+                  url: URL.createObjectURL(file),
+                  name: file.name,
+                  size: file.size,
+                }));
+
+                setFiles(updatedFiles);
                 resolve();
               }, 2000);
             });
