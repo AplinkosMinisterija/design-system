@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { PopupType } from '../../types';
 import { device } from '../../utils';
+import { useKeyAction } from '../common/hooks';
 import Icon from '../common/Icons';
 import Modal from './Modal';
 
@@ -10,6 +11,7 @@ export interface PopupProps {
   children: React.ReactNode;
   type?: PopupType;
   left?: React.ReactNode;
+  ariaLabel?: string;
 }
 
 const Popup = ({
@@ -18,14 +20,23 @@ const Popup = ({
   visible = true,
   type = PopupType.FULL_SCREEN,
   left,
+  ariaLabel = 'popup',
 }: PopupProps) => {
+  const handleCloseOnKeyDown = useKeyAction(() => onClose());
+
   return (
     <Modal visible={visible} onClose={onClose}>
-      <Container $type={type} aria-label="popup" role="dialog" aria-modal="true">
+      <Container $type={type} aria-label={ariaLabel} role="dialog" aria-modal="true">
         <InnerContainer $type={type}>
           <Header>
             <LeftContainer>{left}</LeftContainer>
-            <IconContainer onClick={onClose} aria-label="Close popup" role="button" tabIndex={0}>
+            <IconContainer
+              onClick={onClose}
+              onKeyDown={handleCloseOnKeyDown()}
+              aria-label={`Close ${ariaLabel}`}
+              role="button"
+              tabIndex={0}
+            >
               <StyledIcon name="close" />
             </IconContainer>
           </Header>

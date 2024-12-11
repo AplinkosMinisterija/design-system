@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 
 import { FilterConfig, FilterInputTypes } from '../src';
 import StoryWrapper from '../src/components/common/StoryWrapper';
@@ -35,6 +36,7 @@ const rowConfig = [['firstName', 'lastName'], ['email']];
 export const TabsStory: Story = {
   name: 'DynamicFilter',
   render: () => {
+    const [filter, setFilter] = useState({});
     return (
       <StoryWrapper>
         <DynamicFilter
@@ -42,8 +44,10 @@ export const TabsStory: Story = {
           disabled={false}
           filterConfig={filterConfig()}
           rowConfig={rowConfig}
-          onSetFilters={() => {}}
-          filters={{}}
+          onSetFilters={(filters) => {
+            setFilter(filters);
+          }}
+          filters={filter}
           texts={{
             clearAll: 'Išvalyti filtrus',
             filter: 'Filtruoti',

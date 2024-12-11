@@ -1,32 +1,32 @@
+import { addProtocol, Feature, Map as MaplibreMap, MapOptions } from 'maplibre-gl';
 import { useEffect, useMemo, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import FieldWrapper from '../common/FieldWrapper';
-import { Feature, MapOptions, Map as MaplibreMap, addProtocol } from 'maplibre-gl';
 
 // @ts-ignore
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 
-import 'maplibre-gl/dist/maplibre-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import turfBbox from '@turf/bbox';
 import { AllGeoJSON } from '@turf/helpers';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { Protocol } from 'pmtiles';
 import {
-  BASEMAP_URL,
-  DrawOptions,
-  LKS_PROJECTION,
-  MAP_PROJECTION,
-  MapControls,
   addMapControls,
+  BASEMAP_URL,
   convertGeojsonToProjection,
+  DrawOptions,
   enableDraw,
   getMapStyles,
+  LKS_PROJECTION,
+  MapControls,
+  MAP_PROJECTION,
   parseDrawOptions,
   setPreviewLayerValue,
   setupPreviewLayer,
   transformBufferedItems,
 } from './functions';
 import { MapLayers } from './layers';
-import { Protocol } from 'pmtiles';
 
 MapboxDraw.constants.classes.CONTROL_BASE = 'maplibregl-ctrl';
 MapboxDraw.constants.classes.CONTROL_PREFIX = 'maplibregl-ctrl-';
@@ -180,7 +180,13 @@ const Map = ({
 
   return (
     <FieldWrapper label={label} error={error}>
-      <MapDiv ref={mapContainer} $error={!!error} />
+      <MapDiv
+        aria-label={`Interactive map ${label}`}
+        aria-describedby={error ? `${label}-error` : undefined}
+        tabIndex={0}
+        ref={mapContainer}
+        $error={!!error}
+      />
     </FieldWrapper>
   );
 };
