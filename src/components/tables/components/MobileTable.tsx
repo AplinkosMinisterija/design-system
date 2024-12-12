@@ -321,6 +321,10 @@ const TR = styled.tr<{
     `
     background-color: #F8FAFC;
   `}
+
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const StyledIcon = styled(Icon)<{ $expanded: boolean }>`
@@ -333,6 +337,9 @@ const StyledIconContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 export default MobileTable;

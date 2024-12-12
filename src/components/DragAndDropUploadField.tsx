@@ -192,6 +192,9 @@ const IconContainer = styled.a`
   margin-top: auto;
   height: 40px;
   display: flex;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
   @media ${device.mobileL} {
     margin-bottom: 0px;
     height: auto;
@@ -289,6 +292,9 @@ const UploadFileContainer = styled.div<{ $error: boolean }>`
   padding: 8px 0;
   gap: 4px;
   min-height: 77px;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 export default DragAndDropUploadField;

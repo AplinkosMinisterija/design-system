@@ -140,6 +140,9 @@ const IconContainer = styled.div<{ $disabled: boolean }>`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const StyledIcon = styled(Icon)`

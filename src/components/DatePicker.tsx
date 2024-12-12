@@ -249,6 +249,9 @@ const IconContainer = styled.div<{ $disabled: boolean }>`
   justify-content: center;
   align-items: center;
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const InvisibleContainer = styled.div`

@@ -262,6 +262,9 @@ const TR = styled.tr<{
   &:nth-child(even) {
     background-color: #f8fafc;
   }
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 export default DesktopTable;

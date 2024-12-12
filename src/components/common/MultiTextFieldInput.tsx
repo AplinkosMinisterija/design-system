@@ -204,6 +204,9 @@ const IconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const SimpleCard = styled.label<{ disabled: boolean }>`
