@@ -18,7 +18,7 @@ export const SelectFieldStory: Story = {
     const [value, setValue] = useState();
     return (
       <StoryWrapper>
-        <DatePicker onChange={setValue} value={value} />
+        <DatePicker label={'Date'} onChange={setValue} value={value} />
       </StoryWrapper>
     );
   },

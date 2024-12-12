@@ -34,13 +34,13 @@ const Checkbox = ({
   radius,
 }: CheckboxProps) => {
   const ariaChecked = intermediate ? 'intermediate' : value;
-  const handleOnKeyDown = useKeyAction(onChange, disabled);
+  const handleKeyDown = useKeyAction(onChange, disabled);
   const ariaValue = label || name;
 
   return (
     <Wrapper
       tabIndex={0}
-      onKeyDown={handleOnKeyDown(!value)}
+      onKeyDown={handleKeyDown(!value)}
       $width={width}
       $displayAsButton={displayAsButton}
     >
