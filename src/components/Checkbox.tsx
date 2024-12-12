@@ -34,7 +34,7 @@ const Checkbox = ({
   radius,
 }: CheckboxProps) => {
   const ariaChecked = intermediate ? 'intermediate' : value;
-  const handleOnKeyDown = useKeyAction(onChange);
+  const handleOnKeyDown = useKeyAction(onChange, disabled);
   const ariaValue = label || name;
 
   return (
@@ -92,6 +92,9 @@ const Checkbox = ({
 
 const Wrapper = styled.div<{ $displayAsButton; $width: string }>`
   width: ${({ $width, $displayAsButton }) => ($displayAsButton && $width) || 'fit-content'};
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const buttonStyle = css<{

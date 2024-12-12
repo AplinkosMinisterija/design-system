@@ -75,6 +75,9 @@ const Container = styled.div<{ $padding: string }>`
   display: block;
   position: relative;
   padding: ${({ $padding }) => $padding};
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const LabelRow = styled.div`

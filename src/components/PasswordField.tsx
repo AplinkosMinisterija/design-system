@@ -82,6 +82,9 @@ const IconContainer = styled.div`
   align-items: center;
   padding: 0 12px;
   cursor: pointer;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const StyledIcon = styled(Icon)`

@@ -87,6 +87,9 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
 
 const Container = styled.div`
   position: relative;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const StyledCheckbox = styled(CheckBox)`

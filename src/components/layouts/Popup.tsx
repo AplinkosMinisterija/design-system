@@ -153,6 +153,9 @@ const IconContainer = styled.div`
   margin: 0 0 0 auto;
   padding: 24px;
   width: fit-content;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const Content = styled.div`
