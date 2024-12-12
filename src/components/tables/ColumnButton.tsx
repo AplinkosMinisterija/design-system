@@ -5,19 +5,7 @@ import CheckBox from '../Checkbox';
 import { ErrorMessage } from '../common/ErrorMessage';
 import { useKeyAction } from '../common/hooks';
 import Icon, { IconName } from '../common/Icons';
-import { Columns } from './components/types';
-
-export interface ColumnButtonTexts {
-  atLeastOneColumn: string;
-  columns: string;
-}
-
-export interface ColumnButtonProps {
-  columns: Columns;
-  onToggle: (columns: Columns) => void;
-  texts: ColumnButtonTexts;
-  variant?: string;
-}
+import { ColumnButtonProps } from './components/types';
 
 const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);

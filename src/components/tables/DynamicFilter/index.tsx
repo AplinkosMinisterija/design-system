@@ -2,7 +2,7 @@ import { map } from 'lodash';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useKeyAction } from '../../../components/common/hooks';
-import { FilterConfig, RowConfig } from '../../../types';
+import { DynamicFilterProps, FilterConfig } from '../../../types';
 import { device, FilterInputTypes, formatDate, useWindowSize } from '../../../utils';
 import Icon, { IconName } from '../../common/Icons';
 import Loader from '../../common/Loader';
@@ -62,20 +62,6 @@ const mapFilters = (
   }
   return applied.flat();
 };
-
-export interface DynamicFilterProps {
-  loading?: boolean;
-  disabled?: boolean;
-  className?: string;
-  filterConfig: Record<string, FilterConfig>;
-  rowConfig: RowConfig;
-  onSetFilters: (filters: Record<string, any>) => void;
-  filters: Record<string, any>;
-  texts: {
-    clearAll: string;
-    filter: string;
-  };
-}
 
 const DynamicFilter = ({
   loading = false,

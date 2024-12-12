@@ -1,4 +1,5 @@
 import { JSX } from 'react';
+import { FilterConfig, RowConfig } from 'src/types';
 
 export interface TableRow {
   id?: string | number;
@@ -38,3 +39,29 @@ export type Column = {
 export type Columns = {
   [key: string]: Column;
 };
+
+export interface ColumnButtonTexts {
+  atLeastOneColumn: string;
+  columns: string;
+}
+
+export interface ColumnButtonProps {
+  columns: Columns;
+  onToggle: (columns: Columns) => void;
+  texts: ColumnButtonTexts;
+  variant?: string;
+}
+
+export interface DynamicFilterProps {
+  loading?: boolean;
+  disabled?: boolean;
+  className?: string;
+  filterConfig: Record<string, FilterConfig>;
+  rowConfig: RowConfig;
+  onSetFilters: (filters: Record<string, any>) => void;
+  filters: Record<string, any>;
+  texts: {
+    clearAll: string;
+    filter: string;
+  };
+}
