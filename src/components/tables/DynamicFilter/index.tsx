@@ -135,7 +135,7 @@ const DynamicFilter = ({
         >
           <StyledButton disabled={disabled} aria-disabled={disabled}>
             <StyledIcon name={IconName.filter} />
-            {loading ? <Loader color="white" /> : 'Filtrai'}
+            {loading ? <Loader size={'22'} /> : 'Filtrai'}
             <Count aria-label={`${appliedFilters.length} filters applied`}>
               {appliedFilters.length}
             </Count>
