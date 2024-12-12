@@ -217,6 +217,20 @@ export interface FilterConfig {
   default?: any;
 }
 
+export interface DynamicFilterProps {
+  loading?: boolean;
+  disabled?: boolean;
+  className?: string;
+  filterConfig: Record<string, FilterConfig>;
+  rowConfig: RowConfig;
+  onSetFilters: (filters: Record<string, any>) => void;
+  filters: Record<string, any>;
+  texts: {
+    clearAll: string;
+    filter: string;
+  };
+}
+
 export type RowConfig = string[][];
 
 export enum PopupType {
