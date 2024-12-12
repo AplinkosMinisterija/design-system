@@ -22,7 +22,7 @@ const ButtonsGroup = ({
   label = '',
   getOptionLabel,
 }: ButtonsGroupProps) => {
-  const handleOnKeyDown = useKeyAction(onChange, disabled);
+  const handleKeyDown = useKeyAction(onChange, disabled);
   return (
     <div>
       <FieldWrapper className={className} label={label}>
@@ -35,7 +35,7 @@ const ButtonsGroup = ({
               aria-checked={isSelected(option)}
               disabled={disabled}
               selected={isSelected(option)}
-              onKeyDown={handleOnKeyDown(option)}
+              onKeyDown={handleKeyDown(option)}
               onClick={() => (disabled ? {} : onChange(option))}
               tabIndex={0}
             >

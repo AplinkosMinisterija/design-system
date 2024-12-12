@@ -59,8 +59,8 @@ const DragAndDropUploadField = ({
   const inputRef = useRef<any>(null);
   const [uploadLoading, setUploadLoading] = useState(false);
   const ariaValue = `${label}-upload-instructions`;
-  const handleUploadOnKeyDown = useKeyAction(() => onButtonClick(), disabled);
-  const handleDownloadOnKeyDown = useKeyAction((index) => handleDelete(index), disabled);
+  const handleKeyDownOnUpload = useKeyAction(() => onButtonClick(), disabled);
+  const handleKeyDownOnDelete = useKeyAction((index) => handleDelete(index), disabled);
   const handleSetFiles = async (currentFiles: File[]) => {
     const isValidFileTypes = validateFileTypes(currentFiles, availableMimeTypes);
     if (!isValidFileTypes) return handleError('badFileTypes');
@@ -112,7 +112,7 @@ const DragAndDropUploadField = ({
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
             onClick={onButtonClick}
-            onKeyDown={handleUploadOnKeyDown()}
+            onKeyDown={handleKeyDownOnUpload()}
             role="button"
             tabIndex={0}
             aria-labelledby={ariaValue}
@@ -167,7 +167,7 @@ const DragAndDropUploadField = ({
                     e.stopPropagation();
                     handleDelete(index);
                   }}
-                  onKeyDown={handleDownloadOnKeyDown(index)}
+                  onKeyDown={handleKeyDownOnDelete(index)}
                   tabIndex={0}
                   role="button"
                   aria-label={`Remove ${file?.name}`}

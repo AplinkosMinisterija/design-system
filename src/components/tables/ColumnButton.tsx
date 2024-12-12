@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Button from '../Button';
 import CheckBox from '../Checkbox';
 import { ErrorMessage } from '../common/ErrorMessage';
-import { useKeyAction } from '../common/hooks';
 import Icon, { IconName } from '../common/Icons';
 import { ColumnButtonProps } from './components/types';
 
@@ -49,11 +48,9 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
     setIsOpen(!isOpen);
   };
 
-  const handleOnKeyDown = useKeyAction(handleButtonClick);
-
   return (
-    <Container tabIndex={0} onBlur={handleBlur} onKeyDown={handleOnKeyDown()}>
-      <Button
+    <Container onBlur={handleBlur}>
+      <StyledButton
         variant={variant}
         left={<StyledIcon $variant={variant} name={IconName.settings} />}
         onClick={handleButtonClick}
@@ -62,7 +59,7 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
         aria-haspopup="true"
       >
         {texts.columns}
-      </Button>
+      </StyledButton>
       {isOpen && (
         <OptionContainer id="column-options-menu">
           {visibleColumnsKeys.map((key) => (
@@ -87,6 +84,9 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
 
 const Container = styled.div`
   position: relative;
+`;
+
+const StyledButton = styled(Button)`
   &:focus {
     outline: 1px solid ${({ theme }) => theme.colors.primary};
   }

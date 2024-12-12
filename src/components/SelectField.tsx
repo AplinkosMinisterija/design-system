@@ -64,7 +64,7 @@ const SelectField = ({
     value,
   });
 
-  const handleOnKeyDown = useKeyAction(() => onChange(undefined), disabled);
+  const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const showDeleteIcon = !!value && !!clearable && !disabled;
 
   return (
@@ -94,7 +94,7 @@ const SelectField = ({
                 role="button"
                 tabIndex={0}
                 aria-label={`Remove ${getOptionLabel(value)}`}
-                onKeyDown={handleOnKeyDown()}
+                onKeyDown={handleKeyDown()}
               >
                 <ClearIcon name={IconName.close} />
               </IconContainer>

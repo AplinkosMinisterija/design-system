@@ -76,8 +76,8 @@ const DynamicFilter = ({
     filter: 'Filtruoti',
   },
 }: DynamicFilterProps) => {
-  const handleFilterOnKeyDown = useKeyAction(() => setShowFilters(true), disabled);
-  const handleRemoveFilterOnKeyDown = useKeyAction((appliedFilter) => {
+  const handleKeyDownOnFilter = useKeyAction(() => setShowFilters(true), disabled);
+  const handleKeyDownOnRemoveFilter = useKeyAction((appliedFilter) => {
     handleClearFilter(appliedFilter);
   }, disabled);
   const isMobile = useWindowSize(device.mobileL);
@@ -118,7 +118,7 @@ const DynamicFilter = ({
                 tabIndex={0}
                 aria-label={`Remove filter: ${appliedFilter?.label}`}
                 onClick={() => handleClearFilter(appliedFilter)}
-                onKeyDown={handleRemoveFilterOnKeyDown(appliedFilter)}
+                onKeyDown={handleKeyDownOnRemoveFilter(appliedFilter)}
               >
                 <CloseIcon name={IconName.close} />
               </CloseIconContainer>
@@ -131,7 +131,7 @@ const DynamicFilter = ({
           role="button"
           tabIndex={0}
           aria-label="Open filter menu"
-          onKeyDown={handleFilterOnKeyDown()}
+          onKeyDown={handleKeyDownOnFilter()}
         >
           <StyledButton disabled={disabled} aria-disabled={disabled}>
             <StyledIcon name={IconName.filter} />

@@ -66,12 +66,12 @@ const MobileTable = ({
     });
   };
 
-  const handleColumnOnKeyDown = useKeyAction(handleColumnClick);
+  const handleKeyDownOnColumn = useKeyAction(handleColumnClick);
 
-  const handleOnKeyDown = useKeyAction(handleRowClick);
+  const handleKeyDown = useKeyAction(handleRowClick);
   const RenderRow = (row: TableRow, index: number) => {
     const [expand, setExpand] = useState(false);
-    const handleExpandOnKeyDown = useKeyAction(() => setExpand(!expand));
+    const handleKeyDownOnExpand = useKeyAction(() => setExpand(!expand));
 
     return (
       <TR
@@ -83,7 +83,7 @@ const MobileTable = ({
         style={tableRowStyle}
         $checkable={checkable}
         tabIndex={0}
-        onKeyDown={handleOnKeyDown(row)}
+        onKeyDown={handleKeyDown(row)}
         aria-label={`Row ${index + 1}`}
         role="row"
       >
@@ -97,7 +97,7 @@ const MobileTable = ({
               aria-expanded={expand}
               role="button"
               tabIndex={0}
-              onKeyDown={handleExpandOnKeyDown()}
+              onKeyDown={handleKeyDownOnExpand()}
             >
               <StyledIcon expanded={expand} name={IconName.dropdownArrow} />
             </StyledIconContainer>
@@ -186,7 +186,7 @@ const MobileTable = ({
                   aria-sort={isSelectedKey ? (isSelectedUp ? 'ascending' : 'descending') : 'none'}
                   role="columnheader"
                   tabIndex={0}
-                  onKeyDown={handleColumnOnKeyDown(key)}
+                  onKeyDown={handleKeyDownOnColumn(key)}
                 >
                   <LabelContainer>
                     {label}

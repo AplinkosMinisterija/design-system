@@ -48,7 +48,7 @@ const DesktopTable = ({
       onClick(row);
     }
   };
-  const handleOnKeyDown = useKeyAction(handleRowClick);
+  const handleKeyDown = useKeyAction(handleRowClick);
 
   const canSort = !!onColumnSort && !!data?.length;
 
@@ -65,7 +65,7 @@ const DesktopTable = ({
       direction,
     });
   };
-  const handleColumnOnKeyDown = useKeyAction(handleColumnClick);
+  const handleKeyDownOnColumn = useKeyAction(handleColumnClick);
 
   const GenerateTableContent = ({ data }: { data: TableRow[] }) => {
     if (data?.length) {
@@ -77,7 +77,7 @@ const DesktopTable = ({
                 $pointer={!!onClick}
                 key={`tr-${index}`}
                 onClick={() => handleRowClick(row)}
-                onKeyDown={handleOnKeyDown(row)}
+                onKeyDown={handleKeyDown(row)}
                 tabIndex={onClick ? 0 : undefined}
                 style={tableRowStyle}
                 aria-label={`Row with ID ${row?.id}`}
@@ -160,7 +160,7 @@ const DesktopTable = ({
                   onClick={() => {
                     handleColumnClick(key);
                   }}
-                  onKeyDown={handleColumnOnKeyDown(key)}
+                  onKeyDown={handleKeyDownOnColumn(key)}
                   tabIndex={onColumnSort ? 0 : undefined}
                   width={width}
                   key={`large-th-${i}`}
