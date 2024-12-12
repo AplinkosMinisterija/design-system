@@ -1,5 +1,4 @@
 import { JSX } from 'react';
-import { FilterConfig, RowConfig } from 'src/types';
 
 export interface TableRow {
   id?: string | number;
