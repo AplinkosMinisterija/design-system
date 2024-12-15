@@ -172,7 +172,7 @@ const Container = styled.div`
   flex-wrap: wrap;
 `;
 const CloseIcon = styled(Icon)`
-  color: ${({ theme }) => theme.colors.filterText || theme.colors.primary};
+  color: ${({ theme }) => theme.colors?.filterText || theme.colors.primary};
   font-size: 2rem;
 `;
 
@@ -227,23 +227,23 @@ const StyledIcon = styled(Icon)`
 `;
 
 const Count = styled.div`
-  background-color: ${({ theme }) => theme.colors.filterBackground || theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors?.filterBackground || theme.colors.primary};
   border-radius: 9px;
   width: 18px;
   height: 18px;
   justify-content: center;
   align-items: center;
   display: flex;
-  color: ${({ theme }) => theme.colors.filterText || 'white'};
+  color: ${({ theme }) => theme.colors?.filterText || 'white'};
   font-size: 1rem;
   margin-left: 14px;
 `;
 
 const Tag = styled.div`
-  background-color: ${({ theme }) => theme.colors.filterBackground || `${theme.colors.primary}33`};
+  background-color: ${({ theme }) => theme.colors?.filterBackground || `${theme.colors.primary}33`};
   height: auto;
   padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
-  color: ${({ theme }) => theme.colors.filterText || theme.colors.primary};
+  color: ${({ theme }) => theme.colors?.filterText || theme.colors.primary};
   margin-right: 8px;
   border-radius: 4px;
   font-size: 1.2rem;
