@@ -186,7 +186,6 @@ export const useKeyAction = (action: (option?: any) => void, disabled = false) =
     (option?: any) => (e: React.KeyboardEvent) => {
       if (e.key === 'Enter' && !disabled) {
         e.stopPropagation();
-        e.preventDefault();
         action(option);
       }
     },
