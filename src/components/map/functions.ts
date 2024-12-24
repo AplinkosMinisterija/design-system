@@ -28,8 +28,8 @@ const epsg = {
   4326: epsg4326,
 }
 export const BASEMAP_URL = {
-  LIGHT: 'https://basemap.startupgov.lt/vector/styles/bright/style.json',
-  GRAY: 'https://basemap.startupgov.lt/vector/styles/positron/style.json',
+  LIGHT: 'https://basemap.biip.lt/styles/bright/style.json',
+  GRAY: 'https://basemap.biip.lt/styles/positron/style.json',
 };
 
 export type DrawTypes =
