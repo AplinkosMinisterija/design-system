@@ -6,7 +6,8 @@ import FieldWrapper from './common/FieldWrapper';
 interface MapFieldProps extends Partial<HTMLIFrameElement> {
   mapHost: string;
   mapPath: string;
-  onChange: (value: FeatureCollection) => void;
+  onChange?: (value: FeatureCollection) => void;
+  onClick?: (value: any) => void;
   value?: FeatureCollection;
   label?: string;
   error?: string;
@@ -19,6 +20,7 @@ const MapField = ({
   label,
   error,
   onChange,
+  onClick,
   ...rest
 }: MapFieldProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -27,11 +29,10 @@ const MapField = ({
     (event: MessageEvent) => {
       const mapIframeMsg = event?.data?.mapIframeMsg;
       if (event.origin === mapHost && mapIframeMsg) {
-        if (mapIframeMsg?.data) {
+        if (mapIframeMsg?.data && onChange) {
           onChange(JSON.parse(mapIframeMsg.data));
-        }
-        if (mapIframeMsg?.click) {
-          onChange(mapIframeMsg?.click);
+        } else if (mapIframeMsg?.click && onClick) {
+          onClick(mapIframeMsg?.click);
         }
       }
     },
