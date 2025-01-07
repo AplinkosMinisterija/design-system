@@ -25,8 +25,14 @@ const MapField = ({
 
   const handleSaveGeom = useCallback(
     (event: MessageEvent) => {
-      if (event.origin === mapHost && event?.data?.mapIframeMsg?.data) {
-        onChange(JSON.parse(event.data.mapIframeMsg.data));
+      const mapIframeMsg = event?.data?.mapIframeMsg;
+      if (event.origin === mapHost && mapIframeMsg) {
+        if (mapIframeMsg?.data) {
+          onChange(JSON.parse(mapIframeMsg.data));
+        }
+        if (mapIframeMsg?.click) {
+          onChange(mapIframeMsg?.click);
+        }
       }
     },
     [mapHost, onChange],
