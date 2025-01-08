@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { FeatureCollection } from '../types';
@@ -11,6 +12,7 @@ interface MapFieldProps extends Partial<HTMLIFrameElement> {
   value?: FeatureCollection;
   label?: string;
   error?: string;
+  filter?: string;
 }
 
 const MapField = ({
@@ -21,6 +23,7 @@ const MapField = ({
   error,
   onChange,
   onClick,
+  filter,
   ...rest
 }: MapFieldProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -38,6 +41,16 @@ const MapField = ({
     },
     [mapHost, onChange],
   );
+
+  const handleSetSpecies = () => {
+    if (!iframeRef.current?.contentWindow || !filter || isEmpty(filter)) return;
+
+    iframeRef?.current?.contentWindow.postMessage({ eventName: 'filter', filter }, '*');
+  };
+
+  useEffect(() => {
+    handleSetSpecies();
+  }, [iframeRef?.current?.contentWindow, JSON.stringify(filter)]);
 
   useEffect(() => {
     window.addEventListener('message', handleSaveGeom);
