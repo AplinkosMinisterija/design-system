@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { FeatureCollection } from '../types';
 import FieldWrapper from './common/FieldWrapper';
@@ -27,6 +27,7 @@ const MapField = ({
   ...rest
 }: MapFieldProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [loading, setLoading] = useState(true);
 
   const handleSaveGeom = useCallback(
     (event: MessageEvent) => {
@@ -42,15 +43,11 @@ const MapField = ({
     [mapHost, onChange],
   );
 
-  const handleFilter = () => {
-    if (!iframeRef.current?.contentWindow || !filter || isEmpty(filter)) return;
+  useEffect(() => {
+    if (!iframeRef.current?.contentWindow || loading || !filter || isEmpty(filter)) return;
 
     iframeRef?.current?.contentWindow.postMessage({ eventName: 'filter', ...filter }, '*');
-  };
-
-  useEffect(() => {
-    handleFilter();
-  }, [iframeRef?.current?.contentWindow, JSON.stringify(filter)]);
+  }, [iframeRef?.current?.contentWindow, loading, JSON.stringify(filter)]);
 
   useEffect(() => {
     window.addEventListener('message', handleSaveGeom);
@@ -58,6 +55,8 @@ const MapField = ({
   }, [handleSaveGeom]);
 
   const handleLoadMap = () => {
+    setLoading(false);
+
     if (!value) return;
     iframeRef?.current?.contentWindow?.postMessage({ geom: value }, '*');
   };
