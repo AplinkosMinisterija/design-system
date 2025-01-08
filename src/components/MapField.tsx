@@ -42,14 +42,14 @@ const MapField = ({
     [mapHost, onChange],
   );
 
-  const handleSetSpecies = () => {
+  const handleFilter = () => {
     if (!iframeRef.current?.contentWindow || !filter || isEmpty(filter)) return;
 
     iframeRef?.current?.contentWindow.postMessage({ eventName: 'filter', filter }, '*');
   };
 
   useEffect(() => {
-    handleSetSpecies();
+    handleFilter();
   }, [iframeRef?.current?.contentWindow, JSON.stringify(filter)]);
 
   useEffect(() => {
