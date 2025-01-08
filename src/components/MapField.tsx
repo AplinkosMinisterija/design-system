@@ -12,7 +12,7 @@ interface MapFieldProps extends Partial<HTMLIFrameElement> {
   value?: FeatureCollection;
   label?: string;
   error?: string;
-  filter?: string;
+  filter?: { [key: string]: any };
 }
 
 const MapField = ({
@@ -45,7 +45,7 @@ const MapField = ({
   const handleFilter = () => {
     if (!iframeRef.current?.contentWindow || !filter || isEmpty(filter)) return;
 
-    iframeRef?.current?.contentWindow.postMessage({ eventName: 'filter', filter }, '*');
+    iframeRef?.current?.contentWindow.postMessage({ eventName: 'filter', ...filter }, '*');
   };
 
   useEffect(() => {
