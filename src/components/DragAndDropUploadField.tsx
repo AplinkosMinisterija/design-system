@@ -59,6 +59,7 @@ const DragAndDropUploadField = ({
   const inputRef = useRef<any>(null);
   const [uploadLoading, setUploadLoading] = useState(false);
   const ariaValue = `${label}-upload-instructions`;
+  const hideFIeld = disabled && !files?.length;
   const handleKeyDownOnUpload = useKeyAction(() => onButtonClick(), disabled);
   const handleKeyDownOnDelete = useKeyAction((index) => handleDelete(index), disabled);
   const handleSetFiles = async (currentFiles: File[]) => {
@@ -102,6 +103,10 @@ const DragAndDropUploadField = ({
       onDelete([...files.slice(0, index), ...files.slice(index + 1)]);
     }
   };
+
+  if (hideFIeld) {
+    return <></>;
+  }
 
   return (
     <Wrapper>
