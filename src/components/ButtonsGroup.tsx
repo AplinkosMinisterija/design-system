@@ -11,6 +11,8 @@ export interface ButtonsGroupProps {
   className?: string;
   label?: string;
   getOptionLabel?: (option: any) => string;
+  error?: string;
+  showError?: boolean;
 }
 
 const ButtonsGroup = ({
@@ -20,12 +22,14 @@ const ButtonsGroup = ({
   isSelected,
   className,
   label = '',
+  showError = true,
+  error,
   getOptionLabel,
 }: ButtonsGroupProps) => {
   const handleKeyDown = useKeyAction(onChange, disabled);
   return (
     <div>
-      <FieldWrapper className={className} label={label}>
+      <FieldWrapper className={className} label={label} error={error} showError={showError}>
         <Container className={className} role="radiogroup" aria-labelledby={label}>
           {map(options, (option, index) => (
             <StyledButton
