@@ -11,6 +11,8 @@ export interface ButtonsGroupProps {
   className?: string;
   label?: string;
   getOptionLabel?: (option: any) => string;
+  error?: string;
+  showError?: boolean;
 }
 
 const ButtonsGroup = ({
@@ -20,12 +22,14 @@ const ButtonsGroup = ({
   isSelected,
   className,
   label = '',
+  showError = true,
+  error,
   getOptionLabel,
 }: ButtonsGroupProps) => {
   const handleKeyDown = useKeyAction(onChange, disabled);
   return (
     <div>
-      <FieldWrapper className={className} label={label}>
+      <FieldWrapper className={className} label={label} error={error} showError={showError}>
         <Container className={className} role="radiogroup" aria-labelledby={label}>
           {map(options, (option, index) => (
             <StyledButton
@@ -35,6 +39,7 @@ const ButtonsGroup = ({
               aria-checked={isSelected(option)}
               disabled={disabled}
               selected={isSelected(option)}
+              error={!!error}
               onKeyDown={handleKeyDown(option)}
               onClick={() => (disabled ? {} : onChange(option))}
               tabIndex={0}
@@ -62,6 +67,7 @@ const Container = styled.div`
 const StyledButton = styled.button<{
   selected: boolean;
   disabled?: boolean;
+  error?: boolean;
 }>`
   display: flex;
   justify-content: center;
@@ -72,7 +78,8 @@ const StyledButton = styled.button<{
   background-color: ${({ selected, theme }) =>
     selected ? `${theme.colors.primary}33` : 'inherit'};
 
-  border-color: ${({ selected, theme }) => (selected ? theme.colors.primary : '#cdd5df')};
+  border-color: ${({ error, selected, theme }) =>
+    !error ? (selected ? theme.colors.primary : '#cdd5df') : theme.colors.error || '#FE5B78'};
   border-style: solid;
   font-weight: normal;
   font-size: 1.4rem;
