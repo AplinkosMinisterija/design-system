@@ -21,6 +21,7 @@ const StoryComponent = () => {
         onChange={(value) => setSelected(value)}
         isSelected={(option) => option === selected}
         getOptionLabel={(option) => option}
+        error="test"
       />
     </StoryWrapper>
   );
