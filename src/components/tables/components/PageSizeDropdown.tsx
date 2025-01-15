@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Icon, { IconName } from 'src/components/common/Icons';
+import Icon, { IconName } from '../../common/Icons';
 import styled from 'styled-components';
 
 const pageSizeOptions = [10, 20, 50, 100];
