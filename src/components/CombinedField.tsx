@@ -76,7 +76,7 @@ const CombinedField = ({
           </IconContainer>
         </SelectedOption>
         <StyledOptionsContainer
-          values={options}
+          options={options}
           getOptionLabel={(option) =>
             getOptionLabel ? getOptionLabel(option) : <Option>{option}</Option>
           }
