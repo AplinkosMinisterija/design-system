@@ -47,7 +47,7 @@ jobs:
       packages: write
     steps:
       - name: Download client
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: design-system
 
