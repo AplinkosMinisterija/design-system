@@ -34,16 +34,11 @@ const Checkbox = ({
   radius,
 }: CheckboxProps) => {
   const ariaChecked = intermediate ? 'intermediate' : value;
-  const handleOnKeyDown = useKeyAction(onChange);
+  const handleKeyDown = useKeyAction(onChange, disabled);
   const ariaValue = label || name;
 
   return (
-    <Wrapper
-      tabIndex={0}
-      onKeyDown={handleOnKeyDown(!value)}
-      $width={width}
-      $displayAsButton={displayAsButton}
-    >
+    <Wrapper $width={width} $displayAsButton={displayAsButton}>
       <Container
         className={className}
         $disabled={disabled}
@@ -63,6 +58,8 @@ const Checkbox = ({
           aria-checked={ariaChecked}
           aria-labelledby={ariaValue}
           aria-describedby={description ? description : undefined}
+          tabIndex={disabled ? -1 : 0}
+          onKeyDown={handleKeyDown(!value)}
         >
           <CheckBox
             type="checkbox"
@@ -173,6 +170,9 @@ const InnerContainer = styled.div<{
         ? theme.colors.danger
         : theme.colors.border};
   opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const CheckMark = styled.div<{

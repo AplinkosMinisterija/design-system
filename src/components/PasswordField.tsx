@@ -37,7 +37,7 @@ const PasswordField = ({
   onInputClick,
 }: TextFieldProps) => {
   const [show, setShow] = useState(false);
-  const handleOnKeyDown = useKeyAction(() => setShow(!show));
+  const handleKeyDown = useKeyAction(() => setShow(!show));
 
   return (
     <FieldWrapper
@@ -61,7 +61,7 @@ const PasswordField = ({
             aria-pressed={show}
             role="button"
             tabIndex={0}
-            onKeyDown={handleOnKeyDown()}
+            onKeyDown={handleKeyDown()}
           >
             <StyledIcon name={show ? 'visibleOn' : 'visibleOff'} />
           </IconContainer>
@@ -82,6 +82,9 @@ const IconContainer = styled.div`
   align-items: center;
   padding: 0 12px;
   cursor: pointer;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const StyledIcon = styled(Icon)`

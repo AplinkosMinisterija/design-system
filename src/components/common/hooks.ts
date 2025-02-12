@@ -184,9 +184,8 @@ export const useAsyncSelectData = ({
 export const useKeyAction = (action: (option?: any) => void, disabled = false) => {
   return useCallback(
     (option?: any) => (e: React.KeyboardEvent) => {
-      if ((e.key === 'Enter' || e.key === ' ') && !disabled) {
+      if (e.key === 'Enter' && !disabled) {
         e.stopPropagation();
-        e.preventDefault();
         action(option);
       }
     },

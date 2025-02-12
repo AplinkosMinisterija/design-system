@@ -31,7 +31,7 @@ const FieldWrapper = ({
   children,
   labelButton,
 }: FieldWrapperProps) => {
-  const handleOnKeyDown = useKeyAction(() => !!onClick && onClick());
+  const handleKeyDown = useKeyAction(() => !!onClick && onClick());
 
   const labelAriaValue = label ? `field-${label}` : undefined;
   const errorAriaValue = error ? `${labelAriaValue}-error` : undefined;
@@ -44,7 +44,7 @@ const FieldWrapper = ({
       className={`${className} fieldWrapper`}
       $padding={padding}
       onClick={onClick}
-      onKeyDown={handleOnKeyDown()}
+      onKeyDown={handleKeyDown()}
     >
       <LabelRow>
         {!!label && (

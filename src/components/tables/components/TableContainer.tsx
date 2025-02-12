@@ -6,6 +6,8 @@ import { device, useWindowSize } from '../../../utils';
 import Icon from '../../common/Icons';
 import LoaderComponent from '../../common/LoaderComponent';
 import { TableData } from './types';
+import { isEmpty } from 'lodash';
+import PageSizeDropdown from './PageSizeDropdown';
 
 class ChildrenType {}
 
@@ -14,9 +16,16 @@ export interface TableLayoutProps {
   pageName?: string;
   loading?: boolean;
   children: ChildrenType;
+  showPageSizeDropdown?: boolean;
 }
 
-const TableContainer = ({ data, pageName = 'page', loading, children }: TableLayoutProps) => {
+const TableContainer = ({
+  data,
+  pageName = 'page',
+  loading,
+  children,
+  showPageSizeDropdown,
+}: TableLayoutProps) => {
   const [searchParams] = useSearchParams();
   const params = Object.fromEntries([...Array.from(searchParams)]);
   const totalPages = data?.totalPages || 0;
@@ -27,53 +36,75 @@ const TableContainer = ({ data, pageName = 'page', loading, children }: TableLay
   const navigate = useNavigate();
 
   useEffect(() => {
-    const currentPage = parseInt(params?.[pageName]) || 1;
-    if (!loading && (currentPage > totalPages || currentPage < 1)) {
-      navigateToPage(1);
+    if (!loading && totalPages < parseInt(params?.page)) {
+      navigate({
+        search: `?${createSearchParams({
+          ...params,
+          [pageName]: '1',
+        })}`,
+      });
     }
   }, [searchParams, data, loading]);
 
-  const navigateToPage = (pageNumber: number) => {
+  const handlePageChange = (e) => {
     navigate({
       search: `?${createSearchParams({
         ...params,
-        [pageName]: pageNumber.toString(),
+        [pageName]: (e.selected + 1).toString(),
       })}`,
     });
   };
 
-  const handlePageChange = (e: { selected: number }) => {
-    navigateToPage(e.selected + 1);
+  const handlePageSizeChange = (e) => {
+    navigate({
+      search: `?${createSearchParams({
+        ...params,
+        [pageName]: '1',
+        pageSize: e,
+      })}`,
+    });
   };
 
   if (loading) return <LoaderComponent />;
 
   return (
-    <Container>
-      {children}
-      {showPagination && (
-        <StyledReactPaginate
-          pageCount={totalPages || 1}
-          pageRangeDisplayed={pageRange}
-          marginPagesDisplayed={pageMargin}
-          forcePage={parseInt(params?.[pageName]) - 1 || 0}
-          onPageChange={handlePageChange}
-          containerClassName="pagination"
-          activeClassName="active"
-          pageLinkClassName="page-link"
-          breakLinkClassName="page-link"
-          nextLinkClassName="page-link"
-          previousLinkClassName="page-link"
-          pageClassName="page-item"
-          breakClassName="page-item"
-          nextClassName="page-item"
-          previousClassName="page-item"
-          aria-label="Pagination navigation"
-          previousLabel={<StyledIcon name="backward" aria-label="Previous page" />}
-          nextLabel={<StyledIcon name="forward" aria-label="Next page" />}
+    <>
+      <Container>
+        {children}
+        {showPagination && (
+          <StyledReactPaginate
+            pageCount={totalPages || 1}
+            pageRangeDisplayed={pageRange}
+            marginPagesDisplayed={pageMargin}
+            forcePage={parseInt(params?.[pageName]) - 1 || 0}
+            onPageChange={handlePageChange}
+            containerClassName="pagination"
+            activeClassName="active"
+            pageLinkClassName="page-link"
+            breakLinkClassName="page-link"
+            nextLinkClassName="page-link"
+            previousLinkClassName="page-link"
+            pageClassName="page-item"
+            breakClassName="page-item"
+            nextClassName="page-item"
+            previousClassName="page-item"
+            aria-label="Pagination navigation"
+            previousLabel={<StyledIcon name="backward" aria-label="Previous page" />}
+            nextLabel={<StyledIcon name="forward" aria-label="Next page" />}
+          />
+        )}
+      </Container>
+      {showPageSizeDropdown && !isEmpty(data?.data) && (
+        <PageSizeDropdown
+          onChange={(pageSize) => {
+            if (pageSize !== Number(params?.pageSize)) {
+              handlePageSizeChange(pageSize);
+            }
+          }}
+          value={Number(params?.pageSize) || 10}
         />
       )}
-    </Container>
+    </>
   );
 };
 

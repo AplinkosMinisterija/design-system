@@ -76,8 +76,8 @@ const DynamicFilter = ({
     filter: 'Filtruoti',
   },
 }: DynamicFilterProps) => {
-  const handleFilterOnKeyDown = useKeyAction(() => setShowFilters(true), disabled);
-  const handleRemoveFilterOnKeyDown = useKeyAction((appliedFilter) => {
+  const handleKeyDownOnFilter = useKeyAction(() => setShowFilters(true), disabled);
+  const handleKeyDownOnRemoveFilter = useKeyAction((appliedFilter) => {
     handleClearFilter(appliedFilter);
   }, disabled);
   const isMobile = useWindowSize(device.mobileL);
@@ -118,7 +118,7 @@ const DynamicFilter = ({
                 tabIndex={0}
                 aria-label={`Remove filter: ${appliedFilter?.label}`}
                 onClick={() => handleClearFilter(appliedFilter)}
-                onKeyDown={handleRemoveFilterOnKeyDown(appliedFilter)}
+                onKeyDown={handleKeyDownOnRemoveFilter(appliedFilter)}
               >
                 <CloseIcon name={IconName.close} />
               </CloseIconContainer>
@@ -131,11 +131,11 @@ const DynamicFilter = ({
           role="button"
           tabIndex={0}
           aria-label="Open filter menu"
-          onKeyDown={handleFilterOnKeyDown()}
+          onKeyDown={handleKeyDownOnFilter()}
         >
           <StyledButton disabled={disabled} aria-disabled={disabled}>
             <StyledIcon name={IconName.filter} />
-            {loading ? <Loader color="white" /> : 'Filtrai'}
+            {loading ? <Loader size={'22'} /> : 'Filtrai'}
             <Count aria-label={`${appliedFilters.length} filters applied`}>
               {appliedFilters.length}
             </Count>
@@ -172,7 +172,7 @@ const Container = styled.div`
   flex-wrap: wrap;
 `;
 const CloseIcon = styled(Icon)`
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors?.filterText || theme.colors.primary};
   font-size: 2rem;
 `;
 
@@ -182,6 +182,9 @@ const CloseIconContainer = styled.div`
   align-items: center;
   margin-left: 4px;
   cursor: pointer;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const TextContainer = styled.div`
@@ -194,13 +197,16 @@ const Wrapper = styled.div<{
 }>`
   opacity: ${({ disabled }) => (disabled ? 0.48 : 1)};
   min-width: 100px;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 export const StyledButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 40px;
+  height: auto;
   border-radius: 4px;
   background-color: white;
   color: #121926;
@@ -212,7 +218,7 @@ export const StyledButton = styled.button`
   }
   cursor: pointer;
   width: fit-content;
-  padding: 12px;
+  padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
 `;
 
 const StyledIcon = styled(Icon)`
@@ -221,23 +227,23 @@ const StyledIcon = styled(Icon)`
 `;
 
 const Count = styled.div`
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors?.filterBackground || theme.colors.primary};
   border-radius: 9px;
   width: 18px;
   height: 18px;
   justify-content: center;
   align-items: center;
   display: flex;
-  color: white;
+  color: ${({ theme }) => theme.colors?.filterText || 'white'};
   font-size: 1rem;
   margin-left: 14px;
 `;
 
 const Tag = styled.div`
-  background-color: ${({ theme }) => `${theme.colors.primary}33`};
-  height: 40px;
-  padding: 12px 8px;
-  color: ${({ theme }) => `${theme.colors.primary}`};
+  background-color: ${({ theme }) => theme.colors?.filterBackground || `${theme.colors.primary}33`};
+  height: auto;
+  padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
+  color: ${({ theme }) => theme.colors?.filterText || theme.colors.primary};
   margin-right: 8px;
   border-radius: 4px;
   font-size: 1.2rem;

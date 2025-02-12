@@ -38,21 +38,21 @@ export function MapLayers(colors: ThemeMapColors): {
     municipalities: {
       source: {
         type: 'vector',
-        url: 'pmtiles://https://boundaries.startupgov.lt/pmtiles/municipalities.pmtiles',
+        url: 'pmtiles://https://boundaries.biip.lt/tiles/municipalities.pmtiles',
       },
       layers: getDefaultStyles('municipalities'),
     },
     elderships: {
       source: {
         type: 'vector',
-        url: 'pmtiles://https://boundaries.startupgov.lt/pmtiles/elderships.pmtiles',
+        url: 'pmtiles://https://boundaries.biip.lt/tiles/elderships.pmtiles',
       },
       layers: getDefaultStyles('elderships'),
     },
     counties: {
       source: {
         type: 'vector',
-        url: 'pmtiles://https://boundaries.startupgov.lt/pmtiles/counties.pmtiles',
+        url: 'pmtiles://https://boundaries.biip.lt/tiles/counties.pmtiles',
       },
       layers: getDefaultStyles('counties'),
     },

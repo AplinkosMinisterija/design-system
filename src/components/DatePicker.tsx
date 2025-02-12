@@ -48,8 +48,8 @@ const DateField = ({
   const [inputValue, setInputValue] = useState('');
   const [isBottomVisible, setIsBottomVisible] = useState(true);
   const invisibleDivRef = useRef(null);
-  const handleOnKeyDown = useKeyAction(() => onChange(undefined), disabled);
-  const handleToggleOnKeyDown = useKeyAction(() => setOpen(!open), disabled);
+  const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
+  const handleKeyDownOnToggle = useKeyAction(() => setOpen(!open), disabled);
   useEffect(() => {
     const checkVisibility = (entries) => {
       const isDivBottomVisible = entries[0].isIntersecting;
@@ -138,7 +138,7 @@ const DateField = ({
         tabIndex={0}
         onBlur={handleBlurInput}
         onClick={() => setOpen(!open)}
-        onKeyDown={handleToggleOnKeyDown()}
+        onKeyDown={handleKeyDownOnToggle()}
       >
         <TextField
           placeholder={placeHolder}
@@ -160,7 +160,7 @@ const DateField = ({
                   role="button"
                   tabIndex={0}
                   aria-label={`Remove ${textValue}`}
-                  onKeyDown={handleOnKeyDown()}
+                  onKeyDown={handleKeyDown()}
                 >
                   <ClearIcon name={IconName.close} />
                 </IconContainer>
@@ -249,6 +249,9 @@ const IconContainer = styled.div<{ $disabled: boolean }>`
   justify-content: center;
   align-items: center;
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const InvisibleContainer = styled.div`

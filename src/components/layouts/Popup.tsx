@@ -22,7 +22,7 @@ const Popup = ({
   left,
   ariaLabel = 'popup',
 }: PopupProps) => {
-  const handleCloseOnKeyDown = useKeyAction(() => onClose());
+  const handleKeyDownOnClose = useKeyAction(() => onClose());
 
   return (
     <Modal visible={visible} onClose={onClose}>
@@ -32,7 +32,7 @@ const Popup = ({
             <LeftContainer>{left}</LeftContainer>
             <IconContainer
               onClick={onClose}
-              onKeyDown={handleCloseOnKeyDown()}
+              onKeyDown={handleKeyDownOnClose()}
               aria-label={`Close ${ariaLabel}`}
               role="button"
               tabIndex={0}
@@ -153,6 +153,9 @@ const IconContainer = styled.div`
   margin: 0 0 0 auto;
   padding: 24px;
   width: fit-content;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const Content = styled.div`

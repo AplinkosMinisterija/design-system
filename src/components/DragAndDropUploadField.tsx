@@ -59,8 +59,9 @@ const DragAndDropUploadField = ({
   const inputRef = useRef<any>(null);
   const [uploadLoading, setUploadLoading] = useState(false);
   const ariaValue = `${label}-upload-instructions`;
-  const handleUploadOnKeyDown = useKeyAction(() => onButtonClick(), disabled);
-  const handleDownloadOnKeyDown = useKeyAction((index) => handleDelete(index), disabled);
+  const hideField = disabled && !files?.length;
+  const handleKeyDownOnUpload = useKeyAction(() => onButtonClick(), disabled);
+  const handleKeyDownOnDelete = useKeyAction((index) => handleDelete(index), disabled);
   const handleSetFiles = async (currentFiles: File[]) => {
     const isValidFileTypes = validateFileTypes(currentFiles, availableMimeTypes);
     if (!isValidFileTypes) return handleError('badFileTypes');
@@ -103,6 +104,10 @@ const DragAndDropUploadField = ({
     }
   };
 
+  if (hideField) {
+    return <></>;
+  }
+
   return (
     <Wrapper>
       <FieldWrapper error={error} showError={showError} label={label}>
@@ -112,7 +117,7 @@ const DragAndDropUploadField = ({
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
             onClick={onButtonClick}
-            onKeyDown={handleUploadOnKeyDown()}
+            onKeyDown={handleKeyDownOnUpload()}
             role="button"
             tabIndex={0}
             aria-labelledby={ariaValue}
@@ -167,7 +172,7 @@ const DragAndDropUploadField = ({
                     e.stopPropagation();
                     handleDelete(index);
                   }}
-                  onKeyDown={handleDownloadOnKeyDown(index)}
+                  onKeyDown={handleKeyDownOnDelete(index)}
                   tabIndex={0}
                   role="button"
                   aria-label={`Remove ${file?.name}`}
@@ -192,6 +197,9 @@ const IconContainer = styled.a`
   margin-top: auto;
   height: 40px;
   display: flex;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
   @media ${device.mobileL} {
     margin-bottom: 0px;
     height: auto;
@@ -289,6 +297,9 @@ const UploadFileContainer = styled.div<{ $error: boolean }>`
   padding: 8px 0;
   gap: 4px;
   min-height: 77px;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 export default DragAndDropUploadField;

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import MapField from '../src/components/MapField';
 import StoryWrapper from '../src/components/common/StoryWrapper';
+import MapField from '../src/components/MapField';
 
 const meta: Meta<typeof MapField> = {
   component: MapField,
@@ -18,7 +18,7 @@ export const MapFieldStory: Story = {
       <StoryWrapper>
         <MapField
           mapHost={'https://dev-maps.biip.lt'}
-          mapPath={'/edit?types[]=point&buffer=xl'}
+          mapPath={'/uetk'}
           label={'Pažymėkite vietą'}
           error={'Laukas privalomas'}
           onChange={(value) => alert(JSON.stringify(value))}
