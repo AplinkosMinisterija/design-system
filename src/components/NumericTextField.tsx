@@ -66,10 +66,13 @@ const NumericTextField = ({
 
     if (regex.test(input)) {
       const fixed = input.replaceAll(',', '.');
-      const number = input ? Number(fixed) : NaN;
+      const significantDigitsCount = fixed.replace('.', '').replace('-', '')?.length || 0;
+      if (significantDigitsCount <= 15) {
+        const number = fixed ? Number(fixed) : undefined;
 
-      setInputValue(fixed);
-      onChange(Number.isNaN(number) ? undefined : number);
+        setInputValue(fixed);
+        onChange(Number.isNaN(number) ? undefined : number);
+      }
     }
   };
 
