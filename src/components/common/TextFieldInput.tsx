@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import { useEffect, useRef, useState } from 'react';
+import styled, { useTheme } from 'styled-components';
 
 export interface TextFieldProps {
   value?: string | number;
@@ -32,7 +33,7 @@ const TextFieldInput = ({
   placeholder,
   type = 'text',
   disabled,
-  height,
+  height = 5.6,
   selectedValue = false,
   onInputClick,
   inputMode = 'text',
@@ -41,11 +42,23 @@ const TextFieldInput = ({
   ...rest
 }: TextFieldProps) => {
   const ariaValue = label || name;
+  const placeholderRef = useRef<HTMLDivElement>(null);
+  const theme = useTheme();
+  const initialHeight = theme?.height?.fields || height;
+  const [containerHeight, setContainerHeight] = useState(initialHeight);
+
+  useEffect(() => {
+    if (!placeholderRef.current) return;
+
+    const placeholderHeight = placeholderRef.current.clientHeight / 10 + 1.2;
+
+    setContainerHeight(placeholderHeight > initialHeight ? placeholderHeight : initialHeight);
+  }, [placeholder]);
 
   return (
     <InputContainer
       $error={!!error}
-      $height={height}
+      $height={containerHeight}
       $disabled={disabled || false}
       aria-disabled={disabled}
       aria-invalid={!!error}
@@ -53,7 +66,9 @@ const TextFieldInput = ({
       {left}
       <InputWrapper>
         {!value && typeof placeholder !== 'string' && (
-          <CustomPlaceholder id={`${ariaValue}-placeholder`}>{placeholder}</CustomPlaceholder>
+          <CustomPlaceholder ref={placeholderRef} id={`${ariaValue}-placeholder`}>
+            {placeholder}
+          </CustomPlaceholder>
         )}
 
         <StyledTextInput
@@ -102,9 +117,10 @@ const InputWrapper = styled.div`
 const InputContainer = styled.div<{
   $error: boolean;
   $disabled: boolean;
+  $height: number;
 }>`
   display: flex;
-  height: ${({ theme }) => `${theme.height?.fields || 5.6}rem`};
+  height: ${({ $height }) => `${$height}rem`};
   background-color: ${({ theme }) => theme.colors.fields?.background || 'white'};
   justify-content: space-between;
   align-items: center;
