@@ -40,7 +40,7 @@ const PhoneField = ({
   onInputClick,
 }: PhoneFieldProps) => {
   const handleChange = (input) => {
-    const isPartialPhoneValid = ['8', '+370', '0'].some((prefix) => {
+    const isPartialPhoneValid = ['+370', '0'].some((prefix) => {
       const inputPrefix = input.slice(0, prefix.length);
       const nextChar = input[prefix.length];
 
