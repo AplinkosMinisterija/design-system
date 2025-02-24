@@ -17,6 +17,11 @@
     "design",
     "system"
   ],
+  "files": [
+    "/dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
