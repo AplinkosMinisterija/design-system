@@ -11,13 +11,15 @@ permissions: {}
 
 jobs:
   release-packages:
-    name: Release packages
+    name: Release package
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
       issues: write
       pull-requests: write
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -48,6 +50,7 @@ jobs:
   publish-storybook-page:
     name: Publish Storybook page
     needs: [ release-packages ]
+    if: needs.release-packages.outputs.published == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
