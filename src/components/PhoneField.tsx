@@ -39,19 +39,27 @@ const PhoneField = ({
   showError,
   onInputClick,
 }: PhoneFieldProps) => {
-  const handleChange = (input) => {
-    const isPartialPhoneValid = ['+370', '0'].some((prefix) => {
-      const inputPrefix = input.slice(0, prefix.length);
-      const nextChar = input[prefix.length];
+  const handleChange = (input: string) => {
+    let shouldChange = false;
 
-      const prefixMatches = prefix.startsWith(inputPrefix);
-      const isNextCharValid = !nextChar || Number(nextChar) >= 3;
-      const isNumeric = /^(\+)?\d*$/.test(input);
-      const isLengthValid = input.length - prefix.length <= 8;
+    // allow user to fix the phone number if it's in old format
+    if (value && input.length < String(value).length) {
+      shouldChange = true;
+    } else {
+      shouldChange = ['+370', '0'].some((prefix) => {
+        const inputPrefix = input.slice(0, prefix.length);
+        const nextChar = input[prefix.length];
 
-      return prefixMatches && isNumeric && isLengthValid && isNextCharValid;
-    });
-    if (isPartialPhoneValid) {
+        const prefixMatches = prefix.startsWith(inputPrefix);
+        const isNextCharValid = !nextChar || Number(nextChar) >= 3;
+        const isNumeric = /^(\+)?\d*$/.test(input);
+        const isLengthValid = input.length - prefix.length <= 8;
+
+        return prefixMatches && isNumeric && isLengthValid && isNextCharValid;
+      });
+    }
+
+    if (shouldChange) {
       onChange(input);
     }
   };
