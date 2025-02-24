@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - main
+      - deploy-to-cf-pages
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -44,3 +44,43 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+
+  publish-storybook-page:
+    name: Publish Storybook page
+    needs: [ release-packages ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    environment:
+      name: storybook
+      url: https://ui.startupgov.lt
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Generate Storybook
+        run: yarn build-storybook
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: page
+          path: storybook-static
+
+      - name: Publish to Cloudflare pages
+        uses: AplinkosMinisterija/reusable-workflows/.github/actions/cloudflare-pages-publish@main
+        with:
+          cloudflare-api-token: ${{ secrets.BIIP_CLOUDFLARE_PAGES_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.BIIP_CLOUDFLARE_ACCOUNT_ID }}
+          cloudflare-project-name: design-system
+          artifact-name: page
+          branch: production
