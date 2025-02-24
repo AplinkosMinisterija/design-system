@@ -24,15 +24,16 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "openapi-ts:boundaries": "openapi-ts -f openapi-ts.boundaries.config.ts"
+    "openapi-ts:boundaries": "openapi-ts -f openapi-ts.boundaries.config.ts",
+    "packages:publish": "changeset publish"
   },
   "peerDependencies": {
+    "@tanstack/react-query": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "*",
     "react-router-dom": "*",
-    "styled-components": "^6.1.8",
-    "@tanstack/react-query": "*"
+    "styled-components": "^6.1.8"
   },
   "dependencies": {
     "@mapbox/mapbox-gl-draw": "^1.4.3",
@@ -67,6 +68,7 @@
   "devDependencies": {
     "@aplinkosministerija/biip-prettier-config": "^1.1.0",
     "@aplinkosministerija/eslint-config-biip-react": "^1.0.0",
+    "@changesets/cli": "^2.28.1",
     "@hey-api/openapi-ts": "^0.53.11",
     "@storybook/addon-controls": "^8.0.6",
     "@storybook/addon-essentials": "^7.3.2",
