@@ -25,6 +25,7 @@ import NumericTextField from './components/NumericTextField';
 import PasswordField from './components/PasswordField';
 import PhoneField from './components/PhoneField';
 import ProfileSelector from './components/ProfileSelector';
+import RadioOptions from './components/RadioOptions';
 import SelectField from './components/SelectField';
 import SimpleSelect from './components/SimpleSelect';
 import Switch from './components/Switch';
@@ -49,6 +50,7 @@ export {
 export * from './types';
 export * from './utils';
 export {
+  RadioOptions,
   MultiTextField,
   TextFieldInput,
   Button,
