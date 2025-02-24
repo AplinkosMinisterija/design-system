@@ -3,7 +3,7 @@ name: Publish
 on:
   push:
     branches:
-      - deploy-to-cf-pages
+      - main
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
