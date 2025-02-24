@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.24
+
+### Patch Changes
+
+- b70ea8e: Preview page build
+
 ## 1.2.23
 
 ### Patch Changes
