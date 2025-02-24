@@ -1,4 +1,4 @@
-import { device } from 'src/utils';
+import { device } from '../utils';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
 
