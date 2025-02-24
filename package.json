@@ -30,6 +30,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "openapi-ts:boundaries": "openapi-ts -f openapi-ts.boundaries.config.ts",
+    "packages:changeset": "changeset",
     "packages:publish": "changeset publish"
   },
   "peerDependencies": {

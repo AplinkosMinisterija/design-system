@@ -64,6 +64,35 @@ export default App;
 
 [Components Showcase](https://ui.startupgov.lt/?path=/story/design-system-buttons-button--button-story)
 
+## Release
+
+### Creating a New Package Release
+
+Here are the steps to create a new package release:
+
+1. **Execute the `packages:changeset` Command**
+
+   Run the following command on your local computer to generate a changeset:
+
+   ```bash
+   yarn packages:changeset
+   ```
+
+   This command will create a changeset for your package's changes.
+
+2. **Push the Changeset**
+
+   After running the `packages:changeset` command, you'll see changes in your project. Push these changes, including the
+   changeset file, to the repository. This step is essential to trigger the release process.
+
+   After this push, a pull request will be automatically generated in the `main` branch.
+
+3. **Merge the Pull Request**
+
+   Once the pull request is reviewed and approved, you can merge it into the `main` branch. Upon merging, the packages
+   will be automatically pushed, and your changes will be released.
+
+By following these steps, you can ensure that your design-system package releases are well-organized and consistent.
 
 ## License
 
