@@ -25,6 +25,7 @@ export interface NumericTextFieldProps {
   negativeNumber?: boolean;
   secondLabel?: JSX.Element;
   subLabel?: string;
+  returnNumber?: boolean;
 }
 
 const NumericTextField = ({
@@ -47,6 +48,7 @@ const NumericTextField = ({
   bottomLabel,
   subLabel,
   secondLabel,
+  returnNumber = false,
 }: NumericTextFieldProps) => {
   const [inputValue, setInputValue] = useState(value?.toString() || '');
 
@@ -71,7 +73,9 @@ const NumericTextField = ({
         const number = fixed ? Number(fixed) : undefined;
 
         setInputValue(fixed);
-        onChange(Number.isNaN(number) ? undefined : number);
+        onChange(
+          returnNumber ? (Number.isNaN(number) ? undefined : number) : fixed,
+        );
       }
     }
   };
