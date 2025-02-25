@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.25
+
+### Patch Changes
+
+- 36d091a: update numeric text field to return string default
+
 ## 1.2.24
 
 ### Patch Changes
