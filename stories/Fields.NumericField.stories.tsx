@@ -1,22 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import NumericTextField from '../src/components/NumericTextField';
+import NumericField from '../src/components/NumericField';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import { useState } from 'react';
 
-const meta: Meta<typeof NumericTextField> = {
-  component: NumericTextField,
-  title: 'Design system/Fields/Numeric Text Field',
+const meta: Meta<typeof NumericField> = {
+  component: NumericField,
+  title: 'Design system/Fields/Numeric Field',
 };
 
 export default meta;
-type Story = StoryObj<typeof NumericTextField>;
+type Story = StoryObj<typeof NumericField>;
 
 const StoryComponent = () => {
-  const [value, setValue] = useState(65.99);
+  const [value, setValue] = useState<number | undefined>(65.99);
 
   return (
     <StoryWrapper>
-      <NumericTextField
+      <NumericField
         onChange={setValue}
         value={value}
         wholeNumber={false}
@@ -27,6 +27,6 @@ const StoryComponent = () => {
   );
 };
 export const Field: Story = {
-  name: 'NumericTextField',
+  name: 'NumericField',
   render: StoryComponent,
 };

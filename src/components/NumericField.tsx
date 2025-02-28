@@ -2,7 +2,7 @@ import { useState } from 'react';
 import FieldWrapper from './common/FieldWrapper';
 import TextFieldInput from './common/TextFieldInput';
 
-export interface NumericTextFieldProps {
+export interface NumericFieldProps {
   value?: string | number;
   name?: string;
   error?: string;
@@ -13,7 +13,7 @@ export interface NumericTextFieldProps {
   left?: JSX.Element;
   right?: JSX.Element;
   padding?: string;
-  onChange: (option: any) => void;
+  onChange: (option: number | undefined) => void;
   ref?: HTMLHeadingElement;
   bottomLabel?: string;
   disabled?: boolean;
@@ -28,11 +28,7 @@ export interface NumericTextFieldProps {
   returnNumber?: boolean;
 }
 
-/**
- * @deprecated This component will be removed in a future release.
- * Please use `NumericField` instead.
- */
-const NumericTextField = ({
+const NumericField = ({
   value = '',
   name,
   error,
@@ -52,8 +48,7 @@ const NumericTextField = ({
   bottomLabel,
   subLabel,
   secondLabel,
-  returnNumber = false,
-}: NumericTextFieldProps) => {
+}: NumericFieldProps) => {
   const [inputValue, setInputValue] = useState(value?.toString() || '');
 
   const handleBlur = (event: any) => {
@@ -75,9 +70,8 @@ const NumericTextField = ({
       const significantDigitsCount = fixed.replace('.', '').replace('-', '')?.length || 0;
       if (significantDigitsCount <= 15) {
         const number = fixed ? Number(fixed) : undefined;
-
         setInputValue(fixed);
-        onChange(returnNumber ? (Number.isNaN(number) ? undefined : number) : fixed);
+        onChange(Number.isNaN(number) ? undefined : number);
       }
     }
   };
@@ -112,4 +106,4 @@ const NumericTextField = ({
   );
 };
 
-export default NumericTextField;
+export default NumericField;

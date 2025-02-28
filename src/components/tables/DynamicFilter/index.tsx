@@ -170,6 +170,7 @@ const Container = styled.div`
   display: flex;
   align-items: flex-end;
   flex-wrap: wrap;
+  gap: 8px;
 `;
 const CloseIcon = styled(Icon)`
   color: ${({ theme }) => theme.colors?.filterText || theme.colors.primary};
@@ -244,7 +245,7 @@ const Tag = styled.div`
   height: auto;
   padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
   color: ${({ theme }) => theme.colors?.filterText || theme.colors.primary};
-  margin-right: 8px;
+  //margin-right: 8px;
   border-radius: 4px;
   font-size: 1.2rem;
   display: flex;

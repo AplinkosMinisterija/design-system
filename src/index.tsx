@@ -21,6 +21,7 @@ import Map from './components/map/Index';
 import MapField from './components/MapField';
 import MultiSelectField from './components/MultiSelectField';
 import Navigator from './components/Navigator';
+import NumericField from './components/NumericField';
 import NumericTextField from './components/NumericTextField';
 import PasswordField from './components/PasswordField';
 import PhoneField from './components/PhoneField';
@@ -70,6 +71,7 @@ export {
   MultiSelectField,
   AsyncSelectField,
   SelectField,
+  NumericField,
   NumericTextField,
   TextAreaField,
   TableContainer,
