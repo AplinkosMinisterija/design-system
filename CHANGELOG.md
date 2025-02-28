@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.26
+
+### Patch Changes
+
+- cf1c4d5: fix ButtonsGroup height and padding
+
 ## 1.2.25
 
 ### Patch Changes
