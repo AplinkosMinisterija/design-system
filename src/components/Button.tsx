@@ -77,7 +77,7 @@ const StyledButton = styled.button<{
   &:hover {
     color: ${({ $variant, theme }) =>
       theme.colors.buttons?.[$variant]?.hoverText ||
-      theme.colors.buttons[$variant]?.text ||
+      theme.colors.buttons?.[$variant]?.text ||
       'white'};
     background-color: ${({ $variant, theme }) =>
       theme.colors.buttons?.[$variant]?.hover || '#a9d8fd'};

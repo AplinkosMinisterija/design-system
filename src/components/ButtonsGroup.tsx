@@ -74,7 +74,7 @@ const StyledButton = styled.button<{
   flex-grow: 1;
   align-items: center;
 
-  padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
+  padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 1.2rem'};
   background-color: ${({ selected, theme }) =>
     selected ? `${theme.colors.primary}33` : 'inherit'};
 
@@ -82,6 +82,7 @@ const StyledButton = styled.button<{
     !error ? (selected ? theme.colors.primary : '#cdd5df') : theme.colors.error || '#FE5B78'};
   border-style: solid;
   font-weight: normal;
+  height: 4rem;
   font-size: 1.4rem;
   opacity: ${({ disabled }) => (disabled ? 0.48 : 1)};
   &:hover {

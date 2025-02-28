@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { TextField } from '../index';
 import Icon, { IconName } from './common/Icons';
 import OptionsContainer from './common/OptionsContainer';
-import NumericTextField from './NumericTextField';
+import NumericField from './NumericField';
 
 export interface CombinedFieldProps {
   value: { input: string; option: string };
@@ -93,7 +93,7 @@ const CombinedField = ({
   return (
     <>
       {numeric ? (
-        <NumericTextField
+        <NumericField
           className={className}
           label={label}
           showError={showError}
