@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.27
+
+### Patch Changes
+
+- 8c40b2e: added recursive table sort
+
 ## 1.2.26
 
 ### Patch Changes
