@@ -14,6 +14,7 @@ import {
 } from './components/types';
 import { useState } from 'react';
 import { useKeyAction } from '../common/hooks';
+import { SortedColumnsProps } from 'src/types';
 
 export interface RecursiveTableProps {
   data?: TableData;
@@ -27,7 +28,7 @@ export interface RecursiveTableProps {
   texts?: {
     notFound: string;
   };
-  onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
+  onColumnSort?: ({ key, direction, sortBy }: SortedColumnsProps) => void;
 }
 
 const RecursiveTable = ({
@@ -42,10 +43,7 @@ const RecursiveTable = ({
   texts,
   onColumnSort,
 }: RecursiveTableProps) => {
-  const [sortedColumn, setSortedColumn] = useState<{
-    key?: string;
-    direction?: 'asc' | 'desc';
-  }>({});
+  const [sortedColumn, setSortedColumn] = useState<SortedColumnsProps>({});
 
   const activeColumns = getActiveColumns(columns);
   const keys = Object.keys(activeColumns);
@@ -64,7 +62,7 @@ const RecursiveTable = ({
     const direction =
       sortedColumn.key === key ? (sortedColumn?.direction === 'asc' ? 'desc' : 'asc') : 'asc';
 
-    onColumnSort({ key, direction });
+    onColumnSort({ key, direction, sortBy: columns[key]?.sortBy || [key] });
 
     setSortedColumn({
       key,
