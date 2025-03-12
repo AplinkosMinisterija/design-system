@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useKeyAction } from '../../../components/common/hooks';
-import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../../types';
+import {
+  Columns,
+  NotFoundInfoProps,
+  SortedColumnsProps,
+  TableItemWidth,
+  TableRow,
+} from '../../../types';
 import CheckBox from '../../Checkbox';
 import Icon, { IconName } from '../../common/Icons';
 import NotFoundInfo from '../../tables/components/NotFoundInfo';
@@ -13,7 +19,7 @@ export interface DesktopTableProps {
   tableRowStyle?: any;
   customPageName?: string;
   isFilterApplied?: boolean;
-  onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
+  onColumnSort?: ({ key, direction, sortBy }: SortedColumnsProps) => void;
   onClick?: (item: any) => void;
   texts?: {
     filteredItemsNotFound: string;
@@ -39,10 +45,7 @@ const MobileTable = ({
   const mainLabelsLength = 2;
   const mainLabels = Object.keys(columns).slice(0, mainLabelsLength);
   const restLabels = Object.keys(columns).slice(mainLabelsLength);
-  const [sortedColumn, setSortedColumn] = useState<{
-    key?: string;
-    direction?: 'asc' | 'desc';
-  }>({});
+  const [sortedColumn, setSortedColumn] = useState<SortedColumnsProps>({});
 
   const handleRowClick = (row: TableRow) => {
     if (onClick && row?.id) {
@@ -58,7 +61,7 @@ const MobileTable = ({
     const direction =
       sortedColumn.key === key ? (sortedColumn?.direction === 'asc' ? 'desc' : 'asc') : 'asc';
 
-    onColumnSort({ key, direction });
+    onColumnSort({ key, direction, sortBy: columns[key]?.sortBy || [key] });
 
     setSortedColumn({
       key,

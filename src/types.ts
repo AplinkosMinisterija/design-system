@@ -238,3 +238,9 @@ export enum PopupType {
   CENTER = 'CENTER',
   BOTTOM = 'BOTTOM',
 }
+
+export interface SortedColumnsProps {
+  key?: string;
+  direction?: 'asc' | 'desc';
+  sortBy?: string[];
+}

@@ -33,6 +33,7 @@ export type Column = {
   show: boolean;
   visible?: boolean;
   width?: TableItemWidth;
+  sortBy?: string[];
 };
 
 export type Columns = {

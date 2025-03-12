@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import Icon, { IconName } from '../../../components/common/Icons';
-import { Columns, NotFoundInfoProps, TableItemWidth, TableRow } from '../../../types';
+import {
+  Columns,
+  NotFoundInfoProps,
+  SortedColumnsProps,
+  TableItemWidth,
+  TableRow,
+} from '../../../types';
 import CheckBox from '../../Checkbox';
 import { useKeyAction } from '../../common/hooks';
 import NotFoundInfo from '../../tables/components/NotFoundInfo';
@@ -13,7 +19,7 @@ export interface DesktopTableProps {
   tableRowStyle?: any;
   customPageName?: string;
   isFilterApplied?: boolean;
-  onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
+  onColumnSort?: ({ key, direction, sortBy }: SortedColumnsProps) => void;
   onClick?: (item: any) => void;
   texts?: {
     filteredItemsNotFound: string;
@@ -38,10 +44,7 @@ const DesktopTable = ({
 }: DesktopTableProps) => {
   const keys = Object.keys(columns);
 
-  const [sortedColumn, setSortedColumn] = useState<{
-    key?: string;
-    direction?: 'asc' | 'desc';
-  }>({});
+  const [sortedColumn, setSortedColumn] = useState<SortedColumnsProps>({});
 
   const handleRowClick = (row: TableRow) => {
     if (onClick && row?.id) {
@@ -58,7 +61,7 @@ const DesktopTable = ({
     const direction =
       sortedColumn.key === key ? (sortedColumn?.direction === 'asc' ? 'desc' : 'asc') : 'asc';
 
-    onColumnSort({ key, direction });
+    onColumnSort({ key, direction, sortBy: columns[key]?.sortBy || [key] });
 
     setSortedColumn({
       key,
