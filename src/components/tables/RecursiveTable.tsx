@@ -4,6 +4,7 @@ import NotFoundInfo from '../tables/components/NotFoundInfo';
 import TableContainer from '../tables/components/TableContainer';
 import { getActiveColumns } from './components/functions';
 import { RecursiveRow } from './components/RecursiveRow';
+import Icon, { IconName } from '../../components/common/Icons';
 import {
   Columns,
   NotFoundInfoProps,
@@ -11,6 +12,8 @@ import {
   TableItemWidth,
   TableRow,
 } from './components/types';
+import { useState } from 'react';
+import { useKeyAction } from '../common/hooks';
 
 export interface RecursiveTableProps {
   data?: TableData;
@@ -24,6 +27,7 @@ export interface RecursiveTableProps {
   texts?: {
     notFound: string;
   };
+  onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
 }
 
 const RecursiveTable = ({
@@ -36,7 +40,13 @@ const RecursiveTable = ({
   loading,
   isFilterApplied = false,
   texts,
+  onColumnSort,
 }: RecursiveTableProps) => {
+  const [sortedColumn, setSortedColumn] = useState<{
+    key?: string;
+    direction?: 'asc' | 'desc';
+  }>({});
+
   const activeColumns = getActiveColumns(columns);
   const keys = Object.keys(activeColumns);
 
@@ -45,6 +55,23 @@ const RecursiveTable = ({
       onClick(`${row.id}`);
     }
   };
+
+  const canSort = !!onColumnSort && !!data?.data?.length;
+
+  const handleColumnClick = (key) => {
+    if (!canSort) return;
+
+    const direction =
+      sortedColumn.key === key ? (sortedColumn?.direction === 'asc' ? 'desc' : 'asc') : 'asc';
+
+    onColumnSort({ key, direction });
+
+    setSortedColumn({
+      key,
+      direction,
+    });
+  };
+  const handleKeyDownOnColumn = useKeyAction(handleColumnClick);
 
   const GenerateTableContent = ({ data }) => {
     if (data?.length) {
@@ -96,10 +123,29 @@ const RecursiveTable = ({
             {keys.map((key: any, i: number) => {
               const item = columns[key]?.label;
               const width = columns[key]?.width || TableItemWidth.LARGE;
+              const isSelectedKey = key === sortedColumn.key;
+              const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
+              const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
 
               return (
-                <TH width={width} key={`th-${i}`}>
-                  {item}
+                <TH
+                  width={width}
+                  key={`th-${i}`}
+                  onClick={() => {
+                    handleColumnClick(key);
+                  }}
+                  onKeyDown={handleKeyDownOnColumn(key)}
+                  tabIndex={onColumnSort ? 0 : undefined}
+                >
+                  <LabelContainer>
+                    {item}
+                    {canSort && (
+                      <IconContainer>
+                        <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
+                        <ArrowIconDown $isActive={isSelectedDown} name={IconName.tableArrowDown} />
+                      </IconContainer>
+                    )}
+                  </LabelContainer>
                 </TH>
               );
             })}
@@ -153,6 +199,26 @@ const TdSecond = styled.td`
 
 const THEAD = styled.thead`
   width: 100%;
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  gap: 4px;
+  align-items: center;
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ArrowIconUp = styled(Icon)<{ $isActive: boolean }>`
+  opacity: ${({ $isActive }) => ($isActive ? '1' : '0.4')};
+`;
+
+const ArrowIconDown = styled(Icon)<{ $isActive: boolean }>`
+  margin-top: -6px;
+  opacity: ${({ $isActive }) => ($isActive ? '1' : '0.4')};
 `;
 
 export default RecursiveTable;

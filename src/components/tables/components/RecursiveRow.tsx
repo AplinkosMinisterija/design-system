@@ -25,7 +25,7 @@ export const RecursiveRow = ({
   columns,
 }: RecursiveRowProps) => {
   const [show, setShow] = useState(false);
-  const hasChildren = !!row.children;
+  const hasChildren = !!row.children && row.children.length > 0;
   const renderTd = (i: number, label) => {
     const item = row[label] || '-';
 
