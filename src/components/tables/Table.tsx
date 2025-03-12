@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Columns, NotFoundInfoProps, TableData } from '../../types';
+import { Columns, NotFoundInfoProps, SortedColumnsProps, TableData } from '../../types';
 import { device, useWindowSize } from '../../utils';
 import LoaderComponent from '../common/LoaderComponent';
 import DesktopTable from '../tables/components/DesktopTable';
@@ -16,7 +16,7 @@ export interface TableProps {
   pageName?: string;
   isFilterApplied?: boolean;
   loading?: boolean;
-  onColumnSort?: ({ key, direction }: { key: string; direction?: 'asc' | 'desc' }) => void;
+  onColumnSort?: ({ key, direction, sortBy }: SortedColumnsProps) => void;
   selectedItemIds?: (string | number | undefined)[];
   onSetSelectedItemIds?: (ids: (string | number | undefined)[]) => void;
   texts?: {
