@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.28
+
+### Patch Changes
+
+- d510007: added table sortBy key
+
 ## 1.2.27
 
 ### Patch Changes
