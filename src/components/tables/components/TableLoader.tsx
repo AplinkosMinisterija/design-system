@@ -1,5 +1,5 @@
-import LoaderComponent from 'src/components/common/LoaderComponent';
 import styled from 'styled-components';
+import LoaderComponent from 'src/components/common/LoaderComponent';
 
 const TableLoader = () => {
   return (
