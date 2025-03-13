@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import RecursiveTable from '../src/components/tables/RecursiveTable';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import { useState } from 'react';
+import React from 'react';
 
 const meta: Meta<typeof RecursiveTable> = {
   component: RecursiveTable,
@@ -73,8 +74,8 @@ export const RecursiveTableStory: Story = {
             },
             column2: {
               label: 'Column 2',
-              mobileOrder: 1,
-              desktopOrder: 1,
+              mobileOrder: 2,
+              desktopOrder: 2,
               show: true,
               visible: true,
             },

@@ -139,7 +139,7 @@ const DesktopTable = ({
 
   return (
     <Wrapper>
-      <TableContainer>
+      <TableContainer $disabled={loading}>
         <Table role="table">
           <THEAD>
             <TR role="row" $pointer={false}>
@@ -195,7 +195,7 @@ const DesktopTable = ({
           </StyledTbody>
         </Table>
       </TableContainer>
-      {!loading && <TableLoader />}
+      {loading && <TableLoader />}
     </Wrapper>
   );
 };
