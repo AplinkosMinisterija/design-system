@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.29
+
+### Patch Changes
+
+- 591a97f: added loader on table
+
 ## 1.2.28
 
 ### Patch Changes
