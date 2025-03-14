@@ -11,6 +11,7 @@ import {
 import CheckBox from '../../Checkbox';
 import { useKeyAction } from '../../common/hooks';
 import NotFoundInfo from '../../tables/components/NotFoundInfo';
+import TableLoader from './TableLoader';
 
 export interface DesktopTableProps {
   data?: TableRow[];
@@ -27,6 +28,7 @@ export interface DesktopTableProps {
   selectedItemIdsSet: Set<string | number | undefined>;
   handleToggleItem: (id: string | number | undefined) => void;
   checkable: boolean;
+  loading?: boolean;
 }
 
 const DesktopTable = ({
@@ -41,6 +43,7 @@ const DesktopTable = ({
   selectedItemIdsSet,
   handleToggleItem,
   checkable,
+  loading = false,
 }: DesktopTableProps) => {
   const keys = Object.keys(columns);
 
@@ -135,59 +138,65 @@ const DesktopTable = ({
   };
 
   return (
-    <TableContainer>
-      <Table role="table">
-        <THEAD>
-          <TR role="row" $pointer={false}>
-            {checkable && <TH width={TableItemWidth.SMALL} role="columnheader" />}
+    <Wrapper>
+      <TableContainer $disabled={loading}>
+        <Table role="table">
+          <THEAD>
+            <TR role="row" $pointer={false}>
+              {checkable && <TH width={TableItemWidth.SMALL} role="columnheader" />}
 
-            {keys.map((key: any, i: number) => {
-              const column = columns[key];
-              const label = column?.label;
-              const width = column?.width || TableItemWidth.LARGE;
-              const isSelectedKey = key === sortedColumn.key;
-              const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
-              const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
+              {keys.map((key: any, i: number) => {
+                const column = columns[key];
+                const label = column?.label;
+                const width = column?.width || TableItemWidth.LARGE;
+                const isSelectedKey = key === sortedColumn.key;
+                const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
+                const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
 
-              return (
-                <TH
-                  role="columnheader"
-                  aria-sort={
-                    isSelectedKey
-                      ? sortedColumn.direction === 'asc'
-                        ? 'ascending'
-                        : 'descending'
-                      : 'none'
-                  }
-                  $pointer={!!onColumnSort}
-                  onClick={() => {
-                    handleColumnClick(key);
-                  }}
-                  onKeyDown={handleKeyDownOnColumn(key)}
-                  tabIndex={onColumnSort ? 0 : undefined}
-                  width={width}
-                  key={`large-th-${i}`}
-                >
-                  <LabelContainer>
-                    {label}
-                    {canSort && (
-                      <IconContainer>
-                        <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
-                        <ArrowIconDown $isActive={isSelectedDown} name={IconName.tableArrowDown} />
-                      </IconContainer>
-                    )}
-                  </LabelContainer>
-                </TH>
-              );
-            })}
-          </TR>
-        </THEAD>
+                return (
+                  <TH
+                    role="columnheader"
+                    aria-sort={
+                      isSelectedKey
+                        ? sortedColumn.direction === 'asc'
+                          ? 'ascending'
+                          : 'descending'
+                        : 'none'
+                    }
+                    $pointer={!!onColumnSort}
+                    onClick={() => {
+                      handleColumnClick(key);
+                    }}
+                    onKeyDown={handleKeyDownOnColumn(key)}
+                    tabIndex={onColumnSort ? 0 : undefined}
+                    width={width}
+                    key={`large-th-${i}`}
+                  >
+                    <LabelContainer>
+                      {label}
+                      {canSort && (
+                        <IconContainer>
+                          <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
+                          <ArrowIconDown
+                            $isActive={isSelectedDown}
+                            name={IconName.tableArrowDown}
+                          />
+                        </IconContainer>
+                      )}
+                    </LabelContainer>
+                  </TH>
+                );
+              })}
+            </TR>
+          </THEAD>
 
-        <StyledTbody>
-          <GenerateTableContent data={data || []} />
-        </StyledTbody>
-      </Table>
-    </TableContainer>
+          <StyledTbody>
+            <GenerateTableContent data={data || []} />
+          </StyledTbody>
+        </Table>
+      </TableContainer>
+      {loading && <TableLoader />}
+    </Wrapper>
   );
 };
 
@@ -213,13 +222,19 @@ const LabelContainer = styled.div`
 
 const StyledTbody = styled.tbody``;
 
-const TableContainer = styled.div`
+const TableContainer = styled.div<{ $disabled: boolean }>`
+  opacity: ${({ $disabled }) => ($disabled ? '0.5' : '1')};
   width: 100%;
 `;
 
 const Table = styled.table`
   border-collapse: collapse;
   width: 100%;
+`;
+
+const Wrapper = styled.div`
+  width: 100%;
+  position: relative;
 `;
 
 const TD = styled.td`

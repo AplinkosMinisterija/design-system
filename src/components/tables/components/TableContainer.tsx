@@ -4,7 +4,6 @@ import { createSearchParams, useNavigate, useSearchParams } from 'react-router-d
 import styled from 'styled-components';
 import { device, useWindowSize } from '../../../utils';
 import Icon from '../../common/Icons';
-import LoaderComponent from '../../common/LoaderComponent';
 import { TableData } from './types';
 import { isEmpty } from 'lodash';
 import PageSizeDropdown from './PageSizeDropdown';
@@ -65,11 +64,9 @@ const TableContainer = ({
     });
   };
 
-  if (loading) return <LoaderComponent />;
-
   return (
     <>
-      <Container>
+      <Container $disabled={loading}>
         {children}
         {showPagination && (
           <StyledReactPaginate
@@ -108,7 +105,7 @@ const TableContainer = ({
   );
 };
 
-const Container = styled.div`
+const Container = styled.div<{$disabled: boolean}>`
   background-color: white;
   border: 1px solid #cdd5df;
   border-radius: 4px;
@@ -118,6 +115,9 @@ const Container = styled.div`
   flex-direction: column;
   align-items: flex-end;
   overflow-x: auto;
+  pointer-events: ${({ $disabled }) => ($disabled ? "none" : "auto")};
+  opacity: ${({ $disabled }) => ($disabled ? "0.5" : "1")};
+
 
   @media ${device.mobileL} {
     align-items: center;

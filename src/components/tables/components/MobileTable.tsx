@@ -11,6 +11,7 @@ import {
 import CheckBox from '../../Checkbox';
 import Icon, { IconName } from '../../common/Icons';
 import NotFoundInfo from '../../tables/components/NotFoundInfo';
+import TableLoader from './TableLoader';
 
 export interface DesktopTableProps {
   data?: TableRow[];
@@ -27,6 +28,7 @@ export interface DesktopTableProps {
   selectedItemIdsSet: Set<string | number | undefined>;
   handleToggleItem: (id: string | number | undefined) => void;
   checkable: boolean;
+  loading?: boolean;
 }
 
 const MobileTable = ({
@@ -41,6 +43,7 @@ const MobileTable = ({
   selectedItemIdsSet,
   handleToggleItem,
   checkable,
+  loading = false,
 }: DesktopTableProps) => {
   const mainLabelsLength = 2;
   const mainLabels = Object.keys(columns).slice(0, mainLabelsLength);
@@ -169,46 +172,52 @@ const MobileTable = ({
   };
 
   return (
-    <TableContainer>
-      <CustomTable role="table">
-        <THEAD>
-          <TR $checkable={checkable} $expandable={true} $pointer={false} $index={0} role="row">
-            <ArrowTh />
-            {checkable && <ArrowTh />}
-            {mainLabels.map((key: any, i: number) => {
-              const column = columns?.[key];
-              const label = column?.label;
-              const isSelectedKey = key === sortedColumn?.key;
-              const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
-              const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
+    <Wrapper>
+      <TableContainer $disabled={loading}>
+        <CustomTable role="table">
+          <THEAD>
+            <TR $checkable={checkable} $expandable={true} $pointer={false} $index={0} role="row">
+              <ArrowTh />
+              {checkable && <ArrowTh />}
+              {mainLabels.map((key: any, i: number) => {
+                const column = columns?.[key];
+                const label = column?.label;
+                const isSelectedKey = key === sortedColumn?.key;
+                const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
+                const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
 
-              return (
-                <TH
-                  onClick={() => handleColumnClick(key)}
-                  key={`tr-th-${i}`}
-                  aria-sort={isSelectedKey ? (isSelectedUp ? 'ascending' : 'descending') : 'none'}
-                  role="columnheader"
-                  tabIndex={0}
-                  onKeyDown={handleKeyDownOnColumn(key)}
-                >
-                  <LabelContainer>
-                    {label}
-                    {canSort && (
-                      <IconContainer>
-                        <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
-                        <ArrowIconDown $isActive={isSelectedDown} name={IconName.tableArrowDown} />
-                      </IconContainer>
-                    )}
-                  </LabelContainer>
-                </TH>
-              );
-            })}
-          </TR>
-        </THEAD>
+                return (
+                  <TH
+                    onClick={() => handleColumnClick(key)}
+                    key={`tr-th-${i}`}
+                    aria-sort={isSelectedKey ? (isSelectedUp ? 'ascending' : 'descending') : 'none'}
+                    role="columnheader"
+                    tabIndex={0}
+                    onKeyDown={handleKeyDownOnColumn(key)}
+                  >
+                    <LabelContainer>
+                      {label}
+                      {canSort && (
+                        <IconContainer>
+                          <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
+                          <ArrowIconDown
+                            $isActive={isSelectedDown}
+                            name={IconName.tableArrowDown}
+                          />
+                        </IconContainer>
+                      )}
+                    </LabelContainer>
+                  </TH>
+                );
+              })}
+            </TR>
+          </THEAD>
 
-        <tbody>{generateTableContent()}</tbody>
-      </CustomTable>
-    </TableContainer>
+          <tbody>{generateTableContent()}</tbody>
+        </CustomTable>
+      </TableContainer>
+      {loading && <TableLoader />}
+    </Wrapper>
   );
 };
 
@@ -267,7 +276,13 @@ const ArrowTh = styled.th`
   width: 32px;
 `;
 
-const TableContainer = styled.div`
+const Wrapper = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+const TableContainer = styled.div<{ $disabled: boolean }>`
+  opacity: ${({ $disabled }) => ($disabled ? '0.5' : '1')};
   width: 100%;
 `;
 

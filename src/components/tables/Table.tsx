@@ -49,7 +49,7 @@ const Table = ({
     setSelectedItemIdsSet(new Set(selectedItemIds));
   }, [selectedItemIds]);
 
-  if (loading) return <LoaderComponent />;
+  if (loading && !data?.data?.length) return <LoaderComponent />;
 
   const activeColumns = getActiveColumns(columns);
 
@@ -85,6 +85,7 @@ const Table = ({
           selectedItemIdsSet={selectedItemIdsSet}
           checkable={!!onSetSelectedItemIds}
           texts={texts}
+          loading={loading}
         />
       ) : (
         <DesktopTable
@@ -99,6 +100,7 @@ const Table = ({
           selectedItemIdsSet={selectedItemIdsSet}
           checkable={!!onSetSelectedItemIds}
           texts={texts}
+          loading={loading}
         />
       )}
     </TableContainer>

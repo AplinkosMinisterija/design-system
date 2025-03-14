@@ -15,6 +15,7 @@ import {
 import { useState } from 'react';
 import { useKeyAction } from '../common/hooks';
 import { SortedColumnsProps } from 'src/types';
+import TableLoader from './components/TableLoader';
 
 export interface RecursiveTableProps {
   data?: TableData;
@@ -38,7 +39,7 @@ const RecursiveTable = ({
   onClick,
   tableRowStyle,
   pageName = 'page',
-  loading,
+  loading = false,
   isFilterApplied = false,
   texts,
   onColumnSort,
@@ -111,56 +112,68 @@ const RecursiveTable = ({
     );
   };
 
-  if (loading) return <LoaderComponent />;
+  if (loading && !data?.data?.length) return <LoaderComponent />;
 
   return (
-    <TableContainer data={data} pageName={pageName} loading={loading}>
-      <Table>
-        <THEAD>
-          <TR $pointer={false}>
-            {keys.map((key: any, i: number) => {
-              const item = columns[key]?.label;
-              const width = columns[key]?.width || TableItemWidth.LARGE;
-              const isSelectedKey = key === sortedColumn.key;
-              const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
-              const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
+    <Wrapper>
+      <TableContainer data={data} pageName={pageName} loading={loading}>
+        <Table $disabled={loading}>
+          <THEAD>
+            <TR $pointer={false}>
+              {keys.map((key: any, i: number) => {
+                const item = columns[key]?.label;
+                const width = columns[key]?.width || TableItemWidth.LARGE;
+                const isSelectedKey = key === sortedColumn.key;
+                const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
+                const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
 
-              return (
-                <TH
-                  width={width}
-                  key={`th-${i}`}
-                  onClick={() => {
-                    handleColumnClick(key);
-                  }}
-                  onKeyDown={handleKeyDownOnColumn(key)}
-                  tabIndex={onColumnSort ? 0 : undefined}
-                >
-                  <LabelContainer>
-                    {item}
-                    {canSort && (
-                      <IconContainer>
-                        <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
-                        <ArrowIconDown $isActive={isSelectedDown} name={IconName.tableArrowDown} />
-                      </IconContainer>
-                    )}
-                  </LabelContainer>
-                </TH>
-              );
-            })}
-          </TR>
-        </THEAD>
+                return (
+                  <TH
+                    width={width}
+                    key={`th-${i}`}
+                    onClick={() => {
+                      handleColumnClick(key);
+                    }}
+                    onKeyDown={handleKeyDownOnColumn(key)}
+                    tabIndex={onColumnSort ? 0 : undefined}
+                  >
+                    <LabelContainer>
+                      {item}
+                      {canSort && (
+                        <IconContainer>
+                          <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
+                          <ArrowIconDown
+                            $isActive={isSelectedDown}
+                            name={IconName.tableArrowDown}
+                          />
+                        </IconContainer>
+                      )}
+                    </LabelContainer>
+                  </TH>
+                );
+              })}
+            </TR>
+          </THEAD>
 
-        <StyledTbody>
-          <GenerateTableContent data={data?.data} />
-        </StyledTbody>
-      </Table>
-    </TableContainer>
+          <StyledTbody>
+            <GenerateTableContent data={data?.data} />
+          </StyledTbody>
+        </Table>
+      </TableContainer>
+      {loading && <TableLoader />}
+    </Wrapper>
   );
 };
 
-const Table = styled.table`
+const Wrapper = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+const Table = styled.table<{ $disabled: boolean }>`
   border-collapse: collapse;
   width: 100%;
+  opacity: ${({ $disabled }) => ($disabled ? '0.5' : '1')};
 `;
 
 const StyledTbody = styled.tbody``;
