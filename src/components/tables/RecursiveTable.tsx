@@ -165,7 +165,7 @@ const RecursiveTable = ({
   );
 };
 
-const Wrapper = styled.table`
+const Wrapper = styled.div`
   width: 100%;
   position: relative;
 `;

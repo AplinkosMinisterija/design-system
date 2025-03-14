@@ -232,7 +232,7 @@ const Table = styled.table`
   width: 100%;
 `;
 
-const Wrapper = styled.table`
+const Wrapper = styled.div`
   width: 100%;
   position: relative;
 `;
