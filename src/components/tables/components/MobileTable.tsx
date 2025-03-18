@@ -185,10 +185,11 @@ const MobileTable = ({
                 const isSelectedKey = key === sortedColumn?.key;
                 const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
                 const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
+                const enableColumnSort = canSort && !column?.disableSort;
 
                 return (
                   <TH
-                    onClick={() => handleColumnClick(key)}
+                    onClick={() => enableColumnSort && handleColumnClick(key)}
                     key={`tr-th-${i}`}
                     aria-sort={isSelectedKey ? (isSelectedUp ? 'ascending' : 'descending') : 'none'}
                     role="columnheader"
@@ -197,7 +198,7 @@ const MobileTable = ({
                   >
                     <LabelContainer>
                       {label}
-                      {canSort && (
+                      {enableColumnSort && (
                         <IconContainer>
                           <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
                           <ArrowIconDown

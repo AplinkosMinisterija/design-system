@@ -152,6 +152,7 @@ const DesktopTable = ({
                 const isSelectedKey = key === sortedColumn.key;
                 const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
                 const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
+                const enableColumnSort = canSort && !column?.disableSort;
 
                 return (
                   <TH
@@ -163,18 +164,18 @@ const DesktopTable = ({
                           : 'descending'
                         : 'none'
                     }
-                    $pointer={!!onColumnSort}
+                    $pointer={!!enableColumnSort}
                     onClick={() => {
-                      handleColumnClick(key);
+                      enableColumnSort && handleColumnClick(key);
                     }}
                     onKeyDown={handleKeyDownOnColumn(key)}
-                    tabIndex={onColumnSort ? 0 : undefined}
+                    tabIndex={enableColumnSort ? 0 : undefined}
                     width={width}
                     key={`large-th-${i}`}
                   >
                     <LabelContainer>
                       {label}
-                      {canSort && (
+                      {enableColumnSort && (
                         <IconContainer>
                           <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
                           <ArrowIconDown
