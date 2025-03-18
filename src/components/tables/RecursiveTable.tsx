@@ -121,25 +121,28 @@ const RecursiveTable = ({
           <THEAD>
             <TR $pointer={false}>
               {keys.map((key: any, i: number) => {
-                const item = columns[key]?.label;
-                const width = columns[key]?.width || TableItemWidth.LARGE;
+                const column = columns[key];
+                const item = column?.label;
+                const width = column?.width || TableItemWidth.LARGE;
                 const isSelectedKey = key === sortedColumn.key;
                 const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
                 const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
+                const enableColumnSort = canSort && !column?.disableSort;
 
                 return (
                   <TH
                     width={width}
                     key={`th-${i}`}
+                    $pointer={!!enableColumnSort}
                     onClick={() => {
-                      handleColumnClick(key);
+                      enableColumnSort && handleColumnClick(key);
                     }}
                     onKeyDown={handleKeyDownOnColumn(key)}
-                    tabIndex={onColumnSort ? 0 : undefined}
+                    tabIndex={enableColumnSort ? 0 : undefined}
                   >
                     <LabelContainer>
                       {item}
-                      {canSort && (
+                      {enableColumnSort && (
                         <IconContainer>
                           <ArrowIconUp $isActive={isSelectedUp} name={IconName.tableArrowUp} />
                           <ArrowIconDown
@@ -178,7 +181,7 @@ const Table = styled.table<{ $disabled: boolean }>`
 
 const StyledTbody = styled.tbody``;
 
-const TH = styled.th<{ width: string }>`
+const TH = styled.th<{ width: string; $pointer: boolean }>`
   padding: 18px 22px;
   height: 44px;
   text-align: left;
@@ -186,6 +189,7 @@ const TH = styled.th<{ width: string }>`
   font-weight: bold;
   letter-spacing: 0.29px;
   color: #9aa4b2;
+  cursor: ${({ $pointer }) => ($pointer ? 'pointer' : 'default')};
 `;
 
 const TR = styled.tr<{

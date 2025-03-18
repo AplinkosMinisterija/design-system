@@ -78,6 +78,7 @@ export const RecursiveTableStory: Story = {
               desktopOrder: 2,
               show: true,
               visible: true,
+              disableSort: true,
             },
           }}
           data={data}

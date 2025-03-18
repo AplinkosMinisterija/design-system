@@ -34,6 +34,7 @@ export type Column = {
   visible?: boolean;
   width?: TableItemWidth;
   sortBy?: string[];
+  disableSort?: boolean;
 };
 
 export type Columns = {

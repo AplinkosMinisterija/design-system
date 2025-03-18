@@ -80,6 +80,7 @@ export const TabsStory: Story = {
               desktopOrder: 3,
               show: true,
               visible: true,
+              disableSort: true,
             },
           }}
           data={data}
