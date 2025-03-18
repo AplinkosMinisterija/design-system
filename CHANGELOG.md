@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.30
+
+### Patch Changes
+
+- 9bf2262: disable sort specific column
+
 ## 1.2.29
 
 ### Patch Changes
