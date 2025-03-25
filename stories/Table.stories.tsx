@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
@@ -19,7 +20,7 @@ export const TabsStory: Story = {
   render: () => {
     const initData = {
       data: [
-        { id: 1, column1: 'test1', column2: 'test', column3: 'data' },
+        { disabled: true, id: 1, column1: 'test1', column2: 'test', column3: 'data' },
         { id: 2, column1: 'test2', column2: 'test', column3: 'testdata' },
         { id: 3, column1: 'item7', column2: 'data3', column3: 'data3' },
         { id: 4, column1: 'test4', column2: 'test', column3: 'testdata1' },
@@ -34,7 +35,7 @@ export const TabsStory: Story = {
     const [data, setData] = useState(initData);
     const [selectedItemsIds, setSelectedRowsIds] = useState<(string | number | undefined)[]>([]);
 
-    const handleColumnSort = ({ key, direction, sortBy }: SortedColumnsProps) => {
+    const handleColumnSort = ({ key, direction }: SortedColumnsProps) => {
       const sortedData = data.data.sort((a, b) => {
         if (key && a[key].localeCompare(b[key]) === 1) {
           return direction === 'asc' ? -1 : 1;
