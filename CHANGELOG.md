@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.31
+
+### Patch Changes
+
+- 8941328: disable specific checkbox in table
+
 ## 1.2.30
 
 ### Patch Changes
