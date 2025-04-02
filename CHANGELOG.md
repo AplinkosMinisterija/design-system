@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.32
+
+### Patch Changes
+
+- 57fb4c7: added option label function on multiselect filter
+
 ## 1.2.31
 
 ### Patch Changes
