@@ -96,7 +96,9 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   values={values[filter.key] || []}
                   options={filter.options || []}
                   onChange={(value) => setFieldValue(filter.key, value)}
-                  getOptionLabel={(option) => option.label}
+                  getOptionLabel={(option) =>
+                    hasOptionLabelFunction ? optionLabel(option) : option.label
+                  }
                   refreshOptions={filter.refreshOptions}
                 />
               </InputWrapper>

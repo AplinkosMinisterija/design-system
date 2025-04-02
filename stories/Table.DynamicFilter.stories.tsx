@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
@@ -29,9 +31,20 @@ const filterConfig = (): Record<string, FilterConfig> => ({
     key: 'email',
     inputType: FilterInputTypes.text,
   },
+  municipality: {
+    label: 'Municipality',
+    key: 'municipality',
+    inputType: FilterInputTypes.multiselect,
+    options: [
+      { name: 'Vilnius', id: 1 },
+      { name: 'Kaunas', id: 2 },
+      { name: 'Klaipėda', id: 3 },
+    ],
+    optionLabel: (item) => item?.name,
+  },
 });
 
-const rowConfig = [['firstName', 'lastName'], ['email']];
+const rowConfig = [['firstName', 'lastName'], ['email'], ['municipality']];
 
 export const TabsStory: Story = {
   name: 'DynamicFilter',
