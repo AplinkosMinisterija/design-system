@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.33
+
+### Patch Changes
+
+- 7c43936: showPages prop added to table
+
 ## 1.2.32
 
 ### Patch Changes
