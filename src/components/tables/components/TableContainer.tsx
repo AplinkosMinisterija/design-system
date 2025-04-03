@@ -16,6 +16,7 @@ export interface TableLayoutProps {
   loading?: boolean;
   children: ChildrenType;
   showPageSizeDropdown?: boolean;
+  showPages?: boolean;
 }
 
 const TableContainer = ({
@@ -24,11 +25,12 @@ const TableContainer = ({
   loading,
   children,
   showPageSizeDropdown,
+  showPages = true,
 }: TableLayoutProps) => {
   const [searchParams] = useSearchParams();
   const params = Object.fromEntries([...Array.from(searchParams)]);
   const totalPages = data?.totalPages || 0;
-  const showPagination = !!data?.data?.length;
+  const showPagination = !!data?.data?.length && showPages;
   const isMobile = useWindowSize(device.mobileL);
   const pageRange = isMobile ? 1 : 3;
   const pageMargin = isMobile ? 1 : 3;
@@ -105,7 +107,7 @@ const TableContainer = ({
   );
 };
 
-const Container = styled.div<{$disabled: boolean}>`
+const Container = styled.div<{ $disabled: boolean }>`
   background-color: white;
   border: 1px solid #cdd5df;
   border-radius: 4px;
@@ -115,9 +117,8 @@ const Container = styled.div<{$disabled: boolean}>`
   flex-direction: column;
   align-items: flex-end;
   overflow-x: auto;
-  pointer-events: ${({ $disabled }) => ($disabled ? "none" : "auto")};
-  opacity: ${({ $disabled }) => ($disabled ? "0.5" : "1")};
-
+  pointer-events: ${({ $disabled }) => ($disabled ? 'none' : 'auto')};
+  opacity: ${({ $disabled }) => ($disabled ? '0.5' : '1')};
 
   @media ${device.mobileL} {
     align-items: center;
