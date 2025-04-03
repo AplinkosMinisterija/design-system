@@ -23,6 +23,7 @@ export interface TableProps {
     filteredItemsNotFound: string;
   };
   showPageSizeDropdown?: boolean;
+  showPages?: boolean;
 }
 
 const Table = ({
@@ -39,6 +40,7 @@ const Table = ({
   onSetSelectedItemIds,
   texts,
   showPageSizeDropdown,
+  showPages = true,
 }: TableProps) => {
   const isMobile = useWindowSize(device.mobileL);
   const [selectedItemIdsSet, setSelectedItemIdsSet] = useState<Set<string | number | undefined>>(
@@ -68,6 +70,7 @@ const Table = ({
   return (
     <TableContainer
       showPageSizeDropdown={showPageSizeDropdown}
+      showPages={showPages}
       data={data}
       pageName={pageName}
       loading={loading}
