@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.34
+
+### Patch Changes
+
+- 21b50af: group multiselect filter options in one tag
+
 ## 1.2.33
 
 ### Patch Changes
