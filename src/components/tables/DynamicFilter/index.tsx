@@ -32,15 +32,19 @@ const mapFilters = (
             label: `${label} ${formatDate(filter)}`,
           });
         } else if (multiSelects.includes(config.inputType)) {
-          applied.push(
-            map(filter, (item: any) => {
-              return {
-                key: config.key,
-                id: item.id,
-                label: `${label} ${hasOptionLabelFunction ? optionLabel(item) : item.label}`,
-              };
-            }),
-          );
+          if (filter.length === 1) {
+            applied.push(
+              map(filter, (item: any) => {
+                return {
+                  key: config.key,
+                  id: item.id,
+                  label: `${label} ${hasOptionLabelFunction ? optionLabel(item) : item.label}`,
+                };
+              }),
+            );
+          } else if (filter.length > 1) {
+            applied.push({ key: config.key, label: label, count: filter.length });
+          }
         } else if (selects.includes(config.inputType)) {
           applied.push({
             key: config.key,
@@ -112,7 +116,15 @@ const DynamicFilter = ({
               key={`${appliedFilter}_${index}`}
               aria-label={`Applied filter: ${appliedFilter?.label}`}
             >
-              <TextContainer>{appliedFilter?.label}</TextContainer>
+              {appliedFilter?.count > 1 ? (
+                <>
+                  <TextContainer>{appliedFilter?.label}</TextContainer>
+                  <TagCount>{appliedFilter?.count}</TagCount>
+                </>
+              ) : (
+                <TextContainer>{appliedFilter?.label}</TextContainer>
+              )}
+
               <CloseIconContainer
                 role="button"
                 tabIndex={0}
@@ -238,6 +250,13 @@ const Count = styled.div`
   color: ${({ theme }) => theme.colors?.filterText || 'white'};
   font-size: 1rem;
   margin-left: 14px;
+`;
+
+const TagCount = styled(Count)`
+  background-color: ${({ theme }) => theme.colors?.filterText || 'white'};
+  color: ${({ theme }) => theme.colors?.filterBackground || theme.colors.primary};
+  margin-left: 10px;
+  margin-right: 4px;
 `;
 
 const Tag = styled.div`
