@@ -58,6 +58,7 @@ const DragAndDropUploadField = ({
 }: FileFieldProps) => {
   const inputRef = useRef<any>(null);
   const [uploadLoading, setUploadLoading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const ariaValue = `${label}-upload-instructions`;
   const hideField = disabled && !files?.length;
   const handleKeyDownOnUpload = useKeyAction(() => onButtonClick(), disabled);
@@ -78,13 +79,14 @@ const DragAndDropUploadField = ({
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     if (disabled) return;
     e.preventDefault();
+    setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const files: File[] = Array.from(e.dataTransfer.files);
       handleSetFiles(files);
     }
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (disabled) return;
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
@@ -101,6 +103,9 @@ const DragAndDropUploadField = ({
   const handleDelete = (index) => {
     if (onDelete) {
       onDelete([...files.slice(0, index), ...files.slice(index + 1)]);
+      if (inputRef.current) {
+        inputRef.current.value = ''; // Reset the input value to allow re-selection of the same file again
+      }
     }
   };
 
@@ -114,7 +119,12 @@ const DragAndDropUploadField = ({
         {!disabled && (
           <UploadFileContainer
             $error={!!error}
-            onDragOver={(e) => e.preventDefault()}
+            $isDragOver={isDragging}
+            onDragOver={(e: React.DragEvent<HTMLDivElement>) => {
+              e.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
             onClick={onButtonClick}
             onKeyDown={handleKeyDownOnUpload()}
@@ -285,9 +295,11 @@ const TextRow = styled.div`
   }
 `;
 
-const UploadFileContainer = styled.div<{ $error: boolean }>`
+const UploadFileContainer = styled.div<{ $error: boolean; $isDragOver: boolean }>`
   cursor: pointer;
-  background-color: #eeebe53d;
+  background-color: ${({ theme, $isDragOver }) =>
+    $isDragOver ? theme.colors.border : '#eeebe53d'};
+  opacity: ${({ $isDragOver }) => ($isDragOver ? 0.6 : 1)};
   border: 2px dashed ${({ theme, $error }) => ($error ? theme.colors.danger : theme.colors.border)};
   border-radius: 4px;
   display: flex;
