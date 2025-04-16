@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.35
+
+### Patch Changes
+
+- 3c97edd: allow re-selection of recently removed file, added style on dragging
+
 ## 1.2.34
 
 ### Patch Changes
