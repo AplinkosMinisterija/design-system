@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.36
+
+### Patch Changes
+
+- 0db8cf5: wrap field label to the next line
+
 ## 1.2.35
 
 ### Patch Changes
