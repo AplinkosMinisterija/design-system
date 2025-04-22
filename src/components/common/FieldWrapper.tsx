@@ -94,18 +94,12 @@ const Label = styled.label`
   font-size: ${({ theme }) => theme.fonts?.fieldLabels || 1.4}rem;
   font-weight: ${({ theme }) => theme.fontWeight?.fieldLabels || 400};
   color: ${({ theme }) => theme.colors.fields?.label || '#101010'};
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
 
 const LabelContainer = styled.div`
   display: flex;
   align-items: center;
   min-height: 2.4rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin-bottom: 0.4rem;
 `;
 
