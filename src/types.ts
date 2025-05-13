@@ -66,11 +66,24 @@ export interface ProfileSelectorColors {
 
 export interface ThemeColors {
   primary: string;
-  secondary: string;
-  tertiary: string;
-  transparent: string;
+  lightPrimary?: string;
+  lighterPrimary?: string;
+  darkPrimary?: string;
+  secondary?: string;
+  lightSecondary?: string;
+  lighterSecondary?: string;
+  darkSecondary?: string;
+  tertiary?: string;
+  lightTertiary?: string;
+  lighterTertiary?: string;
+  darkTertiary?: string;
   danger: string;
+  lightDanger?: string;
+  darkDanger?: string;
   success: string;
+  lightSuccess?: string;
+  darkSuccess?: string;
+  transparent?: string;
   map?: ThemeMapColors;
   buttons?: {
     // configure your own button variants

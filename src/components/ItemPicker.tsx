@@ -10,7 +10,12 @@ function ItemPicker<T>(props: ItemPickerProps<T>) {
     const { isActive, onClick } = item;
 
     return (
-      <PickerItem className={props.className} key={props.getItemKey(item.item)} $isActive={isActive} onClick={onClick}>
+      <PickerItem
+        className={props.className}
+        key={props.getItemKey(item.item)}
+        $isActive={isActive}
+        onClick={onClick}
+      >
         <PickerItemText>{props.getItemRenderString(item.item)}</PickerItemText>
       </PickerItem>
     );
@@ -25,14 +30,13 @@ function ItemPicker<T>(props: ItemPickerProps<T>) {
 
 const PickerWrapper = styled.div`
   display: flex;
-  justify-content: row;
   flex-wrap: wrap;
   gap: 8px;
 `;
 
 const PickerItem = styled.div<{ $isActive: boolean }>`
-  background-color: ${({ $isActive }) => ($isActive ? '#DFF9E5' : '#F7F7F7')};
-  border: 1px solid ${({ $isActive }) => ($isActive ? '#73DC8C' : 'transparent')};
+  background-color: ${({ $isActive, theme }) => ($isActive ? theme.colors.primary : 'white')};
+  border: 1px solid ${({ $isActive, theme }) => ($isActive ? theme.colors.primary : 'transparent')};
   border-radius: 200px;
   padding: 11px 12px;
   display: flex;
