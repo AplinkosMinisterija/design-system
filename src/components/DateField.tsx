@@ -412,7 +412,8 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
   .react-datepicker {
     width: 364px;
     position: absolute;
-    // top: ${({ $bottom }) => ($bottom ? '-370px' : '5px')};
+    ${({ $bottom, theme }) =>
+      $bottom ? `bottom: ${(theme.height.fields || 5.6) + 0.5}rem` : ' top: 0.5rem'};
     z-index: 8;
     background-color: #ffffff;
     box-shadow: 0px 2px 16px #121a5529;
