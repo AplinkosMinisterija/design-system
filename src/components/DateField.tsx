@@ -315,7 +315,7 @@ const DateContainer = styled.div`
 `;
 
 const CalendarIcon = styled(Icon)`
-  color: rgb(122, 126, 159);
+  color: ${({ theme }) => theme.colors.text.secondary || '#767b83'};
   vertical-align: middle;
   margin-right: 8px;
   font-size: 2rem;
@@ -354,7 +354,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     outline: none;
   }
   .react-datepicker__header {
-    color: #121a55;
+    color: ${({ theme }) => theme.colors.text.primary || '#0b1f51'};
     background-color: #ffffff !important;
     border: none;
   }
@@ -362,7 +362,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     margin: 0;
   }
   .react-datepicker__day--outside-month:before {
-    color: #151229;
+    color: ${({ theme }) => theme.colors.text.primary || '#0b1f51'};
     opacity: 0.6;
   }
   .react-datepicker__input-time-container {
@@ -433,7 +433,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     display: block !important;
     margin: 15px 0px 10px 0px;
     text-align: center;
-    color: #0b1f51;
+    color: ${({ theme }) => theme.colors.text.primary || '#0b1f51'};
   }
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
@@ -452,7 +452,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
   .react-datepicker__day--keyboard-selected {
     background-color: white;
     font-size: 1.5rem;
-    color: #121a55;
+    color: ${({ theme }) => theme.colors.text.primary || '#0b1f51'};
   }
   .react-datepicker__day--selected::before {
     content: '';
@@ -462,7 +462,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     transform: translate(-50%, -50%);
     z-index: -1;
 
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.colors.primary || '#53B1FD'};
     width: 50px;
     height: 50px;
     border-radius: 25px;
@@ -480,7 +480,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     font-weight: bold;
 
     letter-spacing: 0px;
-    color: #151229;
+    color: ${({ theme }) => theme.colors.text.primary || '#0b1f51'};
     margin: 26px 32px 0px 0px;
     border: none;
   }
@@ -497,7 +497,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     text-align: center;
     font-size: 1.6rem;
     letter-spacing: 0px;
-    color: #121a55;
+    color: ${({ theme }) => theme.colors.text.primary || '#0b1f51'};
     margin-top: 13px;
     text-transform: capitalize;
   }
@@ -535,28 +535,28 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     align-items: center;
     justify-content: center;
     &:focus {
-      background-color: ${({ theme }) => theme.colors.lightYellow || '#a9d8fd'};
+      background-color: ${({ theme }) => theme.colors.primaryLight || '#a9d8fd'};
       color: ${({ theme }) => theme.colors.primary || '#53B1FD'};
       border: 1px solid ${({ theme }) => theme.colors.yellow || '#53B1FD'};
-      border-radius: ${({ theme }) => theme.borderRadius?.buttons || 4}rem;
+      border-radius: ${({ theme }) => theme.borderRadius?.buttons || 0.4}rem;
     }
   }
 
   .react-datepicker__month-text--keyboard-selected,
   .react-datepicker__quarter-text--keyboard-selected,
   .react-datepicker__year-text--keyboard-selected {
-    background-color: ${({ theme }) => theme.colors.lightYellow};
-    color: ${({ theme }) => theme.colors.primary};
-    border: 1px solid ${({ theme }) => theme.colors.yellow};
-    border-radius: ${({ theme }) => theme.borderRadius?.buttons}rem;
+    background-color: ${({ theme }) => theme.colors.primaryLight || '#a9d8fd'};
+    color: ${({ theme }) => theme.colors.primary || '#53B1FD'};
+    border: 1px solid ${({ theme }) => theme.colors.primary || '#53B1FD'};
+    border-radius: ${({ theme }) => theme.borderRadius?.buttons || 0.4}rem;
   }
   .react-datepicker__month-text--keyboard-selected:not([aria-disabled='true']):hover {
-    background-color: ${({ theme }) => theme.colors.lightYellow};
-    border: 1px solid ${({ theme }) => theme.colors.yellow};
+    background-color: ${({ theme }) => theme.colors.primaryLight || '#a9d8fd'};
+    border: 1px solid ${({ theme }) => theme.colors.primary || '#53B1FD'};
   }
   .react-datepicker__year-text--keyboard-selected:not([aria-disabled='true']):hover {
-    background-color: ${({ theme }) => theme.colors.lightYellow};
-    border: 1px solid ${({ theme }) => theme.colors.yellow};
+    background-color: ${({ theme }) => theme.colors.primaryLight || '#a9d8fd'};
+    border: 1px solid ${({ theme }) => theme.colors.primary || '#53B1FD'};
   }
   .react-datepicker__month-text:not([aria-disabled='true']):hover {
     background-color: white;
@@ -567,18 +567,18 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     border: none;
   }
   .react-datepicker__month-text--keyboard-selected:not([aria-disabled='true']):hover {
-    background-color: ${({ theme }) => theme.colors.lightYellow};
-    border: 1px solid ${({ theme }) => theme.colors.yellow};
+    background-color: ${({ theme }) => theme.colors.primaryLight || '#a9d8fd'};
+    border: 1px solid ${({ theme }) => theme.colors.primary || '#53B1FD'};
   }
   .react-datepicker__year-text--selected:not([aria-disabled='true']):hover {
-    background-color: ${({ theme }) => theme.colors.lightYellow};
-    border: 1px solid ${({ theme }) => theme.colors.yellow};
+    background-color: ${({ theme }) => theme.colors.primaryLight || '#a9d8fd'};
+    border: 1px solid ${({ theme }) => theme.colors.primary || '#53B1FD'};
   }
   .react-datepicker__month-text--selected,
   .react-datepicker__year-text--selected {
-    background-color: ${({ theme }) => theme.colors.lightYellow};
-    border: 1px solid ${({ theme }) => theme.colors.yellow};
-    color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.colors.primaryLight || '#a9d8fd'};
+    border: 1px solid ${({ theme }) => theme.colors.primary || '#53B1FD'};
+    color: ${({ theme }) => theme.colors.primary || '#53B1FD'};
   }
 `;
 
@@ -595,7 +595,7 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  height: ${({ theme }) => theme.height?.buttons}rem;
+  height: ${({ theme }) => theme.height?.buttons || 4}rem;
   gap: 8px;
   padding-top: 16px;
 `;
@@ -608,8 +608,9 @@ const MonthYearWrapper = styled.div`
 
 const ToggleButton = styled.button<{ $isOn: boolean }>`
   background-color: ${({ $isOn, theme }) => ($isOn ? theme.colors.primary : 'transparent')};
-  color: ${({ $isOn, theme }) => ($isOn ? 'white' : theme.colors.texts?.primary)};
+  color: ${({ $isOn, theme }) => ($isOn ? 'white' : theme.colors.texts?.primary || '#121a55')};
   border: none;
+  border-radius: ${({ theme }) => theme.borderRadius?.buttons || 0.4}rem;
   cursor: pointer;
   padding: ${({ $isOn }) => ($isOn ? '4px 8px' : '4px 0')};
   margin: 0;
