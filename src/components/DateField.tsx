@@ -60,9 +60,11 @@ const DateField = ({
   const [mode, setMode] = useState<Mode>(Mode.DATE);
   const headerRef = useRef<HTMLDivElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      if (inputRef?.current?.contains(event.target as Node)) return;
       if (open && calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
         setOpen(false);
       }
@@ -99,7 +101,10 @@ const DateField = ({
   }, [open]);
 
   const handleBlurInput = (event: any) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) {
+    if (
+      !event.currentTarget.contains(event.relatedTarget) &&
+      !calendarRef?.current?.contains(event.relatedTarget)
+    ) {
       if (!validDate(inputValue)) {
         setInputValue('');
         onChange(undefined);
@@ -175,9 +180,11 @@ const DateField = ({
     >
       <TextFieldWrapper
         tabIndex={0}
+        id={'text-field-wrapper'}
         onBlur={handleBlurInput}
         onClick={() => setOpen(!open)}
         onKeyDown={handleToggleOnKeyDown()}
+        ref={inputRef}
       >
         <TextField
           placeholder={placeHolder}
@@ -215,7 +222,7 @@ const DateField = ({
       </TextFieldWrapper>
 
       {open && !disabled ? (
-        <DateContainer ref={calendarRef}>
+        <DateContainer ref={calendarRef} tabIndex={1}>
           {isMobile && (
             <div onClick={() => setOpen(false)}>
               <CloseIcon name={IconName.close} />
@@ -229,10 +236,8 @@ const DateField = ({
             inline
             maxDate={maxDate ? new Date(maxDate) : undefined}
             minDate={minDate ? new Date(minDate) : undefined}
-            //@ts-ignore
             showMonthYearPicker={mode === Mode.MONTH}
             showYearPicker={mode === Mode.YEAR}
-            onClickOutside={() => setOpen(false)}
             renderCustomHeader={({
               decreaseYear,
               increaseYear,
