@@ -109,7 +109,7 @@ export const theme: Theme = {
     dropDown: {
       background: 'white',
       label: colors.black,
-      hover: '',
+      hover: colors.lighterBlue,
     },
     profileSelector: {
       [ProfileSelectorVariants.PRIMARY]: {
