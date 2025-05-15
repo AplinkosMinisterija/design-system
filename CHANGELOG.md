@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.37
+
+### Patch Changes
+
+- 312a912: added date and time fields
+
 ## 1.2.36
 
 ### Patch Changes
