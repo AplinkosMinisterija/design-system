@@ -20,13 +20,13 @@ const Option = ({ option, selected }: any) => {
     align-items: center;
     gap: 8px;
     border-radius: ${({ theme }) => theme.radius?.profileSelector || 0.4}rem;
-    background-color: ${({ $selected }) => ($selected ? '#437783' : 'white')};
-    color: ${({ $selected }) => ($selected ? 'white' : '#437783')};
+    background-color: ${({ $selected, theme }) => ($selected ? theme.colors.primary : 'white')};
+    color: ${({ $selected, theme }) => ($selected ? 'white' : theme.colors.primary)};
   `;
   const Initials = styled.div<{ $selected }>`
     padding: 8px;
-    background-color: ${({ $selected }) => ($selected ? 'white' : '#437783')};
-    color: ${({ $selected }) => ($selected ? '#437783' : 'white')};
+    background-color: ${({ $selected, theme }) => ($selected ? 'white' : theme.colors.primary)};
+    color: ${({ $selected, theme }) => ($selected ? theme.colors.primary : 'white')};
     width: 24px;
     height: 24px;
     align-items: center;
