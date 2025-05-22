@@ -66,7 +66,7 @@ export const LayerToggleControl: React.FC<Props> = ({
       const contRect = container.getBoundingClientRect();
 
       const left = btnRect.left - contRect.left;
-      const top = btnRect.top - contRect.top + btn.offsetHeight + 40;
+      const top = btnRect.top - contRect.top + btn.offsetHeight + 8;
       panel.style.position = 'absolute';
       panel.style.left = `${left}px`;
       panel.style.top = `${top}px`;
