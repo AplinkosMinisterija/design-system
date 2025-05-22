@@ -211,8 +211,7 @@ const Map = ({
         aria-describedby={error ? `${label}-error` : undefined}
         tabIndex={0}
         ref={mapContainer}
-        $error={!!error}
-      />
+        $error={!!error}>
       {toggleLayers && toggleLayers.length > 0 && setToggleLayers && (
         <LayerToggleControl
           toggleLayers={toggleLayers}
@@ -220,6 +219,7 @@ const Map = ({
           mapContainerRef={mapContainer}
         />
       )}
+      </MapDiv>
     </FieldWrapper>
   );
 };
