@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.38
+
+### Patch Changes
+
+- d2a2d9d: Added Map layer toggle control and switch size control
+
 ## 1.2.37
 
 ### Patch Changes
