@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.39
+
+### Patch Changes
+
+- 76832c9: Fixed on fullscreen layers toggle panel visibility and position when opened
+
 ## 1.2.38
 
 ### Patch Changes
