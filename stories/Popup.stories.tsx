@@ -42,8 +42,8 @@ const PopupContent = ({ text }) => {
 
 const LeftComponent = () => {
   const Initials = styled.div<{ $selected }>`
-    background-color: ${({ $selected }) => ($selected ? 'white' : '#437783')};
-    color: ${({ $selected }) => ($selected ? '#437783' : 'white')};
+    background-color: ${({ $selected, theme }) => ($selected ? 'white' : theme.colors.primary)};
+    color: ${({ $selected, theme }) => ($selected ? theme.colors.primary : 'white')};
     width: 40px;
     height: 40px;
     align-items: center;

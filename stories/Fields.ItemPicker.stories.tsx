@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 const meta: Meta<typeof ItemPicker> = {
   component: ItemPicker,
-  title: 'Design system/Fields/Item Picker',
+  title: 'Design system/Buttons/Item Picker',
 };
 
 export default meta;
@@ -32,7 +32,6 @@ const timeRangeItems = [
     name: 'Būsimi',
   },
 ];
-
 
 const apps = [
   {
@@ -68,53 +67,55 @@ const stuff = [
   },
 ];
 
+const Component = () => {
+  const [selectedApps, setSelectedApps] = useState([]);
+  const [selectedStuff, setSelectedStuff] = useState([]);
+  const [selectedTime, setSelectedTime] = useState([]);
+  return (
+    <StoryWrapper>
+      <ItemPicker
+        allowMultipleSelection
+        getItemKey={(item) => item.key}
+        getItemRenderString={(item) => item.name}
+        data={apps}
+        selectedItems={selectedApps}
+        setSelectedItems={(items: any) => setSelectedApps(items)}
+      />
+      <ItemPicker
+        getItemKey={(item) => item.key}
+        getItemRenderString={(item) => item.name}
+        data={timeRangeItems}
+        selectedItems={selectedTime}
+        setSelectedItems={(items: any) => setSelectedTime(items)}
+      />
+      <PickerWrapper>
+        <HeadlessItemPicker
+          allowMultipleSelection
+          getItemKey={(item) => item.key}
+          data={stuff}
+          selectedItems={selectedStuff}
+          setSelectedItems={(items: any) => setSelectedStuff(items)}
+          renderItem={(item) => {
+            const { key } = item.item;
+            const { isActive, onClick } = item;
+            return (
+              <PickerItem key={key} $isActive={isActive} onClick={onClick}>
+                {key}
+              </PickerItem>
+            );
+          }}
+        />
+      </PickerWrapper>
+    </StoryWrapper>
+  );
+};
+
 export const ItemPickerFieldStory: Story = {
   name: 'ItemPicker',
   render: () => {
-    const [selectedApps, setSelectedApps] = useState([]);
-    const [selectedStuff, setSelectedStuff] = useState([]);
-    const [selectedTime, setSelectedTime] = useState([]);
-    return (
-      <StoryWrapper>
-        <ItemPicker 
-          allowMultipleSelection
-          getItemKey={(item) => item.key}
-          getItemRenderString={(item) => item.name}
-          data={apps}
-          selectedItems={selectedApps}
-          setSelectedItems={(items) => setSelectedApps(items)}
-        />
-        <ItemPicker 
-          getItemKey={(item) => item.key}
-          getItemRenderString={(item) => item.name}
-          data={timeRangeItems}
-          selectedItems={selectedTime}
-          setSelectedItems={(items) => setSelectedTime(items)}
-        />
-        <PickerWrapper>
-          <HeadlessItemPicker 
-            allowMultipleSelection
-            getItemKey={(item) => item.key}
-            data={stuff}
-            selectedItems={selectedStuff}
-            setSelectedItems={(items) => setSelectedStuff(items)}
-            renderItem={(item) => {
-              const { key } = item.item;
-              const { isActive, onClick } = item;
-              return (
-                <PickerItem key={key} $isActive={isActive} onClick={onClick}>
-                  {key}
-                </PickerItem>
-              );
-            }}
-          />
-
-        </PickerWrapper>
-      </StoryWrapper>
-    );
+    return <Component />;
   },
 };
-
 
 const PickerWrapper = styled.div`
   display: flex;
@@ -124,7 +125,8 @@ const PickerWrapper = styled.div`
 `;
 
 const PickerItem = styled.div<{ $isActive: boolean }>`
-  background-color: ${({ $isActive, theme }) => ($isActive ? theme.colors.secondary : theme.colors.gray)};
+  background-color: ${({ $isActive, theme }) =>
+    $isActive ? theme.colors.secondary : theme.colors.gray};
   border: 1px solid ${({ $isActive, theme }) => ($isActive ? theme.colors.primary : 'transparent')};
   border-radius: 2px;
   padding: 11px 12px;

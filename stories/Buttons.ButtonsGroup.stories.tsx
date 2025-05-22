@@ -17,11 +17,21 @@ const StoryComponent = () => {
   return (
     <StoryWrapper>
       <ButtonsGroup
-        options={['test1', 'test2', 'test3', 'test4', 'test5', 'test6', 'test7', 'test8', 'test9']}
+        options={[
+          'Button 1',
+          'Button 2',
+          'Button 3',
+          'Button 4',
+          'Button 5',
+          'Button 6',
+          'Button 7',
+          'Button 8',
+          'Button 9',
+        ]}
         onChange={(value) => setSelected(value)}
         isSelected={(option) => option === selected}
         getOptionLabel={(option) => option}
-        error="test"
+        error="Showing button group error"
       />
     </StoryWrapper>
   );
