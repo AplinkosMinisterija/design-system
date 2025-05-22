@@ -2,7 +2,6 @@ import { addProtocol, Feature, Map as MaplibreMap, MapOptions } from 'maplibre-g
 import { useEffect, useMemo, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import FieldWrapper from '../common/FieldWrapper';
-
 // @ts-ignore
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 
@@ -27,10 +26,17 @@ import {
   transformBufferedItems,
 } from './functions';
 import { MapLayers } from './layers';
+import { LayerToggleControl } from './LayerToggleControl';
 
 MapboxDraw.constants.classes.CONTROL_BASE = 'maplibregl-ctrl';
 MapboxDraw.constants.classes.CONTROL_PREFIX = 'maplibregl-ctrl-';
 MapboxDraw.constants.classes.CONTROL_GROUP = 'maplibregl-ctrl-group';
+
+export interface MapToggleLayerConfig {
+  id: string;
+  name: string;
+  visible: boolean;
+}
 
 export interface MapProps {
   onLoad?: (map: MaplibreMap) => void;
@@ -45,6 +51,8 @@ export interface MapProps {
   basemapUrl?: string;
   layers?: string[];
   zoomOnChange?: boolean;
+  toggleLayers?: MapToggleLayerConfig[];
+  setToggleLayers?: (layers: MapToggleLayerConfig[]) => void;
   bbox?: [number, number, number, number];
 }
 
@@ -60,6 +68,8 @@ const Map = ({
   basemapUrl,
   projection = LKS_PROJECTION,
   layers,
+  toggleLayers = [],
+  setToggleLayers,
   zoomOnChange = true,
   bbox,
 }: MapProps) => {
@@ -178,6 +188,22 @@ const Map = ({
     onLoad?.(map.current);
   }, [mapContainer, onLoad]);
 
+  useEffect(() => {
+    if (!map.current || !toggleLayers) return;
+    toggleLayers.forEach(layer => {
+      ['-outline', '-name'].forEach(suffix => {
+        const layerId = `${layer.id}${suffix}`;
+        if (map.current!.getLayer(layerId)) {
+          map.current!.setLayoutProperty(
+            layerId,
+            'visibility',
+            layer.visible ? 'visible' : 'none'
+          );
+        }
+      });
+    });
+  }, [toggleLayers]);
+
   return (
     <FieldWrapper label={label} error={error}>
       <MapDiv
@@ -187,6 +213,13 @@ const Map = ({
         ref={mapContainer}
         $error={!!error}
       />
+      {toggleLayers && toggleLayers.length > 0 && setToggleLayers && (
+        <LayerToggleControl
+          toggleLayers={toggleLayers}
+          setToggleLayers={setToggleLayers}
+          mapContainerRef={mapContainer}
+        />
+      )}
     </FieldWrapper>
   );
 };
