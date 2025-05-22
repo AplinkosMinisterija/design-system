@@ -12,6 +12,8 @@ import {
   MdTune,
   MdOutlineAccessTime,
   MdUnfoldMore,
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
 } from 'react-icons/md';
 import { FaTrash } from 'react-icons/fa';
 import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
@@ -38,6 +40,8 @@ export enum IconName {
   remove = 'remove',
   upload = 'upload',
   layer = 'layer',
+  leftArrow = 'leftArrow',
+  rightArrow = 'rightArrow',
 }
 
 export interface IconProps {
@@ -117,6 +121,10 @@ const Icon = ({ name, className }: IconProps) => {
       return <FaTrash className={className} />;
     case IconName.upload:
       return <FiUpload className={className} />;
+    case IconName.leftArrow:
+      return <MdKeyboardArrowLeft className={className} />;
+    case IconName.rightArrow:
+      return <MdKeyboardArrowRight className={className} />;
     default:
       return null;
   }

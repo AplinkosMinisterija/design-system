@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import TextField from '../src/components/TextField';
 import StoryWrapper from '../src/components/common/StoryWrapper';
@@ -16,7 +15,7 @@ export const Field: Story = {
   render: () => {
     return (
       <StoryWrapper>
-        <TextField label={'Name'} onChange={(e) => {}} value={''} placeholder={'testing'} />
+        <TextField label={'Name'} onChange={() => {}} value={''} placeholder={'testing'} />
       </StoryWrapper>
     );
   },
