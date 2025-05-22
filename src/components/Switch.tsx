@@ -41,7 +41,7 @@ const Switch = ({
   };
 
   const renderLabel = () => (
-    <Label style={labelStyle} $disabled={!!disabled}>
+    <Label style={labelStyle} onClick={onSwitchClick} $disabled={!!disabled}>
       {label}
     </Label>
   );
