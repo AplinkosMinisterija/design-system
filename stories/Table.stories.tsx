@@ -24,7 +24,7 @@ export const TabsStory: Story = {
         { id: 2, column1: 'test2', column2: 'test', column3: 'testdata' },
         { id: 3, column1: 'item7', column2: 'data3', column3: 'data3' },
         { id: 4, column1: 'test4', column2: 'test', column3: 'testdata1' },
-        { id: 5, column1: 'data3', column2: 'item4', column3: 'data4' },
+        { id: 5, column1: 'data3', column2: 'item4', column3: 'data4', column4: 'data' },
       ],
       total: 10,
       page: 1,
@@ -57,6 +57,7 @@ export const TabsStory: Story = {
           selectedItemIds={selectedItemsIds}
           onClick={() => {}}
           loading={false}
+          showPageSizeDropdown={true}
           onSetSelectedItemIds={(ids) => {
             setSelectedRowsIds(ids);
           }}
@@ -79,6 +80,14 @@ export const TabsStory: Story = {
               label: 'Column 3',
               mobileOrder: 3,
               desktopOrder: 3,
+              show: true,
+              visible: true,
+              disableSort: true,
+            },
+            column4: {
+              label: 'Column 4',
+              mobileOrder: 4,
+              desktopOrder: 4,
               show: true,
               visible: true,
               disableSort: true,
