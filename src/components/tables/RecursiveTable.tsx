@@ -30,6 +30,7 @@ export interface RecursiveTableProps {
     notFound: string;
   };
   onColumnSort?: ({ key, direction, sortBy }: SortedColumnsProps) => void;
+  showPageSizeDropdown?: boolean;
 }
 
 const RecursiveTable = ({
@@ -43,6 +44,7 @@ const RecursiveTable = ({
   isFilterApplied = false,
   texts,
   onColumnSort,
+  showPageSizeDropdown = false,
 }: RecursiveTableProps) => {
   const [sortedColumn, setSortedColumn] = useState<SortedColumnsProps>({});
 
@@ -116,7 +118,12 @@ const RecursiveTable = ({
 
   return (
     <Wrapper>
-      <TableContainer data={data} pageName={pageName} loading={loading}>
+      <TableContainer
+        data={data}
+        pageName={pageName}
+        loading={loading}
+        showPageSizeDropdown={showPageSizeDropdown}
+      >
         <Table $disabled={loading}>
           <THEAD>
             <TR $pointer={false}>

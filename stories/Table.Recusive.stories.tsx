@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import type { Meta, StoryObj } from '@storybook/react';
 
 import RecursiveTable from '../src/components/tables/RecursiveTable';
@@ -64,6 +65,7 @@ export const RecursiveTableStory: Story = {
       <StoryWrapper>
         <RecursiveTable
           onColumnSort={handleColumnSort}
+          showPageSizeDropdown={true}
           columns={{
             column1: {
               label: 'Column 1',
