@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.40
+
+### Patch Changes
+
+- 75d8d20: updated page size dropdown style
+
 ## 1.2.39
 
 ### Patch Changes
