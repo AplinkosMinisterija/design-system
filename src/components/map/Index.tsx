@@ -33,7 +33,7 @@ MapboxDraw.constants.classes.CONTROL_PREFIX = 'maplibregl-ctrl-';
 MapboxDraw.constants.classes.CONTROL_GROUP = 'maplibregl-ctrl-group';
 
 export interface MapToggleLayerConfig {
-  id: string;
+  ids: string[];
   name: string;
   visible: boolean;
 }
@@ -52,7 +52,7 @@ export interface MapProps {
   layers?: string[];
   zoomOnChange?: boolean;
   toggleLayers?: MapToggleLayerConfig[];
-  setToggleLayers?: (layers: MapToggleLayerConfig[]) => void;
+  onLayerToggle?: (layer: MapToggleLayerConfig, visible: boolean) => void;
   bbox?: [number, number, number, number];
 }
 
@@ -69,7 +69,7 @@ const Map = ({
   projection = LKS_PROJECTION,
   layers,
   toggleLayers = [],
-  setToggleLayers,
+  onLayerToggle,
   zoomOnChange = true,
   bbox,
 }: MapProps) => {
@@ -191,8 +191,7 @@ const Map = ({
   useEffect(() => {
     if (!map.current || !toggleLayers) return;
     toggleLayers.forEach(layer => {
-      ['-outline', '-name'].forEach(suffix => {
-        const layerId = `${layer.id}${suffix}`;
+      layer.ids.forEach(layerId => {
         if (map.current!.getLayer(layerId)) {
           map.current!.setLayoutProperty(
             layerId,
@@ -202,7 +201,11 @@ const Map = ({
         }
       });
     });
-  }, [toggleLayers]);
+  }, [toggleLayers, map]);
+
+  const handleLayerToggle = (layer: MapToggleLayerConfig) => {
+    onLayerToggle?.(layer, !layer.visible);
+  };
 
   return (
     <FieldWrapper label={label} error={error}>
@@ -212,10 +215,10 @@ const Map = ({
         tabIndex={0}
         ref={mapContainer}
         $error={!!error}>
-      {toggleLayers && toggleLayers.length > 0 && setToggleLayers && (
+      {toggleLayers && toggleLayers.length > 0 && (
         <LayerToggleControl
           toggleLayers={toggleLayers}
-          setToggleLayers={setToggleLayers}
+          onLayerToggle={handleLayerToggle}
           mapContainerRef={mapContainer}
         />
       )}
