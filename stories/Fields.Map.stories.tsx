@@ -80,8 +80,12 @@ const locations = [
 ];
 
 const initialLayers = [
-  { id: 'footprint_tracks', name: 'Pėdsakai', visible: false },
-  { id: 'hunting_areas', name: 'Medžioklės plotas', visible: false },
+  { ids: ['footprint_tracks-outline', 'footprint_tracks-name'], name: 'Pėdsakai', visible: true },
+  {
+    ids: ['hunting_areas-outline', 'hunting_areas-name'],
+    name: 'Medžioklės plotas',
+    visible: false,
+  },
 ];
 
 const StoryComponent = () => {
@@ -90,7 +94,6 @@ const StoryComponent = () => {
   const [location, setLocation] = useState([]);
   const [toggleLayers, setToggleLayers] = useState(initialLayers);
 
-  // Funkcija, kuri laukia, kol map bus pilnai užkrautas
   const whenMapLoads = (cb: () => void) => {
     if (!map) return;
     if (!map.loaded()) {
@@ -103,8 +106,6 @@ const StoryComponent = () => {
     whenMapLoads(() => {
       // FOOTPRINT TRACKS
       const sourceId = 'footprint_tracks';
-      const footprintLayer = toggleLayers.find(l => l.id === sourceId);
-      const footprintVisible = footprintLayer ? footprintLayer.visible : true;
       if (!map.getSource(sourceId)) {
         map.addSource(sourceId, {
           type: 'vector',
@@ -119,7 +120,7 @@ const StoryComponent = () => {
           layout: {
             'line-cap': 'round',
             'line-join': 'round',
-            'visibility': footprintVisible ? 'visible' : 'none',
+            visibility: 'visible',
           },
           paint: {
             'line-color': '#f00',
@@ -138,7 +139,7 @@ const StoryComponent = () => {
             'text-field': '{track_number}',
             'text-size': 10,
             'text-font': ['Noto Sans Regular'],
-            'visibility': footprintVisible ? 'visible' : 'none',
+            visibility: 'visible',
           },
           paint: { 'text-color': '#f00' },
         });
@@ -146,8 +147,6 @@ const StoryComponent = () => {
 
       // HUNTING AREAS
       const sourceId2 = 'hunting_areas';
-      const huntingLayer = toggleLayers.find(l => l.id === sourceId2);
-      const huntingVisible = huntingLayer ? huntingLayer.visible : true;
       if (!map.getSource(sourceId2)) {
         map.addSource(sourceId2, {
           type: 'vector',
@@ -162,7 +161,7 @@ const StoryComponent = () => {
           layout: {
             'line-cap': 'round',
             'line-join': 'round',
-            'visibility': huntingVisible ? 'visible' : 'none',
+            visibility: 'none',
           },
           paint: {
             'line-color': '#f00',
@@ -180,7 +179,7 @@ const StoryComponent = () => {
             'text-field': '{name}',
             'text-size': 10,
             'text-font': ['Noto Sans Regular'],
-            'visibility': huntingVisible ? 'visible' : 'none',
+            visibility: 'none',
           },
           paint: { 'text-color': '#f00' },
         });
@@ -188,6 +187,16 @@ const StoryComponent = () => {
     });
   }, [map, toggleLayers]);
 
+  const handleLayerToggle = (layer, visible) => {
+    const layerIndex = toggleLayers.indexOf(layer);
+    if (layerIndex === -1) return;
+    const updatedLayers = [...toggleLayers];
+    updatedLayers[layerIndex] = {
+      ...layer,
+      visible,
+    };
+    setToggleLayers(updatedLayers);
+  };
 
   return (
     <StoryWrapper>
@@ -215,7 +224,7 @@ const StoryComponent = () => {
         }}
         value={value}
         toggleLayers={toggleLayers}
-        setToggleLayers={setToggleLayers}
+        onLayerToggle={handleLayerToggle}
         onLoad={setMap}
       />
     </StoryWrapper>

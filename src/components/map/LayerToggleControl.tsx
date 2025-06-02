@@ -4,7 +4,7 @@ import Icon, { IconName } from "../common/Icons";
 import Switch from "../Switch";
 
 export interface MapToggleLayerConfig {
-  id: string;
+  ids: string[];
   name: string;
   visible: boolean;
 }
@@ -12,13 +12,13 @@ export interface MapToggleLayerConfig {
 interface Props {
   mapContainerRef: React.RefObject<HTMLDivElement>;
   toggleLayers: MapToggleLayerConfig[];
-  setToggleLayers: (layers: MapToggleLayerConfig[]) => void;
+  onLayerToggle: (layer: MapToggleLayerConfig, visible: boolean) => void;
 }
 
 export const LayerToggleControl: React.FC<Props> = ({
   mapContainerRef,
   toggleLayers,
-  setToggleLayers,
+  onLayerToggle,
 }) => {
   const [isLayersPanelOpen, setIsLayersPanelOpen] = useState(false);
   const buttonToggleLayerRef = useRef<HTMLButtonElement | null>(null);
@@ -74,14 +74,6 @@ export const LayerToggleControl: React.FC<Props> = ({
     }
   }, [isLayersPanelOpen, mapContainerRef]);
 
-  const toggleLayerVisibility = (id: string) => {
-    setToggleLayers(
-      toggleLayers.map(layer =>
-        layer.id === id ? { ...layer, visible: !layer.visible } : layer
-      )
-    );
-  };
-
   if (!toggleLayers || toggleLayers.length === 0) return null;
 
   return (
@@ -98,7 +90,7 @@ export const LayerToggleControl: React.FC<Props> = ({
           <PanelHeader>Sluoksniai</PanelHeader>
           <LayersControl>
             {toggleLayers.map((layer) => (
-              <LayerItem key={layer.id}>
+              <LayerItem key={layer.ids.join('-')}>
                 <LayerInfo>
                   <LayerIcon name={IconName.layer} $size="1.8rem" $color="#9ca3af" />
                   <span>{layer.name}</span>
@@ -106,7 +98,7 @@ export const LayerToggleControl: React.FC<Props> = ({
                 <Switch
                   size="sm"
                   value={layer.visible}
-                  onChange={() => toggleLayerVisibility(layer.id)}
+                  onChange={() => onLayerToggle(layer, !layer.visible)}
                   labelPosition="left"
                 />
               </LayerItem>
