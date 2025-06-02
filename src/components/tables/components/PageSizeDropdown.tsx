@@ -15,13 +15,13 @@ const PageSizeDropdown = ({ value, onChange }: PageSizeDropdownProps) => {
 
   const handleBlur = (event) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
-      setOpen(false);
+      open && setOpen(false);
     }
   };
 
   return (
-    <Container tabIndex={0} onBlur={handleBlur}>
-      <PageSizeDropdownContainer>
+    <Container tabIndex={1} onBlur={handleBlur}>
+      <PageSizeDropdownContainer onClick={handleBlur}>
         <Label>Įrašų skaičius puslapyje</Label>
         <FilterButton $selected={open} onClick={() => setOpen(!open)}>
           <SelectedValueLabel>{value.toString()}</SelectedValueLabel>

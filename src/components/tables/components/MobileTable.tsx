@@ -49,6 +49,7 @@ const MobileTable = ({
   const mainLabels = Object.keys(columns).slice(0, mainLabelsLength);
   const restLabels = Object.keys(columns).slice(mainLabelsLength);
   const [sortedColumn, setSortedColumn] = useState<SortedColumnsProps>({});
+  const [expand, setExpand] = useState(false);
 
   const handleRowClick = (row: TableRow) => {
     if (onClick && row?.id) {
@@ -73,12 +74,10 @@ const MobileTable = ({
   };
 
   const handleKeyDownOnColumn = useKeyAction(handleColumnClick);
+  const handleKeyDownOnExpand = useKeyAction(() => setExpand(!expand));
 
   const handleKeyDown = useKeyAction(handleRowClick);
   const RenderRow = (row: TableRow, index: number) => {
-    const [expand, setExpand] = useState(false);
-    const handleKeyDownOnExpand = useKeyAction(() => setExpand(!expand));
-
     return (
       <TR
         $expandable={true}
