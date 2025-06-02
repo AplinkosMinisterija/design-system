@@ -62,7 +62,6 @@ const PageSizeDropdownContainer = styled.div`
 
 const Container = styled.div`
   width: 100%;
-  position: relative;
   &:focus {
     outline: none;
   }
