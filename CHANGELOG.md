@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.42
+
+### Patch Changes
+
+- 0b3b3c8: fixed mobile table hooks and page size dropdown
+
 ## 1.2.41
 
 ### Patch Changes
