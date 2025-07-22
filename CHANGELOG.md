@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.2.43
+
+### Patch Changes
+
+- 51fec28: add onBlur event handler to layerToggleControl
+
 ## 1.2.42
 
 ### Patch Changes
