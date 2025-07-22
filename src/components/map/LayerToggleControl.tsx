@@ -1,7 +1,7 @@
-import { useRef, useEffect, useState } from "react";
-import styled from "styled-components";
-import Icon, { IconName } from "../common/Icons";
-import Switch from "../Switch";
+import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import Icon, { IconName } from '../common/Icons';
+import Switch from '../Switch';
 
 export interface MapToggleLayerConfig {
   ids: string[];
@@ -23,6 +23,12 @@ export const LayerToggleControl: React.FC<Props> = ({
   const [isLayersPanelOpen, setIsLayersPanelOpen] = useState(false);
   const buttonToggleLayerRef = useRef<HTMLButtonElement | null>(null);
   const layersPanelRef = useRef<HTMLDivElement | null>(null);
+
+  const handleBlur = (event: any) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setIsLayersPanelOpen(false);
+    }
+  };
 
   useEffect(() => {
     const container = mapContainerRef.current;
@@ -77,7 +83,7 @@ export const LayerToggleControl: React.FC<Props> = ({
   if (!toggleLayers || toggleLayers.length === 0) return null;
 
   return (
-    <>
+    <div onBlur={handleBlur}>
       <LayersButton
         ref={buttonToggleLayerRef}
         title="Sluoksnių valdymas"
@@ -86,7 +92,7 @@ export const LayerToggleControl: React.FC<Props> = ({
         <LayerIcon name={IconName.layer} $size="2rem" $color="#1f2937" />
       </LayersButton>
       {isLayersPanelOpen && (
-        <LayersPanel ref={layersPanelRef}>
+        <LayersPanel ref={layersPanelRef} tabIndex={-1}>
           <PanelHeader>Sluoksniai</PanelHeader>
           <LayersControl>
             {toggleLayers.map((layer) => (
@@ -106,28 +112,52 @@ export const LayerToggleControl: React.FC<Props> = ({
           </LayersControl>
         </LayersPanel>
       )}
-    </>
+    </div>
   );
 };
 
 const LayersButton = styled.button`
   position: absolute;
   z-index: 1000;
-  display:flex;
+  display: flex;
   align-items: center;
   background-color: #ffffff;
   border-color: transparent;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   justify-content: space-between;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  padding: .5rem;
+  padding: 0.5rem;
   outline: 2px solid transparent;
   outline-offset: 2px;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
-  transition-duration: .15s;
+  transition-property:
+    color,
+    background-color,
+    border-color,
+    text-decoration-color,
+    fill,
+    stroke,
+    opacity,
+    box-shadow,
+    transform,
+    filter,
+    -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke,
+    opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property:
+    color,
+    background-color,
+    border-color,
+    text-decoration-color,
+    fill,
+    stroke,
+    opacity,
+    box-shadow,
+    transform,
+    filter,
+    backdrop-filter,
+    -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
   cursor: pointer;
 
   &:hover {
@@ -138,7 +168,7 @@ const LayersButton = styled.button`
 const LayerIcon = styled(Icon)<{ $size: string; $color?: string }>`
   width: ${({ $size }) => ($size ? $size : '2.5rem')};
   height: ${({ $size }) => ($size ? $size : '2.5rem')};
-  fill: ${({ $color }) => ($color ? $color : 'currentColor')}; 
+  fill: ${({ $color }) => ($color ? $color : 'currentColor')};
 `;
 
 const LayersPanel = styled.div`
