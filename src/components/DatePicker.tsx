@@ -41,7 +41,7 @@ const DateField = ({
   className,
   showError = true,
   maxDate,
-  ariaLabelRemove,
+  ariaLabelRemove = 'Pašalinti data',
   minDate,
 }: DateFieldProps) => {
   const daterRegex = /^\d{4}-\d{2}-\d{2}$/;

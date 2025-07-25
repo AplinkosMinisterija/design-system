@@ -27,6 +27,7 @@ export interface AsyncSelectFieldProps {
   texts?: OptionContainerTexts;
   handleGetNextPageParam?: (params: any) => number | undefined;
   ariaLabelRemove?: string;
+  ariaLabelDropDownIcon?: string;
 }
 
 const AsyncSelectField = ({
@@ -45,7 +46,8 @@ const AsyncSelectField = ({
   loadOptions,
   dependantValue,
   placeholder = '',
-  ariaLabelRemove,
+  ariaLabelRemove = 'Pašalinti',
+  ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
   texts,
   handleGetNextPageParam = (data) => {
     return data?.page < data?.totalPages ? data.page + 1 : undefined;
@@ -105,7 +107,9 @@ const AsyncSelectField = ({
                 <ClearIcon name={IconName.close} />
               </IconContainer>
             )}
-            <StyledIcon name={IconName.dropdownArrow} />
+            <IconContainer aria-label={ariaLabelDropDownIcon}>
+              <StyledIcon name={IconName.dropdownArrow} />
+            </IconContainer>
           </>
         }
         onChange={handleInputChange}

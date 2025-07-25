@@ -18,6 +18,10 @@ export interface MultiTextFieldProps {
   name?: string;
   hideDropdown?: boolean;
   label?: string;
+  role?: string;
+  ariaLabelRemove?: string;
+  ariaLabelSelectedValue?: string;
+  ariaLabelDropDownIcon?: string;
 }
 
 const MultiTextField = ({
@@ -32,12 +36,16 @@ const MultiTextField = ({
   input = '',
   disabled,
   handleKeyDown,
+  role = 'combobox',
   name,
   height = 56,
+  ariaLabelRemove = 'Pašalinti',
+  ariaLabelSelectedValue = 'Pasirinkta reikšmė',
+  ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
   hideDropdown = false,
 }: MultiTextFieldProps) => {
   const inputRef = useRef<any>(null);
-  const ariaValue = label || name;
+  const ariaValue = label || name || 'field';
 
   const handleClick = () => {
     if (!inputRef?.current) return;
@@ -68,14 +76,18 @@ const MultiTextField = ({
       $height={height}
       aria-disabled={disabled}
       aria-invalid={!!error}
+      role={role}
+      aria-multiselectable="true"
+      aria-label={label || placeholder || 'Multi-select field'}
     >
-      <InnerContainer>
+      <InnerContainer role="listbox">
         {values?.map((value: any, index) => (
           <SimpleCard
             key={index}
             disabled={!!disabled}
-            role="listitem"
-            aria-label={`Tag: ${getOptionLabel(value)}`}
+            role="option"
+            aria-selected="true"
+            aria-label={`${ariaLabelSelectedValue} ${getOptionLabel(value)}`}
             tabIndex={disabled ? -1 : 0}
           >
             <Name>{getOptionLabel(value)}</Name>
@@ -86,7 +98,7 @@ const MultiTextField = ({
               }}
               role="button"
               tabIndex={disabled ? -1 : 0}
-              aria-label={`Remove ${getOptionLabel(value)}`}
+              aria-label={`${ariaLabelRemove} ${getOptionLabel(value)}`}
             >
               <StyledCloseIcon name="close" />
             </IconContainer>
@@ -103,11 +115,18 @@ const MultiTextField = ({
             disabled={disabled}
             value={input}
             onChange={(e) => handleInputChange(e?.target?.value)}
+            aria-label="Įveskite reikšmę"
+            role="textbox"
+            aria-autocomplete="list"
           />
         )}
       </InnerContainer>
       {!hideDropdown && (
-        <DropdownIconContainer>
+        <DropdownIconContainer
+          role="presentation"
+          aria-hidden="true"
+          aria-label={ariaLabelDropDownIcon}
+        >
           <StyledIcons name="dropdownArrow" />
         </DropdownIconContainer>
       )}
@@ -230,6 +249,7 @@ const StyledIcons = styled(Icon)`
   color: ${({ theme }) => theme.colors.fields?.icon || '#cdd5df'};
   font-size: 2.4rem;
 `;
+
 const DropdownIconContainer = styled.div`
   display: flex;
   align-items: center;
