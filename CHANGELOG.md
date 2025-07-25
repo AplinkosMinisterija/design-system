@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.5
+
+### Patch Changes
+
+- 203c589: result count default value
+
 ## 1.3.4
 
 ### Patch Changes
