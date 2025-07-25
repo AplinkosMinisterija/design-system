@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.3
+
+### Patch Changes
+
+- 6b640b3: update default values
+
 ## 1.3.2
 
 ### Patch Changes
