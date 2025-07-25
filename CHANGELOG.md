@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.2
+
+### Patch Changes
+
+- 2705a7c: update datepicker accessibility
+
 ## 1.3.1
 
 ### Patch Changes
