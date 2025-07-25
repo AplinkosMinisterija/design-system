@@ -19,8 +19,6 @@ export interface TextFieldProps {
   onFocus?: any;
   variant?: string;
   label?: string;
-
-  // WCAG / ARIA
   role?: string;
   ariaExpanded?: boolean;
   ariaControls?: string;
@@ -181,6 +179,18 @@ const StyledTextInput = styled.input<{
   ::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+  }
+  ::-webkit-input-placeholder {
+    color: ${({ theme, $selectedValue }) =>
+      (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
+  }
+  ::-moz-placeholder {
+    color: ${({ theme, $selectedValue }) =>
+      (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
+  }
+  ::-ms-placeholder {
+    color: ${({ theme, $selectedValue }) =>
+      (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
   }
   ::placeholder {
     color: ${({ theme, $selectedValue }) =>
