@@ -35,7 +35,7 @@ const OptionsContainer = ({
   showSelect,
   observerRef,
   loading,
-  texts,
+  texts = { noOptions: 'Nėra pasirinkimų' },
   className,
 }: OptionsContainerProps) => {
   const display = showSelect && !disabled;
