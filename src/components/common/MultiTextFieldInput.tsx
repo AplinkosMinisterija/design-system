@@ -125,6 +125,7 @@ const MultiTextField = ({
         <DropdownIconContainer
           role="presentation"
           aria-hidden="true"
+          tabIndex={disabled ? -1 : 0}
           aria-label={ariaLabelDropDownIcon}
         >
           <StyledIcons name="dropdownArrow" />

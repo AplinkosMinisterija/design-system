@@ -28,6 +28,7 @@ export interface DateFieldProps {
   placeHolder?: string;
   showError?: boolean;
   ariaLabelRemove?: string;
+  ariaLabelCalendarIcon?: string;
 }
 
 const DateField = ({
@@ -42,6 +43,7 @@ const DateField = ({
   showError = true,
   maxDate,
   ariaLabelRemove = 'Pašalinti data',
+  ariaLabelCalendarIcon = 'Kalendoriaus ikonėlė',
   minDate,
 }: DateFieldProps) => {
   const daterRegex = /^\d{4}-\d{2}-\d{2}$/;
@@ -167,7 +169,11 @@ const DateField = ({
                   <ClearIcon name={IconName.close} />
                 </IconContainer>
               )}
-              <IconContainer $disabled={disabled}>
+              <IconContainer
+                tabIndex={disabled ? -1 : 0}
+                aria-label={ariaLabelCalendarIcon}
+                $disabled={disabled}
+              >
                 <CalendarIcon name={IconName.calendar} />
               </IconContainer>
             </>

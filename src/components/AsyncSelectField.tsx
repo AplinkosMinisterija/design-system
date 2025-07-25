@@ -107,7 +107,7 @@ const AsyncSelectField = ({
                 <ClearIcon name={IconName.close} />
               </IconContainer>
             )}
-            <IconContainer aria-label={ariaLabelDropDownIcon}>
+            <IconContainer tabIndex={disabled ? -1 : 0} aria-label={ariaLabelDropDownIcon}>
               <StyledIcon name={IconName.dropdownArrow} />
             </IconContainer>
           </>
