@@ -8,8 +8,10 @@ export interface SelectOption {
   label?: string;
   [key: string]: any;
 }
+
 export interface OptionContainerTexts {
   noOptions: string;
+  resultsCount?: (count: number) => string;
 }
 
 export interface OptionsContainerProps {
@@ -33,7 +35,7 @@ const OptionsContainer = ({
   showSelect,
   observerRef,
   loading,
-  texts = { noOptions: '' },
+  texts,
   className,
 }: OptionsContainerProps) => {
   const display = showSelect && !disabled;
@@ -46,7 +48,7 @@ const OptionsContainer = ({
         <LoaderComponent />
       ) : (
         <Option key="no-options" role="option" aria-disabled="true">
-          {texts.noOptions}
+          {texts?.noOptions}
         </Option>
       );
     }
@@ -58,6 +60,7 @@ const OptionsContainer = ({
             key={JSON.stringify(option) + index}
             role="option"
             tabIndex={0}
+            aria-selected={false}
             onClick={() => {
               handleClick(option);
             }}
@@ -78,12 +81,13 @@ const OptionsContainer = ({
         className={className}
         role="listbox"
         aria-hidden={!display}
+        aria-disabled={disabled}
       >
         {renderOptions()}
         {observerRef && <ObserverRef $display={display} ref={observerRef} aria-hidden={!display} />}
       </OptionContainer>
       <OptionsLength aria-live="polite" aria-atomic="true">
-        {optionsLength}
+        {optionsLength > 0 ? texts?.resultsCount?.(optionsLength) : texts?.noOptions}
       </OptionsLength>
     </>
   );
