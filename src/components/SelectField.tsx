@@ -25,6 +25,7 @@ export interface SelectFieldProps {
   clearable?: boolean;
   refreshOptions?: (dependantId?: string) => any;
   ariaLabelRemove?: string;
+  ariaLabelDropDownIcon?: string;
 }
 
 const SelectField = ({
@@ -45,7 +46,8 @@ const SelectField = ({
   disabled,
   dependantId,
   refreshOptions,
-  ariaLabelRemove,
+  ariaLabelRemove = 'Pašalinti',
+  ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
 }: SelectFieldProps) => {
   const {
     suggestions,
@@ -101,7 +103,9 @@ const SelectField = ({
                 <ClearIcon name={IconName.close} />
               </IconContainer>
             )}
-            <StyledIcon name={IconName.dropdownArrow} />
+            <IconContainer aria-label={ariaLabelDropDownIcon}>
+              <StyledIcon name={IconName.dropdownArrow} />
+            </IconContainer>
           </RightContainer>
         }
         onChange={handleOnChange}
