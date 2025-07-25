@@ -24,6 +24,7 @@ export interface SelectFieldProps {
   dependantId?: string;
   clearable?: boolean;
   refreshOptions?: (dependantId?: string) => any;
+  ariaLabelRemove?: string;
 }
 
 const SelectField = ({
@@ -44,6 +45,7 @@ const SelectField = ({
   disabled,
   dependantId,
   refreshOptions,
+  ariaLabelRemove,
 }: SelectFieldProps) => {
   const {
     suggestions,
@@ -87,13 +89,13 @@ const SelectField = ({
           <RightContainer>
             {showDeleteIcon && (
               <IconContainer
+                role="button"
+                tabIndex={0}
+                aria-label={`${ariaLabelRemove} ${typeof getOptionLabel(value) === 'string' ? getOptionLabel(value) : ''}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   !disabled && onChange(undefined);
                 }}
-                role="button"
-                tabIndex={0}
-                aria-label={`Remove ${getOptionLabel(value)}`}
                 onKeyDown={handleKeyDown()}
               >
                 <ClearIcon name={IconName.close} />
@@ -103,6 +105,12 @@ const SelectField = ({
           </RightContainer>
         }
         onChange={handleOnChange}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowDown' || e.key === 'Enter') {
+            e.preventDefault();
+            handleToggleSelect();
+          }
+        }}
         disabled={disabled}
         placeholder={
           value

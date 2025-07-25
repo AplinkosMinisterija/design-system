@@ -19,6 +19,14 @@ export interface TextFieldProps {
   onFocus?: any;
   variant?: string;
   label?: string;
+
+  // WCAG / ARIA
+  role?: string;
+  ariaExpanded?: boolean;
+  ariaControls?: string;
+  ariaHaspopup?: string;
+  ariaActivedescendant?: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const TextFieldInput = ({
@@ -39,6 +47,12 @@ const TextFieldInput = ({
   inputMode = 'text',
   onFocus = () => {},
   variant = 'default',
+  role,
+  ariaExpanded,
+  ariaControls,
+  ariaHaspopup,
+  ariaActivedescendant,
+  onKeyDown,
   ...rest
 }: TextFieldProps) => {
   const ariaValue = label || name;
@@ -51,7 +65,6 @@ const TextFieldInput = ({
     if (!placeholderRef.current) return;
 
     const placeholderHeight = placeholderRef.current.clientHeight / 10 + 1.2;
-
     setContainerHeight(placeholderHeight > initialHeight ? placeholderHeight : initialHeight);
   }, [placeholder]);
 
@@ -76,6 +89,11 @@ const TextFieldInput = ({
           aria-labelledby={
             placeholder && typeof placeholder === 'string' ? `${ariaValue}-placeholder` : undefined
           }
+          role={role}
+          aria-expanded={ariaExpanded}
+          aria-controls={ariaControls}
+          aria-haspopup={ariaHaspopup}
+          aria-activedescendant={ariaActivedescendant}
           $selectedValue={selectedValue}
           onClick={() => (onInputClick ? onInputClick() : null)}
           readOnly={readOnly}
@@ -88,6 +106,7 @@ const TextFieldInput = ({
           disabled={disabled}
           onFocus={onFocus}
           inputMode={inputMode}
+          onKeyDown={onKeyDown}
           {...rest}
         />
       </InputWrapper>
@@ -162,18 +181,6 @@ const StyledTextInput = styled.input<{
   ::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
-  }
-  ::-webkit-input-placeholder {
-    color: ${({ theme, $selectedValue }) =>
-      (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
-  }
-  ::-moz-placeholder {
-    color: ${({ theme, $selectedValue }) =>
-      (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
-  }
-  ::-ms-placeholder {
-    color: ${({ theme, $selectedValue }) =>
-      (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
   }
   ::placeholder {
     color: ${({ theme, $selectedValue }) =>

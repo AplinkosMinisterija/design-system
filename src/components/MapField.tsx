@@ -13,6 +13,8 @@ interface MapFieldProps extends Partial<HTMLIFrameElement> {
   label?: string;
   error?: string;
   filter?: { [key: string]: any };
+  accessibilityDescription?: string;
+  accessibilityContact?: string;
 }
 
 const MapField = ({
@@ -24,10 +26,13 @@ const MapField = ({
   onChange,
   onClick,
   filter,
+  accessibilityDescription,
+  accessibilityContact,
   ...rest
 }: MapFieldProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [loading, setLoading] = useState(true);
+  const mapId = `map-description-${Math.random().toString(36).slice(2)}`;
 
   const handleSaveGeom = useCallback(
     (event: MessageEvent) => {
@@ -68,13 +73,17 @@ const MapField = ({
         $error={!!error}
         src={`${mapHost}${mapPath}`}
         ref={iframeRef}
-        width={'100%'}
+        width="100%"
         allowFullScreen={true}
         onLoad={handleLoadMap}
-        aria-label={`Interactive map ${label}`}
-        aria-describedby={error ? `${label}-error` : undefined}
+        aria-label={`Interaktyvus žemėlapis – ${label}`}
+        aria-describedby={mapId}
+        title={`Žemėlapis – ${label}`}
         tabIndex={0}
       />
+      <VisuallyHidden id={mapId}>
+        {accessibilityDescription} {accessibilityContact}
+      </VisuallyHidden>
     </FieldWrapper>
   );
 };
@@ -88,4 +97,15 @@ const Iframe = styled.iframe<{ $error: boolean }>`
   border: 1px solid ${({ $error, theme }) => ($error ? theme.colors.danger : theme.colors.border)};
   border-radius: 4px;
   margin-top: 8px;
+`;
+
+const VisuallyHidden = styled.div`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 `;

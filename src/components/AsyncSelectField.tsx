@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
-import { useAsyncSelectData } from './common/hooks';
+import { useAsyncSelectData, useKeyAction } from './common/hooks';
 import Icon, { IconName } from './common/Icons';
 import OptionsContainer, { OptionContainerTexts } from './common/OptionsContainer';
 import TextFieldInput from './common/TextFieldInput';
@@ -26,6 +26,7 @@ export interface AsyncSelectFieldProps {
   hasOptionKey?: boolean;
   texts?: OptionContainerTexts;
   handleGetNextPageParam?: (params: any) => number | undefined;
+  ariaLabelRemove?: string;
 }
 
 const AsyncSelectField = ({
@@ -44,7 +45,8 @@ const AsyncSelectField = ({
   loadOptions,
   dependantValue,
   placeholder = '',
-  texts = { noOptions: 'Nėra pasirinkimų' },
+  ariaLabelRemove,
+  texts,
   handleGetNextPageParam = (data) => {
     return data?.page < data?.totalPages ? data.page + 1 : undefined;
   },
@@ -68,8 +70,10 @@ const AsyncSelectField = ({
     handleGetNextPageParam,
     name,
   });
-
+  const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const placeholderValue = value ? getOptionLabel(value) : placeholder;
+  const activeOptionId = value ? `${name}-option-${value?.id || value}` : undefined;
+
   return (
     <FieldWrapper
       onClick={handleToggleSelect}
@@ -89,13 +93,16 @@ const AsyncSelectField = ({
           <>
             {value && !disabled && (
               <IconContainer
-                $disabled={disabled}
+                role="button"
+                tabIndex={0}
+                aria-label={`${ariaLabelRemove} ${typeof getOptionLabel(value) === 'string' ? getOptionLabel(value) : ''}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   !disabled && onChange(undefined);
                 }}
+                onKeyDown={handleKeyDown()}
               >
-                <ClearIcon $disabled={disabled!} name={IconName.close} />
+                <ClearIcon name={IconName.close} />
               </IconContainer>
             )}
             <StyledIcon name={IconName.dropdownArrow} />
@@ -105,6 +112,17 @@ const AsyncSelectField = ({
         disabled={disabled}
         placeholder={placeholderValue}
         selectedValue={value}
+        role="combobox"
+        ariaExpanded={showSelect}
+        ariaControls={`${name}-options`}
+        ariaHaspopup="listbox"
+        ariaActivedescendant={activeOptionId}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowDown' || e.key === 'Enter') {
+            e.preventDefault();
+            handleToggleSelect();
+          }
+        }}
       />
       <OptionsContainer
         loading={loading}
