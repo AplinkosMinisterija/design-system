@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.0
+
+### Minor Changes
+
+- 03d479e: accesibility updates
+
 ## 1.2.43
 
 ### Patch Changes
