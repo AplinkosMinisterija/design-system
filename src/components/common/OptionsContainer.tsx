@@ -35,7 +35,10 @@ const OptionsContainer = ({
   showSelect,
   observerRef,
   loading,
-  texts = { noOptions: 'Nėra pasirinkimų' },
+  texts = {
+    resultsCount: (count) => `${count} rezultatai`,
+    noOptions: 'Nėra pasirinkimų',
+  },
   className,
 }: OptionsContainerProps) => {
   const display = showSelect && !disabled;
