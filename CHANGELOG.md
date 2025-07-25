@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.4
+
+### Patch Changes
+
+- 1ad76b4: update tab indexes
+
 ## 1.3.3
 
 ### Patch Changes
