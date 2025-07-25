@@ -27,6 +27,7 @@ export interface DateFieldProps {
   bottom?: boolean;
   placeHolder?: string;
   showError?: boolean;
+  ariaLabelRemove?: string;
 }
 
 const DateField = ({
@@ -40,6 +41,7 @@ const DateField = ({
   className,
   showError = true,
   maxDate,
+  ariaLabelRemove,
   minDate,
 }: DateFieldProps) => {
   const daterRegex = /^\d{4}-\d{2}-\d{2}$/;
@@ -153,13 +155,13 @@ const DateField = ({
             <>
               {value && !disabled && (
                 <IconContainer
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${ariaLabelRemove} ${textValue}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     onChange(undefined);
                   }}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Remove ${textValue}`}
                   onKeyDown={handleKeyDown()}
                 >
                   <ClearIcon name={IconName.close} />
