@@ -12,8 +12,8 @@ import Filter from './Filter';
 const mapFilters = (
   filterConfig: { [key: string]: FilterConfig },
   filters?: { [key: string]: any },
-): string[] => {
-  const applied: { key: string; label: string }[] | any = [];
+): any[] => {
+  const applied: any[] = [];
   if (filters) {
     map(filterConfig, (config) => {
       const optionLabel = config?.optionLabel;
@@ -34,13 +34,11 @@ const mapFilters = (
         } else if (multiSelects.includes(config.inputType)) {
           if (filter.length === 1) {
             applied.push(
-              map(filter, (item: any) => {
-                return {
-                  key: config.key,
-                  id: item.id,
-                  label: `${label} ${hasOptionLabelFunction ? optionLabel(item) : item.label}`,
-                };
-              }),
+              ...map(filter, (item: any) => ({
+                key: config.key,
+                id: item.id,
+                label: `${label} ${hasOptionLabelFunction ? optionLabel(item) : item.label}`,
+              })),
             );
           } else if (filter.length > 1) {
             applied.push({ key: config.key, label: label, count: filter.length });
@@ -80,32 +78,32 @@ const DynamicFilter = ({
     filter: 'Filtruoti',
   },
 }: DynamicFilterProps) => {
-  const handleKeyDownOnFilter = useKeyAction(() => setShowFilters(true), disabled);
-  const handleKeyDownOnRemoveFilter = useKeyAction((appliedFilter) => {
-    handleClearFilter(appliedFilter);
-  }, disabled);
-  const isMobile = useWindowSize(device.mobileL);
-
   const [showFilters, setShowFilters] = useState(false);
-
-  const [appliedFilters, setAppliedFilters] = useState<any>([]);
+  const [appliedFilters, setAppliedFilters] = useState<any[]>([]);
 
   useEffect(() => {
     setAppliedFilters(mapFilters(filterConfig, filters));
   }, [filters, filterConfig]);
 
-  const handleClearFilter = (appliedFilter) => {
+  const handleClearFilter = (appliedFilter: any) => {
     const { [appliedFilter.key]: key, ...rest } = filters;
     if (appliedFilter.id) {
       onSetFilters({
         ...rest,
-        [appliedFilter.key]: key.filter((filter) => filter.id !== appliedFilter.id),
+        [appliedFilter.key]: key.filter((filter: any) => filter.id !== appliedFilter.id),
       });
-
       return;
     }
     onSetFilters(rest);
   };
+
+  const handleKeyDownOnFilter = useKeyAction(() => setShowFilters(true), disabled);
+  const handleKeyDownOnRemoveFilter = useKeyAction((appliedFilter) => {
+    handleClearFilter(appliedFilter);
+  }, disabled);
+
+  const isMobile = useWindowSize(device.mobileL);
+  const title = texts?.filter || 'Filtrai';
 
   return (
     <>
@@ -113,7 +111,7 @@ const DynamicFilter = ({
         {!isMobile &&
           map(appliedFilters, (appliedFilter, index) => (
             <Tag
-              key={`${appliedFilter}_${index}`}
+              key={`${appliedFilter.key}_${appliedFilter.id || index}`}
               aria-label={`Applied filter: ${appliedFilter?.label}`}
             >
               {appliedFilter?.count > 1 ? (
@@ -143,7 +141,7 @@ const DynamicFilter = ({
           role="button"
           tabIndex={0}
           aria-label="Open filter menu"
-          onKeyDown={handleKeyDownOnFilter()}
+          onKeyDown={handleKeyDownOnFilter}
         >
           <StyledButton disabled={disabled} aria-disabled={disabled}>
             <StyledIcon name={IconName.filter} />
@@ -154,8 +152,14 @@ const DynamicFilter = ({
           </StyledButton>
         </Wrapper>
       </Container>
-      <Popup ariaLabel="Filter" visible={showFilters} onClose={() => setShowFilters(false)}>
+
+      <Popup
+        visible={showFilters}
+        onClose={() => setShowFilters(false)}
+        ariaLabelledby="filtro-modalo-pavadinimas"
+      >
         <FilterWraper>
+          <VisuallyHidden id="filtro-modalo-pavadinimas">{title}</VisuallyHidden>
           <Filter
             values={filters}
             filters={filterConfig}
@@ -163,7 +167,7 @@ const DynamicFilter = ({
             onSubmit={(values) => {
               const copy = { ...values };
               Object.keys(copy).forEach((key) => {
-                if (copy?.[key] && typeof copy[key] == 'string') {
+                if (copy?.[key] && typeof copy[key] === 'string') {
                   copy[key] = copy?.[key]?.trim();
                 }
               });
@@ -177,6 +181,18 @@ const DynamicFilter = ({
     </>
   );
 };
+
+const VisuallyHidden = styled.h2`
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -205,9 +221,7 @@ const TextContainer = styled.div`
   vertical-align: middle;
 `;
 
-const Wrapper = styled.div<{
-  disabled: boolean;
-}>`
+const Wrapper = styled.div<{ disabled: boolean }>`
   opacity: ${({ disabled }) => (disabled ? 0.48 : 1)};
   min-width: 100px;
   &:focus {

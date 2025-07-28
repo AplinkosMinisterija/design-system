@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { PopupType } from '../../types';
 import { device } from '../../utils';
@@ -12,6 +13,7 @@ export interface PopupProps {
   type?: PopupType;
   left?: React.ReactNode;
   ariaLabel?: string;
+  ariaLabelledby?: string;
 }
 
 const Popup = ({
@@ -21,12 +23,45 @@ const Popup = ({
   type = PopupType.FULL_SCREEN,
   left,
   ariaLabel = 'popup',
+  ariaLabelledby,
 }: PopupProps) => {
   const handleKeyDownOnClose = useKeyAction(() => onClose());
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const mainEl =
+      document.querySelector('main') || document.getElementById('root') || document.body;
+
+    if (visible && mainEl) {
+      mainEl.setAttribute('aria-hidden', 'true');
+    } else if (mainEl) {
+      mainEl.removeAttribute('aria-hidden');
+    }
+
+    return () => {
+      if (mainEl) {
+        mainEl.removeAttribute('aria-hidden');
+      }
+    };
+  }, [visible]);
+
+  useEffect(() => {
+    if (visible && containerRef.current) {
+      containerRef.current.focus();
+    }
+  }, [visible]);
 
   return (
     <Modal visible={visible} onClose={onClose}>
-      <Container $type={type} aria-label={ariaLabel} role="dialog" aria-modal="true">
+      <Container
+        $type={type}
+        aria-label={ariaLabelledby ? undefined : ariaLabel}
+        aria-labelledby={ariaLabelledby}
+        role="dialog"
+        aria-modal="true"
+        tabIndex={-1}
+        ref={containerRef}
+      >
         <InnerContainer $type={type}>
           <Header>
             <LeftContainer>{left}</LeftContainer>
@@ -119,9 +154,12 @@ const Container = styled.div<{ width?: string; $type: PopupType }>`
   flex-basis: auto;
   margin: auto;
   display: flex;
+  outline: none;
+
   @media ${device.desktop} {
     max-width: 440px;
   }
+
   @media ${device.mobileL} {
     ${({ $type, theme }) => css(getContainerCss($type, theme))}
   }
@@ -153,6 +191,8 @@ const IconContainer = styled.div`
   margin: 0 0 0 auto;
   padding: 24px;
   width: fit-content;
+  cursor: pointer;
+
   &:focus {
     outline: 1px solid ${({ theme }) => theme.colors.primary};
   }
