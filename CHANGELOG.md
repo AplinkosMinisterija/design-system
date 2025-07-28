@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.6
+
+### Patch Changes
+
+- 1f32194: improve filter and table accessibility
+
 ## 1.3.5
 
 ### Patch Changes
