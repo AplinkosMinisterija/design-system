@@ -256,7 +256,7 @@ const TH = styled.th<{
   font-size: 1.2rem;
   font-weight: bold;
   letter-spacing: 0.29px;
-  color: #9aa4b2;
+  color: #4b5565;
   cursor: ${({ $pointer }) => ($pointer ? 'pointer' : 'default')};
 `;
 
