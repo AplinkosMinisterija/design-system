@@ -94,22 +94,34 @@ const AsyncSelectField = ({
         right={
           <>
             {value && !disabled && (
-              <IconContainer
-                role="button"
-                tabIndex={0}
-                aria-label={`${ariaLabelRemove} ${typeof getOptionLabel(value) === 'string' ? getOptionLabel(value) : ''}`}
+              <IconButton
+                type="button"
+                aria-label={`${ariaLabelRemove} ${
+                  typeof getOptionLabel(value) === 'string' ? getOptionLabel(value) : ''
+                }`}
                 onClick={(e) => {
                   e.stopPropagation();
                   !disabled && onChange(undefined);
                 }}
                 onKeyDown={handleKeyDown()}
+                disabled={disabled}
+                tabIndex={disabled ? -1 : 0}
               >
-                <ClearIcon name={IconName.close} />
-              </IconContainer>
+                <ClearIcon name={IconName.close} $disabled={disabled} />
+              </IconButton>
             )}
-            <IconContainer tabIndex={disabled ? -1 : 0} aria-label={ariaLabelDropDownIcon}>
+            <IconButton
+              type="button"
+              aria-label={ariaLabelDropDownIcon}
+              onClick={(e) => {
+                e.stopPropagation();
+                !disabled && handleToggleSelect();
+              }}
+              disabled={disabled}
+              tabIndex={disabled ? -1 : 0}
+            >
               <StyledIcon name={IconName.dropdownArrow} />
-            </IconContainer>
+            </IconButton>
           </>
         }
         onChange={handleInputChange}
@@ -117,10 +129,10 @@ const AsyncSelectField = ({
         placeholder={placeholderValue}
         selectedValue={value}
         role="combobox"
-        ariaExpanded={showSelect}
-        ariaControls={`${name}-options`}
-        ariaHaspopup="listbox"
-        ariaActivedescendant={activeOptionId}
+        aria-expanded={showSelect}
+        aria-controls={`${name}-options`}
+        aria-haspopup="listbox"
+        aria-activedescendant={activeOptionId}
         onKeyDown={(e) => {
           if (e.key === 'ArrowDown' || e.key === 'Enter') {
             e.preventDefault();
@@ -141,6 +153,25 @@ const AsyncSelectField = ({
   );
 };
 
+const IconButton = styled.button`
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+`;
+
 const StyledIcon = styled(Icon)`
   color: ${({ theme }) => theme.colors.fields?.icon || '#cdd5df'};
   font-size: 2.4rem;
@@ -151,13 +182,6 @@ const ClearIcon = styled(Icon)<{ $disabled: boolean }>`
   color: ${({ theme }) => theme.colors.fields?.icon || '#cdd5df'};
   font-size: 2.4rem;
   margin-right: 12px;
-  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
-`;
-
-const IconContainer = styled.div<{ $disabled: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
 `;
 

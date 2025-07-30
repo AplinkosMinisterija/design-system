@@ -90,22 +90,32 @@ const SelectField = ({
         right={
           <RightContainer>
             {showDeleteIcon && (
-              <IconContainer
-                role="button"
-                tabIndex={0}
+              <IconButton
+                type="button"
                 aria-label={`${ariaLabelRemove} ${typeof getOptionLabel(value) === 'string' ? getOptionLabel(value) : ''}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   !disabled && onChange(undefined);
                 }}
                 onKeyDown={handleKeyDown()}
+                disabled={disabled}
+                tabIndex={disabled ? -1 : 0}
               >
                 <ClearIcon name={IconName.close} />
-              </IconContainer>
+              </IconButton>
             )}
-            <IconContainer tabIndex={disabled ? -1 : 0} aria-label={ariaLabelDropDownIcon}>
+            <IconButton
+              type="button"
+              aria-label={ariaLabelDropDownIcon}
+              onClick={(e) => {
+                e.stopPropagation();
+                !disabled && handleToggleSelect();
+              }}
+              disabled={disabled}
+              tabIndex={disabled ? -1 : 0}
+            >
               <StyledIcon name={IconName.dropdownArrow} />
-            </IconContainer>
+            </IconButton>
           </RightContainer>
         }
         onChange={handleOnChange}
@@ -141,20 +151,26 @@ const RightContainer = styled.div`
   gap: 8px;
 `;
 
-const ClearIcon = styled(Icon)<{ $disabled: boolean }>`
-  color: #cdd5df;
-  font-size: 2.4rem;
-  cursor: pointer;
-`;
-
-const IconContainer = styled.div<{ $disabled: boolean }>`
+const IconButton = styled.button`
+  background: none;
+  border: none;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  padding: 0;
+  margin: 0;
   &:focus {
     outline: 1px solid ${({ theme }) => theme.colors.primary};
   }
+  &:disabled {
+    cursor: not-allowed;
+  }
+`;
+
+const ClearIcon = styled(Icon)`
+  color: #cdd5df;
+  font-size: 2.4rem;
 `;
 
 const StyledIcon = styled(Icon)`
