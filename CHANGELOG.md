@@ -1,5 +1,12 @@
 # @aplinkosministerija/design-system
 
+## 1.3.7
+
+### Patch Changes
+
+- 6d2c712: update accesibility
+- 5045e70: update accesibility
+
 ## 1.3.6
 
 ### Patch Changes
