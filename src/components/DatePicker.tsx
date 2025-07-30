@@ -54,10 +54,10 @@ const DateField = ({
   const invisibleDivRef = useRef(null);
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const handleKeyDownOnToggle = useKeyAction(() => setOpen(!open), disabled);
-  useEffect(() => {
-    const checkVisibility = (entries) => {
-      const isDivBottomVisible = entries[0].isIntersecting;
 
+  useEffect(() => {
+    const checkVisibility = (entries: IntersectionObserverEntry[]) => {
+      const isDivBottomVisible = entries[0].isIntersecting;
       setIsBottomVisible(isDivBottomVisible);
     };
 
@@ -78,14 +78,14 @@ const DateField = ({
     };
   }, [open]);
 
-  const handleBlur = (event: any) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) {
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    if (!event.currentTarget.contains(event.relatedTarget as Node)) {
       setOpen(false);
     }
   };
 
-  const handleBlurInput = (event: any) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) {
+  const handleBlurInput = (event: React.FocusEvent<HTMLDivElement>) => {
+    if (!event.currentTarget.contains(event.relatedTarget as Node)) {
       if (!validDate(inputValue)) {
         setInputValue('');
         onChange(undefined);
@@ -156,26 +156,28 @@ const DateField = ({
           right={
             <>
               {value && !disabled && (
-                <IconContainer
-                  role="button"
-                  tabIndex={0}
+                <IconButton
+                  type="button"
                   aria-label={`${ariaLabelRemove} ${textValue}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     onChange(undefined);
                   }}
                   onKeyDown={handleKeyDown()}
+                  $disabled={disabled}
                 >
                   <ClearIcon name={IconName.close} />
-                </IconContainer>
+                </IconButton>
               )}
-              <IconContainer
-                tabIndex={disabled ? -1 : 0}
+              <IconButton
+                type="button"
                 aria-label={ariaLabelCalendarIcon}
+                onClick={() => setOpen(!open)}
                 $disabled={disabled}
+                tabIndex={disabled ? -1 : 0}
               >
                 <CalendarIcon name={IconName.calendar} />
-              </IconContainer>
+              </IconButton>
             </>
           }
           disabled={disabled}
@@ -185,9 +187,13 @@ const DateField = ({
       {open && !disabled ? (
         <DateContainer>
           {isMobile && (
-            <div onClick={() => setOpen(false)}>
+            <CloseButton
+              type="button"
+              aria-label="Uždaryti kalendorių"
+              onClick={() => setOpen(false)}
+            >
               <CloseIcon name={IconName.close} />
-            </div>
+            </CloseButton>
           )}
           <Datepicker
             locale="lt"
@@ -234,6 +240,20 @@ const DateContainer = styled.div`
   }
 `;
 
+const IconButton = styled.button<{ $disabled: boolean }>`
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  padding: 0;
+  margin: 0;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
+`;
+
 const CalendarIcon = styled(Icon)`
   color: rgb(122, 126, 159);
   vertical-align: middle;
@@ -252,14 +272,25 @@ const CloseIcon = styled(Icon)`
   cursor: pointer;
 `;
 
-const IconContainer = styled.div<{ $disabled: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  color: white;
+  font-size: 2.8rem;
   &:focus {
     outline: 1px solid ${({ theme }) => theme.colors.primary};
   }
+`;
+
+const ClearIcon = styled(Icon)<{ $disabled: boolean }>`
+  color: #cdd5df;
+  font-size: 2.4rem;
+  margin-right: 12px;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
 `;
 
 const InvisibleContainer = styled.div`
@@ -432,14 +463,6 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
   .react-datepicker__month-container {
     float: none;
   }
-`;
-
-const ClearIcon = styled(Icon)<{ $disabled: boolean }>`
-  color: #cdd5df;
-  font-size: 2.4rem;
-  margin-right: 12px;
-
-  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
 `;
 
 export default DateField;

@@ -77,7 +77,6 @@ const MultiTextField = ({
       aria-disabled={disabled}
       aria-invalid={!!error}
       role={role}
-      aria-multiselectable="true"
       aria-label={label || placeholder || 'Multi-select field'}
     >
       <InnerContainer role="listbox">

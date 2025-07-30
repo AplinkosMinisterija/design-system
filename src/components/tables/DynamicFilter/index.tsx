@@ -134,23 +134,20 @@ const DynamicFilter = ({
               </CloseIconContainer>
             </Tag>
           ))}
-        <Wrapper
+
+        <StyledFilterButton
           className={className}
           disabled={disabled}
-          onClick={() => setShowFilters(true)}
-          role="button"
-          tabIndex={0}
           aria-label="Open filter menu"
+          onClick={() => setShowFilters(true)}
           onKeyDown={handleKeyDownOnFilter}
         >
-          <StyledButton disabled={disabled} aria-disabled={disabled}>
-            <StyledIcon name={IconName.filter} />
-            {loading ? <Loader size={'22'} /> : 'Filtrai'}
-            <Count aria-label={`${appliedFilters.length} filters applied`}>
-              {appliedFilters.length}
-            </Count>
-          </StyledButton>
-        </Wrapper>
+          <StyledIcon name={IconName.filter} />
+          {loading ? <Loader size={'22'} /> : 'Filtrai'}
+          <Count aria-label={`${appliedFilters.length} filters applied`}>
+            {appliedFilters.length}
+          </Count>
+        </StyledFilterButton>
       </Container>
 
       <Popup
@@ -200,6 +197,7 @@ const Container = styled.div`
   flex-wrap: wrap;
   gap: 8px;
 `;
+
 const CloseIcon = styled(Icon)`
   color: ${({ theme }) => theme.colors?.filterText || theme.colors.primary};
   font-size: 2rem;
@@ -221,15 +219,7 @@ const TextContainer = styled.div`
   vertical-align: middle;
 `;
 
-const Wrapper = styled.div<{ disabled: boolean }>`
-  opacity: ${({ disabled }) => (disabled ? 0.48 : 1)};
-  min-width: 100px;
-  &:focus {
-    outline: 1px solid ${({ theme }) => theme.colors.primary};
-  }
-`;
-
-export const StyledButton = styled.button`
+const StyledFilterButton = styled.button<{ disabled: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -240,12 +230,17 @@ export const StyledButton = styled.button`
   border: 1px solid #cdd5df;
   font-weight: normal;
   font-size: 1.4rem;
-  :hover {
-    opacity: 0.6;
-  }
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   width: fit-content;
   padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
+  opacity: ${({ disabled }) => (disabled ? 0.48 : 1)};
+  :hover {
+    opacity: ${({ disabled }) => (disabled ? 0.48 : 0.6)};
+  }
+
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const StyledIcon = styled(Icon)`
