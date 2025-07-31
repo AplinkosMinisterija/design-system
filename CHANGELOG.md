@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.8
+
+### Patch Changes
+
+- ad04c66: mapfield undefined dix
+
 ## 1.3.7
 
 ### Patch Changes
