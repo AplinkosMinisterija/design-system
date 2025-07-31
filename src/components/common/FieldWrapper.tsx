@@ -15,6 +15,7 @@ export interface FieldWrapperProps {
   secondLabel?: JSX.Element;
   children: any;
   labelButton?: JSX.Element;
+  htmlFor?: string;
 }
 
 const FieldWrapper = ({
@@ -30,10 +31,11 @@ const FieldWrapper = ({
   secondLabel,
   children,
   labelButton,
+  htmlFor,
 }: FieldWrapperProps) => {
   const handleKeyDown = useKeyAction(() => !!onClick && onClick());
 
-  const labelAriaValue = label ? `field-${label}` : undefined;
+  const labelAriaValue = htmlFor || (label ? `field-${label}` : undefined);
   const errorAriaValue = error ? `${labelAriaValue}-error` : undefined;
   const subLabelAriaValue = subLabel ? `${subLabel}-sublabel` : undefined;
 
@@ -49,7 +51,7 @@ const FieldWrapper = ({
       <LabelRow>
         {!!label && (
           <LabelContainer>
-            <Label id={labelAriaValue} htmlFor={labelAriaValue}>
+            <Label id={labelAriaValue} htmlFor={htmlFor}>
               {label}
             </Label>
             {!!subLabel && (
