@@ -77,8 +77,11 @@ const AsyncSelectField = ({
 
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const placeholderValue = value ? getOptionLabel(value) : placeholder;
+
   const activeOptionId =
-    value && getOptionId(value) != null ? `${name}-option-${getOptionId(value)}` : undefined;
+    showSelect && value && getOptionId(value) != null
+      ? `${name}-option-${getOptionId(value)}`
+      : undefined;
 
   return (
     <FieldWrapper
