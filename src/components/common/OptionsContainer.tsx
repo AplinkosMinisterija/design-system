@@ -25,6 +25,9 @@ export interface OptionsContainerProps {
   texts?: OptionContainerTexts;
   observerRef?: any;
   className?: string;
+  name?: string;
+  getOptionId?: (option: any) => string | number;
+  activeOptionId?: string;
 }
 
 const OptionsContainer = ({
@@ -40,6 +43,9 @@ const OptionsContainer = ({
     noOptions: 'Nėra pasirinkimų',
   },
   className,
+  name = '',
+  getOptionId = (option) => option?.id ?? option,
+  activeOptionId,
 }: OptionsContainerProps) => {
   const display = showSelect && !disabled;
   const optionsLength = options.length;
@@ -58,20 +64,24 @@ const OptionsContainer = ({
 
     return (
       <>
-        {options.map((option, index) => (
-          <Option
-            key={JSON.stringify(option) + index}
-            role="option"
-            tabIndex={0}
-            aria-selected={false}
-            onClick={() => {
-              handleClick(option);
-            }}
-            onKeyDown={handleKeyDown(option)}
-          >
-            {getOptionLabel && getOptionLabel(option)}
-          </Option>
-        ))}
+        {options.map((option, index) => {
+          const optionId = `${name}-option-${getOptionId(option)}`;
+          const isActive = activeOptionId === optionId;
+
+          return (
+            <Option
+              id={optionId}
+              key={JSON.stringify(option) + index}
+              role="option"
+              tabIndex={0}
+              aria-selected={isActive}
+              onClick={() => handleClick(option)}
+              onKeyDown={handleKeyDown(option)}
+            >
+              {getOptionLabel(option)}
+            </Option>
+          );
+        })}
         {loading && <LoaderComponent />}
       </>
     );
@@ -123,8 +133,6 @@ const OptionContainer = styled.div<{ $display: boolean }>`
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
     }
-  }
-  > * {
     &:last-child {
       border-bottom-left-radius: 4px;
       border-bottom-right-radius: 4px;
@@ -138,6 +146,7 @@ const Option = styled.div`
   line-height: 20px;
   padding: 8px 12px;
   color: ${({ theme }) => theme.colors.dropDown?.label || '#101010'};
+
   &:hover {
     background: ${({ theme }) => theme.colors.dropDown?.hover || '#f3f3f7'} 0% 0% no-repeat
       padding-box;
