@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useId } from 'react';
 import { useResizeDetector } from 'react-resize-detector';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
@@ -36,6 +36,7 @@ const TextAreaField = ({
   disabled = false,
 }: TextFieldProps) => {
   const { width, ref } = useResizeDetector();
+  const id = useId();
 
   useEffect(() => {
     if (rows * 20 < ref?.current?.scrollHeight) {
@@ -50,11 +51,13 @@ const TextAreaField = ({
       padding={padding}
       className={className}
       label={label}
+      htmlFor={id}
       error={error}
       showError={showError}
     >
       <InputContainer $error={!!error} $disabled={disabled}>
         <StyledTextArea
+          id={id}
           ref={ref}
           disabled={disabled}
           placeholder={placeholder}
@@ -62,6 +65,7 @@ const TextAreaField = ({
           value={value}
           name={name}
           onChange={(e) => onChange && onChange(e.target.value || '')}
+          aria-label={label || name || 'Text area'}
         />
       </InputContainer>
     </FieldWrapper>

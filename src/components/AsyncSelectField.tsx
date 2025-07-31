@@ -28,6 +28,7 @@ export interface AsyncSelectFieldProps {
   handleGetNextPageParam?: (params: any) => number | undefined;
   ariaLabelRemove?: string;
   ariaLabelDropDownIcon?: string;
+  getOptionId?: (option: any) => string | number;
 }
 
 const AsyncSelectField = ({
@@ -52,6 +53,7 @@ const AsyncSelectField = ({
   handleGetNextPageParam = (data) => {
     return data?.page < data?.totalPages ? data.page + 1 : undefined;
   },
+  getOptionId = (option) => option?.id ?? option,
 }: AsyncSelectFieldProps) => {
   const {
     loading,
@@ -74,7 +76,7 @@ const AsyncSelectField = ({
   });
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const placeholderValue = value ? getOptionLabel(value) : placeholder;
-  const activeOptionId = value ? `${name}-option-${value?.id || value}` : undefined;
+  const activeOptionId = value ? `${name}-option-${getOptionId(value)}` : undefined;
 
   return (
     <FieldWrapper
