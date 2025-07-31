@@ -68,6 +68,9 @@ const MapField = ({
 
   return (
     <FieldWrapper label={label} error={error}>
+      <VisuallyHidden id={mapId}>
+        {accessibilityDescription} {accessibilityContact}
+      </VisuallyHidden>
       <Iframe
         {...rest}
         $error={!!error}
@@ -81,9 +84,6 @@ const MapField = ({
         title={`Žemėlapis${label ? ` – ${label}` : ''}`}
         tabIndex={0}
       />
-      <VisuallyHidden id={mapId}>
-        {accessibilityDescription} {accessibilityContact}
-      </VisuallyHidden>
     </FieldWrapper>
   );
 };
