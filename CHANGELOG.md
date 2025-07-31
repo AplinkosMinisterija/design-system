@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.11
+
+### Patch Changes
+
+- 1f54a9f: fix async field
+
 ## 1.3.10
 
 ### Patch Changes
