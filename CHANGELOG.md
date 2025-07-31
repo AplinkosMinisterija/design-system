@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.10
+
+### Patch Changes
+
+- e0a6c5b: refactor fields
+
 ## 1.3.9
 
 ### Patch Changes
