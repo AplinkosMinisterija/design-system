@@ -74,9 +74,11 @@ const AsyncSelectField = ({
     handleGetNextPageParam,
     name,
   });
+
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const placeholderValue = value ? getOptionLabel(value) : placeholder;
-  const activeOptionId = value ? `${name}-option-${getOptionId(value)}` : undefined;
+  const activeOptionId =
+    value && getOptionId(value) != null ? `${name}-option-${getOptionId(value)}` : undefined;
 
   return (
     <FieldWrapper
@@ -147,6 +149,9 @@ const AsyncSelectField = ({
         observerRef={observerRef}
         options={suggestions}
         getOptionLabel={getOptionComponent || getOptionLabel}
+        getOptionId={getOptionId}
+        name={name}
+        activeOptionId={activeOptionId}
         showSelect={showSelect}
         handleClick={handleClick}
         texts={texts}

@@ -1,5 +1,6 @@
 import FieldWrapper from './common/FieldWrapper';
 import TextFieldInput from './common/TextFieldInput';
+
 export interface TextFieldProps {
   value?: string | number;
   name?: string;
@@ -70,6 +71,7 @@ const TextField = ({
         onInputClick={onInputClick}
         placeholder={placeholder}
         type={type}
+        ariaLabel={label || name}
       />
     </FieldWrapper>
   );

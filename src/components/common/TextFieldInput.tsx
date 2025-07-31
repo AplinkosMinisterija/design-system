@@ -25,6 +25,7 @@ export interface TextFieldProps {
   ariaHaspopup?: string;
   ariaActivedescendant?: string;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  ariaLabel?: string;
 }
 
 const TextFieldInput = ({
@@ -51,6 +52,7 @@ const TextFieldInput = ({
   ariaHaspopup,
   ariaActivedescendant,
   onKeyDown,
+  ariaLabel,
   ...rest
 }: TextFieldProps) => {
   const ariaValue = label || name;
@@ -66,6 +68,8 @@ const TextFieldInput = ({
     setContainerHeight(placeholderHeight > initialHeight ? placeholderHeight : initialHeight);
   }, [placeholder]);
 
+  const isCustomPlaceholder = typeof placeholder !== 'string';
+
   return (
     <InputContainer
       $error={!!error}
@@ -76,7 +80,7 @@ const TextFieldInput = ({
     >
       {left}
       <InputWrapper>
-        {!value && typeof placeholder !== 'string' && (
+        {!value && isCustomPlaceholder && (
           <CustomPlaceholder ref={placeholderRef} id={`${ariaValue}-placeholder`}>
             {placeholder}
           </CustomPlaceholder>
@@ -84,23 +88,22 @@ const TextFieldInput = ({
 
         <StyledTextInput
           id={ariaValue}
-          aria-labelledby={
-            placeholder && typeof placeholder === 'string' ? `${ariaValue}-placeholder` : undefined
-          }
+          aria-labelledby={!isCustomPlaceholder ? `${ariaValue}-placeholder` : undefined}
+          aria-label={isCustomPlaceholder ? ariaLabel : undefined}
           role={role}
           aria-expanded={ariaExpanded}
           aria-controls={ariaControls}
           aria-haspopup={ariaHaspopup}
           aria-activedescendant={ariaActivedescendant}
           $selectedValue={selectedValue}
-          onClick={() => (onInputClick ? onInputClick() : null)}
+          onClick={onInputClick}
           readOnly={readOnly}
           type={type}
           name={name}
           autoComplete="off"
           value={value || ''}
-          onChange={(e: any) => onChange && onChange(e?.target?.value || '')}
-          placeholder={typeof placeholder === 'string' ? placeholder : ''}
+          onChange={(e) => onChange?.(e.target.value)}
+          placeholder={!isCustomPlaceholder ? placeholder : ''}
           disabled={disabled}
           onFocus={onFocus}
           inputMode={inputMode}
@@ -156,9 +159,7 @@ const InputContainer = styled.div<{
   }
 `;
 
-const StyledTextInput = styled.input<{
-  $selectedValue: boolean;
-}>`
+const StyledTextInput = styled.input<{ $selectedValue: boolean }>`
   border: none;
   padding: 0 12px;
   width: 100%;
@@ -175,6 +176,7 @@ const StyledTextInput = styled.input<{
   [type='number'] {
     -moz-appearance: textfield;
   }
+
   ::-webkit-inner-spin-button,
   ::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -192,6 +194,7 @@ const StyledTextInput = styled.input<{
     color: ${({ theme, $selectedValue }) =>
       (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
   }
+
   ::placeholder {
     color: ${({ theme, $selectedValue }) =>
       (theme.colors.fields?.text || '#101010') + `${!$selectedValue ? '8F' : ''}`};
