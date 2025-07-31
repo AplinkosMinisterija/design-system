@@ -1,5 +1,72 @@
 # @aplinkosministerija/design-system
 
+## 1.3.9
+
+### Patch Changes
+
+- ba73f6b: fix minor accessibility bugs
+
+## 1.3.8
+
+### Patch Changes
+
+- ad04c66: mapfield undefined dix
+
+## 1.3.7
+
+### Patch Changes
+
+- 6d2c712: update accesibility
+- 5045e70: update accesibility
+
+## 1.3.6
+
+### Patch Changes
+
+- 1f32194: improve filter and table accessibility
+
+## 1.3.5
+
+### Patch Changes
+
+- 203c589: result count default value
+
+## 1.3.4
+
+### Patch Changes
+
+- 1ad76b4: update tab indexes
+
+## 1.3.3
+
+### Patch Changes
+
+- 6b640b3: update default values
+
+## 1.3.2
+
+### Patch Changes
+
+- 2705a7c: update datepicker accessibility
+
+## 1.3.1
+
+### Patch Changes
+
+- 3b24e52: return back options container default value
+
+## 1.3.0
+
+### Minor Changes
+
+- 03d479e: accesibility updates
+
+## 1.2.43
+
+### Patch Changes
+
+- 51fec28: add onBlur event handler to layerToggleControl
+
 ## 1.2.42
 
 ### Patch Changes
