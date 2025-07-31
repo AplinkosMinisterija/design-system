@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.12
+
+### Patch Changes
+
+- 8aceb58: mapfield descritpions
+
 ## 1.3.11
 
 ### Patch Changes
