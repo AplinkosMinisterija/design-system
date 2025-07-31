@@ -76,9 +76,9 @@ const MapField = ({
         width="100%"
         allowFullScreen={true}
         onLoad={handleLoadMap}
-        aria-label={`Interaktyvus žemėlapis – ${label}`}
+        aria-label={`Interaktyvus žemėlapis${label ? ` – ${label}` : ''}`}
         aria-describedby={mapId}
-        title={`Žemėlapis – ${label}`}
+        title={`Žemėlapis${label ? ` – ${label}` : ''}`}
         tabIndex={0}
       />
       <VisuallyHidden id={mapId}>
