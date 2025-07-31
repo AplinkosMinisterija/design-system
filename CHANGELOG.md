@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.9
+
+### Patch Changes
+
+- ba73f6b: fix minor accessibility bugs
+
 ## 1.3.8
 
 ### Patch Changes
