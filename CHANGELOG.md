@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.13
+
+### Patch Changes
+
+- c389fd6: update interface type
+
 ## 1.3.12
 
 ### Patch Changes
