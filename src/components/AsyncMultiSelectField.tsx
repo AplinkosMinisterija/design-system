@@ -18,7 +18,7 @@ export interface SelectFieldProps {
   showError?: boolean;
   onChange: (option: any) => void;
   disabled?: boolean;
-  getOptionLabel?: (option: any) => string;
+  getOptionLabel?: (option: any) => string | JSX.Element;
   getOptionValue?: (option: any) => any;
   loadOptions: (input: any, page: number, id?: any) => any;
   dependantValue?: any;

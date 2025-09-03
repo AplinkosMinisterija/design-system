@@ -18,7 +18,7 @@ export interface SelectFieldProps {
   onChange: (option: any) => void;
   disabled?: boolean;
   hasBorder?: boolean;
-  getOptionLabel?: (option: any) => string;
+  getOptionLabel?: (option: any) => string | JSX.Element;
   getOptionValue?: (option: any) => any;
   refreshOptions?: (id?: string) => any;
   dependantId?: string;

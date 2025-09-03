@@ -10,7 +10,7 @@ export interface MultiTextFieldProps {
   handleKeyDown?: (event?: any) => void;
   disabled?: boolean;
   handleInputChange: (event: any) => void;
-  getOptionLabel: (option: any) => string;
+  getOptionLabel: (option: any) => string | JSX.Element;
   placeholder?: string;
   input: string;
   backgroundColor?: string;
