@@ -17,7 +17,7 @@ export interface SelectFieldProps {
   padding?: string;
   onChange: (option: any) => void;
   disabled?: boolean;
-  getOptionLabel: (option: any) => string;
+  getOptionLabel: (option: any) => string | JSX.Element;
   getOptionComponent?: (option: any) => string | JSX.Element;
   className?: string;
   placeholder?: string;
