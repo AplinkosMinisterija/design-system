@@ -64,7 +64,7 @@ const MapField = ({
           });
 
           if (!data?.items?.length) {
-            alert(`Pasirinkta  geometrija nėra Lietuvos teritorijoje`);
+            return alert(`Pasirinkta  geometrija nėra Lietuvos teritorijoje`);
           }
 
           onChange(geojson);
