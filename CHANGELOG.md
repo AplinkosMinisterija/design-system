@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.15
+
+### Patch Changes
+
+- 73e619b: map geometry must be in the territory of lithuania
+
 ## 1.3.14
 
 ### Patch Changes
