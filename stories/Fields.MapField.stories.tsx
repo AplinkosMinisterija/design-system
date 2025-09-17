@@ -18,7 +18,6 @@ export const MapFieldStory: Story = {
       <StoryWrapper>
         <MapField
           mapHost={'https://dev-maps.biip.lt'}
-          mapPath={'/uetk'}
           label={'Pažymėkite vietą'}
           error={'Laukas privalomas'}
           onChange={(value) => alert(JSON.stringify(value))}
