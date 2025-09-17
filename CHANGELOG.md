@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.3.16
+
+### Patch Changes
+
+- 4ca01bf: undo accessibility changes
+
 ## 1.3.15
 
 ### Patch Changes
