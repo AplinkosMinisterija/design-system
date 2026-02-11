@@ -1,5 +1,29 @@
 # @aplinkosministerija/design-system
 
+## 1.4.4
+
+### Patch Changes
+
+- ba7a41d: update
+
+## 1.4.3
+
+### Patch Changes
+
+- 376d282: update workflow
+
+## 1.4.2
+
+### Patch Changes
+
+- d33854f: update publish workflow
+
+## 1.4.1
+
+### Patch Changes
+
+- f261a5b: update package json
+
 ## 1.4.0
 
 ### Minor Changes
