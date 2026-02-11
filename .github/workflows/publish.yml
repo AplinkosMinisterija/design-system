@@ -20,6 +20,7 @@ jobs:
       pull-requests: write
     outputs:
       published: ${{ steps.changesets.outputs.published }}
+
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -32,6 +33,8 @@ jobs:
           node-version-file: package.json
           cache: yarn
           registry-url: https://registry.npmjs.org
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -44,9 +47,10 @@ jobs:
         uses: changesets/action@v1
         with:
           publish: yarn packages:publish
+          setupGitUser: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
 
   publish-storybook-page:
     name: Publish Storybook page
@@ -59,6 +63,7 @@ jobs:
     environment:
       name: storybook
       url: https://ui.startupgov.lt
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
