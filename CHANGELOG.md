@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.4.5
+
+### Patch Changes
+
+- 17c5629: update workflow
+
 ## 1.4.4
 
 ### Patch Changes
