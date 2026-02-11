@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.4.4
+
+### Patch Changes
+
+- ba7a41d: update
+
 ## 1.4.3
 
 ### Patch Changes
