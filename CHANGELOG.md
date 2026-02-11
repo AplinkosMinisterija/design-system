@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.4.2
+
+### Patch Changes
+
+- d33854f: update publish workflow
+
 ## 1.4.1
 
 ### Patch Changes
