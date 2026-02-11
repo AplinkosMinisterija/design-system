@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.4.0
+
+### Minor Changes
+
+- dddcbf7: submit filter form on enter
+
 ## 1.3.16
 
 ### Patch Changes
