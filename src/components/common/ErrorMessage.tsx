@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const ErrorMessage = ({
-  error,
+  error = '',
   errorAriaValue = '',
 }: {
   error?: string;
