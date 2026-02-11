@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.4.1
+
+### Patch Changes
+
+- f261a5b: update package json
+
 ## 1.4.0
 
 ### Minor Changes
