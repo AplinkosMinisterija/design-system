@@ -173,24 +173,27 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
         validateOnChange={false}
       >
         {({ values, setFieldValue, handleSubmit, handleReset }: any) => (
-          <>
-            {map(rowConfig, (row, index) => {
-              return renderRow(row, values, setFieldValue, index);
-            })}
-            <Row key="form_actions">
-              <ClearButton
-                onClick={(e) => {
-                  handleReset(e);
-                  onSubmit(null);
-                }}
-              >
-                {texts.clearAll}
-              </ClearButton>
-              <StyledButton type="submit" onClick={handleSubmit}>
-                {texts.filter}
-              </StyledButton>
-            </Row>
-          </>
+          <form onSubmit={handleSubmit}>
+            <>
+              {map(rowConfig, (row, index) => {
+                return renderRow(row, values, setFieldValue, index);
+              })}
+
+              <Row key="form_actions">
+                <ClearButton
+                  type="button"
+                  onClick={(e) => {
+                    handleReset(e);
+                    onSubmit(null);
+                  }}
+                >
+                  {texts.clearAll}
+                </ClearButton>
+
+                <StyledButton type="submit">{texts.filter}</StyledButton>
+              </Row>
+            </>
+          </form>
         )}
       </Formik>
     </Container>
