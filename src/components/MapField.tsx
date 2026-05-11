@@ -55,21 +55,29 @@ const MapField = ({
             },
           };
 
-          const data = await Boundaries.municipalitiesSearch({
-            requestBody: {
-              filters: [
-                {
-                  geometry: {
-                    method: 'intersects',
-                    geojson: JSON.stringify(geometryWithCrs),
+          try {
+            const data = await Boundaries.municipalitiesSearch({
+              requestBody: {
+                filters: [
+                  {
+                    geometry: {
+                      method: 'intersects',
+                      geojson: JSON.stringify(geometryWithCrs),
+                    },
                   },
-                },
-              ],
-            },
-          });
+                ],
+              },
+            });
 
-          if (!data?.items?.length) {
-            return alert(`Pasirinkta  geometrija nėra Lietuvos teritorijoje`);
+            if (!data?.items?.length) {
+              return alert(`Pasirinkta geometrija nėra Lietuvos teritorijoje`);
+            }
+          } catch (err) {
+            // Boundaries lookup is a best-effort guard; if it fails (e.g. PostGIS
+            // rejects an invalid/self-intersecting polygon, network error, 5xx),
+            // do not silently drop the user's geometry — let the form submit and
+            // rely on server-side validation.
+            console.error('Failed to verify geometry against municipalities', err);
           }
 
           onChange(geojson);
