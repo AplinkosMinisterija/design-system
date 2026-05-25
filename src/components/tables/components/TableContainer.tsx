@@ -3,6 +3,7 @@ import ReactPaginate from 'react-paginate';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { device, useWindowSize } from '../../../utils';
+import { useTablePageSize } from '../../common/hooks';
 import Icon from '../../common/Icons';
 import { TableData } from './types';
 import { isEmpty } from 'lodash';
@@ -35,6 +36,7 @@ const TableContainer = ({
   const pageRange = isMobile ? 1 : 3;
   const pageMargin = isMobile ? 1 : 3;
   const navigate = useNavigate();
+  const [pageSize, setPageSize] = useTablePageSize(pageName);
 
   useEffect(() => {
     if (!loading && totalPages < parseInt(params?.page)) {
@@ -56,12 +58,14 @@ const TableContainer = ({
     });
   };
 
-  const handlePageSizeChange = (e) => {
+  const handlePageSizeChange = (newPageSize: number) => {
+    const nextParams = { ...params };
+    delete nextParams.pageSize;
+    setPageSize(newPageSize);
     navigate({
       search: `?${createSearchParams({
-        ...params,
+        ...nextParams,
         [pageName]: '1',
-        pageSize: e,
       })}`,
     });
   };
@@ -74,12 +78,12 @@ const TableContainer = ({
           <>
             {showPageSizeDropdown && !isEmpty(data?.data) && (
               <PageSizeDropdown
-                onChange={(pageSize) => {
-                  if (pageSize !== Number(params?.pageSize)) {
-                    handlePageSizeChange(pageSize);
+                onChange={(newPageSize) => {
+                  if (newPageSize !== pageSize) {
+                    handlePageSizeChange(newPageSize);
                   }
                 }}
-                value={Number(params?.pageSize) || 10}
+                value={pageSize}
               />
             )}
             {showPagination && (
