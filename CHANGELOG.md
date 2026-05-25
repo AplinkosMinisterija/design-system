@@ -1,5 +1,13 @@
 # @aplinkosministerija/design-system
 
+## 1.4.8
+
+### Patch Changes
+
+- 3b13f47: Persist table `pageSize` selection in `localStorage` per page + table. The storage key is `tablePageSize_<pathname>_<pageName>`, so each route (and each table on it, by `pageName`) keeps its own remembered choice across sessions. URL behavior is unchanged — `pageSize` is still mirrored to search params, so existing data-fetching code keeps working without any changes.
+
+  No migration needed — bump the lib version and existing tables automatically gain persistence.
+
 ## 1.4.7
 
 ### Patch Changes
