@@ -1,7 +1,7 @@
 ---
-'@aplinkosministerija/design-system': minor
+'@aplinkosministerija/design-system': patch
 ---
 
-Persist table `pageSize` in `localStorage` instead of the URL. `TableContainer` no longer writes `pageSize` to search params and reads the current value from `localStorage` (key: `tablePageSize_<pageName>`, default `10`). Adds a new `useTablePageSize(pageName?)` hook so consumers can read the current page size for data fetching and stay in sync across instances (same-tab via custom event, cross-tab via `storage`).
+Persist table `pageSize` selection in `localStorage` per page + table. The storage key is `tablePageSize_<pathname>_<pageName>`, so each route (and each table on it, by `pageName`) keeps its own remembered choice across sessions. URL behavior is unchanged — `pageSize` is still mirrored to search params, so existing data-fetching code keeps working without any changes.
 
-Migration: replace any `searchParams.get('pageSize')` reads with the new hook.
+No migration needed — bump the lib version and existing tables automatically gain persistence.

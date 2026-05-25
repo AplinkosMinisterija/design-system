@@ -3,7 +3,6 @@ import ReactPaginate from 'react-paginate';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { device, useWindowSize } from '../../../utils';
-import { useTablePageSize } from '../../common/hooks';
 import Icon from '../../common/Icons';
 import { TableData } from './types';
 import { isEmpty } from 'lodash';
@@ -19,6 +18,25 @@ export interface TableLayoutProps {
   showPageSizeDropdown?: boolean;
   showPages?: boolean;
 }
+
+const DEFAULT_PAGE_SIZE = 10;
+
+const getPageSizeStorageKey = (pageName: string) => {
+  const path = typeof window !== 'undefined' ? window.location.pathname : '';
+  return `tablePageSize_${path}_${pageName}`;
+};
+
+const readStoredPageSize = (pageName: string): number | null => {
+  if (typeof window === 'undefined') return null;
+  const raw = window.localStorage.getItem(getPageSizeStorageKey(pageName));
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+};
+
+const writeStoredPageSize = (pageName: string, size: number) => {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(getPageSizeStorageKey(pageName), String(size));
+};
 
 const TableContainer = ({
   data,
@@ -36,7 +54,24 @@ const TableContainer = ({
   const pageRange = isMobile ? 1 : 3;
   const pageMargin = isMobile ? 1 : 3;
   const navigate = useNavigate();
-  const [pageSize, setPageSize] = useTablePageSize(pageName);
+
+  const urlPageSize = Number(params?.pageSize);
+  const currentPageSize =
+    Number.isFinite(urlPageSize) && urlPageSize > 0
+      ? urlPageSize
+      : readStoredPageSize(pageName) ?? DEFAULT_PAGE_SIZE;
+
+  useEffect(() => {
+    const stored = readStoredPageSize(pageName);
+    if (!params?.pageSize && stored && stored !== DEFAULT_PAGE_SIZE) {
+      navigate(
+        { search: `?${createSearchParams({ ...params, pageSize: String(stored) })}` },
+        { replace: true },
+      );
+    } else if (params?.pageSize && Number(params.pageSize) > 0) {
+      writeStoredPageSize(pageName, Number(params.pageSize));
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (!loading && totalPages < parseInt(params?.page)) {
@@ -59,13 +94,12 @@ const TableContainer = ({
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    const nextParams = { ...params };
-    delete nextParams.pageSize;
-    setPageSize(newPageSize);
+    writeStoredPageSize(pageName, newPageSize);
     navigate({
       search: `?${createSearchParams({
-        ...nextParams,
+        ...params,
         [pageName]: '1',
+        pageSize: String(newPageSize),
       })}`,
     });
   };
@@ -79,11 +113,11 @@ const TableContainer = ({
             {showPageSizeDropdown && !isEmpty(data?.data) && (
               <PageSizeDropdown
                 onChange={(newPageSize) => {
-                  if (newPageSize !== pageSize) {
+                  if (newPageSize !== currentPageSize) {
                     handlePageSizeChange(newPageSize);
                   }
                 }}
-                value={pageSize}
+                value={currentPageSize}
               />
             )}
             {showPagination && (
