@@ -19,6 +19,25 @@ export interface TableLayoutProps {
   showPages?: boolean;
 }
 
+const DEFAULT_PAGE_SIZE = 10;
+
+const getPageSizeStorageKey = (pageName: string) => {
+  const path = typeof window !== 'undefined' ? window.location.pathname : '';
+  return `tablePageSize_${path}_${pageName}`;
+};
+
+const readStoredPageSize = (pageName: string): number | null => {
+  if (typeof window === 'undefined') return null;
+  const raw = window.localStorage.getItem(getPageSizeStorageKey(pageName));
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+};
+
+const writeStoredPageSize = (pageName: string, size: number) => {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(getPageSizeStorageKey(pageName), String(size));
+};
+
 const TableContainer = ({
   data,
   pageName = 'page',
@@ -35,6 +54,24 @@ const TableContainer = ({
   const pageRange = isMobile ? 1 : 3;
   const pageMargin = isMobile ? 1 : 3;
   const navigate = useNavigate();
+
+  const urlPageSize = Number(params?.pageSize);
+  const currentPageSize =
+    Number.isFinite(urlPageSize) && urlPageSize > 0
+      ? urlPageSize
+      : readStoredPageSize(pageName) ?? DEFAULT_PAGE_SIZE;
+
+  useEffect(() => {
+    const stored = readStoredPageSize(pageName);
+    if (!params?.pageSize && stored && stored !== DEFAULT_PAGE_SIZE) {
+      navigate(
+        { search: `?${createSearchParams({ ...params, pageSize: String(stored) })}` },
+        { replace: true },
+      );
+    } else if (params?.pageSize && Number(params.pageSize) > 0) {
+      writeStoredPageSize(pageName, Number(params.pageSize));
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (!loading && totalPages < parseInt(params?.page)) {
@@ -56,12 +93,13 @@ const TableContainer = ({
     });
   };
 
-  const handlePageSizeChange = (e) => {
+  const handlePageSizeChange = (newPageSize: number) => {
+    writeStoredPageSize(pageName, newPageSize);
     navigate({
       search: `?${createSearchParams({
         ...params,
         [pageName]: '1',
-        pageSize: e,
+        pageSize: String(newPageSize),
       })}`,
     });
   };
@@ -74,12 +112,12 @@ const TableContainer = ({
           <>
             {showPageSizeDropdown && !isEmpty(data?.data) && (
               <PageSizeDropdown
-                onChange={(pageSize) => {
-                  if (pageSize !== Number(params?.pageSize)) {
-                    handlePageSizeChange(pageSize);
+                onChange={(newPageSize) => {
+                  if (newPageSize !== currentPageSize) {
+                    handlePageSizeChange(newPageSize);
                   }
                 }}
-                value={Number(params?.pageSize) || 10}
+                value={currentPageSize}
               />
             )}
             {showPagination && (
