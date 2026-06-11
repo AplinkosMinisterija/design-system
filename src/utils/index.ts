@@ -130,6 +130,21 @@ export const globalStyles = (theme) => `
   }
  `;
 
+// Storage can hold values JSON.parse chokes on: the literal "undefined"
+// (written by setItem(key, JSON.stringify(undefined))), an empty string, or
+// JSON corrupted by interrupted writes. Parsing happens inside a useState
+// initializer, so an unguarded throw crashes the consumer during render.
+function parseStoredValue<T>(raw: string | null, fallback: T): T {
+  if (raw === null || raw === '' || raw === 'undefined') {
+    return fallback;
+  }
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+}
+
 export function useStorage<T>(
   key: string,
   initialValue: T,
@@ -139,10 +154,9 @@ export function useStorage<T>(
   setValue: (newValue: T) => void;
   resetValue: () => void;
 } {
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    const item = localStorage.getItem(key);
-    return item ? JSON.parse(item) : initialValue;
-  });
+  const [storedValue, setStoredValue] = useState<T>(() =>
+    parseStoredValue(localStorage.getItem(key), initialValue),
+  );
 
   useEffect(() => {
     if (!persistent) {
@@ -151,12 +165,11 @@ export function useStorage<T>(
   }, []);
 
   useEffect(() => {
-    const val = localStorage.getItem(key);
-    setStoredValue(val ? JSON.parse(val) : initialValue);
+    setStoredValue(parseStoredValue(localStorage.getItem(key), initialValue));
 
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === key) {
-        setStoredValue(JSON.parse(event.newValue as string));
+        setStoredValue(parseStoredValue(event.newValue, initialValue));
       }
     };
 
@@ -168,11 +181,18 @@ export function useStorage<T>(
   }, [key]);
   const updateStorage = (newValue: T) => {
     setStoredValue(newValue);
-    localStorage.setItem(key, JSON.stringify(newValue));
+    // JSON.stringify(undefined) returns undefined; setItem would coerce it to
+    // the string "undefined", which is not valid JSON on the next read.
+    const serialized = JSON.stringify(newValue);
+    if (serialized === undefined) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, serialized);
+    }
     window.dispatchEvent(
       new StorageEvent('storage', {
         key,
-        newValue: JSON.stringify(newValue),
+        newValue: serialized ?? null,
       }),
     );
   };
