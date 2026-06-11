@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 1.4.9
+
+### Patch Changes
+
+- 0ed8f44: useStorage: guard JSON.parse against corrupt storage values ("undefined", empty or malformed JSON) — they now fall back to initialValue instead of throwing inside render. setValue(undefined) removes the key instead of persisting the literal string "undefined".
+
 ## 1.4.8
 
 ### Patch Changes
