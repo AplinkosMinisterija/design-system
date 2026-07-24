@@ -6,6 +6,7 @@ import OptionsContainer from './common/OptionsContainer';
 
 export interface CreatableMultiSelectProps {
   label?: string;
+  required?: boolean;
   values?: any;
   error?: string;
   showError?: boolean;
@@ -18,6 +19,7 @@ export interface CreatableMultiSelectProps {
 
 const CreatableMultiSelect = ({
   label,
+  required,
   values,
   error,
   showError = true,
@@ -61,6 +63,7 @@ const CreatableMultiSelect = ({
       padding={padding}
       className={className}
       label={label}
+      required={required}
       error={error}
       handleBlur={handleBlur}
     >

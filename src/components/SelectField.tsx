@@ -9,6 +9,8 @@ import TextFieldInput from './common/TextFieldInput';
 export interface SelectFieldProps {
   name?: string;
   label?: string;
+  required?: boolean;
+  /** The selected option object; with `getOptionValue` — the selected option's VALUE (e.g. its id). */
   value?: any;
   error?: string;
   showError?: boolean;
@@ -18,6 +20,8 @@ export interface SelectFieldProps {
   onChange: (option: any) => void;
   disabled?: boolean;
   getOptionLabel: (option: any) => string | JSX.Element;
+  /** When provided, `value` is matched against options by this accessor, so consumers can pass a primitive value instead of the option object. */
+  getOptionValue?: (option: any) => any;
   getOptionComponent?: (option: any) => string | JSX.Element;
   className?: string;
   placeholder?: string;
@@ -30,6 +34,7 @@ export interface SelectFieldProps {
 
 const SelectField = ({
   label,
+  required,
   value,
   name,
   error,
@@ -41,6 +46,7 @@ const SelectField = ({
   left,
   padding,
   getOptionLabel,
+  getOptionValue,
   getOptionComponent,
   onChange,
   disabled,
@@ -49,6 +55,13 @@ const SelectField = ({
   ariaLabelRemove = 'Pašalinti',
   ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
 }: SelectFieldProps) => {
+  // With getOptionValue the consumer passes the option's value — resolve the
+  // option object internally so display/selection keep working.
+  const selected =
+    getOptionValue && value != null
+      ? (options || []).find((option) => getOptionValue(option) === value)
+      : value;
+
   const {
     suggestions,
     input,
@@ -65,11 +78,11 @@ const SelectField = ({
     getOptionLabel,
     refreshOptions,
     dependantId,
-    value,
+    value: selected,
   });
 
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
-  const showDeleteIcon = !!value && !!clearable && !disabled;
+  const showDeleteIcon = selected != null && !!clearable && !disabled;
 
   return (
     <FieldWrapper
@@ -78,6 +91,7 @@ const SelectField = ({
       padding={padding}
       className={className}
       label={label}
+      required={required}
       error={error}
       showError={showError}
     >
@@ -92,7 +106,7 @@ const SelectField = ({
             {showDeleteIcon && (
               <IconButton
                 type="button"
-                aria-label={`${ariaLabelRemove} ${typeof getOptionLabel(value) === 'string' ? getOptionLabel(value) : ''}`}
+                aria-label={`${ariaLabelRemove} ${typeof getOptionLabel(selected) === 'string' ? getOptionLabel(selected) : ''}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   !disabled && onChange(undefined);
@@ -127,13 +141,13 @@ const SelectField = ({
         }}
         disabled={disabled}
         placeholder={
-          value
+          selected
             ? getOptionComponent
-              ? getOptionComponent(value)
-              : getOptionLabel(value)
+              ? getOptionComponent(selected)
+              : getOptionLabel(selected)
             : placeholder
         }
-        selectedValue={value}
+        selectedValue={selected}
       />
       <OptionsContainer
         options={suggestions}

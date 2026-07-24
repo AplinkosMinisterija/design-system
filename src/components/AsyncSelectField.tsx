@@ -9,6 +9,7 @@ import TextFieldInput from './common/TextFieldInput';
 export interface AsyncSelectFieldProps {
   name: string;
   label?: string;
+  required?: boolean;
   value?: any;
   error?: string;
   showError?: boolean;
@@ -33,6 +34,7 @@ export interface AsyncSelectFieldProps {
 
 const AsyncSelectField = ({
   label,
+  required,
   value,
   error,
   showError = true,
@@ -90,6 +92,7 @@ const AsyncSelectField = ({
       padding={padding}
       className={className}
       label={label}
+      required={required}
       error={error}
       showError={showError}
     >

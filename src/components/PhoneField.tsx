@@ -7,6 +7,7 @@ export interface PhoneFieldProps {
   error?: string;
   showError?: boolean;
   label?: string;
+  required?: boolean;
   icon?: JSX.Element;
   className?: string;
   left?: JSX.Element;
@@ -28,6 +29,7 @@ const PhoneField = ({
   name,
   error,
   label,
+  required,
   className,
   left,
   right,
@@ -69,6 +71,7 @@ const PhoneField = ({
       padding={padding}
       className={className}
       label={label}
+      required={required}
       error={error}
       showError={showError}
     >

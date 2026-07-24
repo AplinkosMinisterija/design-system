@@ -6,6 +6,8 @@ export interface FieldWrapperProps {
   error?: string;
   showError?: boolean;
   label?: string;
+  /** Renders the required mark (" *") after the label. Visual only — validation stays with the consumer. */
+  required?: boolean;
   className?: string;
   padding?: string;
   onClick?: () => void;
@@ -22,6 +24,7 @@ const FieldWrapper = ({
   error,
   showError = true,
   label = '',
+  required = false,
   className,
   padding = '0',
   onClick,
@@ -53,6 +56,7 @@ const FieldWrapper = ({
           <LabelContainer>
             <Label id={labelAriaValue} htmlFor={htmlFor}>
               {label}
+              {required && <RequiredMark aria-hidden="true"> *</RequiredMark>}
             </Label>
             {!!subLabel && (
               <SubLabel id={subLabelAriaValue} aria-labelledby={subLabelAriaValue}>
@@ -96,6 +100,11 @@ const Label = styled.label`
   font-size: ${({ theme }) => theme.fonts?.fieldLabels || 1.4}rem;
   font-weight: ${({ theme }) => theme.fontWeight?.fieldLabels || 400};
   color: ${({ theme }) => theme.colors.fields?.label || '#101010'};
+`;
+
+const RequiredMark = styled.span`
+  color: ${({ theme }) => theme.colors?.danger || '#fe5b78'};
+  white-space: pre;
 `;
 
 const LabelContainer = styled.div`

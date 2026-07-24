@@ -11,6 +11,7 @@ export interface RadioOptionsProps {
   className?: string;
   onChange: (option: any) => void;
   label?: string;
+  required?: boolean;
   disabled?: boolean;
   column?: boolean;
   oneLine?: boolean;
@@ -28,11 +29,12 @@ const RadioOptions = ({
   className,
   disabled,
   label,
+  required,
   ...rest
 }: RadioOptionsProps) => {
   return (
     <Container oneLine={oneLine} className={className}>
-      <FieldWrapper error={error} showError={showError} label={label}>
+      <FieldWrapper error={error} showError={showError} label={label} required={required}>
         <OptionsContainer column={column}>
           {options?.map((option, index) => {
             const key = `${name}_${option.value}`;

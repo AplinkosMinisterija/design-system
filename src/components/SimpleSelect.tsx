@@ -8,6 +8,7 @@ import TextFieldInput from './common/TextFieldInput';
 interface SimpleSelectProps {
   name?: string;
   label?: string;
+  required?: boolean;
   value?: any;
   error?: string;
   showError?: boolean;
@@ -25,6 +26,7 @@ interface SimpleSelectProps {
 
 const SimpleSelect = ({
   label,
+  required,
   value,
   name,
   error,
@@ -59,6 +61,7 @@ const SimpleSelect = ({
       padding={padding}
       className={className}
       label={label}
+      required={required}
       error={error}
       showError={showError}
     >

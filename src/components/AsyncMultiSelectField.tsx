@@ -13,6 +13,7 @@ export interface SelectOption {
 export interface SelectFieldProps {
   texts?: OptionContainerTexts;
   label?: string;
+  required?: boolean;
   values?: any[];
   error?: string;
   showError?: boolean;
@@ -31,6 +32,7 @@ export interface SelectFieldProps {
 
 const AsyncMultiSelectField = ({
   label,
+  required,
   values = [],
   name,
   error,
@@ -72,6 +74,7 @@ const AsyncMultiSelectField = ({
     <FieldWrapper
       onClick={handleToggleSelect}
       label={label}
+      required={required}
       error={error}
       showError={showError}
       handleBlur={handleBlur}
