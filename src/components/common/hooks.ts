@@ -181,6 +181,79 @@ export const useAsyncSelectData = ({
   };
 };
 
+/**
+ * Debounce a rapidly-changing value (e.g. a search input) so downstream
+ * effects — query keys, network requests — only react once typing settles.
+ */
+export const useDebouncedValue = <T,>(value: T, delayMs = 300): T => {
+  const [debounced, setDebounced] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delayMs);
+    return () => clearTimeout(timer);
+  }, [value, delayMs]);
+
+  return debounced;
+};
+
+/**
+ * Debounce an async callback so only the last call within the delay window
+ * runs. Resolves with the settled call's result; superseded and unmounted
+ * calls resolve to undefined rather than rejecting, so callers do not need
+ * to guard every await against cancellation.
+ */
+export const useDebouncedCallback = <TArgs extends any[], TResult>(
+  callback: (...args: TArgs) => Promise<TResult> | TResult,
+  delayMs = 300,
+) => {
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const callIdRef = useRef(0);
+  const mountedRef = useRef(true);
+  const callbackRef = useRef(callback);
+
+  callbackRef.current = callback;
+
+  const cancel = useCallback(() => {
+    clearTimeout(timerRef.current);
+    callIdRef.current += 1;
+  }, []);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      clearTimeout(timerRef.current);
+      callIdRef.current += 1;
+    };
+  }, []);
+
+  const run = useCallback(
+    (...args: TArgs): Promise<TResult | undefined> => {
+      cancel();
+      const callId = callIdRef.current;
+
+      return new Promise((resolve, reject) => {
+        timerRef.current = setTimeout(async () => {
+          try {
+            const result = await callbackRef.current(...args);
+            const isStale = !mountedRef.current || callId !== callIdRef.current;
+            resolve(isStale ? undefined : result);
+          } catch (error) {
+            if (!mountedRef.current || callId !== callIdRef.current) {
+              resolve(undefined);
+              return;
+            }
+            reject(error);
+          }
+        }, delayMs);
+      });
+    },
+    [cancel, delayMs],
+  );
+
+  return Object.assign(run, { cancel });
+};
+
 export const useKeyAction = (action: (option?: any) => void, disabled = false) => {
   return useCallback(
     (option?: any) => (e: React.KeyboardEvent) => {
