@@ -8,6 +8,7 @@ export interface NumericFieldProps {
   error?: string;
   showError?: boolean;
   label?: string;
+  required?: boolean;
   icon?: JSX.Element;
   className?: string;
   left?: JSX.Element;
@@ -33,6 +34,7 @@ const NumericField = ({
   name,
   error,
   label,
+  required,
   className,
   left,
   right,
@@ -82,6 +84,7 @@ const NumericField = ({
       padding={padding}
       className={className}
       label={label}
+      required={required}
       bottomLabel={bottomLabel}
       subLabel={subLabel}
       secondLabel={secondLabel}

@@ -9,6 +9,7 @@ export interface TextFieldProps {
   error?: string;
   showError?: boolean;
   label?: string;
+  required?: boolean;
   icon?: JSX.Element;
   className?: string;
   left?: JSX.Element;
@@ -27,6 +28,7 @@ const TextAreaField = ({
   error,
   showError = true,
   label,
+  required,
   className,
   onChange,
   onClick,
@@ -51,6 +53,7 @@ const TextAreaField = ({
       padding={padding}
       className={className}
       label={label}
+      required={required}
       htmlFor={id}
       error={error}
       showError={showError}

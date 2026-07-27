@@ -8,6 +8,7 @@ import TextField from './TextField';
 
 export interface TimepickerProps {
   label?: string;
+  required?: boolean;
   value?: Date;
   error?: string;
   padding?: string;
@@ -24,6 +25,7 @@ const TimePicker = ({
   error,
   onChange,
   label,
+  required,
   disabled,
   padding,
   className,
@@ -84,6 +86,7 @@ const TimePicker = ({
       <StyledTextInput
         readOnly={true}
         label={label}
+        required={required}
         padding={padding}
         value={time ? format(new Date(time), 'HH:mm') : ''}
         error={error}

@@ -33,6 +33,7 @@ export interface CustomTimePickerProps {
   error?: string;
   onChange: (time?: string) => void;
   label?: string;
+  required?: boolean;
   name?: string;
   className?: string;
   maxTime?: string;
@@ -48,6 +49,7 @@ const TimeField = ({
   error,
   onChange,
   label,
+  required,
   disabled = false,
   padding,
   className,
@@ -183,6 +185,7 @@ const TimeField = ({
           className={className}
           onChange={handleChange}
           label={label}
+          required={required}
           padding={padding}
           value={inputValue}
           showError={showError}

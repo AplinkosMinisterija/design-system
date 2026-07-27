@@ -12,6 +12,7 @@ export interface SelectOption {
 
 export interface SelectFieldProps {
   label?: string;
+  required?: boolean;
   values: any[];
   error?: string;
   options: SelectOption[] | string[];
@@ -26,6 +27,7 @@ export interface SelectFieldProps {
 
 const MultiSelectField = ({
   label,
+  required,
   values = [],
   error,
   options,
@@ -56,7 +58,13 @@ const MultiSelectField = ({
   });
 
   return (
-    <FieldWrapper onClick={handleToggleSelect} label={label} error={error} handleBlur={handleBlur}>
+    <FieldWrapper
+      onClick={handleToggleSelect}
+      label={label}
+      required={required}
+      error={error}
+      handleBlur={handleBlur}
+    >
       <MultiTextField
         values={values}
         label={label}

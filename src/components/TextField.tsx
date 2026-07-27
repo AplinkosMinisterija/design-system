@@ -7,6 +7,7 @@ export interface TextFieldProps {
   error?: string;
   showError?: boolean;
   label?: string;
+  required?: boolean;
   icon?: JSX.Element;
   className?: string;
   left?: JSX.Element;
@@ -32,6 +33,7 @@ const TextField = ({
   showError = true,
   readOnly = false,
   label,
+  required,
   className,
   left,
   right,
@@ -51,6 +53,7 @@ const TextField = ({
       padding={padding}
       className={className}
       label={label}
+      required={required}
       subLabel={subLabel}
       secondLabel={secondLabel}
       error={error}

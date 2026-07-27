@@ -10,6 +10,7 @@ export interface TextFieldProps {
   error?: string;
   showError?: boolean;
   label?: string;
+  required?: boolean;
   className?: string;
   padding?: string;
   onChange?: (option?: any) => void;
@@ -28,6 +29,7 @@ const PasswordField = ({
   error,
   showError = true,
   label,
+  required,
   className,
   padding,
   onChange,
@@ -45,6 +47,7 @@ const PasswordField = ({
       secondLabel={secondLabel}
       className={className}
       label={label}
+      required={required}
       error={error}
       showError={showError}
     >

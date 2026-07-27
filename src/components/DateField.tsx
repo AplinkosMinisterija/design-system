@@ -21,6 +21,7 @@ export interface DateFieldProps {
   error?: string;
   onChange: (date?: Date) => void;
   label?: string;
+  required?: boolean;
   name?: string;
   className?: string;
   maxDate?: Date | string;
@@ -42,6 +43,7 @@ const DateField = ({
   error,
   onChange,
   label,
+  required,
   disabled = false,
   padding,
   className,
@@ -191,6 +193,7 @@ const DateField = ({
           className={className}
           onChange={handleChange}
           label={label}
+          required={required}
           padding={padding}
           value={textValue}
           showError={showError}
