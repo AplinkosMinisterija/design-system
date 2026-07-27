@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Design System library provides a set of UI components designed to streamline the development of consistent user interfaces among web applications.
-## Installation
+## Installation[package.json](package.json)
 
 You can install the design system package via npm or yarn:
 
