@@ -73,9 +73,9 @@ const Map = ({
   zoomOnChange = true,
   bbox,
 }: MapProps) => {
-  const mapContainer = useRef(null as HTMLDivElement | null);
-  const map = useRef(null as MaplibreMap | null);
-  const mapDraw = useRef(null as MapboxDraw | null);
+  const mapContainer = useRef<HTMLDivElement | null>(null);
+  const map = useRef<MaplibreMap>(null!);
+  const mapDraw = useRef<MapboxDraw>(null!);
 
   const theme = useTheme();
   const styles = getMapStyles(theme.colors.map);
