@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useKeyAction } from './common/hooks';
 
 export interface CheckboxProps {
@@ -36,47 +36,89 @@ const Checkbox = ({
 
   return (
     <Wrapper $width={width} $displayAsButton={displayAsButton}>
-      <Container
-        className={className}
-        $disabled={disabled}
-        $displayAsButton={displayAsButton}
-        $radius={radius}
-        htmlFor={name}
-      >
-        <InnerContainer
-          $intermediate={intermediate}
+      {displayAsButton ? (
+        <ButtonContainer
+          className={className}
           $disabled={disabled}
-          $error={error}
-          $checked={value}
-          $hidden={displayAsButton}
-          role="checkbox"
-          aria-checked={intermediate ? 'mixed' : value}
-          aria-labelledby={ariaValue}
-          aria-describedby={description ? description : undefined}
-          tabIndex={disabled ? -1 : 0}
-          onKeyDown={handleKeyDown(!value)}
+          $radius={radius}
+          htmlFor={name}
         >
-          <CheckBox
-            type="checkbox"
-            id={name}
-            name={name}
-            checked={value || false}
-            disabled={disabled}
-            onChange={(v) => {
-              onChange(v.target.checked);
-            }}
-            onClick={(e) => {
-              e?.stopPropagation();
-            }}
-            $displayAsButton={displayAsButton}
-          />
-          <CheckMark checked={value || false} intermediate={intermediate} disabled={disabled} />
-        </InnerContainer>
-        <Column $displayAsButton={displayAsButton}>
-          <Label>{label}</Label>
-          {description && <Description>{description}</Description>}
-        </Column>
-      </Container>
+          <InnerContainer
+            $intermediate={intermediate}
+            $disabled={disabled}
+            $error={error}
+            $checked={value}
+            $hidden={displayAsButton}
+            role="checkbox"
+            aria-checked={intermediate ? 'mixed' : value}
+            aria-labelledby={ariaValue}
+            aria-describedby={description ? description : undefined}
+            tabIndex={disabled ? -1 : 0}
+            onKeyDown={handleKeyDown(!value)}
+          >
+            <CheckBox
+              type="checkbox"
+              id={name}
+              name={name}
+              checked={value || false}
+              disabled={disabled}
+              onChange={(v) => {
+                onChange(v.target.checked);
+              }}
+              onClick={(e) => {
+                e?.stopPropagation();
+              }}
+              $displayAsButton={displayAsButton}
+            />
+            <CheckMark checked={value || false} intermediate={intermediate} disabled={disabled} />
+          </InnerContainer>
+          <Column $displayAsButton={displayAsButton}>
+            <Label>{label}</Label>
+            {description && <Description>{description}</Description>}
+          </Column>
+        </ButtonContainer>
+      ) : (
+        <Container
+          className={className}
+          $disabled={disabled}
+          $radius={radius}
+          htmlFor={name}
+        >
+          <InnerContainer
+            $intermediate={intermediate}
+            $disabled={disabled}
+            $error={error}
+            $checked={value}
+            $hidden={displayAsButton}
+            role="checkbox"
+            aria-checked={intermediate ? 'mixed' : value}
+            aria-labelledby={ariaValue}
+            aria-describedby={description ? description : undefined}
+            tabIndex={disabled ? -1 : 0}
+            onKeyDown={handleKeyDown(!value)}
+          >
+            <CheckBox
+              type="checkbox"
+              id={name}
+              name={name}
+              checked={value || false}
+              disabled={disabled}
+              onChange={(v) => {
+                onChange(v.target.checked);
+              }}
+              onClick={(e) => {
+                e?.stopPropagation();
+              }}
+              $displayAsButton={displayAsButton}
+            />
+            <CheckMark checked={value || false} intermediate={intermediate} disabled={disabled} />
+          </InnerContainer>
+          <Column $displayAsButton={displayAsButton}>
+            <Label>{label}</Label>
+            {description && <Description>{description}</Description>}
+          </Column>
+        </Container>
+      )}
     </Wrapper>
   );
 };
@@ -85,12 +127,27 @@ const Wrapper = styled.div<{ $displayAsButton?: boolean; $width?: string }>`
   width: ${({ $width, $displayAsButton }) => ($displayAsButton && $width) || 'fit-content'};
 `;
 
-const buttonStyle = css<{
+const Container = styled.label<{
+  $displayAsButton?: boolean;
+  $disabled?: boolean;
+  $radius?: number;
+}>`
+  display: grid;
+  grid-template-columns: ${({ $displayAsButton }) => ($displayAsButton ? '1fr' : '28px 1fr')};
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
+`;
+
+const ButtonContainer = styled.label<{
   $variant?: string;
   $disabled?: boolean;
   $checked?: boolean;
   $radius?: number;
 }>`
+  display: grid;
+  grid-template-columns: 1fr;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
   background-color: ${({ $variant = 'primary', $checked, theme }) =>
     ($checked ? theme.colors.buttons?.[$variant]?.checked : undefined) ||
     theme.colors.buttons?.[$variant]?.background ||
@@ -109,18 +166,6 @@ const buttonStyle = css<{
   &:hover {
     opacity: ${({ $disabled }) => ($disabled ? 0.48 : 0.6)};
   }
-`;
-
-const Container = styled.label<{
-  $displayAsButton?: boolean;
-  $disabled?: boolean;
-  $radius?: number;
-}>`
-  display: grid;
-  grid-template-columns: ${({ $displayAsButton }) => ($displayAsButton ? '1fr' : '28px 1fr')};
-  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
-  opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
-  ${({ $displayAsButton }) => ($displayAsButton ? buttonStyle : '')}
 `;
 
 const Label = styled.div`
