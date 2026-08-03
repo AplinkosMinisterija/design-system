@@ -46,7 +46,7 @@ export interface MapProps {
   value?: AllGeoJSON;
   label?: string;
   error?: string;
-  projection?: string;
+  projection?: 3346 | 4326;
   controls?: MapControls;
   preview?: boolean;
   draw?: boolean | DrawOptions;
@@ -76,11 +76,11 @@ const Map = ({
   bbox,
 }: MapProps) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
-  const map = useRef<MaplibreMap>(null!);
-  const mapDraw = useRef<MapboxDraw>(null!);
+  const map = useRef<MaplibreMap | null>(null);
+  const mapDraw = useRef<MapboxDraw | null>(null);
 
   const theme = useTheme();
-  const styles = getMapStyles(theme.colors.map);
+  const styles = theme.colors?.map ? getMapStyles(theme.colors.map) : undefined;
   const fitBoundsOptions = useMemo(() => ({ padding: 50, maxZoom: 16 }), []);
 
   const value4326: AllGeoJSON | undefined = useMemo(() => {
@@ -110,7 +110,7 @@ const Map = ({
   useEffect(() => {
     if (!map.current || !value4326) return;
 
-    setPreviewLayerValue(map.current, value4326, styles);
+    if (styles) setPreviewLayerValue(map.current, value4326, styles);
 
     if (zoomOnChange) {
       map.current.fitBounds(turfBbox(value4326) as any, fitBoundsOptions);
@@ -142,6 +142,7 @@ const Map = ({
 
     if (!(drawOptions as DrawOptions)?.multi) {
       map.current.on('draw.render', () => {
+        if (!mapDraw.current) return;
         const { features } = mapDraw.current.getAll();
         if (features?.length < 2) return;
 
@@ -156,7 +157,7 @@ const Map = ({
   }, [projection, drawOptions, onChange]);
 
   const addDefaultLayers = useCallback(() => {
-    if (!map.current || !layers?.length) return;
+    if (!map.current || !layers?.length || !theme.colors.map) return;
 
     const mapLayers = MapLayers(theme.colors.map);
 
@@ -182,32 +183,29 @@ const Map = ({
     addDefaultLayers();
 
     if (drawOptions && !preview) {
-      const draw = enableDraw(map.current, drawOptions as DrawOptions, value4326, styles);
+      const draw = enableDraw(map.current, drawOptions as DrawOptions, value4326, styles || []);
       if (draw) {
         mapDraw.current = draw;
         addDrawEvents();
       }
-    } else if (value4326) {
+    } else if (value4326 && styles) {
       setupPreviewLayer(map.current, value4326, styles);
     }
 
     onLoad?.(map.current);
-  }, [mapContainer, onLoad, addDefaultLayers, drawOptions, preview, value4326, styles, addDrawEvents, controls, mapOptions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapContainer, onLoad]);
 
   useEffect(() => {
     if (!map.current || !toggleLayers) return;
-    toggleLayers.forEach(layer => {
-      layer.ids.forEach(layerId => {
+    toggleLayers.forEach((layer) => {
+      layer.ids.forEach((layerId) => {
         if (map.current!.getLayer(layerId)) {
-          map.current!.setLayoutProperty(
-            layerId,
-            'visibility',
-            layer.visible ? 'visible' : 'none'
-          );
+          map.current!.setLayoutProperty(layerId, 'visibility', layer.visible ? 'visible' : 'none');
         }
       });
     });
-  }, [toggleLayers]);
+  }, [toggleLayers, map]);
 
   const handleLayerToggle = (layer: MapToggleLayerConfig) => {
     onLayerToggle?.(layer, !layer.visible);
@@ -220,14 +218,15 @@ const Map = ({
         aria-describedby={error ? `${label}-error` : undefined}
         tabIndex={0}
         ref={mapContainer}
-        $error={!!error}>
-      {toggleLayers && toggleLayers.length > 0 && (
-        <LayerToggleControl
-          toggleLayers={toggleLayers}
-          onLayerToggle={handleLayerToggle}
-          mapContainerRef={mapContainer}
-        />
-      )}
+        $error={!!error}
+      >
+        {toggleLayers && toggleLayers.length > 0 && (
+          <LayerToggleControl
+            toggleLayers={toggleLayers}
+            onLayerToggle={handleLayerToggle}
+            mapContainerRef={mapContainer}
+          />
+        )}
       </MapDiv>
     </FieldWrapper>
   );

@@ -29,7 +29,8 @@ const MapField = ({
   filter,
   accessibilityDescription,
   accessibilityContact,
-}: MapFieldProps) => {
+  ...rest
+}: MapFieldProps & Record<string, any>) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [loading, setLoading] = useState(true);
   const mapId = `map-description-${Math.random().toString(36).slice(2)}`;
@@ -85,14 +86,16 @@ const MapField = ({
         }
       }
     },
-    [mapHost, onChange, onClick],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [mapHost, onChange],
   );
 
   useEffect(() => {
     if (!iframeRef.current?.contentWindow || loading || !filter || isEmpty(filter)) return;
 
     iframeRef?.current?.contentWindow.postMessage({ eventName: 'filter', ...filter }, '*');
-  }, [loading, filter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [iframeRef?.current?.contentWindow, loading, JSON.stringify(filter)]);
 
   useEffect(() => {
     window.addEventListener('message', handleSaveGeom);
@@ -112,6 +115,7 @@ const MapField = ({
         {accessibilityDescription} {accessibilityContact}
       </VisuallyHidden>
       <Iframe
+        {...rest}
         $error={!!error}
         src={`${mapHost}${mapPath}`}
         ref={iframeRef}
@@ -129,7 +133,7 @@ const MapField = ({
 
 export default MapField;
 
-const Iframe = styled.iframe<{ $error: boolean }>`
+const Iframe = styled.iframe<{ $error: boolean } & Record<string, unknown>>`
   height: 400px;
   width: 100%;
   display: block;

@@ -8,7 +8,7 @@ import {
 } from 'maplibre-gl';
 
 // @ts-ignore
-import MapboxDraw,{ Constants } from '@mapbox/mapbox-gl-draw';
+import MapboxDraw, { Constants } from '@mapbox/mapbox-gl-draw';
 import { AllGeoJSON } from '@turf/helpers';
 // @ts-ignore
 import proj4 from 'proj4';
@@ -23,10 +23,12 @@ import { ThemeMapColors } from 'src/types';
 import { DragCircle, convertCircleToPoint, convertFeatureToCircle } from './modes';
 import { DirectSelect, SimpleSelect } from './modes';
 
-const epsg = {
+export const epsg = {
   3346: epsg3346,
   4326: epsg4326,
-}
+};
+
+export type KeyOfEPSG = keyof typeof epsg;
 export const BASEMAP_URL = {
   LIGHT: 'https://basemap.biip.lt/styles/bright/style.json',
   GRAY: 'https://basemap.biip.lt/styles/positron/style.json',
@@ -56,8 +58,8 @@ export type DrawOptions = {
 };
 
 export const PREVIEW_LAYER_ID = 'preview-layer';
-export const MAP_PROJECTION = '4326';
-export const LKS_PROJECTION = '3346';
+export const MAP_PROJECTION = 4326 as const;
+export const LKS_PROJECTION = 3346 as const;
 
 export const DrawType = {
   POINT: 'point' as const,
@@ -100,13 +102,14 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styl
 
   if (!Array.isArray(draw.types)) draw.types = [draw.types!] as DrawTypes[];
 
-  const modes: any = { ...MapboxDraw.modes };
+  // MapboxDraw.modes is untyped; we extend with custom modes for buffer functionality
+  const modes = { ...MapboxDraw.modes };
 
   if (draw.buffer && typeof draw.buffer !== 'boolean') {
     // TODO: setup lines
-    modes.draw_point = DragCircle(draw.buffer);
-    modes.simple_select = SimpleSelect();
-    modes.direct_select = DirectSelect({ circle: draw.buffer });
+    (modes as any).draw_point = DragCircle(draw.buffer);
+    (modes as any).simple_select = SimpleSelect();
+    (modes as any).direct_select = DirectSelect({ circle: draw.buffer });
   }
 
   const types = draw.types || [];
@@ -117,12 +120,13 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styl
       polygon: types.includes(DrawType.POLYGON),
       trash: types.length > 1 || draw.multi,
     },
-    modes,
+    modes: modes as any,
     styles,
     displayControlsDefault: false,
     userProperties: true,
   });
 
+  // MapboxDraw constructor is untyped; addControl and set accept any
   map.addControl(mapDraw as any, getPosition('top-left', draw.position));
 
   if (value) mapDraw.set(value as any);
@@ -130,7 +134,11 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styl
   return mapDraw;
 }
 
-export function convertGeojsonToProjection(source: AllGeoJSON, from: string, to: string): AllGeoJSON {
+export function convertGeojsonToProjection(
+  source: AllGeoJSON,
+  from: KeyOfEPSG,
+  to: KeyOfEPSG,
+): AllGeoJSON {
   const fromEPSG = epsg[from];
   const toEPSG = epsg[to];
 

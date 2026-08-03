@@ -136,7 +136,6 @@ const TimeField = ({
     const dateToCheck = new Date().setHours(hour, minute, 0, 0);
     if (minDate && dateToCheck < minDate) return true;
     return !!(maxDate && dateToCheck > maxDate);
-
   };
 
   const handleTimeChange = (hour: any, minute: any) => {

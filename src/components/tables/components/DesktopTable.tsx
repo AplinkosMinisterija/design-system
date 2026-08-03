@@ -58,7 +58,7 @@ const DesktopTable = ({
 
   const canSort = !!onColumnSort && !!data?.length;
 
-  const handleColumnClick = (key) => {
+  const handleColumnClick = (key: string) => {
     if (!canSort) return;
 
     const direction =
@@ -90,7 +90,7 @@ const DesktopTable = ({
                 role="row"
               >
                 {checkable && (
-                  <TD width={TableItemWidth.SMALL}>
+                  <TD $width={TableItemWidth.SMALL}>
                     <CheckBox
                       value={selectedItemIdsSet.has(row.id)}
                       onChange={() => handleToggleItem(row.id)}
@@ -105,7 +105,7 @@ const DesktopTable = ({
 
                   return (
                     <TD
-                      width={width}
+                      $width={width}
                       key={`tr-td-${i}`}
                       role="cell"
                       aria-label={`${columns[label]?.label}: ${item}`}
@@ -146,9 +146,10 @@ const DesktopTable = ({
             <TR role="row" $pointer={false}>
               {checkable && <TH $pointer={false} role="columnheader" />}
 
-              {keys.map((key: any, i: number) => {
+              {keys.map((key: string, i: number) => {
                 const column = columns[key];
                 const label = column?.label;
+                const width = column?.width || TableItemWidth.LARGE;
                 const isSelectedKey = key === sortedColumn.key;
                 const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
                 const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
@@ -165,6 +166,7 @@ const DesktopTable = ({
                         : 'none'
                     }
                     $pointer={enableColumnSort}
+                    $width={width}
                     onClick={() => {
                       enableColumnSort && handleColumnClick(key);
                     }}
@@ -237,16 +239,18 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const TD = styled.td`
+const TD = styled.td<{ $width?: number | string }>`
   padding: 6px 22px;
   height: 44px;
   text-align: left;
   font-size: 1.4rem;
   color: #121926;
+  ${({ $width }) => $width && `width: ${$width}px`};
 `;
 
 const TH = styled.th<{
   $pointer: boolean;
+  $width?: number | string;
 }>`
   padding: 18px 22px;
   height: 44px;

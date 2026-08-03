@@ -38,8 +38,8 @@
   },
   "peerDependencies": {
     "@tanstack/react-query": "*",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-router": "^8.3.0",
     "styled-components": "^6.1.8"
   },
@@ -57,7 +57,7 @@
     "date-fns": "^3.6.0",
     "epsg-index": "^2.0.0",
     "formik": "^2.4.6",
-    "lodash": "^4.18.1",
+    "lodash": "^4.17.21",
     "maplibre-gl": "^4.3.2",
     "numeral": "^2.0.6",
     "openapi-fetch": "^0.12.2",
@@ -88,6 +88,7 @@
     "@storybook/react": "^8.6.0",
     "@storybook/react-vite": "^8.6.0",
     "@storybook/testing-library": "^0.2.2",
+    "@types/lodash": "^4.17.25",
     "@types/mapbox__mapbox-gl-draw": "^1.4.6",
     "@types/proj4": "^2.5.5",
     "@types/react": "^19.0.0",
