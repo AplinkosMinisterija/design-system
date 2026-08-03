@@ -100,7 +100,7 @@ const DragAndDropUploadField = ({
     inputRef?.current?.click();
   };
 
-  const handleDelete = (index) => {
+  const handleDelete = (index: number) => {
     if (onDelete) {
       onDelete([...files.slice(0, index), ...files.slice(index + 1)]);
       if (inputRef.current) {

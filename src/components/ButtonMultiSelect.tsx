@@ -41,7 +41,7 @@ const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
   buttonWidth,
   labelButton,
 }) => {
-  const handleSelect = (option, selected) => {
+  const handleSelect = (option: string, selected: boolean) => {
     let updatedValues;
     if (selected) {
       updatedValues = values.includes(option) ? values : [...values, option];

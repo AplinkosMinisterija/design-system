@@ -34,7 +34,7 @@ export interface DynamicFilterProps {
 
 const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterProps) => {
   const generateDefaultValues = () => {
-    const defaultValues = {};
+    const defaultValues: Record<string, any> = {};
     map(filters, (filter) => {
       defaultValues[filter.key] =
         filter.default || (filter.inputType === FilterInputTypes.text ? '' : null);
@@ -42,10 +42,10 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
     return defaultValues;
   };
 
-  const renderRow = (row: string[], values, setFieldValue, index) => (
+  const renderRow = (row: string[], values: any, setFieldValue: any, index: number) => (
     <Content key={`row_${index}`}>
       {map(row, (rowKey: string, index: number) => {
-        const filter = filters[rowKey];
+        const filter = filters[rowKey as keyof typeof filters];
         const singleItem = row.length === 1;
         const optionLabel = filter?.optionLabel;
         const optionValue = filter?.getOptionValue;

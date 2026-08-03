@@ -84,7 +84,7 @@ const Popup = ({
   );
 };
 
-const getContainerCss = ($type, theme) => {
+const getContainerCss = ($type: any, theme: any) => {
   switch ($type) {
     case PopupType.BOTTOM:
       return {
@@ -112,7 +112,7 @@ const getContainerCss = ($type, theme) => {
   }
 };
 
-const getInnerContainerCss = ($type) => {
+const getInnerContainerCss = ($type: any) => {
   switch ($type) {
     case PopupType.BOTTOM:
       return {

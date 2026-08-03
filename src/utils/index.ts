@@ -84,7 +84,7 @@ export const svgToUrl = (icon: string) => {
   return `data:image/svg+xml;base64,${base64SVG}`;
 };
 
-export const globalStyles = (theme) => `
+export const globalStyles = (theme: any) => `
   * {
     box-sizing: border-box;
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -281,7 +281,7 @@ export const compressJSON = async (data: any) => {
   return btoa(String.fromCharCode(...new Uint8Array(buffer)));
 };
 
-export const decompressJSON = async (compressedBase64) => {
+export const decompressJSON = async (compressedBase64: string) => {
   const stream = new Blob([b64decode(compressedBase64) as any], {
     type: 'application/json',
   }).stream();
@@ -293,8 +293,8 @@ export const decompressJSON = async (compressedBase64) => {
   return JSON.parse(await blob.text());
 };
 
-export const cleanObj = (el) => {
-  const internalClean = (el) => {
+export const cleanObj = (el: any) => {
+  const internalClean = (el: any) => {
     return transform(el, (result: any, value, key) => {
       const isCollection = isObject(value);
       const cleaned = isCollection ? internalClean(value) : value;

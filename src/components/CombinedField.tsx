@@ -6,8 +6,8 @@ import OptionsContainer from './common/OptionsContainer';
 import NumericField from './NumericField';
 
 export interface CombinedFieldProps {
-  value: { input: string; option: string };
-  onChange: (option: { input: string; option: string }) => void;
+  value: { input: string | number; option: string };
+  onChange: (option: { input: string | number; option: string }) => void;
   name?: string;
   label?: string;
   error?: string;
@@ -53,7 +53,7 @@ const CombinedField = ({
     }
   };
 
-  const handleChange = (input) => {
+  const handleChange = (input: Partial<{ input: string | number; option: string }>) => {
     setShowSelect(false);
     onChange({
       ...value,

@@ -1,10 +1,11 @@
 import { toast } from 'react-toastify';
+import { JSX } from 'react';
 import { ServerErrors, ValidationMessages } from '../../types';
 
 export const getFilteredOptions = (
   options: any[],
   input: string,
-  getOptionLabel: (option: any) => string,
+  getOptionLabel: (option: any) => string | JSX.Element,
 ) =>
   options?.filter((option) => {
     const label = getOptionLabel(option)?.toString().toLowerCase();

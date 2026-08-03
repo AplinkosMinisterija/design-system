@@ -57,7 +57,7 @@ const MultiTextField = ({
     onRemove({ value, index });
   };
 
-  const handleRemoveOnKeyDown = (e, value, index) => {
+  const handleRemoveOnKeyDown = (e: React.KeyboardEvent, value: any, index: number) => {
     const keysToRemove = ['Enter', 'Backspace', 'Delete'];
     if (keysToRemove.includes(e.key)) {
       handleRemove(e, value, index);

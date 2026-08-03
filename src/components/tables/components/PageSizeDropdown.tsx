@@ -13,15 +13,15 @@ export interface PageSizeDropdownProps {
 const PageSizeDropdown = ({ value, onChange }: PageSizeDropdownProps) => {
   const [open, setOpen] = useState(false);
 
-  const handleBlur = (event) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) {
+  const handleBlur = (event: React.FocusEvent) => {
+    if (!event.currentTarget.contains(event.relatedTarget as Node)) {
       open && setOpen(false);
     }
   };
 
   return (
     <Container tabIndex={1} onBlur={handleBlur}>
-      <PageSizeDropdownContainer onClick={handleBlur}>
+      <PageSizeDropdownContainer>
         <Label>Įrašų skaičius puslapyje</Label>
         <FilterButton $selected={open} onClick={() => setOpen(!open)}>
           <SelectedValueLabel>{value.toString()}</SelectedValueLabel>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { TableItemWidth, TableRow } from '../../tables/components/types';
+import { TableItemWidth, TableRow } from './types';
 import Icon from '../../common/Icons';
 
 interface RecursiveRowProps {
@@ -11,7 +11,7 @@ interface RecursiveRowProps {
   handleRowClick: any;
   tableRowStyle: any;
   padding: any;
-  columns;
+  columns: any;
 }
 
 export const RecursiveRow = ({
@@ -26,7 +26,7 @@ export const RecursiveRow = ({
 }: RecursiveRowProps) => {
   const [show, setShow] = useState(false);
   const hasChildren = !!row.children && row.children.length > 0;
-  const renderTd = (i: number, label) => {
+  const renderTd = (i: number, label: string) => {
     const item = row[label] || '-';
 
     if (hasChildren && i == 0) {

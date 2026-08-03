@@ -247,7 +247,7 @@ const DateField = ({
               increaseYear,
               prevMonthButtonDisabled,
               nextMonthButtonDisabled,
-            }) => {
+            }: any) => {
               const date = value ? new Date(value as any) : new Date();
               const month = date.toLocaleString('lt', { month: 'long' });
               const year = date.getFullYear();
@@ -324,7 +324,7 @@ const DateContainer = styled.div`
 `;
 
 const CalendarIcon = styled(Icon)`
-  color: ${({ theme }) => theme.colors.text.secondary || '#767b83'};
+  color: ${({ theme }) => theme.colors?.text?.secondary || '#767b83'};
   vertical-align: middle;
   margin-right: 8px;
   font-size: 2rem;
@@ -363,7 +363,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     outline: none;
   }
   .react-datepicker__header {
-    color: ${({ theme }) => theme.colors.text.primary || '#0b1f51'};
+    color: ${({ theme }) => theme.colors?.text?.primary || '#0b1f51'};
     background-color: #ffffff !important;
     border: none;
   }
@@ -371,7 +371,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     margin: 0;
   }
   .react-datepicker__day--outside-month:before {
-    color: ${({ theme }) => theme.colors.text.primary || '#0b1f51'};
+    color: ${({ theme }) => theme.colors?.text?.primary || '#0b1f51'};
     opacity: 0.6;
   }
   .react-datepicker__input-time-container {
@@ -422,7 +422,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     width: 364px;
     position: absolute;
     ${({ $bottom, theme }) =>
-      $bottom ? `bottom: ${(theme.height.fields || 5.6) + 0.5}rem` : ' top: 0.5rem'};
+      $bottom ? `bottom: ${(theme.height?.fields || 5.6) + 0.5}rem` : ' top: 0.5rem'};
     z-index: 8;
     background-color: #ffffff;
     box-shadow: 0px 2px 16px #121a5529;
@@ -443,7 +443,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     display: block !important;
     margin: 15px 0px 10px 0px;
     text-align: center;
-    color: ${({ theme }) => theme.colors.text.primary || '#0b1f51'};
+    color: ${({ theme }) => theme.colors?.text?.primary || '#0b1f51'};
   }
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
@@ -462,7 +462,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
   .react-datepicker__day--keyboard-selected {
     background-color: white;
     font-size: 1.5rem;
-    color: ${({ theme }) => theme.colors.text.primary || '#0b1f51'};
+    color: ${({ theme }) => theme.colors?.text?.primary || '#0b1f51'};
   }
   .react-datepicker__day--selected::before {
     content: '';
@@ -490,7 +490,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     font-weight: bold;
 
     letter-spacing: 0px;
-    color: ${({ theme }) => theme.colors.text.primary || '#0b1f51'};
+    color: ${({ theme }) => theme.colors?.text?.primary || '#0b1f51'};
     margin: 26px 32px 0px 0px;
     border: none;
   }
@@ -507,7 +507,7 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
     text-align: center;
     font-size: 1.6rem;
     letter-spacing: 0px;
-    color: ${({ theme }) => theme.colors.text.primary || '#0b1f51'};
+    color: ${({ theme }) => theme.colors?.text?.primary || '#0b1f51'};
     margin-top: 13px;
     text-transform: capitalize;
   }
@@ -618,7 +618,7 @@ const MonthYearWrapper = styled.div`
 
 const ToggleButton = styled.button<{ $isOn: boolean }>`
   background-color: ${({ $isOn, theme }) => ($isOn ? theme.colors.primary : 'transparent')};
-  color: ${({ $isOn, theme }) => ($isOn ? 'white' : theme.colors.texts?.primary || '#121a55')};
+  color: ${({ $isOn, theme }) => ($isOn ? 'white' : theme.colors?.texts?.primary || '#121a55')};
   border: none;
   border-radius: ${({ theme }) => theme.borderRadius?.buttons || 0.4}rem;
   cursor: pointer;

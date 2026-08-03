@@ -59,7 +59,7 @@ const RecursiveTable = ({
 
   const canSort = !!onColumnSort && !!data?.data?.length;
 
-  const handleColumnClick = (key) => {
+  const handleColumnClick = (key: string) => {
     if (!canSort) return;
 
     const direction =
@@ -74,7 +74,7 @@ const RecursiveTable = ({
   };
   const handleKeyDownOnColumn = useKeyAction(handleColumnClick);
 
-  const GenerateTableContent = ({ data }) => {
+  const GenerateTableContent = ({ data }: { data: any }) => {
     if (data?.length) {
       return (
         <>
@@ -140,7 +140,7 @@ const RecursiveTable = ({
                   <TH
                     width={width}
                     key={`th-${i}`}
-                    $pointer={!!enableColumnSort}
+                    $pointer={enableColumnSort}
                     onClick={() => {
                       enableColumnSort && handleColumnClick(key);
                     }}

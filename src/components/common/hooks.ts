@@ -1,7 +1,17 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, JSX } from 'react';
 import { intersectionObserverConfig } from '../../utils';
 import { getFilteredOptions } from './functions';
+
+interface UseSelectDataProps {
+  options: any[];
+  disabled?: boolean;
+  onChange: (option: any) => void;
+  getOptionLabel: (option: any) => string | JSX.Element;
+  refreshOptions?: (dependantId: any) => Promise<void>;
+  dependantId?: any;
+  value?: any;
+}
 
 export const useSelectData = ({
   options,
@@ -11,7 +21,7 @@ export const useSelectData = ({
   refreshOptions,
   dependantId,
   value,
-}) => {
+}: UseSelectDataProps) => {
   const [input, setInputValue] = useState<any>(null);
   const [showSelect, setShowSelect] = useState(false);
   const [suggestions, setSuggestions] = useState(options);
@@ -61,7 +71,7 @@ export const useSelectData = ({
     onChange(option);
   };
 
-  const handleOnChange = (input) => {
+  const handleOnChange = (input: string) => {
     if (!options) return;
 
     if (input) {
@@ -87,6 +97,16 @@ export const useSelectData = ({
   };
 };
 
+interface UseAsyncSelectDataProps {
+  loadOptions: (input: string, page: number, dependantValue: any) => Promise<any>;
+  disabled?: boolean;
+  onChange: (option: any) => void;
+  dependantValue?: any;
+  name: string;
+  optionsKey?: string;
+  handleGetNextPageParam: (data: any) => number | null | undefined;
+}
+
 export const useAsyncSelectData = ({
   loadOptions,
   disabled,
@@ -95,7 +115,7 @@ export const useAsyncSelectData = ({
   name,
   optionsKey,
   handleGetNextPageParam,
-}) => {
+}: UseAsyncSelectDataProps) => {
   const [input, setInput] = useState('');
   const [showSelect, setShowSelect] = useState(false);
   const observerRef = useRef(null);
@@ -103,7 +123,8 @@ export const useAsyncSelectData = ({
   const fetchData = async (page: number) => {
     const data = await loadOptions(input, page, dependantValue);
     const nextPage = handleGetNextPageParam(data);
-    const formattedData = data?.[optionsKey] ?? data;
+
+    const formattedData = optionsKey ? (data?.[optionsKey as keyof typeof data] ?? data) : data;
 
     return {
       data: formattedData,
@@ -185,7 +206,7 @@ export const useAsyncSelectData = ({
  * Debounce a rapidly-changing value (e.g. a search input) so downstream
  * effects — query keys, network requests — only react once typing settles.
  */
-export const useDebouncedValue = <T,>(value: T, delayMs = 300): T => {
+export const useDebouncedValue = <T>(value: T, delayMs = 300): T => {
   const [debounced, setDebounced] = useState(value);
 
   useEffect(() => {
