@@ -94,15 +94,15 @@ const StoryComponent = () => {
   const [location, setLocation] = useState([]);
   const [toggleLayers, setToggleLayers] = useState(initialLayers);
 
-  const whenMapLoads = (cb: () => void) => {
-    if (!map) return;
-    if (!map.loaded()) {
-      return map.on('load', () => cb());
-    }
-    return cb();
-  };
-
   useEffect(() => {
+    const whenMapLoads = (cb: () => void) => {
+      if (!map) return;
+      if (!map.loaded()) {
+        return map.on('load', () => cb());
+      }
+      return cb();
+    };
+
     whenMapLoads(() => {
       // FOOTPRINT TRACKS
       const sourceId = 'footprint_tracks';

@@ -91,13 +91,14 @@ const DateField = ({
       threshold: 1,
     });
 
-    if (invisibleDivRef.current) {
-      observer.observe(invisibleDivRef.current);
+    const currentRef = invisibleDivRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (invisibleDivRef.current) {
-        observer.unobserve(invisibleDivRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [open]);

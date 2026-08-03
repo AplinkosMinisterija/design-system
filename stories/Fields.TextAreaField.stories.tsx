@@ -12,14 +12,16 @@ const meta: Meta<typeof TextAreaField> = {
 export default meta;
 type Story = StoryObj<typeof TextAreaField>;
 
+function TextAreaFieldComponent() {
+  const [value, setValue] = useState('');
+  return (
+    <StoryWrapper>
+      <TextAreaField onChange={(e) => setValue(e)} value={value} />
+    </StoryWrapper>
+  );
+}
+
 export const TextAreaFieldStory: Story = {
   name: 'TextAreaField',
-  render: () => {
-    const [value, setValue] = useState('');
-    return (
-      <StoryWrapper>
-        <TextAreaField onChange={(e) => setValue(e)} value={value} />
-      </StoryWrapper>
-    );
-  },
+  render: () => <TextAreaFieldComponent />,
 };

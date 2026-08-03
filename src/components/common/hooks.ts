@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { intersectionObserverConfig } from '../../utils';
-import { getFilteredOptions } from '../common/functions';
+import { getFilteredOptions } from './functions';
 
 export const useSelectData = ({
   options,
@@ -24,22 +24,22 @@ export const useSelectData = ({
     }
   };
 
-  const handleSetOptions = async () => {
+  const handleSetOptions = useCallback(async () => {
     if (!refreshOptions) return;
     setLoading(true);
     await refreshOptions(dependantId);
     setLoading(false);
-  };
+  }, [refreshOptions, dependantId]);
 
   useEffect(() => {
     if (!showSelect || options?.length) return;
     handleSetOptions();
-  }, [showSelect]);
+  }, [showSelect, handleSetOptions, options?.length]);
 
   useEffect(() => {
     if (typeof dependantId === 'undefined') return;
     handleSetOptions();
-  }, [dependantId]);
+  }, [dependantId, handleSetOptions]);
 
   useEffect(() => {
     const canClearValue =
@@ -50,7 +50,7 @@ export const useSelectData = ({
     }
 
     setSuggestions(options);
-  }, [options]);
+  }, [options, disabled, dependantId, value?.id, onChange]);
 
   const handleClick = (option: any) => {
     setShowSelect(false);
@@ -206,7 +206,7 @@ export const useDebouncedCallback = <TArgs extends any[], TResult>(
   callback: (...args: TArgs) => Promise<TResult> | TResult,
   delayMs = 300,
 ) => {
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const callIdRef = useRef(0);
   const mountedRef = useRef(true);
   const callbackRef = useRef(callback);

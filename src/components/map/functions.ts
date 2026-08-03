@@ -32,10 +32,7 @@ export const BASEMAP_URL = {
   GRAY: 'https://basemap.biip.lt/styles/positron/style.json',
 };
 
-export type DrawTypes =
-  | MapboxDraw.constants.types.POINT
-  | MapboxDraw.constants.types.LINE
-  | MapboxDraw.constants.types.POLYGON;
+export type DrawTypes = 'point' | 'line_string' | 'polygon';
 
 export type MapControls = {
   geolocate?: boolean | ControlPosition;
@@ -61,7 +58,11 @@ export const PREVIEW_LAYER_ID = 'preview-layer';
 export const MAP_PROJECTION = '4326';
 export const LKS_PROJECTION = '3346';
 
-export const DrawType = MapboxDraw.constants.types;
+export const DrawType: { POINT: DrawTypes; LINE: DrawTypes; POLYGON: DrawTypes } = {
+  POINT: 'point',
+  LINE: 'line_string' as DrawTypes,
+  POLYGON: 'polygon',
+};
 
 export function getPosition(
   fallbackPosition: ControlPosition,
@@ -96,25 +97,24 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styl
     draw.buffer = typeof draw.buffer === 'boolean' ? { max: 10, min: 1 } : draw.buffer;
   }
 
-  if (!Array.isArray(draw.types)) draw.types = [draw.types];
+  if (!Array.isArray(draw.types)) draw.types = [draw.types!] as DrawTypes[];
 
-  let modes = MapboxDraw.modes;
+  const modes: any = { ...MapboxDraw.modes };
 
   if (draw.buffer) {
     // TODO: setup lines
-    modes = Object.assign(modes, {
-      draw_point: DragCircle(draw.buffer),
-      simple_select: SimpleSelect(),
-      direct_select: DirectSelect({ circle: draw.buffer }),
-    });
+    modes.draw_point = DragCircle(draw.buffer);
+    modes.simple_select = SimpleSelect();
+    modes.direct_select = DirectSelect({ circle: draw.buffer });
   }
 
+  const types = draw.types || [];
   const mapDraw = new MapboxDraw({
     controls: {
-      point: draw.types.includes(DrawType.POINT),
-      line_string: draw.types.includes(DrawType.LINE),
-      polygon: draw.types.includes(DrawType.POLYGON),
-      trash: draw.types.length > 1 || draw.multi,
+      point: types.includes(DrawType.POINT),
+      line_string: types.includes(DrawType.LINE),
+      polygon: types.includes(DrawType.POLYGON),
+      trash: types.length > 1 || draw.multi,
     },
     modes,
     styles,
@@ -122,14 +122,14 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styl
     userProperties: true,
   });
 
-  map.addControl(mapDraw, getPosition('top-left', draw.position));
+  map.addControl(mapDraw as any, getPosition('top-left', draw.position));
 
-  if (value) mapDraw.set(value);
+  if (value) mapDraw.set(value as any);
 
   return mapDraw;
 }
 
-export function convertGeojsonToProjection(source: AllGeoJSON, from: string, to: string) {
+export function convertGeojsonToProjection(source: AllGeoJSON, from: string, to: string): AllGeoJSON {
   const fromEPSG = epsg[from];
   const toEPSG = epsg[to];
 
@@ -139,7 +139,7 @@ export function convertGeojsonToProjection(source: AllGeoJSON, from: string, to:
   const transform = proj4(fromEPSG.proj4, toEPSG.proj4);
   source = cloneDeep(source);
 
-  coordEach(source, (coords) => {
+  coordEach(source as any, (coords: any) => {
     const newCoord = transform.forward(coords);
     coords[0] = newCoord[0];
     coords[1] = newCoord[1];

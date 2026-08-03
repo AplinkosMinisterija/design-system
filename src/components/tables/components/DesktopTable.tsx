@@ -144,12 +144,11 @@ const DesktopTable = ({
         <Table role="table">
           <THEAD>
             <TR role="row" $pointer={false}>
-              {checkable && <TH width={TableItemWidth.SMALL} role="columnheader" />}
+              {checkable && <TH $pointer={false} role="columnheader" />}
 
               {keys.map((key: any, i: number) => {
                 const column = columns[key];
                 const label = column?.label;
-                const width = column?.width || TableItemWidth.LARGE;
                 const isSelectedKey = key === sortedColumn.key;
                 const isSelectedUp = isSelectedKey && sortedColumn?.direction === 'asc';
                 const isSelectedDown = isSelectedKey && sortedColumn?.direction === 'desc';
@@ -165,13 +164,12 @@ const DesktopTable = ({
                           : 'descending'
                         : 'none'
                     }
-                    $pointer={!!enableColumnSort}
+                    $pointer={enableColumnSort}
                     onClick={() => {
                       enableColumnSort && handleColumnClick(key);
                     }}
                     onKeyDown={handleKeyDownOnColumn(key)}
                     tabIndex={enableColumnSort ? 0 : undefined}
-                    width={width}
                     key={`large-th-${i}`}
                   >
                     <LabelContainer>

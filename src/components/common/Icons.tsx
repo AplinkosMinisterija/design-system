@@ -17,32 +17,9 @@ import {
 } from 'react-icons/md';
 import { FaTrash } from 'react-icons/fa';
 import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
+import { IconName } from './IconsConstants';
 
-export enum IconName {
-  visibleOn = 'visibleOn',
-  filter = 'filter',
-  visibleOff = 'visibleOff',
-  logout = 'logout',
-  back = 'back',
-  burger = 'burger',
-  right = 'right',
-  close = 'close',
-  dropdownArrow = 'dropdownArrow',
-  forward = 'forward',
-  backward = 'backward',
-  calendar = 'calendar',
-  settings = 'settings',
-  tableArrowUp = 'tableArrowUp',
-  tableArrowDown = 'tableArrowDown',
-  time = 'time',
-  showMore = 'showMore',
-  download = 'download',
-  remove = 'remove',
-  upload = 'upload',
-  layer = 'layer',
-  leftArrow = 'leftArrow',
-  rightArrow = 'rightArrow',
-}
+export { IconName } from './IconsConstants';
 
 export interface IconProps {
   name: IconName | string;
@@ -72,16 +49,16 @@ const Icon = ({ name, className }: IconProps) => {
     case IconName.layer:
       return (
         <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 -960 960 960"
-        fill="currentColor"
-        width="16"
-        height="16"
-        className={className}
-      >
-        <path d="M480-118 120-398l66-50 294 228 294-228 66 50-360 280Zm0-202L120-600l360-280 360 280-360 280Zm0-280Zm0 178 230-178-230-178-230 178 230 178Z"></path>
-      </svg>
-      )
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 -960 960 960"
+          fill="currentColor"
+          width="16"
+          height="16"
+          className={className}
+        >
+          <path d="M480-118 120-398l66-50 294 228 294-228 66 50-360 280Zm0-202L120-600l360-280 360 280-360 280Zm0-280Zm0 178 230-178-230-178-230 178 230 178Z" />
+        </svg>
+      );
     case IconName.logout:
       return (
         <svg

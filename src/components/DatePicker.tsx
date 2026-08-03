@@ -69,13 +69,14 @@ const DateField = ({
       threshold: 1,
     });
 
-    if (invisibleDivRef.current) {
-      observer.observe(invisibleDivRef.current);
+    const currentRef = invisibleDivRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (invisibleDivRef.current) {
-        observer.unobserve(invisibleDivRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [open]);
@@ -289,7 +290,7 @@ const CloseButton = styled.button`
   }
 `;
 
-const ClearIcon = styled(Icon)<{ $disabled: boolean }>`
+const ClearIcon = styled(Icon)<{ $disabled?: boolean }>`
   color: #cdd5df;
   font-size: 2.4rem;
   margin-right: 12px;

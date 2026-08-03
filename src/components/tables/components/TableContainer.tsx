@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, ReactNode } from 'react';
 import ReactPaginate from 'react-paginate';
-import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router';
 import styled from 'styled-components';
 import { device, useWindowSize } from '../../../utils';
 import Icon from '../../common/Icons';
@@ -8,13 +8,12 @@ import { TableData } from './types';
 import { isEmpty } from 'lodash';
 import PageSizeDropdown from './PageSizeDropdown';
 
-class ChildrenType {}
 
 export interface TableLayoutProps {
   data?: TableData;
   pageName?: string;
   loading?: boolean;
-  children: ChildrenType;
+  children: ReactNode;
   showPageSizeDropdown?: boolean;
   showPages?: boolean;
 }
@@ -59,7 +58,7 @@ const TableContainer = ({
   const currentPageSize =
     Number.isFinite(urlPageSize) && urlPageSize > 0
       ? urlPageSize
-      : readStoredPageSize(pageName) ?? DEFAULT_PAGE_SIZE;
+      : (readStoredPageSize(pageName) ?? DEFAULT_PAGE_SIZE);
 
   useEffect(() => {
     const stored = readStoredPageSize(pageName);
@@ -71,7 +70,7 @@ const TableContainer = ({
     } else if (params?.pageSize && Number(params.pageSize) > 0) {
       writeStoredPageSize(pageName, Number(params.pageSize));
     }
-  }, [searchParams]);
+  }, [params, pageName, navigate]);
 
   useEffect(() => {
     if (!loading && totalPages < parseInt(params?.page)) {
@@ -82,7 +81,7 @@ const TableContainer = ({
         })}`,
       });
     }
-  }, [searchParams, data, loading]);
+  }, [searchParams, data, loading, totalPages, params, pageName, navigate]);
 
   const handlePageChange = (e) => {
     navigate({
@@ -106,7 +105,7 @@ const TableContainer = ({
 
   return (
     <>
-      <Container $disabled={loading}>
+      <Container $disabled={!!loading}>
         {children}
         <Row>
           <>

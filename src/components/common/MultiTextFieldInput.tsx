@@ -135,10 +135,11 @@ const MultiTextField = ({
 };
 
 const InputContainer = styled.div<{
-  $error: boolean;
-  $disabled: boolean;
-  $hasBorder: boolean;
-  $backgroundColor: string;
+  $error?: boolean;
+  $disabled?: boolean;
+  $hasBorder?: boolean;
+  $backgroundColor?: string;
+  $height?: number;
 }>`
   ${({ $hasBorder, $error, theme }) =>
     $hasBorder

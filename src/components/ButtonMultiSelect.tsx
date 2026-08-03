@@ -1,10 +1,29 @@
 import styled from 'styled-components';
 import Checkbox from './Checkbox';
 import { FieldWrapper } from '../index';
-// @ts-ignore
 import React from 'react';
 
-const ButtonMultiSelect = ({
+interface ButtonMultiSelectProps {
+  options: string[];
+  values: string[];
+  onChange: (data: string[]) => void;
+  labels?: { [key: string]: string };
+  columns?: number;
+  variant?: string;
+  name?: string;
+  gap?: number;
+  radius?: number;
+  label?: string;
+  error?: string;
+  showError?: boolean;
+  disabled?: boolean;
+  padding?: string;
+  buttonWidth?: string;
+  labelButton?: JSX.Element;
+  className?: string;
+}
+
+const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
   options,
   values,
   onChange,
@@ -22,26 +41,9 @@ const ButtonMultiSelect = ({
   className,
   buttonWidth,
   labelButton,
-}: React.FC<{
-  options: string[];
-  values: string[];
-  onChange: (data: string[]) => void;
-  labels?: { [key: string]: string };
-  columns?: number;
-  variant?: string;
-  name?: string;
-  gap?: number;
-  radius?: number;
-  label?: string;
-  error?: string;
-  showError?: boolean;
-  disabled?: boolean;
-  padding?: string;
-  buttonWidth?: string;
-  labelButton?: JSX.Element;
-}>) => {
+}) => {
   const handleSelect = (option, selected) => {
-    let updatedValues = values;
+    let updatedValues;
     if (selected) {
       updatedValues = values.includes(option) ? values : [...values, option];
     } else {
@@ -89,10 +91,10 @@ const ButtonMultiSelect = ({
 };
 
 const Container = styled.div<{
-  $cols: number;
-  $gap: number;
-  $labelVisible: boolean;
-  $errorVisible: boolean;
+  $cols?: number;
+  $gap?: number;
+  $labelVisible?: boolean;
+  $errorVisible?: boolean;
 }>`
   display: flex;
   flex-direction: row;

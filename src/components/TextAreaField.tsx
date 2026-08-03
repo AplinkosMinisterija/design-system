@@ -45,7 +45,7 @@ const TextAreaField = ({
       ref.current.style.height = 'auto';
       ref.current.style.height = ref.current.scrollHeight + 'px';
     }
-  }, [ref, value, width]);
+  }, [ref, value, width, rows]);
 
   return (
     <FieldWrapper

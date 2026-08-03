@@ -93,13 +93,14 @@ const TimeField = ({
       threshold: 1,
     });
 
-    if (invisibleDivRef.current) {
-      observer.observe(invisibleDivRef.current);
+    const currentRef = invisibleDivRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (invisibleDivRef.current) {
-        observer.unobserve(invisibleDivRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [open]);
@@ -134,8 +135,8 @@ const TimeField = ({
 
     const dateToCheck = new Date().setHours(hour, minute, 0, 0);
     if (minDate && dateToCheck < minDate) return true;
-    if (maxDate && dateToCheck > maxDate) return true;
-    return false;
+    return !!(maxDate && dateToCheck > maxDate);
+
   };
 
   const handleTimeChange = (hour: any, minute: any) => {

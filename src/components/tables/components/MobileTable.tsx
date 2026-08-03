@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useKeyAction } from '../../../components/common/hooks';
+import { useKeyAction } from '../../common/hooks';
 import {
   Columns,
   NotFoundInfoProps,
@@ -104,7 +104,7 @@ const MobileTable = ({
               tabIndex={0}
               onKeyDown={handleKeyDownOnExpand()}
             >
-              <StyledIcon expanded={expand} name={IconName.dropdownArrow} />
+              <StyledIcon $expanded={expand} name={IconName.dropdownArrow} />
             </StyledIconContainer>
           ) : null}
         </RowTD>
@@ -324,7 +324,7 @@ const TR = styled.tr<{
   $hide_border?: boolean;
   $pointer: boolean;
   $expandable: boolean;
-  $checkable: boolean;
+  $checkable?: boolean;
 }>`
   width: 100%;
   border: none !important;

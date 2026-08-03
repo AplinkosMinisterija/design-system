@@ -52,7 +52,7 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
     <Container onBlur={handleBlur}>
       <StyledButton
         variant={variant}
-        left={<StyledIcon $variant={variant} name={IconName.settings} />}
+        left={<StyledIcon $variant={String(variant)} name={IconName.settings} />}
         onClick={handleButtonClick}
         aria-expanded={isOpen}
         aria-controls="column-options-menu"

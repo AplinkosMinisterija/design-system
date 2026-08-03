@@ -94,19 +94,19 @@ function calculateCircleBuffersAndUpdate(feature, e, opts) {
 type CircleOptions = { initial?: number; max: number; min: number };
 
 export function DragCircle(opts: CircleOptions) {
-  const Mode = cloneDeep(MapboxDraw.modes.draw_polygon);
+  const Mode = cloneDeep((MapboxDraw.modes as any).draw_polygon);
 
-  const defaultOnSetup = MapboxDraw.modes.draw_polygon.onSetup;
+  const defaultOnSetup = (MapboxDraw.modes as any).draw_polygon.onSetup;
 
   Mode.onSetup = function () {
-    const { polygon } = defaultOnSetup.bind(this)();
+    const { polygon } = defaultOnSetup?.bind(this)?.() || { polygon: {} };
 
     // additional things
     polygon.properties.isCircle = true;
     polygon.properties.center = [];
     polygon.coordinates = [];
     dragPan.disable(this);
-    this.activateUIButton(MapboxDraw.constants.types.POINT);
+    (this as any).activateUIButton('point');
 
     return { polygon };
   };
@@ -114,8 +114,7 @@ export function DragCircle(opts: CircleOptions) {
   Mode.onMouseDown = Mode.onTouchStart = function (state, e) {
     const currentCenter = state.polygon.properties.center;
     if (!currentCenter.length) {
-      const center = [e.lngLat.lng, e.lngLat.lat];
-      state.polygon.properties.center = center;
+      state.polygon.properties.center = [e.lngLat.lng, e.lngLat.lat];
       state.polygon.properties.buffer = opts.initial || opts.min;
       updateCircleGeometry(state.polygon);
     }
@@ -155,90 +154,90 @@ export function DragCircle(opts: CircleOptions) {
 }
 
 export function SimpleSelect() {
-  const Mode = { ...MapboxDraw.modes.simple_select };
+  const Mode: any = { ...(MapboxDraw.modes as any).simple_select };
 
-  const defaultDragMove = MapboxDraw.modes.simple_select.dragMove;
+  const defaultDragMove = (MapboxDraw.modes as any).simple_select.dragMove;
 
-  Mode.dragMove = function (state, e) {
+  Mode.dragMove = function (state: any, e: any) {
     const delta = {
       lng: e.lngLat.lng - state.dragMoveLocation.lng,
       lat: e.lngLat.lat - state.dragMoveLocation.lat,
     };
 
-    this.getSelected()
-      .filter((feature) => feature.properties.isCircle)
-      .map((circle) => circle.properties.center)
-      .forEach((center) => {
+    (this as any).getSelected()
+      .filter((feature: any) => feature.properties.isCircle)
+      .map((circle: any) => circle.properties.center)
+      .forEach((center: any) => {
         center[0] += delta.lng;
         center[1] += delta.lat;
       });
 
-    defaultDragMove.bind(this)(state, e);
+    defaultDragMove?.bind(this)(state, e);
   };
 
-  Mode.toDisplayFeatures = function (_, geojson, display) {
-    geojson.properties.active = this.isSelected(geojson.properties.id)
-      ? MapboxDraw.constants.activeStates.ACTIVE
-      : MapboxDraw.constants.activeStates.INACTIVE;
+  Mode.toDisplayFeatures = function (_state: any, geojson: any, display: any) {
+    geojson.properties.active = (this as any).isSelected(geojson.properties.id)
+      ? 'active'
+      : 'inactive';
     display(geojson);
-    this.fireActionable();
+    (this as any).fireActionable?.();
     if (
-      geojson.properties.active !== MapboxDraw.constants.activeStates.ACTIVE ||
-      geojson.geometry.type === MapboxDraw.constants.geojsonTypes.POINT
+      geojson.properties.active !== 'active' ||
+      geojson.geometry?.type === 'Point'
     )
       return;
 
     const supplementaryPoints = geojson.properties.user_isCircle
       ? createSupplementaryPointsForCircle(geojson)
-      : MapboxDraw.lib.createSupplementaryPoints(geojson);
-    supplementaryPoints.forEach(display);
+      : (MapboxDraw.lib as any).createSupplementaryPoints(geojson);
+    supplementaryPoints?.forEach(display);
   };
 
   return Mode;
 }
 export function DirectSelect(opts: { circle?: CircleOptions }) {
-  const Mode = { ...MapboxDraw.modes.direct_select };
+  const Mode: any = { ...(MapboxDraw.modes as any).direct_select };
 
-  const defaultDragVertexFn = MapboxDraw.modes.direct_select.dragVertex;
-  const defaultDragFeature = MapboxDraw.modes.direct_select.dragFeature;
+  const defaultDragVertexFn = (MapboxDraw.modes as any).direct_select.dragVertex;
+  const defaultDragFeature = (MapboxDraw.modes as any).direct_select.dragFeature;
 
-  Mode.dragFeature = function (state, e, delta) {
-    this.getSelected()
-      .filter((feature) => feature.properties.isCircle)
-      .map((circle) => circle.properties.center)
-      .forEach((center) => {
+  Mode.dragFeature = function (state: any, e: any, delta: any) {
+    (this as any).getSelected()
+      .filter((feature: any) => feature.properties.isCircle)
+      .map((circle: any) => circle.properties.center)
+      .forEach((center: any) => {
         center[0] += delta.lng;
         center[1] += delta.lat;
       });
 
-    defaultDragFeature.bind(this)(state, e, delta);
+    defaultDragFeature?.bind(this)(state, e, delta);
   };
 
-  Mode.dragVertex = function (state, e, delta) {
+  Mode.dragVertex = function (state: any, e: any, delta: any) {
     if (state.feature.properties.isCircle) {
       calculateCircleBuffersAndUpdate(state.feature, e, opts?.circle);
     } else {
-      defaultDragVertexFn.bind(this)(state, e, delta);
+      defaultDragVertexFn?.bind(this)(state, e, delta);
     }
   };
 
-  Mode.toDisplayFeatures = function (state, geojson, push) {
+  Mode.toDisplayFeatures = function (state: any, geojson: any, push: any) {
     if (state.featureId === geojson.properties.id) {
-      geojson.properties.active = MapboxDraw.constants.activeStates.ACTIVE;
+      geojson.properties.active = 'active';
       push(geojson);
       const supplementaryPoints = geojson.properties.user_isCircle
         ? createSupplementaryPointsForCircle(geojson, true)
-        : MapboxDraw.lib.createSupplementaryPoints(geojson, {
-            map: this.map,
+        : (MapboxDraw.lib as any).createSupplementaryPoints(geojson, {
+            map: (this as any).map,
             midpoints: true,
             selectedPaths: state.selectedCoordPaths,
           });
-      supplementaryPoints.forEach(push);
+      supplementaryPoints?.forEach(push);
     } else {
-      geojson.properties.active = MapboxDraw.constants.activeStates.INACTIVE;
+      geojson.properties.active = 'inactive';
       push(geojson);
     }
-    this.fireActionable(state);
+    (this as any).fireActionable?.(state);
   };
 
   return Mode;

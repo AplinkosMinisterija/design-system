@@ -11,20 +11,22 @@ const meta: Meta<typeof CombinedField> = {
 export default meta;
 type Story = StoryObj<typeof CombinedField>;
 
+function CombinedFieldComponent() {
+  const [value, setValue] = useState({ input: '', option: 'kg' });
+  return (
+    <StoryWrapper>
+      <CombinedField
+        onChange={setValue}
+        value={value}
+        options={['kg', 'l', 'ml']}
+        placeholder="4"
+        numeric={true}
+      />
+    </StoryWrapper>
+  );
+}
+
 export const Field: Story = {
   name: 'CombinedField',
-  render: () => {
-    const [value, setValue] = useState({ input: '', option: 'kg' });
-    return (
-      <StoryWrapper>
-        <CombinedField
-          onChange={setValue}
-          value={value}
-          options={['kg', 'l', 'ml']}
-          placeholder="4"
-          numeric={true}
-        />
-      </StoryWrapper>
-    );
-  },
+  render: () => <CombinedFieldComponent />,
 };

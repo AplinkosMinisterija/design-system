@@ -33,7 +33,6 @@ const Checkbox = ({
   width,
   radius,
 }: CheckboxProps) => {
-  const ariaChecked = intermediate ? 'intermediate' : value;
   const handleKeyDown = useKeyAction(onChange, disabled);
   const ariaValue = label || name;
 
@@ -55,7 +54,7 @@ const Checkbox = ({
           $checked={value}
           $hidden={displayAsButton}
           role="checkbox"
-          aria-checked={ariaChecked}
+          aria-checked={intermediate ? 'mixed' : value}
           aria-labelledby={ariaValue}
           aria-describedby={description ? description : undefined}
           tabIndex={disabled ? -1 : 0}
@@ -74,7 +73,6 @@ const Checkbox = ({
               e?.stopPropagation();
             }}
             $displayAsButton={displayAsButton}
-            aria-checked={ariaChecked}
           />
           <CheckMark checked={value || false} intermediate={intermediate} disabled={disabled} />
         </InnerContainer>
@@ -87,26 +85,26 @@ const Checkbox = ({
   );
 };
 
-const Wrapper = styled.div<{ $displayAsButton; $width: string }>`
+const Wrapper = styled.div<{ $displayAsButton?: boolean; $width?: string }>`
   width: ${({ $width, $displayAsButton }) => ($displayAsButton && $width) || 'fit-content'};
 `;
 
 const buttonStyle = css<{
-  $variant: string;
-  $disabled: boolean;
-  $checked: boolean;
-  $radius: number;
+  $variant?: string;
+  $disabled?: boolean;
+  $checked?: boolean;
+  $radius?: number;
 }>`
-  background-color: ${({ $variant, $checked, theme }) =>
+  background-color: ${({ $variant = 'primary', $checked, theme }) =>
     ($checked ? theme.colors.buttons?.[$variant]?.checked : undefined) ||
     theme.colors.buttons?.[$variant]?.background ||
     '#53B1FD'};
-  color: ${({ $variant, $checked, theme }) =>
+  color: ${({ $variant = 'primary', $checked, theme }) =>
     ($checked ? theme.colors.buttons?.[$variant]?.checkedText : undefined) ||
     theme.colors.buttons?.[$variant]?.text ||
     'white'};
   border: 1px solid
-    ${({ $variant, $checked, theme }) =>
+    ${({ $variant = 'primary', $checked, theme }) =>
       ($checked ? theme.colors.buttons?.[$variant]?.checkedBorder : undefined) ??
       (theme.colors.buttons?.[$variant]?.border || 'transparent')};
   border-radius: ${({ theme, $radius }) =>
@@ -118,11 +116,11 @@ const buttonStyle = css<{
 `;
 
 const Container = styled.label<{
-  $displayAsButton: boolean;
-  $variant: string;
-  $disabled: boolean;
-  $checked: boolean;
-  $radius: number;
+  $displayAsButton?: boolean;
+  $variant?: string;
+  $disabled?: boolean;
+  $checked?: boolean;
+  $radius?: number;
 }>`
   display: grid;
   grid-template-columns: ${({ $displayAsButton }) => ($displayAsButton ? '1fr' : '28px 1fr')};
@@ -143,7 +141,7 @@ const Description = styled.div`
   color: #4b5565;
 `;
 
-const Column = styled.div<{ $displayAsButton: boolean }>`
+const Column = styled.div<{ $displayAsButton?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -232,7 +230,7 @@ const CheckMark = styled.div<{
   }
 `;
 
-const CheckBox = styled.input<{ $disabled: boolean; $displayAsButton: boolean }>`
+const CheckBox = styled.input<{ $disabled?: boolean; $displayAsButton?: boolean }>`
   visibility: ${({ $displayAsButton }) => ($displayAsButton ? 'hidden' : 'visible')};
   position: absolute;
   width: ${({ $displayAsButton }) => ($displayAsButton ? '0' : '20px')};
@@ -241,7 +239,7 @@ const CheckBox = styled.input<{ $disabled: boolean; $displayAsButton: boolean }>
   left: -4px;
   z-index: 1;
   opacity: 0;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
 `;
 
 export default Checkbox;

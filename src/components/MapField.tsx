@@ -29,7 +29,6 @@ const MapField = ({
   filter,
   accessibilityDescription,
   accessibilityContact,
-  ...rest
 }: MapFieldProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [loading, setLoading] = useState(true);
@@ -86,14 +85,14 @@ const MapField = ({
         }
       }
     },
-    [mapHost, onChange],
+    [mapHost, onChange, onClick],
   );
 
   useEffect(() => {
     if (!iframeRef.current?.contentWindow || loading || !filter || isEmpty(filter)) return;
 
     iframeRef?.current?.contentWindow.postMessage({ eventName: 'filter', ...filter }, '*');
-  }, [iframeRef?.current?.contentWindow, loading, JSON.stringify(filter)]);
+  }, [loading, filter]);
 
   useEffect(() => {
     window.addEventListener('message', handleSaveGeom);
@@ -113,7 +112,6 @@ const MapField = ({
         {accessibilityDescription} {accessibilityContact}
       </VisuallyHidden>
       <Iframe
-        {...rest}
         $error={!!error}
         src={`${mapHost}${mapPath}`}
         ref={iframeRef}

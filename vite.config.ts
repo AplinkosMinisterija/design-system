@@ -16,7 +16,7 @@ export default defineConfig({
         'react',
         'react-dom',
         'styled-components',
-        'react-router-dom',
+        'react-router',
         '@tanstack/react-query',
       ],
       output: {

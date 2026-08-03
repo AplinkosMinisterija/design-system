@@ -162,7 +162,7 @@ export function useStorage<T>(
     if (!persistent) {
       setStoredValue(initialValue);
     }
-  }, []);
+  }, [initialValue, persistent]);
 
   useEffect(() => {
     setStoredValue(parseStoredValue(localStorage.getItem(key), initialValue));
@@ -178,7 +178,7 @@ export function useStorage<T>(
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, [key]);
+  }, [key, initialValue]);
   const updateStorage = (newValue: T) => {
     setStoredValue(newValue);
     // JSON.stringify(undefined) returns undefined; setItem would coerce it to
@@ -252,7 +252,7 @@ export const handleDateRestriction = (filter: FilterConfig, values: any) => {
   };
 };
 
-export const phoneNumberRegexPattern = new RegExp(`^(\\+370|0)(3|4|5|6|7|8|9)\\d{7}$`);
+export const phoneNumberRegexPattern = new RegExp(`^(\\+370|0)([3456789])\\d{7}$`);
 
 export const b64decode = (str: string): ArrayBuffer => {
   const binary_string = window.atob(str);
@@ -277,8 +277,8 @@ export const compressJSON = async (data: any) => {
   const buffer = await blob.arrayBuffer();
 
   // convert ArrayBuffer to base64 encoded string
-  const compressedBase64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
-  return compressedBase64;
+
+  return btoa(String.fromCharCode(...new Uint8Array(buffer)));
 };
 
 export const decompressJSON = async (compressedBase64) => {
@@ -289,8 +289,8 @@ export const decompressJSON = async (compressedBase64) => {
   const compressedReadableStream = stream.pipeThrough(new DecompressionStream('gzip'));
   const resp = new Response(compressedReadableStream);
   const blob = await resp.blob();
-  const data = JSON.parse(await blob.text());
-  return data;
+
+  return JSON.parse(await blob.text());
 };
 
 export const cleanObj = (el) => {

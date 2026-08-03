@@ -132,7 +132,7 @@ const StyledIcon = styled(Icon)`
   font-size: 2.4rem;
 `;
 
-const IconContainer = styled.div<{ $disabled: boolean }>`
+const IconContainer = styled.div<{ $disabled?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -140,7 +140,7 @@ const IconContainer = styled.div<{ $disabled: boolean }>`
 `;
 
 const OptionsWrapper = styled.div``;
-const SelectedOption = styled.div<{ $width?: number; $disabled: boolean }>`
+const SelectedOption = styled.div<{ $width?: number; $disabled?: boolean }>`
   display: flex;
   justify-content: space-between;
   padding: 0 9px 0 16px;

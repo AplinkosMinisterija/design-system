@@ -22,7 +22,7 @@ export interface TextFieldProps {
   role?: string;
   ariaExpanded?: boolean;
   ariaControls?: string;
-  ariaHaspopup?: string;
+  ariaHaspopup?: boolean | 'dialog' | 'menu' | 'grid' | 'listbox' | 'tree';
   ariaActivedescendant?: string;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   ariaLabel?: string;
@@ -66,7 +66,7 @@ const TextFieldInput = ({
 
     const placeholderHeight = placeholderRef.current.clientHeight / 10 + 1.2;
     setContainerHeight(placeholderHeight > initialHeight ? placeholderHeight : initialHeight);
-  }, [placeholder]);
+  }, [placeholder, initialHeight]);
 
   const isCustomPlaceholder = typeof placeholder !== 'string';
 

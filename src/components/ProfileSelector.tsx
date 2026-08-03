@@ -43,7 +43,7 @@ const ProfileSelector = ({
       $variant={variant}
     >
       <RelativeContainer>
-        <SelectorContainer onClick={() => setShowSelect(true)} $variant={variant}>
+        <SelectorContainer onClick={() => setShowSelect(true)}>
           <Column $alignRight={alignRight}>
             <ModuleContainer>
               <TenantLabel $variant={variant} $alignRight={alignRight}>
