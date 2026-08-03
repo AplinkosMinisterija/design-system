@@ -8,7 +8,7 @@ import {
 } from 'maplibre-gl';
 
 // @ts-ignore
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import MapboxDraw,{ Constants } from '@mapbox/mapbox-gl-draw';
 import { AllGeoJSON } from '@turf/helpers';
 // @ts-ignore
 import proj4 from 'proj4';
@@ -32,7 +32,8 @@ export const BASEMAP_URL = {
   GRAY: 'https://basemap.biip.lt/styles/positron/style.json',
 };
 
-export type DrawTypes = 'point' | 'line_string' | 'polygon';
+export type DrawTypes =
+  Constants['types']['POINT'] | Constants['types']['LINE'] | Constants['types']['POLYGON'];
 
 export type MapControls = {
   geolocate?: boolean | ControlPosition;
@@ -58,10 +59,10 @@ export const PREVIEW_LAYER_ID = 'preview-layer';
 export const MAP_PROJECTION = '4326';
 export const LKS_PROJECTION = '3346';
 
-export const DrawType: { POINT: DrawTypes; LINE: DrawTypes; POLYGON: DrawTypes } = {
-  POINT: 'point',
-  LINE: 'line_string' as DrawTypes,
-  POLYGON: 'polygon',
+export const DrawType = {
+  POINT: 'point' as const,
+  LINE: 'line_string' as const,
+  POLYGON: 'polygon' as const,
 };
 
 export function getPosition(

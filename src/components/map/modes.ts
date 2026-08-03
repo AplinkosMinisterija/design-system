@@ -94,7 +94,7 @@ function calculateCircleBuffersAndUpdate(feature, e, opts) {
 type CircleOptions = { initial?: number; max: number; min: number };
 
 export function DragCircle(opts: CircleOptions) {
-  const Mode = cloneDeep((MapboxDraw.modes as any).draw_polygon);
+  const Mode = cloneDeep((MapboxDraw.modes).draw_polygon);
 
   const defaultOnSetup = (MapboxDraw.modes as any).draw_polygon.onSetup;
 

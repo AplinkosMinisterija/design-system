@@ -30,7 +30,6 @@ const Checkbox = ({
   intermediate,
   displayAsButton,
   width,
-  radius,
 }: CheckboxProps) => {
   const handleKeyDown = useKeyAction(onChange, disabled);
   const ariaValue = label || name;
@@ -41,8 +40,6 @@ const Checkbox = ({
         className={className}
         $disabled={disabled}
         $displayAsButton={displayAsButton}
-        $checked={value}
-        $radius={radius}
         htmlFor={name}
       >
         <InnerContainer
@@ -116,8 +113,6 @@ const buttonStyle = css<{
 const Container = styled.label<{
   $displayAsButton?: boolean;
   $disabled?: boolean;
-  $checked?: boolean;
-  $radius?: number;
 }>`
   display: grid;
   grid-template-columns: ${({ $displayAsButton }) => ($displayAsButton ? '1fr' : '28px 1fr')};
