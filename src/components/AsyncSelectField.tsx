@@ -144,9 +144,16 @@ const AsyncSelectField = ({
         aria-haspopup="listbox"
         aria-activedescendant={activeOptionId}
         onKeyDown={(e) => {
-          if (e.key === 'ArrowDown' || e.key === 'Enter') {
+          if (e.key === 'ArrowDown') {
             e.preventDefault();
             handleToggleSelect();
+          } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (value) {
+              onChange(value);
+            } else {
+              handleToggleSelect();
+            }
           }
         }}
       />
