@@ -1,5 +1,5 @@
 // @ts-ignore
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import MapboxDraw, { Constants } from '@mapbox/mapbox-gl-draw';
 import center from '@turf/center';
 
 import circle from '@turf/circle';
@@ -177,13 +177,13 @@ export function SimpleSelect() {
 
   Mode.toDisplayFeatures = function (_state: any, geojson: any, display: any) {
     geojson.properties.active = (this as any).isSelected(geojson.properties.id)
-      ? 'active'
-      : 'inactive';
+      ? MapboxDraw.constants.activeStates.ACTIVE
+      : MapboxDraw.constants.activeStates.INACTIVE;
     display(geojson);
     (this as any).fireActionable?.();
     if (
-      geojson.properties.active !== 'active' ||
-      geojson.geometry?.type === 'Point'
+      geojson.properties.active !== MapboxDraw.constants.activeStates.ACTIVE ||
+      geojson.geometry?.type === MapboxDraw.constants.geojsonTypes.POINT
     )
       return;
 
@@ -223,7 +223,7 @@ export function DirectSelect(opts: { circle?: CircleOptions }) {
 
   Mode.toDisplayFeatures = function (state: any, geojson: any, push: any) {
     if (state.featureId === geojson.properties.id) {
-      geojson.properties.active = 'active';
+      geojson.properties.active = MapboxDraw.constants.activeStates.ACTIVE;
       push(geojson);
       const supplementaryPoints = geojson.properties.user_isCircle
         ? createSupplementaryPointsForCircle(geojson, true)
@@ -234,7 +234,7 @@ export function DirectSelect(opts: { circle?: CircleOptions }) {
           });
       supplementaryPoints?.forEach(push);
     } else {
-      geojson.properties.active = 'inactive';
+      geojson.properties.active = MapboxDraw.constants.activeStates.INACTIVE;
       push(geojson);
     }
     (this as any).fireActionable?.(state);

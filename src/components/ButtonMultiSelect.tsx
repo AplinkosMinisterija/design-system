@@ -28,7 +28,7 @@ const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
   values,
   onChange,
   labels,
-  variant,
+  columns,
   name,
   gap,
   radius,
@@ -62,6 +62,7 @@ const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
     >
       <Container
         $gap={gap}
+        $columns={columns}
         $errorVisible={!!error && !!showError}
       >
         {options.map((option, index) => {
@@ -74,11 +75,10 @@ const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
               name={`${name}_${option}`}
               label={labels?.[option] || option}
               displayAsButton={true}
-              variant={variant}
               width={buttonWidth}
-              radius={radius}
               value={values?.includes(option)}
               disabled={disabled}
+              radius={radius}
             />
           );
         })}
@@ -89,11 +89,11 @@ const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
 
 const Container = styled.div<{
   $gap?: number;
+  $columns?: number;
   $errorVisible?: boolean;
 }>`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(${({ $columns }) => $columns ?? 4}, 1fr);
   gap: ${({ $gap, theme }) => $gap ?? theme.gap?.buttonMultiSelect ?? 0.8}rem;
 `;
 
