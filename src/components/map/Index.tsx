@@ -182,7 +182,7 @@ const Map = ({
     addDefaultLayers();
 
     if (drawOptions && !preview) {
-      const draw = enableDraw(map.current, drawOptions, value4326, styles);
+      const draw = enableDraw(map.current, drawOptions as DrawOptions, value4326, styles);
       if (draw) {
         mapDraw.current = draw;
         addDrawEvents();

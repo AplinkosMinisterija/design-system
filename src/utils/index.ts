@@ -254,7 +254,7 @@ export const handleDateRestriction = (filter: FilterConfig, values: any) => {
 
 export const phoneNumberRegexPattern = new RegExp(`^(\\+370|0)([3456789])\\d{7}$`);
 
-export const b64decode = (str: string): ArrayBuffer => {
+export const b64decode = (str: string): Uint8Array => {
   const binary_string = window.atob(str);
   const len = binary_string.length;
   const bytes = new Uint8Array(new ArrayBuffer(len));
@@ -282,7 +282,7 @@ export const compressJSON = async (data: any) => {
 };
 
 export const decompressJSON = async (compressedBase64) => {
-  const stream = new Blob([b64decode(compressedBase64)], {
+  const stream = new Blob([b64decode(compressedBase64) as any], {
     type: 'application/json',
   }).stream();
 

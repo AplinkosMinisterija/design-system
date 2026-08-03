@@ -101,7 +101,7 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styl
 
   const modes: any = { ...MapboxDraw.modes };
 
-  if (draw.buffer) {
+  if (draw.buffer && typeof draw.buffer !== 'boolean') {
     // TODO: setup lines
     modes.draw_point = DragCircle(draw.buffer);
     modes.simple_select = SimpleSelect();
