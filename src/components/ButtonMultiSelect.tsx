@@ -28,7 +28,6 @@ const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
   values,
   onChange,
   labels,
-  columns = 4,
   variant,
   name,
   gap,
@@ -62,9 +61,7 @@ const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
       labelButton={labelButton}
     >
       <Container
-        $cols={columns}
         $gap={gap}
-        $labelVisible={!!label}
         $errorVisible={!!error && !!showError}
       >
         {options.map((option, index) => {
@@ -91,9 +88,7 @@ const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
 };
 
 const Container = styled.div<{
-  $cols?: number;
   $gap?: number;
-  $labelVisible?: boolean;
   $errorVisible?: boolean;
 }>`
   display: flex;

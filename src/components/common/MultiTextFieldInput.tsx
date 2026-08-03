@@ -38,7 +38,6 @@ const MultiTextField = ({
   handleKeyDown,
   role = 'combobox',
   name,
-  height = 56,
   ariaLabelRemove = 'Pašalinti',
   ariaLabelSelectedValue = 'Pasirinkta reikšmė',
   ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
@@ -73,7 +72,6 @@ const MultiTextField = ({
       $backgroundColor={backgroundColor}
       $error={!!error}
       $disabled={disabled || false}
-      $height={height}
       aria-disabled={disabled}
       aria-invalid={!!error}
       role={role}
@@ -139,7 +137,6 @@ const InputContainer = styled.div<{
   $disabled?: boolean;
   $hasBorder?: boolean;
   $backgroundColor?: string;
-  $height?: number;
 }>`
   ${({ $hasBorder, $error, theme }) =>
     $hasBorder

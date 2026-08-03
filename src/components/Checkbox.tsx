@@ -29,7 +29,6 @@ const Checkbox = ({
   className,
   intermediate,
   displayAsButton,
-  variant = 'primary',
   width,
   radius,
 }: CheckboxProps) => {
@@ -42,7 +41,6 @@ const Checkbox = ({
         className={className}
         $disabled={disabled}
         $displayAsButton={displayAsButton}
-        $variant={variant}
         $checked={value}
         $radius={radius}
         htmlFor={name}
@@ -117,7 +115,6 @@ const buttonStyle = css<{
 
 const Container = styled.label<{
   $displayAsButton?: boolean;
-  $variant?: string;
   $disabled?: boolean;
   $checked?: boolean;
   $radius?: number;
