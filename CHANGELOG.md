@@ -1,17 +1,5 @@
 # @aplinkosministerija/design-system
 
-## 2.0.0
-
-### Major Changes
-
-- React 19 and React Router 7 upgrade — breaking change for v2.0.0
-  - Upgraded to React 19.2.8 and react-dom 19.2.8
-  - Upgraded to react-router 7.1.5 and react-router-dom 7.1.5
-  - Upgraded Storybook to 8.6.0 for React 19 compatibility
-  - Fixed TypeScript configuration for React 19 JSX type support
-  - Consumers must upgrade their own React installations to 19.x and React Router to 7.x
-  - All component APIs remain unchanged; only internal dependencies have been updated
-
 ## 1.6.0
 
 ### Minor Changes
