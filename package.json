@@ -7,11 +7,18 @@
   },
   "type": "module",
   "license": "MIT",
-  "sideEffects": false,
+  "sideEffects": ["*.css"],
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
-  "style": "./dist/styles.css",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
   "prettier": "@aplinkosministerija/biip-prettier-config",
   "keywords": [
     "react",
