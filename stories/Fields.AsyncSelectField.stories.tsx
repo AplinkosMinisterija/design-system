@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import AsyncSelectField from '../src/components/AsyncSelectField';
 import StoryWrapper from '../src/components/common/StoryWrapper';
+import { SelectOption } from '../src';
 
 const meta: Meta<typeof AsyncSelectField> = {
   component: AsyncSelectField,
@@ -15,13 +16,11 @@ type Story = StoryObj<typeof AsyncSelectField>;
 const testUrl = 'https://dev-uetk.biip.lt/api/objects/search';
 
 function AsyncSelectFieldComponent() {
-  const [value, setValue] = useState();
+  const [value, setValue] = useState<SelectOption | undefined>();
   return (
     <StoryWrapper>
       <AsyncSelectField
-        onChange={(value) => {
-          setValue(value);
-        }}
+        onChange={setValue}
         getOptionLabel={(option) =>
           option ? `${option?.name} (${option?.cadastralId}) - ${option?.municipality}` : '-'
         }

@@ -154,7 +154,7 @@ const DateField = ({
   const textValue = validDate(inputValue) ? format(new Date(inputValue), 'yyyy-MM-dd') : inputValue;
 
   const handleChangeDate = (date: Date) => {
-    const changedDate = value ? new Date(value as any) : new Date();
+    const changedDate = value ? new Date(value) : new Date();
     if (mode === Mode.DATE) {
       changedDate.setFullYear(date.getFullYear());
       changedDate.setMonth(date.getMonth());
@@ -235,7 +235,7 @@ const DateField = ({
           <DatePicker
             locale="lt"
             open={open}
-            selected={value ? new Date(value as any) : null}
+            selected={value ? new Date(value) : null}
             onChange={handleChangeDate}
             inline
             maxDate={maxDate ? new Date(maxDate) : undefined}
@@ -248,7 +248,7 @@ const DateField = ({
               prevMonthButtonDisabled,
               nextMonthButtonDisabled,
             }: any) => {
-              const date = value ? new Date(value as any) : new Date();
+              const date = value ? new Date(value) : new Date();
               const month = date.toLocaleString('lt', { month: 'long' });
               const year = date.getFullYear();
               return (

@@ -204,7 +204,7 @@ const DateField = ({
             open={open}
             {...(maxDate ? { maxDate: new Date(maxDate) } : {})}
             {...(minDate ? { minDate: new Date(minDate) } : {})}
-            selected={value ? new Date(value as any) : null}
+            selected={value ? new Date(value) : null}
             onSelect={() => setOpen(false)}
             onChange={(date: Date) => {
               if (maxDate && date > new Date(maxDate)) {

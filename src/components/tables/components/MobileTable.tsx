@@ -90,7 +90,7 @@ const MobileTable = ({
         style={tableRowStyle}
         $checkable={checkable}
         tabIndex={0}
-        onKeyDown={handleKeyDown(row) as any}
+        onKeyDown={handleKeyDown}
         aria-label={`Row ${index + 1}`}
         role="row"
       >

@@ -65,7 +65,7 @@ const PasswordField = ({
             aria-pressed={show}
             role="button"
             tabIndex={0}
-            onKeyDown={handleKeyDown as any}
+            onKeyDown={handleKeyDown}
           >
             <StyledIcon name={show ? 'visibleOn' : 'visibleOff'} />
           </IconContainer>

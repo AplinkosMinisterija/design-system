@@ -67,7 +67,7 @@ const Popup = ({
             <LeftContainer>{left}</LeftContainer>
             <IconContainer
               onClick={onClose}
-              onKeyDown={handleKeyDownOnClose as any}
+              onKeyDown={handleKeyDownOnClose}
               aria-label={`Close ${ariaLabel}`}
               role="button"
               tabIndex={0}

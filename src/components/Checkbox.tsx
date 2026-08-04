@@ -49,7 +49,7 @@ const Checkbox = ({
             aria-labelledby={ariaValue}
             aria-describedby={description ? description : undefined}
             tabIndex={disabled ? -1 : 0}
-            onKeyDown={handleKeyDown(!value) as any}
+            onKeyDown={handleKeyDown(!value)}
           >
             <CheckBox
               type="checkbox"

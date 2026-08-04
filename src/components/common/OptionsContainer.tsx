@@ -76,7 +76,7 @@ const OptionsContainer = ({
               tabIndex={0}
               aria-selected={isActive}
               onClick={() => handleClick(option)}
-              onKeyDown={handleKeyDown(option) as any}
+              onKeyDown={handleKeyDown(option)}
             >
               {getOptionLabel(option)}
             </Option>
