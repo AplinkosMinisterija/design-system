@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import PasswordField from '../src/components/PasswordField';
 import StoryWrapper from '../src/components/common/StoryWrapper';
+import { useState } from 'react';
 
 const meta: Meta<typeof PasswordField> = {
   component: PasswordField,
@@ -13,9 +14,10 @@ type Story = StoryObj<typeof PasswordField>;
 export const PasswordFieldStory: Story = {
   name: 'PasswordField',
   render: () => {
+    const [value, setValue] = useState<string>('');
     return (
       <StoryWrapper>
-        <PasswordField />
+        <PasswordField value={value} onChange={setValue} />
       </StoryWrapper>
     );
   },

@@ -62,7 +62,10 @@ const DragAndDropUploadField = ({
   const ariaValue = `${label}-upload-instructions`;
   const hideField = disabled && !files?.length;
   const handleKeyDownOnUpload = useKeyAction(() => onButtonClick(), disabled);
-  const handleKeyDownOnDelete = useKeyAction((index) => handleDelete(index), disabled);
+  const handleKeyDownOnDelete = useKeyAction(
+    (index: number | undefined) => index && handleDelete(index),
+    disabled,
+  );
   const handleSetFiles = async (currentFiles: File[]) => {
     const isValidFileTypes = validateFileTypes(currentFiles, availableMimeTypes);
     if (!isValidFileTypes) return handleError('badFileTypes');
@@ -127,7 +130,7 @@ const DragAndDropUploadField = ({
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
             onClick={onButtonClick}
-            onKeyDown={handleKeyDownOnUpload()}
+            onKeyDown={handleKeyDownOnUpload}
             role="button"
             tabIndex={0}
             aria-labelledby={ariaValue}

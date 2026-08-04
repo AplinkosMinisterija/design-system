@@ -1,5 +1,6 @@
 import { JSX } from 'react';
 import { FilterInputTypes } from './utils';
+
 export * from './components/tables/components/types';
 
 export interface ButtonColors {
@@ -215,13 +216,19 @@ export type ValidationMessages = {
 
 export type ChildrenType = string | JSX.Element | JSX.Element[];
 
+export interface SelectOption {
+  id?: string | number;
+  label?: string;
+  [key: string]: any;
+}
+
 export interface FilterConfig {
   label: string;
   key: string;
   handleGetNextPageParam?: (params: any) => number;
   optionLabel?: (value: any) => string;
   inputType: FilterInputTypes;
-  options?: any[];
+  options?: SelectOption[];
   customSetValue?: (setFieldValue: () => void, input: string) => void;
   getDependId?: (values: any) => string;
   optionsApi?: (input: string, page: number) => Promise<any>;
@@ -251,6 +258,8 @@ export enum PopupType {
   CENTER = 'CENTER',
   BOTTOM = 'BOTTOM',
 }
+
+export type PopupTypes = `${PopupType}`;
 
 export interface SortedColumnsProps {
   key?: string;

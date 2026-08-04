@@ -73,10 +73,12 @@ const MobileTable = ({
     });
   };
 
-  const handleKeyDownOnColumn = useKeyAction(handleColumnClick);
+  const handleKeyDownOnColumn = useKeyAction(
+    (key: string | undefined) => key && handleColumnClick(key),
+  );
   const handleKeyDownOnExpand = useKeyAction(() => setExpand(!expand));
 
-  const handleKeyDown = useKeyAction(handleRowClick);
+  const handleKeyDown = useKeyAction((row: TableRow | undefined) => row && handleRowClick(row));
   const RenderRow = (row: TableRow, index: number) => {
     return (
       <TR
@@ -102,7 +104,7 @@ const MobileTable = ({
               aria-expanded={expand}
               role="button"
               tabIndex={0}
-              onKeyDown={handleKeyDownOnExpand()}
+              onKeyDown={handleKeyDownOnExpand}
             >
               <StyledIcon $expanded={expand} name={IconName.dropdownArrow} />
             </StyledIconContainer>

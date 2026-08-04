@@ -1,4 +1,4 @@
-import { format, addMonths, subMonths } from 'date-fns';
+import { addMonths, format, subMonths } from 'date-fns';
 import { lt } from 'date-fns/locale';
 import { useEffect, useRef, useState } from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
@@ -186,7 +186,7 @@ const DateField = ({
         id={'text-field-wrapper'}
         onBlur={handleBlurInput}
         onClick={() => setOpen(!open)}
-        onKeyDown={handleToggleOnKeyDown()}
+        onKeyDown={handleToggleOnKeyDown}
         ref={inputRef}
       >
         <TextField
@@ -210,7 +210,7 @@ const DateField = ({
                   role="button"
                   tabIndex={0}
                   aria-label={`Remove ${textValue}`}
-                  onKeyDown={handleOnKeyDown()}
+                  onKeyDown={handleOnKeyDown}
                   $disabled={disabled}
                 >
                   <ClearIcon name={IconName.close} $disabled={disabled} />

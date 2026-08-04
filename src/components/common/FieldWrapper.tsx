@@ -49,7 +49,7 @@ const FieldWrapper = ({
       className={`${className} fieldWrapper`}
       $padding={padding}
       onClick={onClick}
-      onKeyDown={handleKeyDown()}
+      onKeyDown={handleKeyDown}
     >
       <LabelRow>
         {!!label && (

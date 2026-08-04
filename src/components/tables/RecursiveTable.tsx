@@ -59,9 +59,10 @@ const RecursiveTable = ({
 
   const canSort = !!onColumnSort && !!data?.data?.length;
 
-  const handleColumnClick = (key: string) => {
+  const handleColumnClick = (keyCode: KeyboardEvent) => {
     if (!canSort) return;
 
+    const key = keyCode.toString();
     const direction =
       sortedColumn.key === key ? (sortedColumn?.direction === 'asc' ? 'desc' : 'asc') : 'asc';
 

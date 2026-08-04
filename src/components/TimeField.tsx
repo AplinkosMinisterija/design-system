@@ -164,7 +164,6 @@ const TimeField = ({
       onChange(undefined);
     }
   };
-
   return (
     <Container
       className={className}
@@ -176,7 +175,7 @@ const TimeField = ({
         tabIndex={0}
         id={'input_wrapper'}
         onBlur={handleBlurInput}
-        onKeyDown={handleToggleOnKeyDown()}
+        onKeyDown={handleToggleOnKeyDown}
         onClick={() => setOpen(!open)}
         ref={inputRef}
       >

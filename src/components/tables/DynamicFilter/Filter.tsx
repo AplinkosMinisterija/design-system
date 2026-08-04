@@ -12,14 +12,11 @@ import {
   MultiSelectField,
   RowConfig,
   SelectField,
+  SelectOption,
   TextField,
 } from '../../../index';
 import Checkbox from '../../Checkbox';
 import Datepicker from '../../DatePicker';
-
-export interface LabelsProps {
-  [key: string]: string;
-}
 
 export interface DynamicFilterProps {
   texts: {
@@ -52,6 +49,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
         const hasOptionValue = !!optionValue;
         const hasOptionLabelFunction = !!optionLabel;
         const customSetValue = filter?.customSetValue;
+        const options: SelectOption[] = filter?.options || [];
 
         if (filter) {
           if (filter.inputType === FilterInputTypes.date) {
@@ -75,14 +73,14 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   label={filter.label}
                   value={values[filter.key]}
                   dependantId={filter.getDependId && filter.getDependId(values)}
-                  options={filter.options || []}
+                  options={options}
                   onChange={(value) =>
                     customSetValue
                       ? customSetValue(setFieldValue, value)
                       : setFieldValue(filter.key, value)
                   }
-                  getOptionLabel={(option) =>
-                    hasOptionLabelFunction ? optionLabel(option) : option.label
+                  getOptionLabel={(option: SelectOption) =>
+                    hasOptionLabelFunction ? optionLabel(option) : option.label || ''
                   }
                   refreshOptions={filter.refreshOptions}
                 />
@@ -94,10 +92,10 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                 <MultiSelectField
                   label={filter.label}
                   values={values[filter.key] || []}
-                  options={filter.options || []}
+                  options={options}
                   onChange={(value) => setFieldValue(filter.key, value)}
-                  getOptionLabel={(option) =>
-                    hasOptionLabelFunction ? optionLabel(option) : option.label
+                  getOptionLabel={(option: SelectOption) =>
+                    hasOptionLabelFunction ? optionLabel(option) : option.label || ''
                   }
                   refreshOptions={filter.refreshOptions}
                 />
@@ -112,10 +110,14 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   value={values[filter.key]}
                   onChange={(value) => setFieldValue(filter.key, value)}
                   handleGetNextPageParam={filter?.handleGetNextPageParam}
-                  getOptionLabel={(option) =>
+                  getOptionLabel={(option: SelectOption) =>
                     hasOptionLabelFunction ? optionLabel(option) : option.name
                   }
-                  loadOptions={(input, page) => filter.optionsApi && filter.optionsApi(input, page)}
+                  loadOptions={(input, page) =>
+                    filter.optionsApi
+                      ? filter.optionsApi(input, page)
+                      : Promise.resolve({ rows: [] })
+                  }
                 />
               </InputWrapper>
             );
@@ -127,12 +129,14 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   label={filter.label}
                   values={values[filter.key] || []}
                   onChange={(value) => setFieldValue(filter.key, value)}
-                  getOptionLabel={(option) =>
+                  getOptionLabel={(option: SelectOption) =>
                     hasOptionLabelFunction ? optionLabel(option) : option.name
                   }
                   handleGetNextPageParam={filter?.handleGetNextPageParam}
                   loadOptions={(input, page) => filter.optionsApi && filter.optionsApi(input, page)}
-                  getOptionValue={(option) => (hasOptionValue ? optionValue(option) : option.id)}
+                  getOptionValue={(option: SelectOption) =>
+                    hasOptionValue ? optionValue(option) : option.id
+                  }
                 />
               </InputWrapper>
             );

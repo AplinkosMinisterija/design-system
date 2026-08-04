@@ -112,7 +112,7 @@ const SelectField = ({
                   e.stopPropagation();
                   !disabled && onChange(undefined);
                 }}
-                onKeyDown={handleKeyDown()}
+                onKeyDown={handleKeyDown}
                 disabled={disabled}
                 tabIndex={disabled ? -1 : 0}
               >

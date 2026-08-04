@@ -20,8 +20,13 @@ import epsg4326 from 'epsg-index/s/4326.json';
 import { coordEach, featureEach } from '@turf/meta';
 import { cloneDeep, mergeWith } from 'lodash';
 import { ThemeMapColors } from 'src/types';
-import { DragCircle, convertCircleToPoint, convertFeatureToCircle } from './modes';
-import { DirectSelect, SimpleSelect } from './modes';
+import {
+  convertCircleToPoint,
+  convertFeatureToCircle,
+  DirectSelect,
+  DragCircle,
+  SimpleSelect,
+} from './modes';
 
 export const epsg = {
   3346: epsg3346,
@@ -34,8 +39,8 @@ export const BASEMAP_URL = {
   GRAY: 'https://basemap.biip.lt/styles/positron/style.json',
 };
 
-export type DrawTypes =
-  Constants['types']['POINT'] | Constants['types']['LINE'] | Constants['types']['POLYGON'];
+type Types = typeof MapboxDraw.constants.types;
+export type DrawTypes = Types[keyof Types];
 
 export type MapControls = {
   geolocate?: boolean | ControlPosition;

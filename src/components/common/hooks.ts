@@ -1,19 +1,20 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useCallback, useEffect, useRef, useState, JSX } from 'react';
+import { JSX, useCallback, useEffect, useRef, useState } from 'react';
 import { intersectionObserverConfig } from '../../utils';
 import { getFilteredOptions } from './functions';
+import { SelectOption } from '../../types';
 
-interface UseSelectDataProps {
-  options: any[];
+interface UseSelectDataProps<T extends SelectOption = SelectOption> {
+  options: T[];
   disabled?: boolean;
-  onChange: (option: any) => void;
-  getOptionLabel: (option: any) => string | JSX.Element;
-  refreshOptions?: (dependantId: any) => Promise<void>;
-  dependantId?: any;
-  value?: any;
+  onChange: (option: T | null) => void;
+  getOptionLabel: (option: T) => string | JSX.Element;
+  refreshOptions?: (dependantId: string) => Promise<void>;
+  dependantId?: string;
+  value?: T;
 }
 
-export const useSelectData = ({
+export const useSelectData = <T extends SelectOption = SelectOption>({
   options,
   disabled,
   onChange,
@@ -21,13 +22,13 @@ export const useSelectData = ({
   refreshOptions,
   dependantId,
   value,
-}: UseSelectDataProps) => {
-  const [input, setInputValue] = useState<any>(null);
+}: UseSelectDataProps<T>) => {
+  const [input, setInputValue] = useState<string>('');
   const [showSelect, setShowSelect] = useState(false);
   const [suggestions, setSuggestions] = useState(options);
   const [loading, setLoading] = useState(false);
 
-  const handleBlur = (event: any) => {
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setShowSelect(false);
       setInputValue('');
@@ -37,7 +38,7 @@ export const useSelectData = ({
   const handleSetOptions = useCallback(async () => {
     if (!refreshOptions) return;
     setLoading(true);
-    await refreshOptions(dependantId);
+    dependantId && (await refreshOptions(dependantId));
     setLoading(false);
   }, [refreshOptions, dependantId]);
 
@@ -62,7 +63,7 @@ export const useSelectData = ({
     setSuggestions(options);
   }, [options, disabled, dependantId, value?.id, onChange]);
 
-  const handleClick = (option: any) => {
+  const handleClick = (option: T) => {
     setShowSelect(false);
     setInputValue('');
 
@@ -97,17 +98,17 @@ export const useSelectData = ({
   };
 };
 
-interface UseAsyncSelectDataProps {
-  loadOptions: (input: string, page: number, dependantValue: any) => Promise<any>;
+interface UseAsyncSelectDataProps<T extends SelectOption = SelectOption> {
+  loadOptions: (input: string, page: number, dependantValue?: string) => Promise<any>;
   disabled?: boolean;
-  onChange: (option: any) => void;
-  dependantValue?: any;
+  onChange: (option?: T | null) => void;
+  dependantValue?: string;
   name: string;
   optionsKey?: string;
   handleGetNextPageParam: (data: any) => number | null | undefined;
 }
 
-export const useAsyncSelectData = ({
+export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
   loadOptions,
   disabled,
   onChange,
@@ -115,7 +116,7 @@ export const useAsyncSelectData = ({
   name,
   optionsKey,
   handleGetNextPageParam,
-}: UseAsyncSelectDataProps) => {
+}: UseAsyncSelectDataProps<T>) => {
   const [input, setInput] = useState('');
   const [showSelect, setShowSelect] = useState(false);
   const observerRef = useRef(null);
@@ -136,7 +137,7 @@ export const useAsyncSelectData = ({
     enabled: showSelect,
     queryKey: [name, input],
     initialPageParam: 1,
-    queryFn: ({ pageParam }: any) => fetchData(pageParam),
+    queryFn: ({ pageParam }: { pageParam: number }) => fetchData(pageParam),
     getNextPageParam: (lastPage) => lastPage.nextPage,
     gcTime: 60000,
   });
@@ -160,14 +161,14 @@ export const useAsyncSelectData = ({
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, data]);
 
-  const handleBlur = (event: any) => {
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setShowSelect(false);
       setInput('');
     }
   };
 
-  const handleClick = (option: any) => {
+  const handleClick = (option: T) => {
     setShowSelect(false);
     setInput('');
     onChange(option);
@@ -275,14 +276,19 @@ export const useDebouncedCallback = <TArgs extends any[], TResult>(
   return Object.assign(run, { cancel });
 };
 
-export const useKeyAction = (action: (option?: any) => void, disabled = false) => {
+export function useKeyAction<T = any>(
+  action: (option: T) => void,
+  disabled = false,
+): (option: T) => (e: React.KeyboardEvent) => void {
   return useCallback(
-    (option?: any) => (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter' && !disabled) {
-        e.stopPropagation();
-        action(option);
-      }
+    (option: T) => {
+      return (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && !disabled) {
+          e.stopPropagation();
+          action(option);
+        }
+      };
     },
     [action, disabled],
   );
-};
+}
