@@ -25,7 +25,7 @@ const Popup = ({
   ariaLabel = 'popup',
   ariaLabelledby,
 }: PopupProps) => {
-  const handleKeyDownOnClose = useKeyAction(() => onClose());
+  const handleKeyDownOnClose = useKeyAction(() => onClose(), false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const Popup = ({
             <LeftContainer>{left}</LeftContainer>
             <IconContainer
               onClick={onClose}
-              onKeyDown={handleKeyDownOnClose}
+              onKeyDown={handleKeyDownOnClose as any}
               aria-label={`Close ${ariaLabel}`}
               role="button"
               tabIndex={0}

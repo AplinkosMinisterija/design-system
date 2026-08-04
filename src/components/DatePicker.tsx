@@ -145,7 +145,7 @@ const DateField = ({
         tabIndex={0}
         onBlur={handleBlurInput}
         onClick={() => setOpen(!open)}
-        onKeyDown={handleKeyDownOnToggle}
+        onKeyDown={handleKeyDownOnToggle as any}
       >
         <TextField
           placeholder={placeHolder}
@@ -167,7 +167,7 @@ const DateField = ({
                     e.stopPropagation();
                     onChange(undefined);
                   }}
-                  onKeyDown={handleKeyDown}
+                  onKeyDown={handleKeyDown as any}
                   $disabled={disabled}
                 >
                   <ClearIcon name={IconName.close} />

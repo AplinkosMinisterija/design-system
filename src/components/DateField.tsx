@@ -186,7 +186,7 @@ const DateField = ({
         id={'text-field-wrapper'}
         onBlur={handleBlurInput}
         onClick={() => setOpen(!open)}
-        onKeyDown={handleToggleOnKeyDown}
+        onKeyDown={handleToggleOnKeyDown as any}
         ref={inputRef}
       >
         <TextField
@@ -210,7 +210,7 @@ const DateField = ({
                   role="button"
                   tabIndex={0}
                   aria-label={`Remove ${textValue}`}
-                  onKeyDown={handleOnKeyDown}
+                  onKeyDown={handleOnKeyDown as any}
                   $disabled={disabled}
                 >
                   <ClearIcon name={IconName.close} $disabled={disabled} />

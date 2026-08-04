@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { TableItemWidth, TableRow } from './types';
+import { TableItemWidth, TableRow, Columns } from './types';
 import Icon from '../../common/Icons';
+import { CSSProperties } from 'react';
 
 interface RecursiveRowProps {
   row: TableRow;
   index: number;
-  onClick: any;
+  onClick?: (row: TableRow) => void;
   keys: string[];
-  handleRowClick: any;
-  tableRowStyle: any;
-  padding: any;
-  columns: any;
+  handleRowClick: (row: TableRow) => void;
+  tableRowStyle?: CSSProperties;
+  padding: number;
+  columns: Columns;
 }
 
 export const RecursiveRow = ({

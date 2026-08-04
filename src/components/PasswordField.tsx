@@ -40,7 +40,7 @@ const PasswordField = ({
   onInputClick,
 }: TextFieldProps) => {
   const [show, setShow] = useState(false);
-  const handleKeyDown = useKeyAction(() => setShow(!show));
+  const handleKeyDown = useKeyAction(() => setShow(!show), false);
 
   return (
     <FieldWrapper
@@ -65,7 +65,7 @@ const PasswordField = ({
             aria-pressed={show}
             role="button"
             tabIndex={0}
-            onKeyDown={handleKeyDown}
+            onKeyDown={handleKeyDown as any}
           >
             <StyledIcon name={show ? 'visibleOn' : 'visibleOff'} />
           </IconContainer>

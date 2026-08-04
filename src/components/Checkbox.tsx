@@ -31,18 +31,13 @@ const Checkbox = ({
   width,
   radius,
 }: CheckboxProps) => {
-  const handleKeyDown = useKeyAction(onChange, disabled);
+  const handleKeyDown = useKeyAction((val?: boolean) => onChange(val ?? false), disabled);
   const ariaValue = label || name;
 
   return (
     <Wrapper $width={width} $displayAsButton={displayAsButton}>
       {displayAsButton ? (
-        <ButtonContainer
-          className={className}
-          $disabled={disabled}
-          $radius={radius}
-          htmlFor={name}
-        >
+        <ButtonContainer className={className} $disabled={disabled} $radius={radius} htmlFor={name}>
           <InnerContainer
             $intermediate={intermediate}
             $disabled={disabled}
@@ -54,7 +49,7 @@ const Checkbox = ({
             aria-labelledby={ariaValue}
             aria-describedby={description ? description : undefined}
             tabIndex={disabled ? -1 : 0}
-            onKeyDown={handleKeyDown(!value)}
+            onKeyDown={handleKeyDown(!value) as any}
           >
             <CheckBox
               type="checkbox"
@@ -78,12 +73,7 @@ const Checkbox = ({
           </Column>
         </ButtonContainer>
       ) : (
-        <Container
-          className={className}
-          $disabled={disabled}
-          $radius={radius}
-          htmlFor={name}
-        >
+        <Container className={className} $disabled={disabled} $radius={radius} htmlFor={name}>
           <InnerContainer
             $intermediate={intermediate}
             $disabled={disabled}
@@ -95,7 +85,7 @@ const Checkbox = ({
             aria-labelledby={ariaValue}
             aria-describedby={description ? description : undefined}
             tabIndex={disabled ? -1 : 0}
-            onKeyDown={handleKeyDown(!value)}
+            onKeyDown={handleKeyDown(!value) as any}
           >
             <CheckBox
               type="checkbox"

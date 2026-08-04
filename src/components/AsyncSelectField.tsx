@@ -114,7 +114,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
                   e.stopPropagation();
                   !disabled && onChange(undefined);
                 }}
-                onKeyDown={handleKeyDown}
+                onKeyDown={handleKeyDown as any}
                 disabled={disabled}
                 tabIndex={disabled ? -1 : 0}
               >

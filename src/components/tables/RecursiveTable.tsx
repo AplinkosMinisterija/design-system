@@ -59,10 +59,9 @@ const RecursiveTable = ({
 
   const canSort = !!onColumnSort && !!data?.data?.length;
 
-  const handleColumnClick = (keyCode: KeyboardEvent) => {
+  const handleColumnClick = (key: string) => {
     if (!canSort) return;
 
-    const key = keyCode.toString();
     const direction =
       sortedColumn.key === key ? (sortedColumn?.direction === 'asc' ? 'desc' : 'asc') : 'asc';
 
@@ -73,7 +72,7 @@ const RecursiveTable = ({
       direction,
     });
   };
-  const handleKeyDownOnColumn = useKeyAction(handleColumnClick);
+  const handleKeyDownOnColumn = useKeyAction((key?: string) => key && handleColumnClick(key));
 
   const GenerateTableContent = ({ data }: { data: any }) => {
     if (data?.length) {
@@ -86,7 +85,7 @@ const RecursiveTable = ({
                 padding={0}
                 row={row}
                 index={index}
-                onClick={onClick}
+                onClick={handleRowClick}
                 key={`tableRow-${index}`}
                 keys={keys}
                 handleRowClick={handleRowClick}
@@ -145,7 +144,7 @@ const RecursiveTable = ({
                     onClick={() => {
                       enableColumnSort && handleColumnClick(key);
                     }}
-                    onKeyDown={handleKeyDownOnColumn(key)}
+                    onKeyDown={handleKeyDownOnColumn(key) as any}
                     tabIndex={enableColumnSort ? 0 : undefined}
                   >
                     <LabelContainer>

@@ -49,7 +49,7 @@ const OptionsContainer = ({
 }: OptionsContainerProps) => {
   const display = showSelect && !disabled;
   const optionsLength = options.length;
-  const handleKeyDown = useKeyAction(handleClick);
+  const handleKeyDown = useKeyAction(handleClick, disabled);
 
   const renderOptions = () => {
     if (!options.length) {
@@ -76,7 +76,7 @@ const OptionsContainer = ({
               tabIndex={0}
               aria-selected={isActive}
               onClick={() => handleClick(option)}
-              onKeyDown={handleKeyDown(option)}
+              onKeyDown={handleKeyDown(option) as any}
             >
               {getOptionLabel(option)}
             </Option>

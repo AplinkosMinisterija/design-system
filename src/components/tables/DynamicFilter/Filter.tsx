@@ -1,4 +1,4 @@
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import { map } from 'lodash';
 import styled from 'styled-components';
 import {
@@ -25,8 +25,8 @@ export interface DynamicFilterProps {
   };
   filters: Record<string, FilterConfig>;
   rowConfig: RowConfig;
-  onSubmit: (values: any) => void;
-  values?: any;
+  onSubmit: (values: Record<string, any> | null) => void;
+  values?: Record<string, any>;
 }
 
 const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterProps) => {
@@ -39,7 +39,12 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
     return defaultValues;
   };
 
-  const renderRow = (row: string[], values: any, setFieldValue: any, index: number) => (
+  const renderRow = (
+    row: string[],
+    values: Record<string, any>,
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => Promise<void | any>,
+    index: number
+  ) => (
     <Content key={`row_${index}`}>
       {map(row, (rowKey: string, index: number) => {
         const filter = filters[rowKey as keyof typeof filters];
@@ -176,7 +181,9 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
         onSubmit={onSubmit}
         validateOnChange={false}
       >
-        {({ values, setFieldValue, handleSubmit, handleReset }: any) => (
+        {(formikProps: FormikProps<Record<string, any>>) => {
+          const { values, setFieldValue, handleSubmit, handleReset } = formikProps;
+          return (
           <form onSubmit={handleSubmit}>
             <>
               {map(rowConfig, (row, index) => {
@@ -198,7 +205,8 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
               </Row>
             </>
           </form>
-        )}
+          );
+        }}
       </Formik>
     </Container>
   );

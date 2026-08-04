@@ -1,7 +1,7 @@
 import { map } from 'lodash';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useKeyAction } from '../../../components/common/hooks';
+import { useKeyAction } from '../../common/hooks';
 import { DynamicFilterProps, FilterConfig } from '../../../types';
 import { device, FilterInputTypes, formatDate, useWindowSize } from '../../../utils';
 import Icon, { IconName } from '../../common/Icons';
@@ -128,7 +128,7 @@ const DynamicFilter = ({
                 tabIndex={0}
                 aria-label={`Remove filter: ${appliedFilter?.label}`}
                 onClick={() => handleClearFilter(appliedFilter)}
-                onKeyDown={handleKeyDownOnRemoveFilter(appliedFilter)}
+                onKeyDown={handleKeyDownOnRemoveFilter(appliedFilter) as any}
               >
                 <CloseIcon name={IconName.close} />
               </CloseIconContainer>
@@ -140,7 +140,7 @@ const DynamicFilter = ({
           disabled={disabled}
           aria-label="Open filter menu"
           onClick={() => setShowFilters(true)}
-          onKeyDown={handleKeyDownOnFilter}
+          onKeyDown={handleKeyDownOnFilter as any}
         >
           <StyledIcon name={IconName.filter} />
           {loading ? <Loader size={'22'} /> : 'Filtrai'}

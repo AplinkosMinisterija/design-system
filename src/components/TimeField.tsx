@@ -175,7 +175,7 @@ const TimeField = ({
         tabIndex={0}
         id={'input_wrapper'}
         onBlur={handleBlurInput}
-        onKeyDown={handleToggleOnKeyDown}
+        onKeyDown={handleToggleOnKeyDown as any}
         onClick={() => setOpen(!open)}
         ref={inputRef}
       >

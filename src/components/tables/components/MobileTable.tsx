@@ -76,7 +76,7 @@ const MobileTable = ({
   const handleKeyDownOnColumn = useKeyAction(
     (key: string | undefined) => key && handleColumnClick(key),
   );
-  const handleKeyDownOnExpand = useKeyAction(() => setExpand(!expand));
+  const handleKeyDownOnExpand = useKeyAction(() => setExpand(!expand), false);
 
   const handleKeyDown = useKeyAction((row: TableRow | undefined) => row && handleRowClick(row));
   const RenderRow = (row: TableRow, index: number) => {
@@ -90,7 +90,7 @@ const MobileTable = ({
         style={tableRowStyle}
         $checkable={checkable}
         tabIndex={0}
-        onKeyDown={handleKeyDown(row)}
+        onKeyDown={handleKeyDown(row) as any}
         aria-label={`Row ${index + 1}`}
         role="row"
       >
@@ -104,7 +104,7 @@ const MobileTable = ({
               aria-expanded={expand}
               role="button"
               tabIndex={0}
-              onKeyDown={handleKeyDownOnExpand}
+              onKeyDown={handleKeyDownOnExpand as any}
             >
               <StyledIcon $expanded={expand} name={IconName.dropdownArrow} />
             </StyledIconContainer>

@@ -276,18 +276,23 @@ export const useDebouncedCallback = <TArgs extends any[], TResult>(
   return Object.assign(run, { cancel });
 };
 
-export function useKeyAction<T = any>(
-  action: (option: T) => void,
-  disabled = false,
-): (option: T) => (e: React.KeyboardEvent) => void {
+export function useKeyAction<T = any>(action: (option?: T) => void, disabled = false): any {
   return useCallback(
-    (option: T) => {
-      return (e: React.KeyboardEvent) => {
+    (option?: T) => {
+      if (typeof option === 'object' && option !== null && 'key' in option) {
+        const e = option as unknown as React.KeyboardEvent;
         if (e.key === 'Enter' && !disabled) {
           e.stopPropagation();
-          action(option);
+          (action as any)();
         }
-      };
+      } else {
+        return (e: React.KeyboardEvent) => {
+          if (e.key === 'Enter' && !disabled) {
+            e.stopPropagation();
+            (action as any)(option);
+          }
+        };
+      }
     },
     [action, disabled],
   );

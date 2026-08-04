@@ -229,7 +229,7 @@ export interface FilterConfig {
   optionLabel?: (value: any) => string;
   inputType: FilterInputTypes;
   options?: SelectOption[];
-  customSetValue?: (setFieldValue: () => void, input: string) => void;
+  customSetValue?: (setFieldValue: (field: string, value: any, shouldValidate?: boolean) => Promise<void | any>, input: any) => void;
   getDependId?: (values: any) => string;
   optionsApi?: (input: string, page: number) => Promise<any>;
   refreshOptions?: (input?: string, page?: number) => any;

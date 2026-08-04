@@ -130,7 +130,7 @@ const DragAndDropUploadField = ({
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
             onClick={onButtonClick}
-            onKeyDown={handleKeyDownOnUpload}
+            onKeyDown={handleKeyDownOnUpload as any}
             role="button"
             tabIndex={0}
             aria-labelledby={ariaValue}
@@ -185,7 +185,7 @@ const DragAndDropUploadField = ({
                     e.stopPropagation();
                     handleDelete(index);
                   }}
-                  onKeyDown={handleKeyDownOnDelete(index)}
+                  onKeyDown={handleKeyDownOnDelete(index) as any}
                   tabIndex={0}
                   role="button"
                   aria-label={`Remove ${file?.name}`}
