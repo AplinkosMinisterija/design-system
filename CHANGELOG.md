@@ -1,5 +1,11 @@
 # @aplinkosministerija/design-system
 
+## 2.0.0
+
+### Major Changes
+
+- 9828c3f: Update react and react dom to 19 and react-router to 8.3
+
 ## 1.6.0
 
 ### Minor Changes
