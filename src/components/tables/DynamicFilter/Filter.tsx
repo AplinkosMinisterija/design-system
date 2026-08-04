@@ -1,4 +1,4 @@
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import { map } from 'lodash';
 import styled from 'styled-components';
 import {
@@ -12,14 +12,11 @@ import {
   MultiSelectField,
   RowConfig,
   SelectField,
+  SelectOption,
   TextField,
 } from '../../../index';
 import Checkbox from '../../Checkbox';
 import Datepicker from '../../DatePicker';
-
-export interface LabelsProps {
-  [key: string]: string;
-}
 
 export interface DynamicFilterProps {
   texts: {
@@ -28,13 +25,13 @@ export interface DynamicFilterProps {
   };
   filters: Record<string, FilterConfig>;
   rowConfig: RowConfig;
-  onSubmit: (values: any) => void;
-  values?: any;
+  onSubmit: (values: Record<string, any> | null) => void;
+  values?: Record<string, any>;
 }
 
 const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterProps) => {
   const generateDefaultValues = () => {
-    const defaultValues = {};
+    const defaultValues: Record<string, any> = {};
     map(filters, (filter) => {
       defaultValues[filter.key] =
         filter.default || (filter.inputType === FilterInputTypes.text ? '' : null);
@@ -42,16 +39,22 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
     return defaultValues;
   };
 
-  const renderRow = (row: string[], values, setFieldValue, index) => (
+  const renderRow = (
+    row: string[],
+    values: Record<string, any>,
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => Promise<void | any>,
+    index: number
+  ) => (
     <Content key={`row_${index}`}>
       {map(row, (rowKey: string, index: number) => {
-        const filter = filters[rowKey];
+        const filter = filters[rowKey as keyof typeof filters];
         const singleItem = row.length === 1;
         const optionLabel = filter?.optionLabel;
         const optionValue = filter?.getOptionValue;
         const hasOptionValue = !!optionValue;
         const hasOptionLabelFunction = !!optionLabel;
         const customSetValue = filter?.customSetValue;
+        const options: SelectOption[] = filter?.options || [];
 
         if (filter) {
           if (filter.inputType === FilterInputTypes.date) {
@@ -75,14 +78,14 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   label={filter.label}
                   value={values[filter.key]}
                   dependantId={filter.getDependId && filter.getDependId(values)}
-                  options={filter.options || []}
+                  options={options}
                   onChange={(value) =>
                     customSetValue
                       ? customSetValue(setFieldValue, value)
                       : setFieldValue(filter.key, value)
                   }
-                  getOptionLabel={(option) =>
-                    hasOptionLabelFunction ? optionLabel(option) : option.label
+                  getOptionLabel={(option: SelectOption) =>
+                    hasOptionLabelFunction ? optionLabel(option) : option.label || ''
                   }
                   refreshOptions={filter.refreshOptions}
                 />
@@ -94,10 +97,10 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                 <MultiSelectField
                   label={filter.label}
                   values={values[filter.key] || []}
-                  options={filter.options || []}
+                  options={options}
                   onChange={(value) => setFieldValue(filter.key, value)}
-                  getOptionLabel={(option) =>
-                    hasOptionLabelFunction ? optionLabel(option) : option.label
+                  getOptionLabel={(option: SelectOption) =>
+                    hasOptionLabelFunction ? optionLabel(option) : option.label || ''
                   }
                   refreshOptions={filter.refreshOptions}
                 />
@@ -112,10 +115,14 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   value={values[filter.key]}
                   onChange={(value) => setFieldValue(filter.key, value)}
                   handleGetNextPageParam={filter?.handleGetNextPageParam}
-                  getOptionLabel={(option) =>
+                  getOptionLabel={(option: SelectOption) =>
                     hasOptionLabelFunction ? optionLabel(option) : option.name
                   }
-                  loadOptions={(input, page) => filter.optionsApi && filter.optionsApi(input, page)}
+                  loadOptions={(input, page) =>
+                    filter.optionsApi
+                      ? filter.optionsApi(input, page)
+                      : Promise.resolve({ rows: [] })
+                  }
                 />
               </InputWrapper>
             );
@@ -127,12 +134,14 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   label={filter.label}
                   values={values[filter.key] || []}
                   onChange={(value) => setFieldValue(filter.key, value)}
-                  getOptionLabel={(option) =>
+                  getOptionLabel={(option: SelectOption) =>
                     hasOptionLabelFunction ? optionLabel(option) : option.name
                   }
                   handleGetNextPageParam={filter?.handleGetNextPageParam}
                   loadOptions={(input, page) => filter.optionsApi && filter.optionsApi(input, page)}
-                  getOptionValue={(option) => (hasOptionValue ? optionValue(option) : option.id)}
+                  getOptionValue={(option: SelectOption) =>
+                    hasOptionValue ? optionValue(option) : option.id
+                  }
                 />
               </InputWrapper>
             );
@@ -172,7 +181,9 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
         onSubmit={onSubmit}
         validateOnChange={false}
       >
-        {({ values, setFieldValue, handleSubmit, handleReset }: any) => (
+        {(formikProps: FormikProps<Record<string, any>>) => {
+          const { values, setFieldValue, handleSubmit, handleReset } = formikProps;
+          return (
           <form onSubmit={handleSubmit}>
             <>
               {map(rowConfig, (row, index) => {
@@ -194,7 +205,8 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
               </Row>
             </>
           </form>
-        )}
+          );
+        }}
       </Formik>
     </Container>
   );

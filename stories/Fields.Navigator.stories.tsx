@@ -11,21 +11,23 @@ const meta: Meta<typeof Navigator> = {
 export default meta;
 type Story = StoryObj<typeof Navigator>;
 
+function NavigatorComponent() {
+  const data = ['test', 'test2', 'test3'];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  return (
+    <StoryWrapper>
+      <Navigator
+        label={data[currentIndex]}
+        onPrevClick={() => setCurrentIndex(currentIndex - 1)}
+        onNextClick={() => setCurrentIndex(currentIndex + 1)}
+        hasPrevious={!!data[currentIndex - 1]}
+        hasNext={!!data[currentIndex + 1]}
+      />
+    </StoryWrapper>
+  );
+}
+
 export const Field: Story = {
   name: 'Navigator',
-  render: () => {
-    const data = ['test', 'test2', 'test3'];
-    const [currentIndex, setCurrentIndex] = useState(0);
-    return (
-      <StoryWrapper>
-        <Navigator
-          label={data[currentIndex]}
-          onPrevClick={() => setCurrentIndex(currentIndex - 1)}
-          onNextClick={() => setCurrentIndex(currentIndex + 1)}
-          hasPrevious={!!data[currentIndex - 1]}
-          hasNext={!!data[currentIndex + 1]}
-        />
-      </StoryWrapper>
-    );
-  },
+  render: () => <NavigatorComponent />,
 };

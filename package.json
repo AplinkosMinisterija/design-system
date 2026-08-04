@@ -7,11 +7,18 @@
   },
   "type": "module",
   "license": "MIT",
-  "sideEffects": false,
+  "sideEffects": ["*.css"],
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
-  "style": "./dist/styles.css",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
   "prettier": "@aplinkosministerija/biip-prettier-config",
   "keywords": [
     "react",
@@ -38,10 +45,9 @@
   },
   "peerDependencies": {
     "@tanstack/react-query": "*",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router": "*",
-    "react-router-dom": "*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router": "^8.3.0",
     "styled-components": "^6.1.8"
   },
   "dependencies": {
@@ -72,27 +78,28 @@
     "react-toastify": "^10.0.5"
   },
   "engines": {
-    "node": ">=20.0.0 <21.0.0"
+    "node": ">=20.0.0"
   },
   "devDependencies": {
     "@aplinkosministerija/biip-prettier-config": "^1.1.0",
     "@aplinkosministerija/eslint-config-biip-react": "^1.0.0",
     "@changesets/cli": "^2.28.1",
     "@hey-api/openapi-ts": "^0.53.11",
-    "@storybook/addon-controls": "^8.0.6",
-    "@storybook/addon-essentials": "^7.3.2",
-    "@storybook/addon-interactions": "^7.3.2",
-    "@storybook/addon-links": "^7.3.2",
-    "@storybook/addon-onboarding": "^1.0.8",
-    "@storybook/addon-styling": "^1.3.6",
-    "@storybook/blocks": "^7.3.2",
-    "@storybook/react": "^7.3.2",
-    "@storybook/react-vite": "^7.3.2",
-    "@storybook/testing-library": "^0.2.0",
+    "@storybook/addon-controls": "^8.6.0",
+    "@storybook/addon-essentials": "^8.6.0",
+    "@storybook/addon-interactions": "^8.6.0",
+    "@storybook/addon-links": "^8.6.0",
+    "@storybook/addon-onboarding": "^8.6.0",
+    "@storybook/addon-styling": "^1.3.7",
+    "@storybook/blocks": "^8.6.0",
+    "@storybook/react": "^8.6.0",
+    "@storybook/react-vite": "^8.6.0",
+    "@storybook/testing-library": "^0.2.2",
+    "@types/lodash": "^4.17.25",
     "@types/mapbox__mapbox-gl-draw": "^1.4.6",
     "@types/proj4": "^2.5.5",
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.2.1",
@@ -102,12 +109,11 @@
     "eslint-plugin-storybook": "^0.6.13",
     "lint-staged": "^15.2.2",
     "prettier": "^3.3.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router": "^6.22.2",
-    "react-router-dom": "^6.26.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router": "^8.3.0",
     "rollup-plugin-visualizer": "^5.12.0",
-    "storybook": "^7.3.2",
+    "storybook": "^8.6.0",
     "storybook-addon-react-router-v6": "^2.0.10",
     "styled-components": "^6.1.8",
     "typescript": "^5.0.2",
@@ -125,6 +131,6 @@
     "*.{md,html,css}": "prettier --write"
   },
   "resolutions": {
-    "jackspeak": "2.1.1"
+    "jackspeak": "3.1.2"
   }
 }

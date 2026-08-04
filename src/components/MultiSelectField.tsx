@@ -54,7 +54,7 @@ const MultiSelectField = ({
     refreshOptions,
     dependantId,
     value: values,
-    onChange: (option) => onChange([...values, option]),
+    onChange: (option: any) => onChange([...values, option]),
   });
 
   return (

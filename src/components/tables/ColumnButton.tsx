@@ -15,13 +15,13 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
     return columns[key].label;
   });
 
-  const handleBlur = (event) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) {
+  const handleBlur = (event: React.FocusEvent) => {
+    if (!event.currentTarget.contains(event.relatedTarget as Node)) {
       setIsOpen(false);
     }
   };
 
-  const handleToggle = (key) => {
+  const handleToggle = (key: string) => {
     // Check if the column being toggled is the last visible column
     const isLastVisibleColumn =
       columns[key].show && visibleColumnsKeys.filter((key) => columns[key].show).length === 1;
@@ -52,7 +52,7 @@ const ColumnButton = ({ columns, onToggle, texts, variant }: ColumnButtonProps) 
     <Container onBlur={handleBlur}>
       <StyledButton
         variant={variant}
-        left={<StyledIcon $variant={variant} name={IconName.settings} />}
+        left={<StyledIcon $variant={String(variant)} name={IconName.settings} />}
         onClick={handleButtonClick}
         aria-expanded={isOpen}
         aria-controls="column-options-menu"

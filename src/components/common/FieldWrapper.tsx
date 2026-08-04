@@ -36,7 +36,7 @@ const FieldWrapper = ({
   labelButton,
   htmlFor,
 }: FieldWrapperProps) => {
-  const handleKeyDown = useKeyAction(() => !!onClick && onClick());
+  const handleKeyDown = useKeyAction(() => !!onClick && onClick(), false);
 
   const labelAriaValue = htmlFor || (label ? `field-${label}` : undefined);
   const errorAriaValue = error ? `${labelAriaValue}-error` : undefined;
@@ -49,7 +49,7 @@ const FieldWrapper = ({
       className={`${className} fieldWrapper`}
       $padding={padding}
       onClick={onClick}
-      onKeyDown={handleKeyDown()}
+      onKeyDown={handleKeyDown}
     >
       <LabelRow>
         {!!label && (

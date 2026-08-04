@@ -41,7 +41,7 @@ const Content = styled.div<{ $numberOfColumns?: number }>`
 const Button = styled.div<{ $selected: boolean }>`
   display: flex;
   background-color: ${({ $selected }) => ($selected ? 'rgb(20, 83, 45)' : 'transparent')};
-  color: ${({ $selected, theme }) => ($selected ? 'white' : theme.colors.text.primary)};
+  color: ${({ $selected, theme }) => ($selected ? 'white' : theme.colors?.text?.primary)};
   align-items: center;
   justify-content: center;
   height: 48px;

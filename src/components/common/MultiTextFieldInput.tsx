@@ -38,7 +38,6 @@ const MultiTextField = ({
   handleKeyDown,
   role = 'combobox',
   name,
-  height = 56,
   ariaLabelRemove = 'Pašalinti',
   ariaLabelSelectedValue = 'Pasirinkta reikšmė',
   ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
@@ -58,7 +57,7 @@ const MultiTextField = ({
     onRemove({ value, index });
   };
 
-  const handleRemoveOnKeyDown = (e, value, index) => {
+  const handleRemoveOnKeyDown = (e: React.KeyboardEvent, value: any, index: number) => {
     const keysToRemove = ['Enter', 'Backspace', 'Delete'];
     if (keysToRemove.includes(e.key)) {
       handleRemove(e, value, index);
@@ -73,7 +72,6 @@ const MultiTextField = ({
       $backgroundColor={backgroundColor}
       $error={!!error}
       $disabled={disabled || false}
-      $height={height}
       aria-disabled={disabled}
       aria-invalid={!!error}
       role={role}
@@ -135,10 +133,10 @@ const MultiTextField = ({
 };
 
 const InputContainer = styled.div<{
-  $error: boolean;
-  $disabled: boolean;
-  $hasBorder: boolean;
-  $backgroundColor: string;
+  $error?: boolean;
+  $disabled?: boolean;
+  $hasBorder?: boolean;
+  $backgroundColor?: string;
 }>`
   ${({ $hasBorder, $error, theme }) =>
     $hasBorder

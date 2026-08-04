@@ -16,7 +16,7 @@ const Container = styled.div<{$disabled?: boolean}>`
   flex-shrink: 0;
   border-radius: 4px;
   padding: 10px;
-  height: ${({ theme }) => theme.height.buttons}rem;width: ${({ theme }) => theme.height.buttons}rem;;
+  height: ${({ theme }) => theme.height?.buttons}rem;width: ${({ theme }) => theme.height?.buttons}rem;;
   display: flex;
   cursor: pointer;
     opacity: ${({$disabled}) => $disabled ? 0.6 : 1};

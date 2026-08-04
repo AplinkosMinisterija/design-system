@@ -7,11 +7,11 @@ import OptionsContainer from './common/OptionsContainer';
 export interface CreatableMultiSelectProps {
   label?: string;
   required?: boolean;
-  values?: any;
+  values: string[];
   error?: string;
   showError?: boolean;
   padding?: string;
-  onChange: (option: any) => void;
+  onChange: (values: string[]) => void;
   disabled?: boolean;
   className?: string;
   placeholder?: string;
@@ -29,11 +29,11 @@ const CreatableMultiSelect = ({
   onChange,
   disabled = false,
 }: CreatableMultiSelectProps) => {
-  const [input, setInputValue] = useState<any>('');
+  const [input, setInputValue] = useState('');
   const [showSelect, setShowSelect] = useState(false);
-  const isExist = values.some((value) => value === input);
+  const isExist = values.some((value: string) => value === input);
 
-  const handleBlur = (event: any) => {
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       handleAdd();
     }
@@ -51,7 +51,7 @@ const CreatableMultiSelect = ({
     clear();
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       handleAdd();
     }
@@ -78,16 +78,16 @@ const CreatableMultiSelect = ({
           handleRemove(index, onChange, values);
         }}
         disabled={disabled}
-        handleInputChange={(input) => {
+        handleInputChange={(input: string) => {
           setShowSelect(input?.length > 0);
           setInputValue(input);
         }}
-        getOptionLabel={(option) => `${option}`}
+        getOptionLabel={(option: string) => `${option}`}
         hideDropdown={true}
       />
       <OptionsContainer
         options={[isExist ? 'Toks reikšmė jau egzistuoja' : `Sukurti: ${input}`]}
-        getOptionLabel={(option) => `${option}`}
+        getOptionLabel={(option: string) => `${option}`}
         showSelect={showSelect}
         handleClick={handleAdd}
       />

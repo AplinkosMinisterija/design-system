@@ -10,7 +10,7 @@ export interface MapToggleLayerConfig {
 }
 
 interface Props {
-  mapContainerRef: React.RefObject<HTMLDivElement>;
+  mapContainerRef: React.RefObject<HTMLDivElement | null>;
   toggleLayers: MapToggleLayerConfig[];
   onLayerToggle: (layer: MapToggleLayerConfig, visible: boolean) => void;
 }

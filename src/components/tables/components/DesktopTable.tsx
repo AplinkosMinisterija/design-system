@@ -54,11 +54,11 @@ const DesktopTable = ({
       onClick(row);
     }
   };
-  const handleKeyDown = useKeyAction(handleRowClick);
+  const handleKeyDown = useKeyAction((row?: TableRow) => row && handleRowClick(row));
 
   const canSort = !!onColumnSort && !!data?.length;
 
-  const handleColumnClick = (key) => {
+  const handleColumnClick = (key: string) => {
     if (!canSort) return;
 
     const direction =
@@ -71,7 +71,7 @@ const DesktopTable = ({
       direction,
     });
   };
-  const handleKeyDownOnColumn = useKeyAction(handleColumnClick);
+  const handleKeyDownOnColumn = useKeyAction((key?: string) => key && handleColumnClick(key));
 
   const GenerateTableContent = ({ data }: { data: TableRow[] }) => {
     if (data?.length) {
@@ -83,14 +83,14 @@ const DesktopTable = ({
                 $pointer={!!onClick}
                 key={`tr-${index}`}
                 onClick={() => handleRowClick(row)}
-                onKeyDown={handleKeyDown(row)}
+                onKeyDown={handleKeyDown(row) as any}
                 tabIndex={onClick ? 0 : undefined}
                 style={tableRowStyle}
                 aria-label={`Row with ID ${row?.id}`}
                 role="row"
               >
                 {checkable && (
-                  <TD width={TableItemWidth.SMALL}>
+                  <TD $width={TableItemWidth.SMALL}>
                     <CheckBox
                       value={selectedItemIdsSet.has(row.id)}
                       onChange={() => handleToggleItem(row.id)}
@@ -105,7 +105,7 @@ const DesktopTable = ({
 
                   return (
                     <TD
-                      width={width}
+                      $width={width}
                       key={`tr-td-${i}`}
                       role="cell"
                       aria-label={`${columns[label]?.label}: ${item}`}
@@ -144,9 +144,9 @@ const DesktopTable = ({
         <Table role="table">
           <THEAD>
             <TR role="row" $pointer={false}>
-              {checkable && <TH width={TableItemWidth.SMALL} role="columnheader" />}
+              {checkable && <TH $pointer={false} role="columnheader" />}
 
-              {keys.map((key: any, i: number) => {
+              {keys.map((key: string, i: number) => {
                 const column = columns[key];
                 const label = column?.label;
                 const width = column?.width || TableItemWidth.LARGE;
@@ -165,13 +165,13 @@ const DesktopTable = ({
                           : 'descending'
                         : 'none'
                     }
-                    $pointer={!!enableColumnSort}
+                    $pointer={enableColumnSort}
+                    $width={width}
                     onClick={() => {
                       enableColumnSort && handleColumnClick(key);
                     }}
-                    onKeyDown={handleKeyDownOnColumn(key)}
+                    onKeyDown={handleKeyDownOnColumn(key) as any}
                     tabIndex={enableColumnSort ? 0 : undefined}
-                    width={width}
                     key={`large-th-${i}`}
                   >
                     <LabelContainer>
@@ -239,16 +239,18 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const TD = styled.td`
+const TD = styled.td<{ $width?: number | string }>`
   padding: 6px 22px;
   height: 44px;
   text-align: left;
   font-size: 1.4rem;
   color: #121926;
+  ${({ $width }) => $width && `width: ${$width}px`};
 `;
 
 const TH = styled.th<{
   $pointer: boolean;
+  $width?: number | string;
 }>`
   padding: 18px 22px;
   height: 44px;

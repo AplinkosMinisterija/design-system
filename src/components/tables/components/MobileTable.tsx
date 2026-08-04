@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useKeyAction } from '../../../components/common/hooks';
+import { useKeyAction } from '../../common/hooks';
 import {
   Columns,
   NotFoundInfoProps,
@@ -73,10 +73,12 @@ const MobileTable = ({
     });
   };
 
-  const handleKeyDownOnColumn = useKeyAction(handleColumnClick);
-  const handleKeyDownOnExpand = useKeyAction(() => setExpand(!expand));
+  const handleKeyDownOnColumn = useKeyAction(
+    (key: string | undefined) => key && handleColumnClick(key),
+  );
+  const handleKeyDownOnExpand = useKeyAction(() => setExpand(!expand), false);
 
-  const handleKeyDown = useKeyAction(handleRowClick);
+  const handleKeyDown = useKeyAction((row: TableRow | undefined) => row && handleRowClick(row));
   const RenderRow = (row: TableRow, index: number) => {
     return (
       <TR
@@ -88,7 +90,7 @@ const MobileTable = ({
         style={tableRowStyle}
         $checkable={checkable}
         tabIndex={0}
-        onKeyDown={handleKeyDown(row)}
+        onKeyDown={handleKeyDown}
         aria-label={`Row ${index + 1}`}
         role="row"
       >
@@ -102,9 +104,9 @@ const MobileTable = ({
               aria-expanded={expand}
               role="button"
               tabIndex={0}
-              onKeyDown={handleKeyDownOnExpand()}
+              onKeyDown={handleKeyDownOnExpand as any}
             >
-              <StyledIcon expanded={expand} name={IconName.dropdownArrow} />
+              <StyledIcon $expanded={expand} name={IconName.dropdownArrow} />
             </StyledIconContainer>
           ) : null}
         </RowTD>
@@ -324,7 +326,7 @@ const TR = styled.tr<{
   $hide_border?: boolean;
   $pointer: boolean;
   $expandable: boolean;
-  $checkable: boolean;
+  $checkable?: boolean;
 }>`
   width: 100%;
   border: none !important;

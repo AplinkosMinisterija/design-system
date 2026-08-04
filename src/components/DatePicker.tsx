@@ -69,13 +69,14 @@ const DateField = ({
       threshold: 1,
     });
 
-    if (invisibleDivRef.current) {
-      observer.observe(invisibleDivRef.current);
+    const currentRef = invisibleDivRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (invisibleDivRef.current) {
-        observer.unobserve(invisibleDivRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [open]);
@@ -144,7 +145,7 @@ const DateField = ({
         tabIndex={0}
         onBlur={handleBlurInput}
         onClick={() => setOpen(!open)}
-        onKeyDown={handleKeyDownOnToggle()}
+        onKeyDown={handleKeyDownOnToggle as any}
       >
         <TextField
           placeholder={placeHolder}
@@ -166,7 +167,7 @@ const DateField = ({
                     e.stopPropagation();
                     onChange(undefined);
                   }}
-                  onKeyDown={handleKeyDown()}
+                  onKeyDown={handleKeyDown as any}
                   $disabled={disabled}
                 >
                   <ClearIcon name={IconName.close} />
@@ -203,7 +204,7 @@ const DateField = ({
             open={open}
             {...(maxDate ? { maxDate: new Date(maxDate) } : {})}
             {...(minDate ? { minDate: new Date(minDate) } : {})}
-            selected={value ? new Date(value as any) : null}
+            selected={value ? new Date(value) : null}
             onSelect={() => setOpen(false)}
             onChange={(date: Date) => {
               if (maxDate && date > new Date(maxDate)) {
@@ -289,7 +290,7 @@ const CloseButton = styled.button`
   }
 `;
 
-const ClearIcon = styled(Icon)<{ $disabled: boolean }>`
+const ClearIcon = styled(Icon)<{ $disabled?: boolean }>`
   color: #cdd5df;
   font-size: 2.4rem;
   margin-right: 12px;

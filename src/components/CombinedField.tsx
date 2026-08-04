@@ -6,8 +6,8 @@ import OptionsContainer from './common/OptionsContainer';
 import NumericField from './NumericField';
 
 export interface CombinedFieldProps {
-  value: { input: string; option: string };
-  onChange: (option: { input: string; option: string }) => void;
+  value: { input: string | number; option: string };
+  onChange: (option: { input: string | number; option: string }) => void;
   name?: string;
   label?: string;
   error?: string;
@@ -53,7 +53,7 @@ const CombinedField = ({
     }
   };
 
-  const handleChange = (input) => {
+  const handleChange = (input: Partial<{ input: string | number; option: string }>) => {
     setShowSelect(false);
     onChange({
       ...value,
@@ -132,7 +132,7 @@ const StyledIcon = styled(Icon)`
   font-size: 2.4rem;
 `;
 
-const IconContainer = styled.div<{ $disabled: boolean }>`
+const IconContainer = styled.div<{ $disabled?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -140,7 +140,7 @@ const IconContainer = styled.div<{ $disabled: boolean }>`
 `;
 
 const OptionsWrapper = styled.div``;
-const SelectedOption = styled.div<{ $width?: number; $disabled: boolean }>`
+const SelectedOption = styled.div<{ $width?: number; $disabled?: boolean }>`
   display: flex;
   justify-content: space-between;
   padding: 0 9px 0 16px;
