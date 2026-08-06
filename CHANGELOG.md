@@ -1,5 +1,18 @@
 # @aplinkosministerija/design-system
 
+## 2.0.1
+
+### Patch Changes
+
+- 0809b76: fix(mobile-table): consolidate expand button components, move styles to separate file, and improve code organization
+
+  - Extract RowExpandButton and HeaderExpandButton into single ExpandButton component (DRY)
+  - Move all styled-components to MobileTable.styles.ts for better separation of concerns
+  - Rename DesktopTableProps to MobileTableProps (correct misnomer)
+  - Extract MAIN_LABELS_COUNT magic number with explanatory comment
+  - Improve event handler typing (React.MouseEvent, React.KeyboardEvent)
+  - Fix row expansion state from simple boolean to Set-based tracking for per-row control
+
 ## 2.0.0
 
 ### Major Changes
