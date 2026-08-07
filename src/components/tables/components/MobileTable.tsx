@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useKeyAction } from '../../common/hooks';
 import {
   Columns,
@@ -103,6 +103,10 @@ const MobileTable = ({
   const [sortedColumn, setSortedColumn] = useState<SortedColumnsProps>({});
   const [expandedRowIds, setExpandedRowIds] = useState<Set<string | number | undefined>>(new Set());
 
+  useEffect(() => {
+    setExpandedRowIds(new Set());
+  }, [data]);
+
   const handleRowClick = (row: TableRow) => {
     if (onClick && row?.id) {
       onClick(row);
@@ -142,7 +146,7 @@ const MobileTable = ({
   };
 
   const allRowsExpanded =
-    !!data?.length && data.length === expandedRowIds.size && data.length > 0;
+    !!data?.length && data.every((row) => expandedRowIds.has(row.id));
 
   const toggleAllRows = () => {
     if (allRowsExpanded) {
