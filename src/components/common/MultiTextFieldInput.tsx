@@ -53,9 +53,12 @@ const MultiTextField = ({
 }: MultiTextFieldProps) => {
   const inputRef = useRef<any>(null);
   const field = useFieldControl();
+  const ariaValue = field?.controlId || label || name || 'field';
+
+  // Claims the id FieldWrapper labels, so it only renders a <label for> once
+  // something inside it can actually own that id (see FieldControlContext).
   const registerControl = field?.registerControl;
   useEffect(() => registerControl?.(), [registerControl]);
-  const ariaValue = field?.controlId || label || name || 'field';
 
   const handleClick = () => {
     if (!inputRef?.current) return;

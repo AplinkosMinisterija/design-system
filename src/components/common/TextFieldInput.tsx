@@ -64,13 +64,16 @@ const TextFieldInput = ({
   ...rest
 }: TextFieldProps) => {
   const field = useFieldControl();
-  const registerControl = field?.registerControl;
-  useEffect(() => registerControl?.(), [registerControl]);
   const ariaValue = field?.controlId || label || name;
   const placeholderRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
   const initialHeight = theme?.height?.fields || height;
   const [containerHeight, setContainerHeight] = useState(initialHeight);
+
+  // Claims the id FieldWrapper labels, so it only renders a <label for> once
+  // something inside it can actually own that id (see FieldControlContext).
+  const registerControl = field?.registerControl;
+  useEffect(() => registerControl?.(), [registerControl]);
 
   useEffect(() => {
     if (!placeholderRef.current) return;
