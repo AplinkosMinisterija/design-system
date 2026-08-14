@@ -76,7 +76,7 @@ const OptionsContainer = ({
     return (
       <>
         {options.map((option, index) => {
-          const optionId = `${getOptionId(option) ?? `${name}-option-${index}`}`;
+          const optionId = `${name}-option-${getOptionId(option) ?? index}`;
           const isActive = activeOptionId === optionId;
 
           return (

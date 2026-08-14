@@ -13,7 +13,7 @@ Accessibility: name every field by its own label, tie its error to it, and make 
 
 `TextFieldInput`: fixed `isCustomPlaceholder`, which treated *every* field without a placeholder as having a custom one — it rendered an empty placeholder div and pointed the input's `aria-labelledby` at it, leaving plain fields with no accessible name at all.
 
-`SelectField` follows the ARIA combobox pattern: `role="combobox"` with `aria-expanded` / `aria-controls` / `aria-activedescendant`, and the input handles ArrowDown / ArrowUp / Home / End / Enter / Escape. Options are no longer tab stops (`tabIndex={-1}`) — reaching the next field used to mean tabbing through every option one at a time — and the highlighted option scrolls into view. `aria-selected` now marks the chosen option rather than the highlighted one.
+`SelectField` **and `AsyncSelectField`** follow the ARIA combobox pattern (the keyboard state machine is now one shared `useOptionNavigation` hook, so the two cannot drift again — the async one had no navigation at all, and only highlighted the already-selected value): `role="combobox"` with `aria-expanded` / `aria-controls` / `aria-activedescendant`, and the input handles ArrowDown / ArrowUp / Home / End / Enter / Escape. Options are no longer tab stops (`tabIndex={-1}`) — reaching the next field used to mean tabbing through every option one at a time — and the highlighted option scrolls into view. `aria-selected` now marks the chosen option rather than the highlighted one.
 
 New `autoComplete` prop on `TextField`, `PasswordField` and `TextFieldInput` (default `"off"`, as before). It was hardcoded off, so password managers could not offer to fill or save credentials on any form built with these fields.
 

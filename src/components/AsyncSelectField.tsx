@@ -68,6 +68,8 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
     handleBlur,
     handleClick,
     observerRef,
+    handleKeyDown: handleInputKeyDown,
+    activeOption,
   } = useAsyncSelectData({
     loadOptions,
     disabled,
@@ -82,9 +84,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
   const placeholderValue = value ? getOptionLabel(value) : placeholder;
 
   const activeOptionId =
-    showSelect && value && getOptionId(value) != null
-      ? `${name}-option-${getOptionId(value)}`
-      : undefined;
+    activeOption === undefined ? undefined : `${name}-option-${getOptionId(activeOption as T)}`;
 
   return (
     <FieldWrapper
@@ -144,19 +144,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
         aria-controls={`${name}-options`}
         aria-haspopup="listbox"
         aria-activedescendant={activeOptionId}
-        onKeyDown={(e) => {
-          if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            handleToggleSelect();
-          } else if (e.key === 'Enter') {
-            e.preventDefault();
-            if (value) {
-              onChange(value);
-            } else {
-              handleToggleSelect();
-            }
-          }
-        }}
+        onKeyDown={handleInputKeyDown}
       />
       <OptionsContainer
         loading={loading}
@@ -166,6 +154,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
         getOptionId={getOptionId}
         name={name}
         activeOptionId={activeOptionId}
+        selectedOption={value}
         showSelect={showSelect}
         handleClick={handleClick}
         texts={texts}

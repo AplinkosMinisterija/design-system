@@ -4,6 +4,74 @@ import { intersectionObserverConfig } from '../../utils';
 import { getFilteredOptions } from './functions';
 import { SelectOption } from '../../types';
 
+interface UseOptionNavigationProps<T> {
+  options: T[];
+  disabled?: boolean;
+  showSelect: boolean;
+  setShowSelect: (show: boolean) => void;
+  onSelect: (option: T) => void;
+}
+
+/**
+ * Keyboard handling for a combobox's option list, per the ARIA combobox
+ * pattern: the list never takes focus, the input keeps it and points at the
+ * active option through `aria-activedescendant`.
+ *
+ * Shared by the plain and the async select, which otherwise drift — the async
+ * one had no keyboard navigation at all, so its options were reachable only by
+ * Tab-stopping through every one of them.
+ */
+export const useOptionNavigation = <T,>({
+  options,
+  disabled,
+  showSelect,
+  setShowSelect,
+  onSelect,
+}: UseOptionNavigationProps<T>) => {
+  // -1 = nothing highlighted yet, so the first ArrowDown lands on option 0.
+  const [activeIndex, setActiveIndex] = useState(-1);
+
+  const resetActiveOption = () => setActiveIndex(-1);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (disabled) return;
+    const lastIndex = options.length - 1;
+
+    const move = (next: number) => {
+      event.preventDefault();
+      if (!showSelect) setShowSelect(true);
+      setActiveIndex(next);
+    };
+
+    switch (event.key) {
+      case 'ArrowDown':
+        return move(activeIndex >= lastIndex ? 0 : activeIndex + 1);
+      case 'ArrowUp':
+        return move(activeIndex <= 0 ? lastIndex : activeIndex - 1);
+      case 'Home':
+        return showSelect ? move(0) : undefined;
+      case 'End':
+        return showSelect ? move(lastIndex) : undefined;
+      case 'Enter': {
+        event.preventDefault();
+        if (!showSelect) return setShowSelect(true);
+        const active = options[activeIndex];
+        if (active) return onSelect(active);
+        return setShowSelect(false);
+      }
+      case 'Escape':
+        if (!showSelect) return;
+        event.preventDefault();
+        setShowSelect(false);
+        return resetActiveOption();
+      default:
+        return;
+    }
+  };
+
+  return { activeOption: options[activeIndex], resetActiveOption, handleKeyDown };
+};
+
 interface UseSelectDataProps<T extends SelectOption = SelectOption> {
   options: T[];
   disabled?: boolean;
@@ -27,14 +95,19 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
   const [showSelect, setShowSelect] = useState(false);
   const [suggestions, setSuggestions] = useState(options);
   const [loading, setLoading] = useState(false);
-  // -1 = nothing highlighted yet, so the first ArrowDown lands on option 0.
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const { activeOption, resetActiveOption, handleKeyDown } = useOptionNavigation({
+    options: suggestions,
+    disabled,
+    showSelect,
+    setShowSelect,
+    onSelect: (option) => handleClick(option),
+  });
 
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setShowSelect(false);
       setInputValue('');
-      setActiveIndex(-1);
+      resetActiveOption();
     }
   };
 
@@ -69,7 +142,7 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
   const handleClick = (option: T) => {
     setShowSelect(false);
     setInputValue('');
-    setActiveIndex(-1);
+    resetActiveOption();
 
     if (value && getOptionLabel(value) === getOptionLabel(option)) return;
 
@@ -86,55 +159,13 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
     setSuggestions(getFilteredOptions(options, input, getOptionLabel));
     // The filtered list is a different list — highlighting index 3 of the old
     // one would point at an unrelated option.
-    setActiveIndex(-1);
+    resetActiveOption();
   };
 
   const handleToggleSelect = () => {
     if (disabled) return;
     setShowSelect(!showSelect);
-    setActiveIndex(-1);
-  };
-
-  /**
-   * Keyboard handling for the combobox input, per the ARIA combobox pattern:
-   * the list never takes focus, the input keeps it and points at the active
-   * option through `aria-activedescendant`. Without this the options were
-   * reachable only by Tab-stopping through every one of them.
-   */
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (disabled) return;
-    const lastIndex = suggestions.length - 1;
-
-    const move = (next: number) => {
-      event.preventDefault();
-      if (!showSelect) setShowSelect(true);
-      setActiveIndex(next);
-    };
-
-    switch (event.key) {
-      case 'ArrowDown':
-        return move(activeIndex >= lastIndex ? 0 : activeIndex + 1);
-      case 'ArrowUp':
-        return move(activeIndex <= 0 ? lastIndex : activeIndex - 1);
-      case 'Home':
-        return showSelect && move(0);
-      case 'End':
-        return showSelect && move(lastIndex);
-      case 'Enter': {
-        event.preventDefault();
-        if (!showSelect) return setShowSelect(true);
-        const active = suggestions[activeIndex];
-        return active ? handleClick(active) : setShowSelect(false);
-      }
-      case 'Escape':
-        if (!showSelect) return;
-        event.preventDefault();
-        setShowSelect(false);
-        setActiveIndex(-1);
-        return;
-      default:
-        return;
-    }
+    resetActiveOption();
   };
 
   return {
@@ -146,7 +177,7 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
     handleClick,
     handleOnChange,
     handleKeyDown,
-    activeOption: suggestions[activeIndex],
+    activeOption,
     loading,
   };
 };
@@ -224,16 +255,21 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
   const handleClick = (option: T) => {
     setShowSelect(false);
     setInput('');
+    resetActiveOption();
     onChange(option);
   };
 
   const handleToggleSelect = () => {
-    !disabled && setShowSelect(!showSelect);
+    if (disabled) return;
+    setShowSelect(!showSelect);
+    resetActiveOption();
   };
 
   const handleInputChange = (input: string) => {
     setShowSelect(!!input.length);
     setInput(input);
+    // A new query is a new list — the old highlight would point elsewhere.
+    resetActiveOption();
   };
 
   const suggestions = data
@@ -242,6 +278,14 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
         .map((item) => item?.data)
         .flat()
     : [];
+
+  const { activeOption, resetActiveOption, handleKeyDown } = useOptionNavigation({
+    options: suggestions,
+    disabled,
+    showSelect,
+    setShowSelect,
+    onSelect: (option) => handleClick(option as T),
+  });
 
   return {
     loading: isFetching,
@@ -253,6 +297,8 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     handleBlur,
     observerRef,
     handleClick,
+    handleKeyDown,
+    activeOption,
   };
 };
 

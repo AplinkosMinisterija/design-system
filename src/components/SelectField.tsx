@@ -87,8 +87,10 @@ const SelectField = ({
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const showDeleteIcon = selected != null && clearable && !disabled;
   const listId = `${useId()}-listbox`;
-  const optionId = (option: any) => `${listId}-option-${suggestions.indexOf(option)}`;
-  const activeOptionId = activeOption === undefined ? undefined : optionId(activeOption);
+  const activeOptionId =
+    activeOption === undefined
+      ? undefined
+      : `${listId}-option-${suggestions.indexOf(activeOption)}`;
 
   return (
     <FieldWrapper
@@ -153,12 +155,13 @@ const SelectField = ({
       />
       <OptionsContainer
         id={listId}
+        name={listId}
         options={suggestions}
         getOptionLabel={(getOptionComponent as any) || getOptionLabel}
         loading={loading}
         showSelect={showSelect}
         handleClick={handleClick}
-        getOptionId={optionId}
+        getOptionId={(option: any) => suggestions.indexOf(option)}
         activeOptionId={activeOptionId}
         selectedOption={selected}
       />
