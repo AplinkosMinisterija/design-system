@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import { JSX, useId } from 'react';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
 import { useKeyAction, useSelectData } from './common/hooks';
@@ -71,6 +71,8 @@ const SelectField = ({
     handleBlur,
     handleClick,
     handleOnChange,
+    handleKeyDown: handleInputKeyDown,
+    activeOption,
     loading,
   } = useSelectData({
     options: options || [],
@@ -84,6 +86,9 @@ const SelectField = ({
 
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const showDeleteIcon = selected != null && clearable && !disabled;
+  const listId = `${useId()}-listbox`;
+  const optionId = (option: any) => `${listId}-option-${suggestions.indexOf(option)}`;
+  const activeOptionId = activeOption === undefined ? undefined : optionId(activeOption);
 
   return (
     <FieldWrapper
@@ -134,12 +139,12 @@ const SelectField = ({
           </RightContainer>
         }
         onChange={handleOnChange}
-        onKeyDown={(e) => {
-          if (e.key === 'ArrowDown' || e.key === 'Enter') {
-            e.preventDefault();
-            handleToggleSelect();
-          }
-        }}
+        onKeyDown={handleInputKeyDown}
+        role="combobox"
+        ariaExpanded={showSelect}
+        ariaControls={listId}
+        ariaHaspopup="listbox"
+        ariaActivedescendant={activeOptionId}
         disabled={disabled}
         placeholder={
           selected ? (getOptionComponent?.(selected) ?? getOptionLabel(selected)) : placeholder
@@ -147,11 +152,15 @@ const SelectField = ({
         selectedValue={selected}
       />
       <OptionsContainer
+        id={listId}
         options={suggestions}
         getOptionLabel={(getOptionComponent as any) || getOptionLabel}
         loading={loading}
         showSelect={showSelect}
         handleClick={handleClick}
+        getOptionId={optionId}
+        activeOptionId={activeOptionId}
+        selectedOption={selected}
       />
     </FieldWrapper>
   );

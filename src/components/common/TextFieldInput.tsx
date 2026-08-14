@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
+import { useFieldControl } from './FieldControlContext';
 
 export interface TextFieldProps {
   value?: string | number;
@@ -26,6 +27,12 @@ export interface TextFieldProps {
   ariaActivedescendant?: string;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   ariaLabel?: string;
+  /**
+   * Browser autofill hint. Defaults to "off" — set it on the fields where
+   * filling is wanted ("username", "current-password", "email"), or password
+   * managers cannot offer to fill or save the credential.
+   */
+  autoComplete?: string;
 }
 
 const TextFieldInput = ({
@@ -53,9 +60,11 @@ const TextFieldInput = ({
   ariaActivedescendant,
   onKeyDown,
   ariaLabel,
+  autoComplete = 'off',
   ...rest
 }: TextFieldProps) => {
-  const ariaValue = label || name;
+  const field = useFieldControl();
+  const ariaValue = field?.controlId || label || name;
   const placeholderRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
   const initialHeight = theme?.height?.fields || height;
@@ -68,7 +77,10 @@ const TextFieldInput = ({
     setContainerHeight(placeholderHeight > initialHeight ? placeholderHeight : initialHeight);
   }, [placeholder, initialHeight]);
 
-  const isCustomPlaceholder = typeof placeholder !== 'string';
+  // A *custom* placeholder is a rendered element. `undefined` is not one — the
+  // old check treated every field without a placeholder as having a custom one,
+  // so an empty div was rendered and pointed at as the field's name.
+  const isCustomPlaceholder = placeholder != null && typeof placeholder !== 'string';
 
   return (
     <InputContainer
@@ -88,8 +100,12 @@ const TextFieldInput = ({
 
         <StyledTextInput
           id={ariaValue}
-          aria-labelledby={!isCustomPlaceholder ? `${ariaValue}-placeholder` : undefined}
-          aria-label={isCustomPlaceholder ? ariaLabel : undefined}
+          // Inside a FieldWrapper the <label for> names the field, so nothing
+          // else may claim the name — a placeholder is not a label. Only a bare
+          // input falls back to naming itself.
+          aria-label={field ? undefined : ariaLabel || label || undefined}
+          aria-describedby={field?.errorId}
+          aria-invalid={field?.invalid || undefined}
           role={role}
           aria-expanded={ariaExpanded}
           aria-controls={ariaControls}
@@ -100,7 +116,7 @@ const TextFieldInput = ({
           readOnly={readOnly}
           type={type}
           name={name}
-          autoComplete="off"
+          autoComplete={autoComplete}
           value={value || ''}
           onChange={(e) => onChange?.(e.target.value)}
           placeholder={!isCustomPlaceholder ? placeholder : ''}

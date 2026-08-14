@@ -19,7 +19,8 @@
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js"
     },
-    "./styles.css": "./dist/styles.css"
+    "./styles.css": "./dist/style.css",
+    "./dist/style.css": "./dist/style.css"
   },
   "prettier": "@aplinkosministerija/biip-prettier-config",
   "keywords": [

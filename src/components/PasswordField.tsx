@@ -21,6 +21,8 @@ export interface TextFieldProps {
   onInputClick?: () => void;
   secondLabel?: JSX.Element;
   placeholder?: string;
+  /** Browser autofill hint, e.g. "email" or "current-password". Defaults to "off". */
+  autoComplete?: string;
 }
 
 const PasswordField = ({
@@ -38,6 +40,7 @@ const PasswordField = ({
   disabled,
   height,
   onInputClick,
+  autoComplete,
 }: TextFieldProps) => {
   const [show, setShow] = useState(false);
   const handleKeyDown = useKeyAction(() => setShow(!show), false);
@@ -75,6 +78,7 @@ const PasswordField = ({
         height={height}
         onInputClick={onInputClick}
         placeholder={placeholder}
+        autoComplete={autoComplete}
       />
     </FieldWrapper>
   );

@@ -27,11 +27,14 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
   const [showSelect, setShowSelect] = useState(false);
   const [suggestions, setSuggestions] = useState(options);
   const [loading, setLoading] = useState(false);
+  // -1 = nothing highlighted yet, so the first ArrowDown lands on option 0.
+  const [activeIndex, setActiveIndex] = useState(-1);
 
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setShowSelect(false);
       setInputValue('');
+      setActiveIndex(-1);
     }
   };
 
@@ -66,6 +69,7 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
   const handleClick = (option: T) => {
     setShowSelect(false);
     setInputValue('');
+    setActiveIndex(-1);
 
     if (value && getOptionLabel(value) === getOptionLabel(option)) return;
 
@@ -80,10 +84,57 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
     }
     setInputValue(input);
     setSuggestions(getFilteredOptions(options, input, getOptionLabel));
+    // The filtered list is a different list — highlighting index 3 of the old
+    // one would point at an unrelated option.
+    setActiveIndex(-1);
   };
 
   const handleToggleSelect = () => {
-    !disabled && setShowSelect(!showSelect);
+    if (disabled) return;
+    setShowSelect(!showSelect);
+    setActiveIndex(-1);
+  };
+
+  /**
+   * Keyboard handling for the combobox input, per the ARIA combobox pattern:
+   * the list never takes focus, the input keeps it and points at the active
+   * option through `aria-activedescendant`. Without this the options were
+   * reachable only by Tab-stopping through every one of them.
+   */
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (disabled) return;
+    const lastIndex = suggestions.length - 1;
+
+    const move = (next: number) => {
+      event.preventDefault();
+      if (!showSelect) setShowSelect(true);
+      setActiveIndex(next);
+    };
+
+    switch (event.key) {
+      case 'ArrowDown':
+        return move(activeIndex >= lastIndex ? 0 : activeIndex + 1);
+      case 'ArrowUp':
+        return move(activeIndex <= 0 ? lastIndex : activeIndex - 1);
+      case 'Home':
+        return showSelect && move(0);
+      case 'End':
+        return showSelect && move(lastIndex);
+      case 'Enter': {
+        event.preventDefault();
+        if (!showSelect) return setShowSelect(true);
+        const active = suggestions[activeIndex];
+        return active ? handleClick(active) : setShowSelect(false);
+      }
+      case 'Escape':
+        if (!showSelect) return;
+        event.preventDefault();
+        setShowSelect(false);
+        setActiveIndex(-1);
+        return;
+      default:
+        return;
+    }
   };
 
   return {
@@ -94,6 +145,8 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
     handleBlur,
     handleClick,
     handleOnChange,
+    handleKeyDown,
+    activeOption: suggestions[activeIndex],
     loading,
   };
 };

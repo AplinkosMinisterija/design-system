@@ -28,6 +28,9 @@ export interface OptionsContainerProps {
   name?: string;
   getOptionId?: (option: any) => string | number;
   activeOptionId?: string;
+  /** The currently chosen option, so the list can mark it `aria-selected`. */
+  selectedOption?: any;
+  id?: string;
 }
 
 const OptionsContainer = ({
@@ -46,10 +49,18 @@ const OptionsContainer = ({
   name = '',
   getOptionId = (option) => option?.id ?? option,
   activeOptionId,
+  selectedOption,
+  id,
 }: OptionsContainerProps) => {
   const display = showSelect && !disabled;
   const optionsLength = options.length;
   const handleKeyDown = useKeyAction(handleClick, disabled);
+
+  /** Keeps the arrow-key highlight inside the scrollable list. */
+  const scrollActiveIntoView = (node: HTMLDivElement | null) =>
+    // Guarded: jsdom (and older Safari) ship no scrollIntoView, and a missing
+    // scroll must not take the whole dropdown down with it.
+    node?.scrollIntoView?.({ block: 'nearest' });
 
   const renderOptions = () => {
     if (!options.length) {
@@ -65,7 +76,7 @@ const OptionsContainer = ({
     return (
       <>
         {options.map((option, index) => {
-          const optionId = `${name}-option-${getOptionId(option)}`;
+          const optionId = `${getOptionId(option) ?? `${name}-option-${index}`}`;
           const isActive = activeOptionId === optionId;
 
           return (
@@ -73,8 +84,13 @@ const OptionsContainer = ({
               id={optionId}
               key={JSON.stringify(option) + index}
               role="option"
-              tabIndex={0}
-              aria-selected={isActive}
+              // Not a tab stop: in the ARIA combobox pattern focus stays on the
+              // input and moves through `aria-activedescendant`. Tabbing used to
+              // walk every option one by one before reaching the next field.
+              tabIndex={-1}
+              $active={isActive}
+              ref={isActive ? scrollActiveIntoView : undefined}
+              aria-selected={selectedOption !== undefined && option === selectedOption}
               onClick={() => handleClick(option)}
               onKeyDown={handleKeyDown(option)}
             >
@@ -90,6 +106,7 @@ const OptionsContainer = ({
   return (
     <>
       <OptionContainer
+        id={id}
         $display={display}
         className={className}
         role="listbox"
@@ -140,8 +157,10 @@ const OptionContainer = styled.div<{ $display: boolean }>`
   }
 `;
 
-const Option = styled.div`
+const Option = styled.div<{ $active?: boolean }>`
   cursor: pointer;
+  background: ${({ $active, theme }) =>
+    $active ? theme.colors.dropDown?.hover || '#f3f3f7' : 'transparent'};
   font-size: 1.6rem;
   line-height: 20px;
   padding: 8px 12px;
