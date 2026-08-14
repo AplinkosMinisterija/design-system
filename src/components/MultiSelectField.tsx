@@ -1,6 +1,7 @@
+import { useId } from 'react';
 import FieldWrapper from './common/FieldWrapper';
 import { filterSelectedOptions, handleRemove } from './common/functions';
-import { useSelectData } from './common/hooks';
+import { useSelectData, useOptionNavigation } from './common/hooks';
 import MultiTextField from './common/MultiTextFieldInput';
 import OptionsContainer from './common/OptionsContainer';
 
@@ -46,6 +47,7 @@ const MultiSelectField = ({
     handleBlur,
     handleClick,
     handleOnChange,
+    setShowSelect,
     loading,
   } = useSelectData({
     options,
@@ -56,6 +58,22 @@ const MultiSelectField = ({
     value: values,
     onChange: (option: any) => onChange([...values, option]),
   });
+
+  // Navigation runs over what the list actually shows: already-picked values are
+  // filtered out of it, so the raw suggestions would index onto the wrong option.
+  const visibleOptions = filterSelectedOptions(suggestions, values, getOptionValue);
+  const listId = `${useId()}-listbox`;
+  const { activeOption, handleKeyDown } = useOptionNavigation({
+    options: visibleOptions,
+    disabled,
+    showSelect,
+    setShowSelect,
+    onSelect: handleClick,
+  });
+  const activeOptionId =
+    activeOption === undefined
+      ? undefined
+      : `${listId}-option-${visibleOptions.indexOf(activeOption)}`;
 
   return (
     <FieldWrapper
@@ -76,9 +94,17 @@ const MultiSelectField = ({
         disabled={disabled}
         handleInputChange={handleOnChange}
         getOptionLabel={getOptionLabel}
+        handleKeyDown={handleKeyDown}
+        ariaExpanded={showSelect}
+        ariaControls={listId}
+        ariaActivedescendant={activeOptionId}
       />
       <OptionsContainer
-        options={filterSelectedOptions(suggestions, values, getOptionValue)}
+        id={listId}
+        name={listId}
+        options={visibleOptions}
+        activeOptionId={activeOptionId}
+        getOptionId={(_option, index) => index}
         getOptionLabel={getOptionLabel}
         showSelect={showSelect}
         handleClick={handleClick}

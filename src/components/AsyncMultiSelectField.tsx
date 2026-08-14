@@ -1,6 +1,7 @@
+import { useId } from 'react';
 import FieldWrapper from './common/FieldWrapper';
 import { filterSelectedOptions, handleRemove } from './common/functions';
-import { useAsyncSelectData } from './common/hooks';
+import { useAsyncSelectData, useOptionNavigation } from './common/hooks';
 import MultiTextField from './common/MultiTextFieldInput';
 import OptionsContainer, { OptionContainerTexts } from './common/OptionsContainer';
 
@@ -60,6 +61,7 @@ const AsyncMultiSelectField = ({
     observerRef,
     handleBlur,
     handleClick,
+    setShowSelect,
   } = useAsyncSelectData({
     loadOptions,
     disabled,
@@ -69,6 +71,22 @@ const AsyncMultiSelectField = ({
     name,
     handleGetNextPageParam,
   });
+
+  // Navigation runs over what the list actually shows: already-picked values are
+  // filtered out of it, so the raw suggestions would index onto the wrong option.
+  const visibleOptions = filterSelectedOptions(suggestions, values, getOptionValue);
+  const listId = `${useId()}-listbox`;
+  const { activeOption, handleKeyDown } = useOptionNavigation({
+    options: visibleOptions,
+    disabled,
+    showSelect,
+    setShowSelect,
+    onSelect: handleClick,
+  });
+  const activeOptionId =
+    activeOption === undefined
+      ? undefined
+      : `${listId}-option-${visibleOptions.indexOf(activeOption)}`;
 
   return (
     <FieldWrapper
@@ -91,10 +109,18 @@ const AsyncMultiSelectField = ({
         error={error}
         disabled={disabled}
         handleInputChange={handleInputChange}
+        handleKeyDown={handleKeyDown}
+        ariaExpanded={showSelect}
+        ariaControls={listId}
+        ariaActivedescendant={activeOptionId}
         getOptionLabel={getOptionLabel}
       />
       <OptionsContainer
-        options={filterSelectedOptions(suggestions, values, getOptionValue)}
+        id={listId}
+        name={listId}
+        options={visibleOptions}
+        activeOptionId={activeOptionId}
+        getOptionId={(_option, index) => index}
         getOptionLabel={getOptionLabel}
         loading={loading}
         observerRef={observerRef}

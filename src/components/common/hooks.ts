@@ -178,6 +178,7 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
     handleOnChange,
     handleKeyDown,
     activeOption,
+    setShowSelect,
     loading,
   };
 };
@@ -272,7 +273,7 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     resetActiveOption();
   };
 
-  const suggestions = data
+  const suggestions: T[] = data
     ? data.pages
         .flat()
         .map((item) => item?.data)
@@ -284,7 +285,7 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     disabled,
     showSelect,
     setShowSelect,
-    onSelect: (option) => handleClick(option as T),
+    onSelect: handleClick,
   });
 
   return {
@@ -299,6 +300,7 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     handleClick,
     handleKeyDown,
     activeOption,
+    setShowSelect,
   };
 };
 

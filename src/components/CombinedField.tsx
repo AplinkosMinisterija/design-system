@@ -1,7 +1,8 @@
-import { JSX, useState } from 'react';
+import { JSX, useId, useState } from 'react';
 import styled from 'styled-components';
 import { TextField } from '../index';
 import Icon, { IconName } from './common/Icons';
+import { useOptionNavigation } from './common/hooks';
 import OptionsContainer from './common/OptionsContainer';
 import NumericField from './NumericField';
 
@@ -23,6 +24,9 @@ export interface CombinedFieldProps {
   className?: string;
   numeric?: boolean;
 }
+
+/** One entry of the unit dropdown — as loose as the public `options` prop. */
+type CombinedOption = NonNullable<CombinedFieldProps['options']>[number];
 
 const CombinedField = ({
   value = {
@@ -61,12 +65,37 @@ const CombinedField = ({
     });
   };
 
+  const pickOption = (option: CombinedOption) =>
+    handleChange({ option: getOptionValue ? getOptionValue(option) : option });
+
+  const listId = `${useId()}-listbox`;
+  const { activeOption, handleKeyDown } = useOptionNavigation({
+    options,
+    disabled,
+    showSelect,
+    setShowSelect,
+    onSelect: pickOption,
+  });
+  const activeOptionId =
+    activeOption === undefined ? undefined : `${listId}-option-${options.indexOf(activeOption)}`;
+
   const renderOptions = () => {
     return (
       <OptionsWrapper>
         <SelectedOption
           onBlur={handleBlur}
           onClick={() => !disabled && setShowSelect(!showSelect)}
+          // The unit picker was a plain div: not focusable, so it could not be
+          // reached or opened from the keyboard at all.
+          onKeyDown={handleKeyDown}
+          tabIndex={disabled ? -1 : 0}
+          role="combobox"
+          aria-expanded={showSelect}
+          aria-controls={listId}
+          aria-haspopup="listbox"
+          aria-activedescendant={activeOptionId}
+          aria-disabled={disabled}
+          aria-label={label}
           $width={optionsWidth}
           $disabled={disabled}
         >
@@ -76,14 +105,17 @@ const CombinedField = ({
           </IconContainer>
         </SelectedOption>
         <StyledOptionsContainer
+          id={listId}
+          name={listId}
+          activeOptionId={activeOptionId}
+          getOptionId={(_option, index) => index}
+          selectedOption={value?.option}
           options={options}
           getOptionLabel={(option) =>
             getOptionLabel ? getOptionLabel(option) : <Option>{option}</Option>
           }
           showSelect={showSelect}
-          handleClick={(option) => {
-            handleChange({ option: getOptionValue ? getOptionValue(option) : option });
-          }}
+          handleClick={pickOption}
           $width={optionsWidth}
         />
       </OptionsWrapper>

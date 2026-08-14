@@ -161,8 +161,8 @@ const SelectField = ({
         loading={loading}
         showSelect={showSelect}
         handleClick={handleClick}
-        getOptionId={(option: any) => suggestions.indexOf(option)}
         activeOptionId={activeOptionId}
+        getOptionId={(_option, index) => index}
         selectedOption={selected}
       />
     </FieldWrapper>

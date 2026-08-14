@@ -1,6 +1,7 @@
-import { JSX, useState } from 'react';
+import { JSX, useId, useState } from 'react';
 
 import styled from 'styled-components';
+import { useOptionNavigation } from './common/hooks';
 import Icon, { IconName } from './common/Icons';
 
 interface Option {
@@ -34,10 +35,30 @@ const ProfileSelector = ({
   const [showSelect, setShowSelect] = useState(false);
   const selected = getSelectedOptionLabels(value);
 
+  const listId = `${useId()}-listbox`;
+  const optionId = (option: Option) => `${listId}-option-${options.indexOf(option)}`;
+  const { activeOption, handleKeyDown } = useOptionNavigation({
+    options,
+    disabled,
+    showSelect,
+    setShowSelect,
+    onSelect: onChange,
+  });
+
   return (
     <Container
       className={className}
-      tabIndex={1}
+      // Was tabIndex={1}: a positive tab index jumps the whole page's tab order
+      // to this control before anything else.
+      tabIndex={disabled ? -1 : 0}
+      role="combobox"
+      aria-expanded={showSelect}
+      aria-controls={listId}
+      aria-haspopup="listbox"
+      aria-activedescendant={activeOption && optionId(activeOption)}
+      aria-disabled={disabled}
+      aria-label={selected.label}
+      onKeyDown={handleKeyDown}
       onClick={() => setShowSelect(!showSelect)}
       onBlur={() => setShowSelect(false)}
       $variant={variant}
@@ -57,9 +78,15 @@ const ProfileSelector = ({
           {showIcon && <StyledIcon name={IconName.showMore} $variant={variant} />}
         </SelectorContainer>
         {!disabled && showSelect && (
-          <OptionsContainer $variant={variant}>
+          <OptionsContainer id={listId} role="listbox" $variant={variant}>
             {options?.map((option, index) => (
-              <div key={`profile_select_option_${index}`} onClick={() => onChange(option)}>
+              <div
+                key={`profile_select_option_${index}`}
+                id={optionId(option)}
+                role="option"
+                aria-selected={option.id === value?.id}
+                onClick={() => onChange(option)}
+              >
                 {getOptionLabel ? (
                   getOptionLabel(option)
                 ) : (

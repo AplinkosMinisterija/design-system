@@ -26,7 +26,8 @@ export interface OptionsContainerProps {
   observerRef?: any;
   className?: string;
   name?: string;
-  getOptionId?: (option: any) => string | number;
+  /** Option id for `aria-activedescendant`. Defaults to the option's position. */
+  getOptionId?: (option: any, index: number) => string | number;
   activeOptionId?: string;
   /** The currently chosen option, so the list can mark it `aria-selected`. */
   selectedOption?: any;
@@ -47,7 +48,7 @@ const OptionsContainer = ({
   },
   className,
   name = '',
-  getOptionId = (option) => option?.id ?? option,
+  getOptionId = (option, index) => option?.id ?? index,
   activeOptionId,
   selectedOption,
   id,
@@ -76,7 +77,7 @@ const OptionsContainer = ({
     return (
       <>
         {options.map((option, index) => {
-          const optionId = `${name}-option-${getOptionId(option) ?? index}`;
+          const optionId = `${name}-option-${getOptionId(option, index)}`;
           const isActive = activeOptionId === optionId;
 
           return (

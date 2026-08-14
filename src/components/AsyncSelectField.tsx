@@ -84,7 +84,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
   const placeholderValue = value ? getOptionLabel(value) : placeholder;
 
   const activeOptionId =
-    activeOption === undefined ? undefined : `${name}-option-${getOptionId(activeOption as T)}`;
+    activeOption === undefined ? undefined : `${name}-option-${getOptionId(activeOption)}`;
 
   return (
     <FieldWrapper

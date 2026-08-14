@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import FieldWrapper from './common/FieldWrapper';
 import { handleRemove } from './common/functions';
 import MultiTextField from './common/MultiTextFieldInput';
@@ -51,11 +51,19 @@ const CreatableMultiSelect = ({
     clear();
   };
 
+  // Only ever one synthetic option ("Sukurti: …"), so there is nothing to
+  // arrow through — Enter creates, Escape abandons what was typed.
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
+      event.preventDefault();
       handleAdd();
+    } else if (event.key === 'Escape' && showSelect) {
+      event.preventDefault();
+      clear();
     }
   };
+
+  const listId = `${useId()}-listbox`;
 
   return (
     <FieldWrapper
@@ -74,6 +82,8 @@ const CreatableMultiSelect = ({
         input={input}
         error={error}
         handleKeyDown={handleKeyDown}
+        ariaExpanded={showSelect}
+        ariaControls={listId}
         onRemove={({ index }) => {
           handleRemove(index, onChange, values);
         }}
@@ -86,6 +96,8 @@ const CreatableMultiSelect = ({
         hideDropdown={true}
       />
       <OptionsContainer
+        id={listId}
+        name={listId}
         options={[isExist ? 'Toks reikšmė jau egzistuoja' : `Sukurti: ${input}`]}
         getOptionLabel={(option: string) => `${option}`}
         showSelect={showSelect}
