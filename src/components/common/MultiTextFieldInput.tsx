@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useFieldControl } from './FieldControlContext';
 import Icon from '../common/Icons';
@@ -52,6 +53,8 @@ const MultiTextField = ({
 }: MultiTextFieldProps) => {
   const inputRef = useRef<any>(null);
   const field = useFieldControl();
+  const registerControl = field?.registerControl;
+  useEffect(() => registerControl?.(), [registerControl]);
   const ariaValue = field?.controlId || label || name || 'field';
 
   const handleClick = () => {
@@ -112,7 +115,6 @@ const MultiTextField = ({
         {!disabled && (
           <Input
             id={ariaValue}
-            aria-labelledby={!values?.length ? `${ariaValue}-placeholder` : undefined}
             aria-expanded={ariaExpanded}
             aria-controls={ariaControls}
             aria-activedescendant={ariaActivedescendant}
@@ -137,7 +139,7 @@ const MultiTextField = ({
         <DropdownIconContainer
           role="presentation"
           aria-hidden="true"
-          tabIndex={disabled ? -1 : 0}
+          tabIndex={-1}
           aria-label={ariaLabelDropDownIcon}
         >
           <StyledIcons name="dropdownArrow" />

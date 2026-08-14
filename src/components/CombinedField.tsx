@@ -69,15 +69,14 @@ const CombinedField = ({
     handleChange({ option: getOptionValue ? getOptionValue(option) : option });
 
   const listId = `${useId()}-listbox`;
-  const { activeOption, handleKeyDown } = useOptionNavigation({
+  const { activeOptionId, handleKeyDown } = useOptionNavigation({
     options,
     disabled,
     showSelect,
     setShowSelect,
     onSelect: pickOption,
+    listId,
   });
-  const activeOptionId =
-    activeOption === undefined ? undefined : `${listId}-option-${options.indexOf(activeOption)}`;
 
   const renderOptions = () => {
     return (
@@ -108,8 +107,6 @@ const CombinedField = ({
           id={listId}
           name={listId}
           activeOptionId={activeOptionId}
-          getOptionId={(_option, index) => index}
-          selectedOption={value?.option}
           options={options}
           getOptionLabel={(option) =>
             getOptionLabel ? getOptionLabel(option) : <Option>{option}</Option>

@@ -19,6 +19,7 @@ const ProfileSelector = ({
   alignRight = false,
   showIcon = true,
   disabled = false,
+  label = 'Pasirinkti profilį',
   className,
 }: {
   value: Option;
@@ -30,19 +31,24 @@ const ProfileSelector = ({
   alignRight?: boolean;
   showIcon?: boolean;
   disabled?: boolean;
+  /** Names the control by its PURPOSE — the value alone never says what it picks. */
+  label?: string;
   className?: string;
 }) => {
   const [showSelect, setShowSelect] = useState(false);
   const selected = getSelectedOptionLabels(value);
 
   const listId = `${useId()}-listbox`;
-  const optionId = (option: Option) => `${listId}-option-${options.indexOf(option)}`;
-  const { activeOption, handleKeyDown } = useOptionNavigation({
-    options,
+  // `options` is optional at the call sites below (`options?.map`), so navigation
+  // must see a list either way.
+  const optionList = options || [];
+  const { activeOptionId, handleKeyDown } = useOptionNavigation({
+    options: optionList,
     disabled,
     showSelect,
     setShowSelect,
     onSelect: onChange,
+    listId,
   });
 
   return (
@@ -53,11 +59,11 @@ const ProfileSelector = ({
       tabIndex={disabled ? -1 : 0}
       role="combobox"
       aria-expanded={showSelect}
-      aria-controls={listId}
+      aria-controls={showSelect ? listId : undefined}
       aria-haspopup="listbox"
-      aria-activedescendant={activeOption && optionId(activeOption)}
+      aria-activedescendant={activeOptionId}
       aria-disabled={disabled}
-      aria-label={selected.label}
+      aria-label={label}
       onKeyDown={handleKeyDown}
       onClick={() => setShowSelect(!showSelect)}
       onBlur={() => setShowSelect(false)}
@@ -82,7 +88,7 @@ const ProfileSelector = ({
             {options?.map((option, index) => (
               <div
                 key={`profile_select_option_${index}`}
-                id={optionId(option)}
+                id={`${listId}-option-${index}`}
                 role="option"
                 aria-selected={option.id === value?.id}
                 onClick={() => onChange(option)}

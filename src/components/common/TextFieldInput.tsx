@@ -64,6 +64,8 @@ const TextFieldInput = ({
   ...rest
 }: TextFieldProps) => {
   const field = useFieldControl();
+  const registerControl = field?.registerControl;
+  useEffect(() => registerControl?.(), [registerControl]);
   const ariaValue = field?.controlId || label || name;
   const placeholderRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
@@ -88,7 +90,6 @@ const TextFieldInput = ({
       $height={containerHeight}
       $disabled={disabled || false}
       aria-disabled={disabled}
-      aria-invalid={!!error}
     >
       {left}
       <InputWrapper>

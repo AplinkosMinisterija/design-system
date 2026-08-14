@@ -30,6 +30,10 @@ export interface AsyncSelectFieldProps<T extends SelectOption = SelectOption> {
   handleGetNextPageParam?: (params: any) => number | undefined;
   ariaLabelRemove?: string;
   ariaLabelDropDownIcon?: string;
+  /**
+   * @deprecated no longer used — option ids are derived from the list's own id
+   * and the option's position, so they are unique on a page without help.
+   */
   getOptionId?: (option: T) => string | number;
 }
 
@@ -56,7 +60,6 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
   handleGetNextPageParam = (data) => {
     return data?.page < data?.totalPages ? data.page + 1 : undefined;
   },
-  getOptionId = (option: T) => (option?.id as string | number) ?? '',
 }: AsyncSelectFieldProps<T>) => {
   const {
     loading,
@@ -69,7 +72,8 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
     handleClick,
     observerRef,
     handleKeyDown: handleInputKeyDown,
-    activeOption,
+    activeOptionId,
+    listId,
   } = useAsyncSelectData({
     loadOptions,
     disabled,
@@ -83,8 +87,6 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const placeholderValue = value ? getOptionLabel(value) : placeholder;
 
-  const activeOptionId =
-    activeOption === undefined ? undefined : `${name}-option-${getOptionId(activeOption)}`;
 
   return (
     <FieldWrapper
@@ -141,20 +143,19 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
         selectedValue={!!value}
         role="combobox"
         aria-expanded={showSelect}
-        aria-controls={`${name}-options`}
+        aria-controls={listId}
         aria-haspopup="listbox"
         aria-activedescendant={activeOptionId}
         onKeyDown={handleInputKeyDown}
       />
       <OptionsContainer
+        id={listId}
+        name={listId}
         loading={loading}
         observerRef={observerRef}
         options={suggestions}
         getOptionLabel={getOptionComponent || getOptionLabel}
-        getOptionId={getOptionId}
-        name={name}
         activeOptionId={activeOptionId}
-        selectedOption={value}
         showSelect={showSelect}
         handleClick={handleClick}
         texts={texts}

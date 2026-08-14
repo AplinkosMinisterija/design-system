@@ -1,7 +1,6 @@
-import { useId } from 'react';
 import FieldWrapper from './common/FieldWrapper';
 import { filterSelectedOptions, handleRemove } from './common/functions';
-import { useAsyncSelectData, useOptionNavigation } from './common/hooks';
+import { useAsyncSelectData } from './common/hooks';
 import MultiTextField from './common/MultiTextFieldInput';
 import OptionsContainer, { OptionContainerTexts } from './common/OptionsContainer';
 
@@ -61,32 +60,20 @@ const AsyncMultiSelectField = ({
     observerRef,
     handleBlur,
     handleClick,
-    setShowSelect,
+    activeOptionId,
+    handleKeyDown,
+    listId,
   } = useAsyncSelectData({
     loadOptions,
     disabled,
     onChange: (option: any) => onChange([...values, option]),
+    filterOptions: (all) => filterSelectedOptions(all, values, getOptionValue),
     dependantValue,
     optionsKey,
     name,
     handleGetNextPageParam,
   });
 
-  // Navigation runs over what the list actually shows: already-picked values are
-  // filtered out of it, so the raw suggestions would index onto the wrong option.
-  const visibleOptions = filterSelectedOptions(suggestions, values, getOptionValue);
-  const listId = `${useId()}-listbox`;
-  const { activeOption, handleKeyDown } = useOptionNavigation({
-    options: visibleOptions,
-    disabled,
-    showSelect,
-    setShowSelect,
-    onSelect: handleClick,
-  });
-  const activeOptionId =
-    activeOption === undefined
-      ? undefined
-      : `${listId}-option-${visibleOptions.indexOf(activeOption)}`;
 
   return (
     <FieldWrapper
@@ -118,9 +105,8 @@ const AsyncMultiSelectField = ({
       <OptionsContainer
         id={listId}
         name={listId}
-        options={visibleOptions}
+        options={suggestions}
         activeOptionId={activeOptionId}
-        getOptionId={(_option, index) => index}
         getOptionLabel={getOptionLabel}
         loading={loading}
         observerRef={observerRef}

@@ -57,15 +57,14 @@ const SimpleSelect = ({
 
   const listId = `${useId()}-listbox`;
   const optionList = options || [];
-  const { activeOption, handleKeyDown } = useOptionNavigation({
+  const { activeOptionId, handleKeyDown } = useOptionNavigation({
     options: optionList,
     disabled,
     showSelect,
     setShowSelect,
     onSelect: handleClick,
+    listId,
   });
-  const activeOptionId =
-    activeOption === undefined ? undefined : `${listId}-option-${optionList.indexOf(activeOption)}`;
 
   return (
     <FieldWrapper
@@ -100,8 +99,6 @@ const SimpleSelect = ({
         name={listId}
         options={optionList}
         activeOptionId={activeOptionId}
-        getOptionId={(_option, index) => index}
-        selectedOption={value}
         getOptionLabel={getOptionComponent || getOptionLabel}
         showSelect={showSelect}
         handleClick={handleClick}

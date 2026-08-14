@@ -28,9 +28,9 @@ export interface OptionsContainerProps {
   name?: string;
   /** Option id for `aria-activedescendant`. Defaults to the option's position. */
   getOptionId?: (option: any, index: number) => string | number;
+  /** Id of the chosen option, so the list can mark it `aria-selected`. */
+  selectedOptionId?: string;
   activeOptionId?: string;
-  /** The currently chosen option, so the list can mark it `aria-selected`. */
-  selectedOption?: any;
   id?: string;
 }
 
@@ -48,9 +48,9 @@ const OptionsContainer = ({
   },
   className,
   name = '',
-  getOptionId = (option, index) => option?.id ?? index,
+  getOptionId = (_option, index) => index,
   activeOptionId,
-  selectedOption,
+  selectedOptionId,
   id,
 }: OptionsContainerProps) => {
   const display = showSelect && !disabled;
@@ -91,7 +91,7 @@ const OptionsContainer = ({
               tabIndex={-1}
               $active={isActive}
               ref={isActive ? scrollActiveIntoView : undefined}
-              aria-selected={selectedOption !== undefined && option === selectedOption}
+              aria-selected={selectedOptionId !== undefined && selectedOptionId === optionId}
               onClick={() => handleClick(option)}
               onKeyDown={handleKeyDown(option)}
             >
@@ -162,6 +162,10 @@ const Option = styled.div<{ $active?: boolean }>`
   cursor: pointer;
   background: ${({ $active, theme }) =>
     $active ? theme.colors.dropDown?.hover || '#f3f3f7' : 'transparent'};
+  /* Focus stays on the input, so the highlight is the only cue that says which
+     option Enter will pick — a background tint alone is ~1.1:1 (WCAG 1.4.11). */
+  box-shadow: ${({ $active, theme }) =>
+    $active ? `inset 3px 0 0 ${theme.colors.primary || '#0a5'}` : 'none'};
   font-size: 1.6rem;
   line-height: 20px;
   padding: 8px 12px;

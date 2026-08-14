@@ -1,8 +1,8 @@
 ---
-'@aplinkosministerija/design-system': minor
+'@aplinkosministerija/design-system': major
 ---
 
-Accessibility: name every field by its own label, tie its error to it, and make `SelectField` keyboard-navigable.
+**Breaking (DOM contract).** Accessibility: name every field by its own label, tie its error to it, and make `SelectField` keyboard-navigable.
 
 `FieldWrapper` now generates an id (`useId`) and hands it to whichever control renders inside it through a context, so the wiring cannot be forgotten per field:
 
@@ -22,3 +22,17 @@ Fixed the stylesheet export: `exports` published `./styles.css` → `./dist/styl
 `ProfileSelector` also loses its `tabIndex={1}`: a positive tab index pulls the whole page's tab order to it before anything else.
 
 `MultiTextFieldInput` takes its id from `FieldWrapper` like the single-value input does, so multi-selects are named by their label too. Its wrapper no longer defaults to `role="combobox"` — that nested a second combobox around the real one, and assistive tech landed on the wrapper.
+
+### Breaking changes
+
+The rendered DOM changed for every field. Nothing in the public props was removed, but selectors and queries that depended on the old markup need updating:
+
+- **Input and option ids are no longer derived from the label text.** `<input id="Vardas">` becomes a `useId()` value. Anything selecting `[id="<label>"]` breaks — notably `biip-zuvinimas-web/tests/e2e/helpers/fields.ts` and its two inline call sites. Query by label or role instead; the label association this release adds is what makes that possible.
+- **Select inputs are `role="combobox"`, not `textbox`.** Negative assertions such as `getByRole('textbox')).toHaveCount(0)` will now match differently.
+- **`MultiTextFieldInput`'s wrapper no longer defaults to `role="combobox"`** — the real combobox is the input inside it, and two nested comboboxes meant assistive tech landed on the wrapper. It is exported as `MultiTextField`.
+- **The accessible name no longer comes from the placeholder.** Tests reading a select's chosen value out of `placeholder` still work, but the name is now the label.
+- **`aria-selected` marks the chosen option**, not the highlighted one; the highlighted one is `aria-activedescendant`.
+- **Options are no longer tab stops.**
+- `CheckBox` no longer renders a second `role="checkbox"` element around the native input — it was an unnamed duplicate tab stop.
+
+`AsyncSelectField`'s `getOptionId` prop is now unused and deprecated: option ids come from the list's own id and the option's position, which is unique on a page without help.

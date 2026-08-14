@@ -1,4 +1,4 @@
-import { useId, useMemo } from 'react';
+import { useCallback, useId, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { ErrorMessage } from './ErrorMessage';
 import { FieldControlContext } from './FieldControlContext';
@@ -53,9 +53,11 @@ const FieldWrapper = ({
   const errorAriaValue = showErrorMessage ? `${controlId}-error` : undefined;
   const subLabelAriaValue = subLabel ? `${controlId}-sublabel` : undefined;
 
+  const [hasLabelledControl, setHasLabelledControl] = useState(false);
+  const registerControl = useCallback(() => setHasLabelledControl(true), []);
   const fieldControl = useMemo(
-    () => ({ controlId, errorId: errorAriaValue, invalid: !!error }),
-    [controlId, errorAriaValue, error],
+    () => ({ controlId, errorId: errorAriaValue, invalid: showErrorMessage, registerControl }),
+    [controlId, errorAriaValue, showErrorMessage, registerControl],
   );
 
   return (
@@ -70,7 +72,7 @@ const FieldWrapper = ({
       <LabelRow>
         {!!label && (
           <LabelContainer>
-            <Label id={labelAriaValue} htmlFor={controlId}>
+            <Label id={labelAriaValue} htmlFor={hasLabelledControl ? controlId : undefined}>
               {label}
               {required && <RequiredMark aria-hidden="true"> *</RequiredMark>}
             </Label>

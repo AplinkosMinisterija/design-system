@@ -7,6 +7,12 @@ export interface FieldControl {
   errorId?: string;
   /** Whether the field is currently in error. */
   invalid: boolean;
+  /**
+   * Claims `controlId`. `FieldWrapper` only points its `<label for>` at a
+   * control that has claimed it — a group of radios or buttons never does, and
+   * a label pointing at nothing is worse than one pointing nowhere.
+   */
+  registerControl: () => void;
 }
 
 /**

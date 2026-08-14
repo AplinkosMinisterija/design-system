@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useKeyAction } from './common/hooks';
 
 export interface CheckboxProps {
   value?: boolean;
@@ -31,8 +30,6 @@ const Checkbox = ({
   width,
   radius,
 }: CheckboxProps) => {
-  const handleKeyDown = useKeyAction((val?: boolean) => onChange(val ?? false), disabled);
-  const ariaValue = label || name;
 
   return (
     <Wrapper $width={width} $displayAsButton={displayAsButton}>
@@ -44,12 +41,6 @@ const Checkbox = ({
             $error={error}
             $checked={value}
             $hidden={displayAsButton}
-            role="checkbox"
-            aria-checked={intermediate ? 'mixed' : value}
-            aria-labelledby={ariaValue}
-            aria-describedby={description ? description : undefined}
-            tabIndex={disabled ? -1 : 0}
-            onKeyDown={handleKeyDown(!value)}
           >
             <CheckBox
               type="checkbox"
@@ -80,12 +71,6 @@ const Checkbox = ({
             $error={error}
             $checked={value}
             $hidden={displayAsButton}
-            role="checkbox"
-            aria-checked={intermediate ? 'mixed' : value}
-            aria-labelledby={ariaValue}
-            aria-describedby={description ? description : undefined}
-            tabIndex={disabled ? -1 : 0}
-            onKeyDown={handleKeyDown(!value) as any}
           >
             <CheckBox
               type="checkbox"

@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { JSX, useCallback, useEffect, useRef, useState } from 'react';
+import { JSX, useCallback, useEffect, useId, useRef, useState } from 'react';
 import { intersectionObserverConfig } from '../../utils';
 import { getFilteredOptions } from './functions';
 import { SelectOption } from '../../types';
@@ -10,6 +10,8 @@ interface UseOptionNavigationProps<T> {
   showSelect: boolean;
   setShowSelect: (show: boolean) => void;
   onSelect: (option: T) => void;
+  /** Id of the listbox; option ids are derived from it. */
+  listId: string;
 }
 
 /**
@@ -27,6 +29,7 @@ export const useOptionNavigation = <T,>({
   showSelect,
   setShowSelect,
   onSelect,
+  listId,
 }: UseOptionNavigationProps<T>) => {
   // -1 = nothing highlighted yet, so the first ArrowDown lands on option 0.
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -48,16 +51,19 @@ export const useOptionNavigation = <T,>({
         return move(activeIndex >= lastIndex ? 0 : activeIndex + 1);
       case 'ArrowUp':
         return move(activeIndex <= 0 ? lastIndex : activeIndex - 1);
-      case 'Home':
-        return showSelect ? move(0) : undefined;
-      case 'End':
-        return showSelect ? move(lastIndex) : undefined;
+      // No Home/End: these inputs are editable, and moving the caret to the
+      // start of what you typed has to keep working.
       case 'Enter': {
+        // Only while the list is open, so Enter still submits the form around a
+        // closed select.
+        if (!showSelect) return;
         event.preventDefault();
-        if (!showSelect) return setShowSelect(true);
         const active = options[activeIndex];
-        if (active) return onSelect(active);
-        return setShowSelect(false);
+        if (!active) return setShowSelect(false);
+        // Reset here rather than in each caller: the list shrinks or reorders
+        // after a pick, so a surviving index highlights an unrelated option.
+        setActiveIndex(-1);
+        return onSelect(active);
       }
       case 'Escape':
         if (!showSelect) return;
@@ -69,7 +75,17 @@ export const useOptionNavigation = <T,>({
     }
   };
 
-  return { activeOption: options[activeIndex], resetActiveOption, handleKeyDown };
+  return {
+    activeIndex,
+    activeOption: options[activeIndex],
+    // Composed here, and by position, for two reasons: recovering the index with
+    // `indexOf` picks the FIRST equal option, so arrowing onto a duplicate
+    // highlighted the wrong row; and a closed list must not advertise an
+    // `aria-activedescendant` whose element is no longer rendered.
+    activeOptionId: showSelect && activeIndex >= 0 ? `${listId}-option-${activeIndex}` : undefined,
+    resetActiveOption,
+    handleKeyDown,
+  };
 };
 
 interface UseSelectDataProps<T extends SelectOption = SelectOption> {
@@ -80,6 +96,12 @@ interface UseSelectDataProps<T extends SelectOption = SelectOption> {
   refreshOptions?: (dependantId: string) => Promise<void>;
   dependantId?: string;
   value?: T;
+  /**
+   * Narrows what the list shows — the multi-selects drop already-picked values.
+   * Applied before navigation too, so the highlighted option is always the one
+   * the user can see.
+   */
+  filterOptions?: (options: T[]) => T[];
 }
 
 export const useSelectData = <T extends SelectOption = SelectOption>({
@@ -90,17 +112,21 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
   refreshOptions,
   dependantId,
   value,
+  filterOptions,
 }: UseSelectDataProps<T>) => {
   const [input, setInputValue] = useState<string>('');
   const [showSelect, setShowSelect] = useState(false);
   const [suggestions, setSuggestions] = useState(options);
   const [loading, setLoading] = useState(false);
-  const { activeOption, resetActiveOption, handleKeyDown } = useOptionNavigation({
-    options: suggestions,
+  const listId = `${useId()}-listbox`;
+  const visibleOptions = filterOptions ? filterOptions(suggestions) : suggestions;
+  const { activeOptionId, resetActiveOption, handleKeyDown } = useOptionNavigation({
+    options: visibleOptions,
     disabled,
     showSelect,
     setShowSelect,
     onSelect: (option) => handleClick(option),
+    listId,
   });
 
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
@@ -169,7 +195,7 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
   };
 
   return {
-    suggestions,
+    suggestions: visibleOptions,
     input,
     handleToggleSelect,
     showSelect,
@@ -177,8 +203,8 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
     handleClick,
     handleOnChange,
     handleKeyDown,
-    activeOption,
-    setShowSelect,
+    activeOptionId,
+    listId,
     loading,
   };
 };
@@ -191,6 +217,8 @@ interface UseAsyncSelectDataProps<T extends SelectOption = SelectOption> {
   name: string;
   optionsKey?: string;
   handleGetNextPageParam: (data: any) => number | null | undefined;
+  /** Narrows what the list shows — the multi-select drops already-picked values. */
+  filterOptions?: (options: T[]) => T[];
 }
 
 export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
@@ -201,10 +229,12 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
   name,
   optionsKey,
   handleGetNextPageParam,
+  filterOptions,
 }: UseAsyncSelectDataProps<T>) => {
   const [input, setInput] = useState('');
   const [showSelect, setShowSelect] = useState(false);
   const observerRef = useRef(null);
+  const listId = `${useId()}-listbox`;
 
   const fetchData = async (page: number) => {
     const data = await loadOptions(input, page, dependantValue);
@@ -250,6 +280,7 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setShowSelect(false);
       setInput('');
+      resetActiveOption();
     }
   };
 
@@ -279,14 +310,17 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
         .map((item) => item?.data)
         .flat()
     : [];
+  const visibleOptions = filterOptions ? filterOptions(suggestions) : suggestions;
 
-  const { activeOption, resetActiveOption, handleKeyDown } = useOptionNavigation({
-    options: suggestions,
+  const { activeOptionId, resetActiveOption, handleKeyDown } = useOptionNavigation({
+    options: visibleOptions,
     disabled,
     showSelect,
     setShowSelect,
     onSelect: handleClick,
+    listId,
   });
+
 
   return {
     loading: isFetching,
@@ -299,8 +333,8 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     observerRef,
     handleClick,
     handleKeyDown,
-    activeOption,
-    setShowSelect,
+    activeOptionId,
+    listId,
   };
 };
 

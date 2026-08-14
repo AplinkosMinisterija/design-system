@@ -1,4 +1,4 @@
-import { JSX, useId } from 'react';
+import { JSX } from 'react';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
 import { useKeyAction, useSelectData } from './common/hooks';
@@ -72,7 +72,8 @@ const SelectField = ({
     handleClick,
     handleOnChange,
     handleKeyDown: handleInputKeyDown,
-    activeOption,
+    activeOptionId,
+    listId,
     loading,
   } = useSelectData({
     options: options || [],
@@ -85,12 +86,9 @@ const SelectField = ({
   });
 
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
+  const selectedIndex = selected === undefined ? -1 : suggestions.indexOf(selected);
+  const selectedOptionId = selectedIndex < 0 ? undefined : `${listId}-option-${selectedIndex}`;
   const showDeleteIcon = selected != null && clearable && !disabled;
-  const listId = `${useId()}-listbox`;
-  const activeOptionId =
-    activeOption === undefined
-      ? undefined
-      : `${listId}-option-${suggestions.indexOf(activeOption)}`;
 
   return (
     <FieldWrapper
@@ -162,8 +160,7 @@ const SelectField = ({
         showSelect={showSelect}
         handleClick={handleClick}
         activeOptionId={activeOptionId}
-        getOptionId={(_option, index) => index}
-        selectedOption={selected}
+        selectedOptionId={selectedOptionId}
       />
     </FieldWrapper>
   );
