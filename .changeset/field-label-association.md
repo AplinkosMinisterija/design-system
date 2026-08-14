@@ -35,4 +35,4 @@ The rendered DOM changed for every field. Nothing in the public props was remove
 - **Options are no longer tab stops.**
 - `CheckBox` no longer renders a second `role="checkbox"` element around the native input — it was an unnamed duplicate tab stop.
 
-`AsyncSelectField`'s `getOptionId` prop is now unused and deprecated: option ids come from the list's own id and the option's position, which is unique on a page without help.
+- **`AsyncSelectField`'s `getOptionId` prop is removed.** Option ids now come from the list's own id and the option's position, which is unique on a page without help, so the prop had nothing left to do. Passing it is a type error rather than a silent no-op — `biip-rusys-web/src/pages/ObservationForm/index.tsx` is the one consumer that does; deleting the line is the whole migration.

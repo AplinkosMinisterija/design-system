@@ -30,11 +30,6 @@ export interface AsyncSelectFieldProps<T extends SelectOption = SelectOption> {
   handleGetNextPageParam?: (params: any) => number | undefined;
   ariaLabelRemove?: string;
   ariaLabelDropDownIcon?: string;
-  /**
-   * @deprecated no longer used — option ids are derived from the list's own id
-   * and the option's position, so they are unique on a page without help.
-   */
-  getOptionId?: (option: T) => string | number;
 }
 
 const AsyncSelectField = <T extends SelectOption = SelectOption>({
