@@ -30,7 +30,6 @@ export interface AsyncSelectFieldProps<T extends SelectOption = SelectOption> {
   handleGetNextPageParam?: (params: any) => number | undefined;
   ariaLabelRemove?: string;
   ariaLabelDropDownIcon?: string;
-  getOptionId?: (option: T) => string | number;
 }
 
 const AsyncSelectField = <T extends SelectOption = SelectOption>({
@@ -56,7 +55,6 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
   handleGetNextPageParam = (data) => {
     return data?.page < data?.totalPages ? data.page + 1 : undefined;
   },
-  getOptionId = (option: T) => (option?.id as string | number) ?? '',
 }: AsyncSelectFieldProps<T>) => {
   const {
     loading,
@@ -68,6 +66,9 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
     handleBlur,
     handleClick,
     observerRef,
+    handleKeyDown: handleInputKeyDown,
+    activeOptionId,
+    listId,
   } = useAsyncSelectData({
     loadOptions,
     disabled,
@@ -81,10 +82,6 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const placeholderValue = value ? getOptionLabel(value) : placeholder;
 
-  const activeOptionId =
-    showSelect && value && getOptionId(value) != null
-      ? `${name}-option-${getOptionId(value)}`
-      : undefined;
 
   return (
     <FieldWrapper
@@ -141,30 +138,18 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
         selectedValue={!!value}
         role="combobox"
         aria-expanded={showSelect}
-        aria-controls={`${name}-options`}
+        aria-controls={listId}
         aria-haspopup="listbox"
         aria-activedescendant={activeOptionId}
-        onKeyDown={(e) => {
-          if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            handleToggleSelect();
-          } else if (e.key === 'Enter') {
-            e.preventDefault();
-            if (value) {
-              onChange(value);
-            } else {
-              handleToggleSelect();
-            }
-          }
-        }}
+        onKeyDown={handleInputKeyDown}
       />
       <OptionsContainer
+        id={listId}
+        name={listId}
         loading={loading}
         observerRef={observerRef}
         options={suggestions}
         getOptionLabel={getOptionComponent || getOptionLabel}
-        getOptionId={getOptionId}
-        name={name}
         activeOptionId={activeOptionId}
         showSelect={showSelect}
         handleClick={handleClick}

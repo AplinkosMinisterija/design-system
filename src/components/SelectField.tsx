@@ -71,6 +71,9 @@ const SelectField = ({
     handleBlur,
     handleClick,
     handleOnChange,
+    handleKeyDown: handleInputKeyDown,
+    activeOptionId,
+    listId,
     loading,
   } = useSelectData({
     options: options || [],
@@ -83,6 +86,8 @@ const SelectField = ({
   });
 
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
+  const selectedIndex = selected === undefined ? -1 : suggestions.indexOf(selected);
+  const selectedOptionId = selectedIndex < 0 ? undefined : `${listId}-option-${selectedIndex}`;
   const showDeleteIcon = selected != null && clearable && !disabled;
 
   return (
@@ -134,12 +139,12 @@ const SelectField = ({
           </RightContainer>
         }
         onChange={handleOnChange}
-        onKeyDown={(e) => {
-          if (e.key === 'ArrowDown' || e.key === 'Enter') {
-            e.preventDefault();
-            handleToggleSelect();
-          }
-        }}
+        onKeyDown={handleInputKeyDown}
+        role="combobox"
+        ariaExpanded={showSelect}
+        ariaControls={listId}
+        ariaHaspopup="listbox"
+        ariaActivedescendant={activeOptionId}
         disabled={disabled}
         placeholder={
           selected ? (getOptionComponent?.(selected) ?? getOptionLabel(selected)) : placeholder
@@ -147,11 +152,15 @@ const SelectField = ({
         selectedValue={selected}
       />
       <OptionsContainer
+        id={listId}
+        name={listId}
         options={suggestions}
         getOptionLabel={(getOptionComponent as any) || getOptionLabel}
         loading={loading}
         showSelect={showSelect}
         handleClick={handleClick}
+        activeOptionId={activeOptionId}
+        selectedOptionId={selectedOptionId}
       />
     </FieldWrapper>
   );

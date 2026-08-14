@@ -1,8 +1,92 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { JSX, useCallback, useEffect, useRef, useState } from 'react';
+import { JSX, useCallback, useEffect, useId, useRef, useState } from 'react';
 import { intersectionObserverConfig } from '../../utils';
 import { getFilteredOptions } from './functions';
 import { SelectOption } from '../../types';
+
+interface UseOptionNavigationProps<T> {
+  options: T[];
+  disabled?: boolean;
+  showSelect: boolean;
+  setShowSelect: (show: boolean) => void;
+  onSelect: (option: T) => void;
+  /** Id of the listbox; option ids are derived from it. */
+  listId: string;
+}
+
+/**
+ * Keyboard handling for a combobox's option list, per the ARIA combobox
+ * pattern: the list never takes focus, the input keeps it and points at the
+ * active option through `aria-activedescendant`.
+ *
+ * Shared by the plain and the async select, which otherwise drift — the async
+ * one had no keyboard navigation at all, so its options were reachable only by
+ * Tab-stopping through every one of them.
+ */
+export const useOptionNavigation = <T,>({
+  options,
+  disabled,
+  showSelect,
+  setShowSelect,
+  onSelect,
+  listId,
+}: UseOptionNavigationProps<T>) => {
+  // -1 = nothing highlighted yet, so the first ArrowDown lands on option 0.
+  const [activeIndex, setActiveIndex] = useState(-1);
+
+  const resetActiveOption = () => setActiveIndex(-1);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (disabled) return;
+    const lastIndex = options.length - 1;
+
+    const move = (next: number) => {
+      event.preventDefault();
+      if (!showSelect) setShowSelect(true);
+      setActiveIndex(next);
+    };
+
+    switch (event.key) {
+      case 'ArrowDown':
+        return move(activeIndex >= lastIndex ? 0 : activeIndex + 1);
+      case 'ArrowUp':
+        return move(activeIndex <= 0 ? lastIndex : activeIndex - 1);
+      // No Home/End: these inputs are editable, and moving the caret to the
+      // start of what you typed has to keep working.
+      case 'Enter': {
+        // Only while the list is open, so Enter still submits the form around a
+        // closed select.
+        if (!showSelect) return;
+        event.preventDefault();
+        const active = options[activeIndex];
+        if (!active) return setShowSelect(false);
+        // Reset here rather than in each caller: the list shrinks or reorders
+        // after a pick, so a surviving index highlights an unrelated option.
+        setActiveIndex(-1);
+        return onSelect(active);
+      }
+      case 'Escape':
+        if (!showSelect) return;
+        event.preventDefault();
+        setShowSelect(false);
+        return resetActiveOption();
+      default:
+        return;
+    }
+  };
+
+  return {
+    activeIndex,
+    activeOption: options[activeIndex],
+    // Composed here, and by position, for two reasons: recovering the index with
+    // `indexOf` picks the FIRST equal option, so arrowing onto a duplicate
+    // highlighted the wrong row; and a closed list must not advertise an
+    // `aria-activedescendant` whose element is no longer rendered.
+    activeOptionId: showSelect && activeIndex >= 0 ? `${listId}-option-${activeIndex}` : undefined,
+    resetActiveOption,
+    handleKeyDown,
+  };
+};
 
 interface UseSelectDataProps<T extends SelectOption = SelectOption> {
   options: T[];
@@ -12,6 +96,12 @@ interface UseSelectDataProps<T extends SelectOption = SelectOption> {
   refreshOptions?: (dependantId: string) => Promise<void>;
   dependantId?: string;
   value?: T;
+  /**
+   * Narrows what the list shows — the multi-selects drop already-picked values.
+   * Applied before navigation too, so the highlighted option is always the one
+   * the user can see.
+   */
+  filterOptions?: (options: T[]) => T[];
 }
 
 export const useSelectData = <T extends SelectOption = SelectOption>({
@@ -22,16 +112,28 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
   refreshOptions,
   dependantId,
   value,
+  filterOptions,
 }: UseSelectDataProps<T>) => {
   const [input, setInputValue] = useState<string>('');
   const [showSelect, setShowSelect] = useState(false);
   const [suggestions, setSuggestions] = useState(options);
   const [loading, setLoading] = useState(false);
+  const listId = `${useId()}-listbox`;
+  const visibleOptions = filterOptions ? filterOptions(suggestions) : suggestions;
+  const { activeOptionId, resetActiveOption, handleKeyDown } = useOptionNavigation({
+    options: visibleOptions,
+    disabled,
+    showSelect,
+    setShowSelect,
+    onSelect: (option) => handleClick(option),
+    listId,
+  });
 
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setShowSelect(false);
       setInputValue('');
+      resetActiveOption();
     }
   };
 
@@ -66,6 +168,7 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
   const handleClick = (option: T) => {
     setShowSelect(false);
     setInputValue('');
+    resetActiveOption();
 
     if (value && getOptionLabel(value) === getOptionLabel(option)) return;
 
@@ -80,20 +183,28 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
     }
     setInputValue(input);
     setSuggestions(getFilteredOptions(options, input, getOptionLabel));
+    // The filtered list is a different list — highlighting index 3 of the old
+    // one would point at an unrelated option.
+    resetActiveOption();
   };
 
   const handleToggleSelect = () => {
-    !disabled && setShowSelect(!showSelect);
+    if (disabled) return;
+    setShowSelect(!showSelect);
+    resetActiveOption();
   };
 
   return {
-    suggestions,
+    suggestions: visibleOptions,
     input,
     handleToggleSelect,
     showSelect,
     handleBlur,
     handleClick,
     handleOnChange,
+    handleKeyDown,
+    activeOptionId,
+    listId,
     loading,
   };
 };
@@ -106,6 +217,8 @@ interface UseAsyncSelectDataProps<T extends SelectOption = SelectOption> {
   name: string;
   optionsKey?: string;
   handleGetNextPageParam: (data: any) => number | null | undefined;
+  /** Narrows what the list shows — the multi-select drops already-picked values. */
+  filterOptions?: (options: T[]) => T[];
 }
 
 export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
@@ -116,10 +229,12 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
   name,
   optionsKey,
   handleGetNextPageParam,
+  filterOptions,
 }: UseAsyncSelectDataProps<T>) => {
   const [input, setInput] = useState('');
   const [showSelect, setShowSelect] = useState(false);
   const observerRef = useRef(null);
+  const listId = `${useId()}-listbox`;
 
   const fetchData = async (page: number) => {
     const data = await loadOptions(input, page, dependantValue);
@@ -165,30 +280,47 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setShowSelect(false);
       setInput('');
+      resetActiveOption();
     }
   };
 
   const handleClick = (option: T) => {
     setShowSelect(false);
     setInput('');
+    resetActiveOption();
     onChange(option);
   };
 
   const handleToggleSelect = () => {
-    !disabled && setShowSelect(!showSelect);
+    if (disabled) return;
+    setShowSelect(!showSelect);
+    resetActiveOption();
   };
 
   const handleInputChange = (input: string) => {
     setShowSelect(!!input.length);
     setInput(input);
+    // A new query is a new list — the old highlight would point elsewhere.
+    resetActiveOption();
   };
 
-  const suggestions = data
+  const suggestions: T[] = data
     ? data.pages
         .flat()
         .map((item) => item?.data)
         .flat()
     : [];
+  const visibleOptions = filterOptions ? filterOptions(suggestions) : suggestions;
+
+  const { activeOptionId, resetActiveOption, handleKeyDown } = useOptionNavigation({
+    options: visibleOptions,
+    disabled,
+    showSelect,
+    setShowSelect,
+    onSelect: handleClick,
+    listId,
+  });
+
 
   return {
     loading: isFetching,
@@ -200,6 +332,9 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     handleBlur,
     observerRef,
     handleClick,
+    handleKeyDown,
+    activeOptionId,
+    listId,
   };
 };
 

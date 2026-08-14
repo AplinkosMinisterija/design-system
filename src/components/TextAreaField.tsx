@@ -68,7 +68,9 @@ const TextAreaField = ({
           value={value}
           name={name}
           onChange={(e) => onChange && onChange(e.target.value || '')}
-          aria-label={label || name || 'Text area'}
+          aria-label={label ? undefined : name || 'Text area'}
+          aria-describedby={showError && error ? `${id}-error` : undefined}
+          aria-invalid={!!error || undefined}
         />
       </InputContainer>
     </FieldWrapper>

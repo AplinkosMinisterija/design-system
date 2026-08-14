@@ -46,6 +46,9 @@ const MultiSelectField = ({
     handleBlur,
     handleClick,
     handleOnChange,
+    activeOptionId,
+    handleKeyDown,
+    listId,
     loading,
   } = useSelectData({
     options,
@@ -55,7 +58,9 @@ const MultiSelectField = ({
     dependantId,
     value: values,
     onChange: (option: any) => onChange([...values, option]),
+    filterOptions: (all) => filterSelectedOptions(all, values, getOptionValue),
   });
+
 
   return (
     <FieldWrapper
@@ -76,9 +81,16 @@ const MultiSelectField = ({
         disabled={disabled}
         handleInputChange={handleOnChange}
         getOptionLabel={getOptionLabel}
+        handleKeyDown={handleKeyDown}
+        ariaExpanded={showSelect}
+        ariaControls={listId}
+        ariaActivedescendant={activeOptionId}
       />
       <OptionsContainer
-        options={filterSelectedOptions(suggestions, values, getOptionValue)}
+        id={listId}
+        name={listId}
+        options={suggestions}
+        activeOptionId={activeOptionId}
         getOptionLabel={getOptionLabel}
         showSelect={showSelect}
         handleClick={handleClick}
