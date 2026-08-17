@@ -45,7 +45,7 @@ export interface CustomTimePickerProps {
 
 const TimeField = ({
   value,
-  placeHolder = '12:00',
+  placeHolder = 'hh:mm',
   error,
   onChange,
   label,
