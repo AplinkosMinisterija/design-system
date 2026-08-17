@@ -39,7 +39,7 @@ enum Mode {
 
 const DateField = ({
   value,
-  placeHolder = '2001-01-01',
+  placeHolder = 'yyyy-mm-dd',
   error,
   onChange,
   label,
