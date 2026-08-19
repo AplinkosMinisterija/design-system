@@ -1,5 +1,5 @@
 import { format } from 'date-fns/format';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { matchPath, useLocation } from 'react-router';
 import { AppRoute, FilterConfig } from '../types';
 import { isArray, isEmpty, isObject, transform } from 'lodash';
@@ -158,18 +158,29 @@ export function useStorage<T>(
     parseStoredValue(localStorage.getItem(key), initialValue),
   );
 
-  useEffect(() => {
-    if (!persistent) {
-      setStoredValue(initialValue);
-    }
-  }, [initialValue, persistent]);
+  // The fallback is read through a ref so it never becomes an effect
+  // dependency. Callers write it inline — `useStorage(key, {}, true)` is the
+  // common shape — which is a NEW reference on every render. As a dependency
+  // that re-runs the effects below on every render, and they set state
+  // unconditionally, so the component renders itself forever: the screen keeps
+  // rebuilding, and a click released on a row lands on a node that is already
+  // gone. A primitive fallback hides it (it compares by value), which is why
+  // only object and array fallbacks ever showed the symptom.
+  const initialValueRef = useRef(initialValue);
+  initialValueRef.current = initialValue;
 
   useEffect(() => {
-    setStoredValue(parseStoredValue(localStorage.getItem(key), initialValue));
+    if (!persistent) {
+      setStoredValue(initialValueRef.current);
+    }
+  }, [persistent]);
+
+  useEffect(() => {
+    setStoredValue(parseStoredValue(localStorage.getItem(key), initialValueRef.current));
 
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === key) {
-        setStoredValue(parseStoredValue(event.newValue, initialValue));
+        setStoredValue(parseStoredValue(event.newValue, initialValueRef.current));
       }
     };
 
@@ -178,7 +189,7 @@ export function useStorage<T>(
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, [key, initialValue]);
+  }, [key]);
   const updateStorage = (newValue: T) => {
     setStoredValue(newValue);
     // JSON.stringify(undefined) returns undefined; setItem would coerce it to
