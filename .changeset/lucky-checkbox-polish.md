@@ -15,6 +15,10 @@ Rework `Checkbox` visuals and accessibility
 - Disabled state is dimmed once (0.48) instead of twice (0.23).
 - `displayAsButton` shows its checked state again — `ButtonContainer` styles it from
   `$checked`, which was never passed after the component was split in two.
+- `variant` is back on `CheckboxProps` and forwarded by `ButtonMultiSelect`. Splitting
+  the component dropped it without a changeset, which pinned every button-style
+  checkbox to the `primary` variant — and `primary` defines `checked` as its own
+  `background`, so a selected `ButtonMultiSelect` option looked unselected.
 - Accessibility: the mixed state is exposed through the native `indeterminate`
   property, `aria-describedby` points at the description element, and the input stays
   focusable in `displayAsButton` mode (it was `visibility: hidden`, so keyboard users

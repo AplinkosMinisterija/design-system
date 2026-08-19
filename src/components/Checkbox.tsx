@@ -13,6 +13,7 @@ export interface CheckboxProps {
   className?: string;
   intermediate?: boolean;
   displayAsButton?: boolean;
+  variant?: string;
   width?: string;
   radius?: number;
 }
@@ -28,6 +29,7 @@ const Checkbox = ({
   className,
   intermediate,
   displayAsButton,
+  variant = 'primary',
   width,
   radius,
 }: CheckboxProps) => {
@@ -50,6 +52,7 @@ const Checkbox = ({
         className={className}
         $disabled={disabled}
         $checked={value}
+        $variant={variant}
         $radius={radius}
         htmlFor={inputId}
       >
@@ -92,6 +95,7 @@ const Checkbox = ({
 interface ContainerProps {
   $disabled?: boolean;
   $checked?: boolean;
+  $variant?: string;
   $radius?: number;
 }
 
@@ -203,18 +207,18 @@ const ButtonContainer = styled.label<ContainerProps>`
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
   user-select: none;
-  background-color: ${({ $checked, theme }) =>
-    ($checked ? theme.colors.buttons?.primary?.checked : undefined) ||
-    theme.colors.buttons?.primary?.background ||
+  background-color: ${({ $variant = 'primary', $checked, theme }) =>
+    ($checked ? theme.colors.buttons?.[$variant]?.checked : undefined) ||
+    theme.colors.buttons?.[$variant]?.background ||
     '#53B1FD'};
-  color: ${({ $checked, theme }) =>
-    ($checked ? theme.colors.buttons?.primary?.checkedText : undefined) ||
-    theme.colors.buttons?.primary?.text ||
+  color: ${({ $variant = 'primary', $checked, theme }) =>
+    ($checked ? theme.colors.buttons?.[$variant]?.checkedText : undefined) ||
+    theme.colors.buttons?.[$variant]?.text ||
     'white'};
   border: 1px solid
-    ${({ $checked, theme }) =>
-      ($checked ? theme.colors.buttons?.primary?.checkedBorder : undefined) ??
-      (theme.colors.buttons?.primary?.border || 'transparent')};
+    ${({ $variant = 'primary', $checked, theme }) =>
+      ($checked ? theme.colors.buttons?.[$variant]?.checkedBorder : undefined) ??
+      (theme.colors.buttons?.[$variant]?.border || 'transparent')};
   border-radius: ${({ theme, $radius }) =>
     $radius ?? theme.radius?.checkBoxButton ?? theme.radius?.buttons ?? 0.4}rem;
   padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};

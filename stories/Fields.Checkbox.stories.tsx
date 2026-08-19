@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import Checkbox from '../src/components/Checkbox';
+import { ButtonVariants } from '../.storybook/preview';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 
 const meta: Meta<typeof Checkbox> = {
@@ -38,7 +39,8 @@ const StatesComponent = () => {
   const [values, setValues] = useState<{ [key: string]: boolean }>({
     checked: true,
     description: true,
-    buttonChecked: true,
+    outlineChecked: true,
+    primaryChecked: true,
   });
   const setValue = (key: string) => (value: boolean) =>
     setValues((current) => ({ ...current, [key]: value }));
@@ -102,20 +104,31 @@ const StatesComponent = () => {
         <GroupTitle>Displayed as button</GroupTitle>
         <Row>
           <Checkbox
-            name="buttonUnchecked"
-            label="Unchecked"
+            name="outlineUnchecked"
+            label="Outline"
             displayAsButton={true}
-            width={'120px'}
-            value={values.buttonUnchecked}
-            onChange={setValue('buttonUnchecked')}
+            width={'150px'}
+            variant={ButtonVariants.OUTLINE}
+            value={values.outlineUnchecked}
+            onChange={setValue('outlineUnchecked')}
           />
           <Checkbox
-            name="buttonChecked"
-            label="Checked"
+            name="outlineChecked"
+            label="Outline checked"
             displayAsButton={true}
-            width={'120px'}
-            value={values.buttonChecked}
-            onChange={setValue('buttonChecked')}
+            width={'150px'}
+            variant={ButtonVariants.OUTLINE}
+            value={values.outlineChecked}
+            onChange={setValue('outlineChecked')}
+          />
+          <Checkbox
+            name="primaryChecked"
+            label="Primary checked"
+            displayAsButton={true}
+            width={'150px'}
+            variant={ButtonVariants.PRIMARY}
+            value={values.primaryChecked}
+            onChange={setValue('primaryChecked')}
           />
         </Row>
       </Group>

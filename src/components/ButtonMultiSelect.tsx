@@ -29,6 +29,7 @@ const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
   onChange,
   labels,
   columns,
+  variant,
   name,
   gap,
   radius,
@@ -60,11 +61,7 @@ const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
       className={className}
       labelButton={labelButton}
     >
-      <Container
-        $gap={gap}
-        $columns={columns}
-        $errorVisible={!!error && !!showError}
-      >
+      <Container $gap={gap} $columns={columns} $errorVisible={!!error && !!showError}>
         {options.map((option, index) => {
           return (
             <Checkbox
@@ -75,6 +72,7 @@ const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
               name={`${name}_${option}`}
               label={labels?.[option] || option}
               displayAsButton={true}
+              variant={variant}
               width={buttonWidth}
               value={values?.includes(option)}
               disabled={disabled}
