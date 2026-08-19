@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { useState } from 'react';
+import styled from 'styled-components';
 import Checkbox from '../src/components/Checkbox';
 import StoryWrapper from '../src/components/common/StoryWrapper';
-import { useState } from 'react';
 import { ButtonVariants } from '../.storybook/preview';
 
 const meta: Meta<typeof Checkbox> = {
@@ -14,19 +15,13 @@ export default meta;
 type Story = StoryObj<typeof Checkbox>;
 
 const StoryComponent = () => {
-  const [selected, setSelected] = useState<boolean>();
+  const [selected, setSelected] = useState<boolean>(false);
   return (
     <StoryWrapper>
       <Checkbox
         label={'label'}
         value={selected}
         name={'checkbox'}
-        // description={
-        //   'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.'
-        // }
-        displayAsButton={true}
-        width={'100px'}
-        variant={ButtonVariants.OUTLINE}
         onChange={(val) => {
           setSelected(val);
         }}
@@ -39,3 +34,121 @@ export const CheckboxStory: Story = {
   name: 'Checkbox',
   render: StoryComponent,
 };
+
+const StatesComponent = () => {
+  const [values, setValues] = useState<{ [key: string]: boolean }>({
+    checked: true,
+    description: true,
+    long: false,
+  });
+  const setValue = (key: string) => (value: boolean) =>
+    setValues((current) => ({ ...current, [key]: value }));
+
+  return (
+    <StoryWrapper>
+      <Group>
+        <GroupTitle>States</GroupTitle>
+        <Checkbox
+          name="unchecked"
+          label="Unchecked"
+          value={values.unchecked}
+          onChange={setValue('unchecked')}
+        />
+        <Checkbox
+          name="checked"
+          label="Checked"
+          value={values.checked}
+          onChange={setValue('checked')}
+        />
+        <Checkbox
+          name="intermediate"
+          label="Intermediate"
+          intermediate={true}
+          value={values.intermediate}
+          onChange={setValue('intermediate')}
+        />
+        <Checkbox
+          name="error"
+          label="Error"
+          error={true}
+          value={values.error}
+          onChange={setValue('error')}
+        />
+        <Checkbox
+          name="disabled"
+          label="Disabled"
+          disabled={true}
+          value={values.disabled}
+          onChange={setValue('disabled')}
+        />
+        <Checkbox
+          name="disabledChecked"
+          label="Disabled checked"
+          disabled={true}
+          value={true}
+          onChange={setValue('disabledChecked')}
+        />
+      </Group>
+      <Group>
+        <GroupTitle>With description</GroupTitle>
+        <Checkbox
+          name="description"
+          label="Send me notifications"
+          description="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+          value={values.description}
+          onChange={setValue('description')}
+        />
+      </Group>
+      <Group>
+        <GroupTitle>Displayed as button</GroupTitle>
+        <Row>
+          <Checkbox
+            name="buttonOutline"
+            label="Outline"
+            displayAsButton={true}
+            width={'120px'}
+            variant={ButtonVariants.OUTLINE}
+            value={values.buttonOutline}
+            onChange={setValue('buttonOutline')}
+          />
+          <Checkbox
+            name="buttonPrimary"
+            label="Primary"
+            displayAsButton={true}
+            width={'120px'}
+            variant={ButtonVariants.PRIMARY}
+            value={values.buttonPrimary}
+            onChange={setValue('buttonPrimary')}
+          />
+        </Row>
+      </Group>
+    </StoryWrapper>
+  );
+};
+
+export const CheckboxStatesStory: Story = {
+  name: 'Checkbox states',
+  render: StatesComponent,
+};
+
+const Group = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background-color: white;
+  border-radius: 4px;
+`;
+
+const GroupTitle = styled.div`
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #7a7e9f;
+`;
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+`;
