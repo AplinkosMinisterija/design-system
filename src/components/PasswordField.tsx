@@ -4,6 +4,7 @@ import FieldWrapper from './common/FieldWrapper';
 import { useKeyAction } from './common/hooks';
 import Icon from './common/Icons';
 import TextFieldInput from './common/TextFieldInput';
+
 export interface TextFieldProps {
   value?: string | number;
   name?: string;
@@ -20,6 +21,8 @@ export interface TextFieldProps {
   onInputClick?: () => void;
   secondLabel?: JSX.Element;
   placeholder?: string;
+  /** Browser autofill hint, e.g. "email" or "current-password". Defaults to "off". */
+  autoComplete?: string;
 }
 
 const PasswordField = ({
@@ -37,9 +40,10 @@ const PasswordField = ({
   disabled,
   height,
   onInputClick,
+  autoComplete,
 }: TextFieldProps) => {
   const [show, setShow] = useState(false);
-  const handleKeyDown = useKeyAction(() => setShow(!show));
+  const handleKeyDown = useKeyAction(() => setShow(!show), false);
 
   return (
     <FieldWrapper
@@ -64,7 +68,7 @@ const PasswordField = ({
             aria-pressed={show}
             role="button"
             tabIndex={0}
-            onKeyDown={handleKeyDown()}
+            onKeyDown={handleKeyDown}
           >
             <StyledIcon name={show ? 'visibleOn' : 'visibleOff'} />
           </IconContainer>
@@ -74,6 +78,7 @@ const PasswordField = ({
         height={height}
         onInputClick={onInputClick}
         placeholder={placeholder}
+        autoComplete={autoComplete}
       />
     </FieldWrapper>
   );

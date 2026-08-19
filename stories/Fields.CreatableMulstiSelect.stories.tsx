@@ -12,14 +12,16 @@ const meta: Meta<typeof CreatableMultiSelect> = {
 export default meta;
 type Story = StoryObj<typeof CreatableMultiSelect>;
 
+function CreatableMultiSelectComponent() {
+  const [value, setValue] = useState<string[]>([]);
+  return (
+    <StoryWrapper>
+      <CreatableMultiSelect values={value} onChange={(values) => setValue(values)} />
+    </StoryWrapper>
+  );
+}
+
 export const SelectFieldStory: Story = {
   name: 'CreatableMultiSelect',
-  render: () => {
-    const [value, setValue] = useState<string[]>([]);
-    return (
-      <StoryWrapper>
-        <CreatableMultiSelect values={value} onChange={(values) => setValue(values)} />
-      </StoryWrapper>
-    );
-  },
+  render: () => <CreatableMultiSelectComponent />,
 };

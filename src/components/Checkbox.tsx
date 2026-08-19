@@ -1,6 +1,5 @@
 import { useEffect, useId, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { useKeyAction } from './common/hooks';
 
 export interface CheckboxProps {
   value?: boolean;
@@ -14,7 +13,6 @@ export interface CheckboxProps {
   className?: string;
   intermediate?: boolean;
   displayAsButton?: boolean;
-  variant?: string;
   width?: string;
   radius?: number;
 }
@@ -30,15 +28,14 @@ const Checkbox = ({
   className,
   intermediate,
   displayAsButton,
-  variant = 'primary',
   width,
   radius,
 }: CheckboxProps) => {
-  const handleKeyDown = useKeyAction(onChange, disabled);
   const generatedId = useId();
   const inputId = name || generatedId;
   const descriptionId = `${inputId}-description`;
   const inputRef = useRef<HTMLInputElement>(null);
+  const ContainerLabel = displayAsButton ? ButtonContainer : Container;
 
   // The mixed state is only reachable through the DOM property, there is no attribute for it.
   useEffect(() => {
@@ -49,11 +46,9 @@ const Checkbox = ({
 
   return (
     <Wrapper $width={width} $displayAsButton={displayAsButton}>
-      <Container
+      <ContainerLabel
         className={className}
         $disabled={disabled}
-        $displayAsButton={displayAsButton}
-        $variant={variant}
         $checked={value}
         $radius={radius}
         htmlFor={inputId}
@@ -74,7 +69,6 @@ const Checkbox = ({
             disabled={disabled}
             aria-label={label ? undefined : name}
             aria-describedby={description ? descriptionId : undefined}
-            onKeyDown={handleKeyDown(!value)}
             onChange={(v) => {
               onChange(v.target.checked);
             }}
@@ -90,12 +84,18 @@ const Checkbox = ({
           <Label>{label}</Label>
           {description && <Description id={descriptionId}>{description}</Description>}
         </Column>
-      </Container>
+      </ContainerLabel>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div<{ $displayAsButton; $width: string }>`
+interface ContainerProps {
+  $disabled?: boolean;
+  $checked?: boolean;
+  $radius?: number;
+}
+
+const Wrapper = styled.div<{ $displayAsButton?: boolean; $width?: string }>`
   width: ${({ $width, $displayAsButton }) => ($displayAsButton && $width) || 'fit-content'};
 `;
 
@@ -186,27 +186,42 @@ const CheckBox = styled.input`
   cursor: inherit;
 `;
 
-const buttonStyle = css<{
-  $variant: string;
-  $disabled: boolean;
-  $checked: boolean;
-  $radius: number;
-}>`
-  background-color: ${({ $variant, $checked, theme }) =>
-    ($checked ? theme.colors.buttons?.[$variant]?.checked : undefined) ||
-    theme.colors.buttons?.[$variant]?.background ||
+const Container = styled.label<ContainerProps>`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
+  user-select: none;
+`;
+
+const ButtonContainer = styled.label<ContainerProps>`
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
+  user-select: none;
+  background-color: ${({ $checked, theme }) =>
+    ($checked ? theme.colors.buttons?.primary?.checked : undefined) ||
+    theme.colors.buttons?.primary?.background ||
     '#53B1FD'};
-  color: ${({ $variant, $checked, theme }) =>
-    ($checked ? theme.colors.buttons?.[$variant]?.checkedText : undefined) ||
-    theme.colors.buttons?.[$variant]?.text ||
+  color: ${({ $checked, theme }) =>
+    ($checked ? theme.colors.buttons?.primary?.checkedText : undefined) ||
+    theme.colors.buttons?.primary?.text ||
     'white'};
   border: 1px solid
-    ${({ $variant, $checked, theme }) =>
-      ($checked ? theme.colors.buttons?.[$variant]?.checkedBorder : undefined) ??
-      (theme.colors.buttons?.[$variant]?.border || 'transparent')};
+    ${({ $checked, theme }) =>
+      ($checked ? theme.colors.buttons?.primary?.checkedBorder : undefined) ??
+      (theme.colors.buttons?.primary?.border || 'transparent')};
   border-radius: ${({ theme, $radius }) =>
     $radius ?? theme.radius?.checkBoxButton ?? theme.radius?.buttons ?? 0.4}rem;
   padding: ${({ theme }) => theme.padding?.buttons || '1.1rem 2rem'};
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
   &:hover {
     opacity: ${({ $disabled }) => ($disabled ? 0.48 : 0.6)};
   }
@@ -214,23 +229,6 @@ const buttonStyle = css<{
     box-shadow: 0 0 0 3px
       ${({ theme }) => theme.colors.primaryLighter || theme.colors.lighterPrimary || '#d7eafa'};
   }
-`;
-
-const Container = styled.label<{
-  $displayAsButton: boolean;
-  $variant: string;
-  $disabled: boolean;
-  $checked: boolean;
-  $radius: number;
-}>`
-  display: grid;
-  grid-template-columns: ${({ $displayAsButton }) => ($displayAsButton ? '1fr' : 'auto 1fr')};
-  gap: ${({ $displayAsButton }) => ($displayAsButton ? '0' : '10px')};
-  align-items: ${({ $displayAsButton }) => ($displayAsButton ? 'center' : 'start')};
-  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
-  opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
-  user-select: none;
-  ${({ $displayAsButton }) => ($displayAsButton ? buttonStyle : '')}
 `;
 
 const Label = styled.div`
@@ -250,7 +248,7 @@ const Description = styled.div`
   color: #697586;
 `;
 
-const Column = styled.div<{ $displayAsButton: boolean }>`
+const Column = styled.div<{ $displayAsButton?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 2px;

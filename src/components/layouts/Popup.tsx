@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { PopupType } from '../../types';
+import { PopupType, PopupTypes, Theme } from '../../types';
 import { device } from '../../utils';
 import { useKeyAction } from '../common/hooks';
 import Icon from '../common/Icons';
@@ -25,7 +25,7 @@ const Popup = ({
   ariaLabel = 'popup',
   ariaLabelledby,
 }: PopupProps) => {
-  const handleKeyDownOnClose = useKeyAction(() => onClose());
+  const handleKeyDownOnClose = useKeyAction(() => onClose(), false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const Popup = ({
             <LeftContainer>{left}</LeftContainer>
             <IconContainer
               onClick={onClose}
-              onKeyDown={handleKeyDownOnClose()}
+              onKeyDown={handleKeyDownOnClose}
               aria-label={`Close ${ariaLabel}`}
               role="button"
               tabIndex={0}
@@ -84,7 +84,7 @@ const Popup = ({
   );
 };
 
-const getContainerCss = ($type, theme) => {
+const getContainerCss = ($type: PopupTypes, theme: Theme) => {
   switch ($type) {
     case PopupType.BOTTOM:
       return {
@@ -112,7 +112,7 @@ const getContainerCss = ($type, theme) => {
   }
 };
 
-const getInnerContainerCss = ($type) => {
+const getInnerContainerCss = ($type: PopupTypes) => {
   switch ($type) {
     case PopupType.BOTTOM:
       return {

@@ -1,6 +1,7 @@
-import { JSX, useState } from 'react';
+import { JSX, useId, useState } from 'react';
 
 import styled from 'styled-components';
+import { useOptionNavigation } from './common/hooks';
 import Icon, { IconName } from './common/Icons';
 
 interface Option {
@@ -18,6 +19,7 @@ const ProfileSelector = ({
   alignRight = false,
   showIcon = true,
   disabled = false,
+  label = 'Pasirinkti profilį',
   className,
 }: {
   value: Option;
@@ -29,21 +31,46 @@ const ProfileSelector = ({
   alignRight?: boolean;
   showIcon?: boolean;
   disabled?: boolean;
+  /** Names the control by its PURPOSE — the value alone never says what it picks. */
+  label?: string;
   className?: string;
 }) => {
   const [showSelect, setShowSelect] = useState(false);
   const selected = getSelectedOptionLabels(value);
 
+  const listId = `${useId()}-listbox`;
+  // `options` is optional at the call sites below (`options?.map`), so navigation
+  // must see a list either way.
+  const optionList = options || [];
+  const { activeOptionId, handleKeyDown } = useOptionNavigation({
+    options: optionList,
+    disabled,
+    showSelect,
+    setShowSelect,
+    onSelect: onChange,
+    listId,
+  });
+
   return (
     <Container
       className={className}
-      tabIndex={1}
+      // Was tabIndex={1}: a positive tab index jumps the whole page's tab order
+      // to this control before anything else.
+      tabIndex={disabled ? -1 : 0}
+      role="combobox"
+      aria-expanded={showSelect}
+      aria-controls={showSelect ? listId : undefined}
+      aria-haspopup="listbox"
+      aria-activedescendant={activeOptionId}
+      aria-disabled={disabled}
+      aria-label={label}
+      onKeyDown={handleKeyDown}
       onClick={() => setShowSelect(!showSelect)}
       onBlur={() => setShowSelect(false)}
       $variant={variant}
     >
       <RelativeContainer>
-        <SelectorContainer onClick={() => setShowSelect(true)} $variant={variant}>
+        <SelectorContainer onClick={() => setShowSelect(true)}>
           <Column $alignRight={alignRight}>
             <ModuleContainer>
               <TenantLabel $variant={variant} $alignRight={alignRight}>
@@ -57,9 +84,15 @@ const ProfileSelector = ({
           {showIcon && <StyledIcon name={IconName.showMore} $variant={variant} />}
         </SelectorContainer>
         {!disabled && showSelect && (
-          <OptionsContainer $variant={variant}>
+          <OptionsContainer id={listId} role="listbox" $variant={variant}>
             {options?.map((option, index) => (
-              <div key={`profile_select_option_${index}`} onClick={() => onChange(option)}>
+              <div
+                key={`profile_select_option_${index}`}
+                id={`${listId}-option-${index}`}
+                role="option"
+                aria-selected={option.id === value?.id}
+                onClick={() => onChange(option)}
+              >
                 {getOptionLabel ? (
                   getOptionLabel(option)
                 ) : (

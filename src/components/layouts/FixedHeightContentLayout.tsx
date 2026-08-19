@@ -59,7 +59,7 @@ const InnerContainer = styled.div`
 `;
 
 export const Subtitle = styled.div`
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: ${({ theme }) => theme.colors?.text?.primary};
   line-height: 26px;
   margin-top: 4px;
   font-size: 1.6rem;
@@ -67,7 +67,7 @@ export const Subtitle = styled.div`
 `;
 
 export const Title = styled.div`
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: ${({ theme }) => theme.colors?.text?.primary};
   font-size: 3.2rem;
   font-weight: 800;
   text-align: center;

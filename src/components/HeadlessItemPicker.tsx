@@ -42,7 +42,7 @@ function HeadlessItemPicker<T>({
     }
   };
 
-  const renderPickerItem = ({ item, index }) => {
+  const renderPickerItem = ({ item, index }: { item: any; index: number }) => {
     const isActive = !!selectedItems.find((selected) => getItemKey(selected) === getItemKey(item));
 
     return renderItem({ item, isActive, index, onClick: () => onItemPress(item) });

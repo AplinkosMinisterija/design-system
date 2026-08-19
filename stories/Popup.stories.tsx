@@ -1,10 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-// @ts-ignore
-import React, { useState } from 'react';
 import Popup from '../src/components/layouts/Popup';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import styled from 'styled-components';
-import { Button, PopupType } from '../src';
+import { Button, PopupType, Theme } from '../src';
 import { ButtonVariants } from '../.storybook/preview';
 import { useArgs } from '@storybook/preview-api';
 
@@ -16,7 +14,7 @@ const meta: Meta<typeof Popup> = {
 export default meta;
 type Story = StoryObj<typeof Popup>;
 
-const PopupContent = ({ text }) => {
+const PopupContent = ({ text }: { text: string }) => {
   const Container = styled.div`
     display: flex;
     align-items: center;
@@ -41,7 +39,7 @@ const PopupContent = ({ text }) => {
 };
 
 const LeftComponent = () => {
-  const Initials = styled.div<{ $selected }>`
+  const Initials = styled.div<{ $selected: boolean; theme: Theme }>`
     background-color: ${({ $selected, theme }) => ($selected ? 'white' : theme.colors.primary)};
     color: ${({ $selected, theme }) => ($selected ? theme.colors.primary : 'white')};
     width: 40px;
@@ -52,7 +50,7 @@ const LeftComponent = () => {
     border-radius: 4px;
   `;
 
-  return <Initials>M</Initials>;
+  return <Initials $selected={false}>M</Initials>;
 };
 
 const largeText =
@@ -73,7 +71,6 @@ export const PopupStory1: Story = {
   args: {
     visible: true,
     type: PopupType.BOTTOM,
-    onClose: () => {},
   },
   render: (args) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks

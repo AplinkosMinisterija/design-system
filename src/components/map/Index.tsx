@@ -1,5 +1,5 @@
-import { addProtocol, Feature, Map as MaplibreMap, MapOptions } from 'maplibre-gl';
-import { useEffect, useMemo, useRef } from 'react';
+import { addProtocol, Map as MaplibreMap, MapOptions } from 'maplibre-gl';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import FieldWrapper from '../common/FieldWrapper';
 // @ts-ignore
@@ -28,9 +28,11 @@ import {
 import { MapLayers } from './layers';
 import { LayerToggleControl } from './LayerToggleControl';
 
-MapboxDraw.constants.classes.CONTROL_BASE = 'maplibregl-ctrl';
-MapboxDraw.constants.classes.CONTROL_PREFIX = 'maplibregl-ctrl-';
-MapboxDraw.constants.classes.CONTROL_GROUP = 'maplibregl-ctrl-group';
+if (MapboxDraw.constants?.classes) {
+  (MapboxDraw.constants.classes as any).CONTROL_BASE = 'maplibregl-ctrl';
+  (MapboxDraw.constants.classes as any).CONTROL_PREFIX = 'maplibregl-ctrl-';
+  (MapboxDraw.constants.classes as any).CONTROL_GROUP = 'maplibregl-ctrl-group';
+}
 
 export interface MapToggleLayerConfig {
   ids: string[];
@@ -44,7 +46,7 @@ export interface MapProps {
   value?: AllGeoJSON;
   label?: string;
   error?: string;
-  projection?: string;
+  projection?: 3346 | 4326;
   controls?: MapControls;
   preview?: boolean;
   draw?: boolean | DrawOptions;
@@ -73,13 +75,13 @@ const Map = ({
   zoomOnChange = true,
   bbox,
 }: MapProps) => {
-  const mapContainer = useRef(null as HTMLDivElement | null);
-  const map = useRef(null as MaplibreMap | null);
-  const mapDraw = useRef(null as MapboxDraw | null);
+  const mapContainer = useRef<HTMLDivElement | null>(null);
+  const map = useRef<MaplibreMap | null>(null);
+  const mapDraw = useRef<MapboxDraw | null>(null);
 
   const theme = useTheme();
-  const styles = getMapStyles(theme.colors.map);
-  const fitBoundsOptions = { padding: 50, maxZoom: 16 };
+  const styles = theme.colors?.map ? getMapStyles(theme.colors.map) : undefined;
+  const fitBoundsOptions = useMemo(() => ({ padding: 50, maxZoom: 16 }), []);
 
   const value4326: AllGeoJSON | undefined = useMemo(() => {
     if (value) {
@@ -92,34 +94,36 @@ const Map = ({
   const protocol = new Protocol();
   addProtocol('pmtiles', protocol.tile);
 
-  const mapOptions: Partial<MapOptions> = {
-    attributionControl: false,
-    style: basemapUrl || BASEMAP_URL.LIGHT,
-  };
+  const mapOptions: Partial<MapOptions> = useMemo(() => {
+    const options: Partial<MapOptions> = {
+      attributionControl: false,
+      style: basemapUrl || BASEMAP_URL.LIGHT,
+      fitBoundsOptions,
+    };
 
-  mapOptions.fitBoundsOptions = fitBoundsOptions;
+    if (value4326) options.bounds = turfBbox(value4326) as any;
+    if (bbox) options.bounds = bbox;
 
-  if (value4326) mapOptions.bounds = turfBbox(value4326) as any;
-
-  if (bbox) mapOptions.bounds = bbox;
+    return options;
+  }, [basemapUrl, fitBoundsOptions, value4326, bbox]);
 
   useEffect(() => {
     if (!map.current || !value4326) return;
 
-    setPreviewLayerValue(map.current, value4326, styles);
+    if (styles) setPreviewLayerValue(map.current, value4326, styles);
 
     if (zoomOnChange) {
       map.current.fitBounds(turfBbox(value4326) as any, fitBoundsOptions);
     }
-  }, [value4326, zoomOnChange]);
+  }, [value4326, zoomOnChange, styles, fitBoundsOptions]);
 
-  function addDrawEvents() {
+  const addDrawEvents = useCallback(() => {
     if (!map.current) return;
 
     function onDrawChange() {
       if (!mapDraw.current) return;
 
-      let featureCollection = mapDraw.current.getAll();
+      let featureCollection: any = mapDraw.current.getAll();
 
       if (projection && featureCollection) {
         featureCollection = convertGeojsonToProjection(
@@ -138,22 +142,22 @@ const Map = ({
 
     if (!(drawOptions as DrawOptions)?.multi) {
       map.current.on('draw.render', () => {
+        if (!mapDraw.current) return;
         const { features } = mapDraw.current.getAll();
-        // TODO: filter out by coordinates (when at least one point is drawn)
         if (features?.length < 2) return;
 
         const featureIds = features
           .slice(0, features.length - 1)
-          .map((f: Feature) => f.id)
-          .filter((i: string) => !!i);
+          .map((f: any) => f.id)
+          .filter((i: any) => !!i);
 
         mapDraw.current.delete(featureIds);
       });
     }
-  }
+  }, [projection, drawOptions, onChange]);
 
-  function addDefaultLayers() {
-    if (!map.current || !layers?.length) return;
+  const addDefaultLayers = useCallback(() => {
+    if (!map.current || !layers?.length || !theme.colors.map) return;
 
     const mapLayers = MapLayers(theme.colors.map);
 
@@ -166,38 +170,38 @@ const Map = ({
         });
       });
     });
-  }
+  }, [layers, theme.colors.map]);
 
   useEffect(() => {
     // stops map from intializing more than once (or container not exists)
     if (map.current || !mapContainer?.current) return;
 
-    mapOptions.container = mapContainer.current;
-    map.current = new MaplibreMap(mapOptions as MapOptions);
+    const options = { ...mapOptions, container: mapContainer.current };
+    map.current = new MaplibreMap(options as MapOptions);
 
     addMapControls(map.current, controls);
     addDefaultLayers();
 
     if (drawOptions && !preview) {
-      mapDraw.current = enableDraw(map.current, drawOptions, value4326, styles);
-      addDrawEvents();
-    } else if (value4326) {
+      const draw = enableDraw(map.current, drawOptions as DrawOptions, value4326, styles || []);
+      if (draw) {
+        mapDraw.current = draw;
+        addDrawEvents();
+      }
+    } else if (value4326 && styles) {
       setupPreviewLayer(map.current, value4326, styles);
     }
 
     onLoad?.(map.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapContainer, onLoad]);
 
   useEffect(() => {
     if (!map.current || !toggleLayers) return;
-    toggleLayers.forEach(layer => {
-      layer.ids.forEach(layerId => {
+    toggleLayers.forEach((layer) => {
+      layer.ids.forEach((layerId) => {
         if (map.current!.getLayer(layerId)) {
-          map.current!.setLayoutProperty(
-            layerId,
-            'visibility',
-            layer.visible ? 'visible' : 'none'
-          );
+          map.current!.setLayoutProperty(layerId, 'visibility', layer.visible ? 'visible' : 'none');
         }
       });
     });
@@ -214,14 +218,15 @@ const Map = ({
         aria-describedby={error ? `${label}-error` : undefined}
         tabIndex={0}
         ref={mapContainer}
-        $error={!!error}>
-      {toggleLayers && toggleLayers.length > 0 && (
-        <LayerToggleControl
-          toggleLayers={toggleLayers}
-          onLayerToggle={handleLayerToggle}
-          mapContainerRef={mapContainer}
-        />
-      )}
+        $error={!!error}
+      >
+        {toggleLayers && toggleLayers.length > 0 && (
+          <LayerToggleControl
+            toggleLayers={toggleLayers}
+            onLayerToggle={handleLayerToggle}
+            mapContainerRef={mapContainer}
+          />
+        )}
       </MapDiv>
     </FieldWrapper>
   );

@@ -1,7 +1,8 @@
-import { JSX, useState } from 'react';
+import { JSX, useId, useState } from 'react';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
 import Icon, { IconName } from './common/Icons';
+import { useOptionNavigation } from './common/hooks';
 import OptionsContainer from './common/OptionsContainer';
 import TextFieldInput from './common/TextFieldInput';
 
@@ -54,6 +55,17 @@ const SimpleSelect = ({
     onChange(option);
   };
 
+  const listId = `${useId()}-listbox`;
+  const optionList = options || [];
+  const { activeOptionId, handleKeyDown } = useOptionNavigation({
+    options: optionList,
+    disabled,
+    showSelect,
+    setShowSelect,
+    onSelect: handleClick,
+    listId,
+  });
+
   return (
     <FieldWrapper
       onClick={() => setShowSelect(!showSelect)}
@@ -75,9 +87,18 @@ const SimpleSelect = ({
         selectedValue={value}
         disabled={disabled}
         placeholder={placeholder}
+        onKeyDown={handleKeyDown}
+        role="combobox"
+        ariaExpanded={showSelect}
+        ariaControls={listId}
+        ariaHaspopup="listbox"
+        ariaActivedescendant={activeOptionId}
       />
       <OptionsContainer
-        options={options}
+        id={listId}
+        name={listId}
+        options={optionList}
+        activeOptionId={activeOptionId}
         getOptionLabel={getOptionComponent || getOptionLabel}
         showSelect={showSelect}
         handleClick={handleClick}

@@ -40,7 +40,7 @@ const ButtonsGroup = ({
               disabled={disabled}
               selected={isSelected(option)}
               error={!!error}
-              onKeyDown={handleKeyDown(option)}
+              onKeyDown={handleKeyDown(option) as any}
               onClick={() => (disabled ? {} : onChange(option))}
               tabIndex={0}
             >

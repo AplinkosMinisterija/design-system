@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { TreeSelect } from 'antd';
 import { cloneDeep } from 'lodash';
@@ -47,7 +47,7 @@ const TreeSelectField = ({
 }: SelectFieldProps) => {
   const clonedGroupOptions = cloneDeep(groupOptions);
 
-  const filterTreeOptions = () => {
+  const filterTreeOptions = useCallback(() => {
     const groupsIds = groups?.map((group) => group.id);
 
     const findChildren = (options: Group[], path: boolean): boolean => {
@@ -96,17 +96,17 @@ const TreeSelectField = ({
       };
       return findParents(clonedGroupOptions);
     });
-  };
+  }, [value, clonedGroupOptions, groups]);
 
   useEffect(() => {
     filterTreeOptions();
-  }, [value, groups, groupOptions]);
+  }, [filterTreeOptions]);
 
   return (
     <Container className={className} padding={padding || '0'}>
       <RealativeFieldWrapper error={error} showError={showError} label={label}>
         <StyledTreeSelect
-          error={!!error}
+          $error={!!error}
           treeDefaultExpandedKeys={[value]}
           suffixIcon={<StyledIcons name={IconName.dropdownArrow} />}
           style={{ width: '100%', height: '40px' }}

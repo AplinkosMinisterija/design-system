@@ -5,23 +5,24 @@ import { useAsyncSelectData, useKeyAction } from './common/hooks';
 import Icon, { IconName } from './common/Icons';
 import OptionsContainer, { OptionContainerTexts } from './common/OptionsContainer';
 import TextFieldInput from './common/TextFieldInput';
+import { SelectOption } from '../types';
 
-export interface AsyncSelectFieldProps {
+export interface AsyncSelectFieldProps<T extends SelectOption = SelectOption> {
   name: string;
   label?: string;
   required?: boolean;
-  value?: any;
+  value?: T;
   error?: string;
   showError?: boolean;
   padding?: string;
-  onChange: (option: any) => void;
+  onChange: (option?: T | null) => void;
   disabled?: boolean;
-  getOptionLabel: (option: any) => string | JSX.Element;
-  getOptionComponent?: (option: any) => string | JSX.Element;
+  getOptionLabel: (option: T) => string | JSX.Element;
+  getOptionComponent?: (option: T) => string | JSX.Element;
   className?: string;
   placeholder?: string;
   hasBorder?: boolean;
-  loadOptions: (input: any, page: number, id?: any) => any;
+  loadOptions: (input: string, page: number, id?: string) => Promise<any>;
   dependantValue?: string;
   optionsKey?: string;
   hasOptionKey?: boolean;
@@ -29,10 +30,9 @@ export interface AsyncSelectFieldProps {
   handleGetNextPageParam?: (params: any) => number | undefined;
   ariaLabelRemove?: string;
   ariaLabelDropDownIcon?: string;
-  getOptionId?: (option: any) => string | number;
 }
 
-const AsyncSelectField = ({
+const AsyncSelectField = <T extends SelectOption = SelectOption>({
   label,
   required,
   value,
@@ -55,8 +55,7 @@ const AsyncSelectField = ({
   handleGetNextPageParam = (data) => {
     return data?.page < data?.totalPages ? data.page + 1 : undefined;
   },
-  getOptionId = (option) => option?.id ?? option,
-}: AsyncSelectFieldProps) => {
+}: AsyncSelectFieldProps<T>) => {
   const {
     loading,
     suggestions,
@@ -67,6 +66,9 @@ const AsyncSelectField = ({
     handleBlur,
     handleClick,
     observerRef,
+    handleKeyDown: handleInputKeyDown,
+    activeOptionId,
+    listId,
   } = useAsyncSelectData({
     loadOptions,
     disabled,
@@ -80,10 +82,6 @@ const AsyncSelectField = ({
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const placeholderValue = value ? getOptionLabel(value) : placeholder;
 
-  const activeOptionId =
-    showSelect && value && getOptionId(value) != null
-      ? `${name}-option-${getOptionId(value)}`
-      : undefined;
 
   return (
     <FieldWrapper
@@ -113,7 +111,7 @@ const AsyncSelectField = ({
                   e.stopPropagation();
                   !disabled && onChange(undefined);
                 }}
-                onKeyDown={handleKeyDown()}
+                onKeyDown={handleKeyDown}
                 disabled={disabled}
                 tabIndex={disabled ? -1 : 0}
               >
@@ -137,26 +135,21 @@ const AsyncSelectField = ({
         onChange={handleInputChange}
         disabled={disabled}
         placeholder={placeholderValue}
-        selectedValue={value}
+        selectedValue={!!value}
         role="combobox"
         aria-expanded={showSelect}
-        aria-controls={`${name}-options`}
+        aria-controls={listId}
         aria-haspopup="listbox"
         aria-activedescendant={activeOptionId}
-        onKeyDown={(e) => {
-          if (e.key === 'ArrowDown' || e.key === 'Enter') {
-            e.preventDefault();
-            handleToggleSelect();
-          }
-        }}
+        onKeyDown={handleInputKeyDown}
       />
       <OptionsContainer
+        id={listId}
+        name={listId}
         loading={loading}
         observerRef={observerRef}
         options={suggestions}
         getOptionLabel={getOptionComponent || getOptionLabel}
-        getOptionId={getOptionId}
-        name={name}
         activeOptionId={activeOptionId}
         showSelect={showSelect}
         handleClick={handleClick}

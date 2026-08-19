@@ -19,23 +19,25 @@ const columns: Columns = {
 export default meta;
 type Story = StoryObj<typeof ColumnButton>;
 
+function ColumnButtonComponent() {
+  const [selectedColumns, setSelectedColumns] = useState(columns);
+
+  return (
+    <StoryWrapper>
+      <ColumnButton
+        columns={selectedColumns}
+        onToggle={(columns) => setSelectedColumns(columns)}
+        texts={{
+          atLeastOneColumn: 'Turi būti pasirinktas bent vienas stulpelis',
+          columns: 'Stulpeliai',
+        }}
+        variant={ButtonVariants.COLUMNS}
+      />
+    </StoryWrapper>
+  );
+}
+
 export const ButtonStory: Story = {
   name: 'ColumnButton',
-  render: () => {
-    const [selectedColumns, setSelectedColumns] = useState(columns);
-
-    return (
-      <StoryWrapper>
-        <ColumnButton
-          columns={selectedColumns}
-          onToggle={(columns) => setSelectedColumns(columns)}
-          texts={{
-            atLeastOneColumn: 'Turi būti pasirinktas bent vienas stulpelis',
-            columns: 'Stulpeliai',
-          }}
-          variant={ButtonVariants.COLUMNS}
-        />
-      </StoryWrapper>
-    );
-  },
+  render: () => <ColumnButtonComponent />,
 };

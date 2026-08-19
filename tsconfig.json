@@ -3,7 +3,8 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "CommonJS",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     /* Bundler mode */
     "resolveJsonModule": true,
@@ -11,14 +12,12 @@
     "noEmit": true,
     "declaration": true,
     "jsx": "react-jsx",
-    "typeRoots": ["./dist/index.d.ts"],
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false,
     "baseUrl": ".",
   },
   "include": ["src"],

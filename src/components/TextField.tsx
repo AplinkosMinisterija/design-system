@@ -24,6 +24,8 @@ export interface TextFieldProps {
   type?: string;
   secondLabel?: JSX.Element;
   selectedValue?: boolean;
+  /** Browser autofill hint, e.g. "email" or "current-password". Defaults to "off". */
+  autoComplete?: string;
 }
 
 const TextField = ({
@@ -47,6 +49,7 @@ const TextField = ({
   height,
   secondLabel,
   onInputClick,
+  autoComplete,
 }: TextFieldProps) => {
   return (
     <FieldWrapper
@@ -72,6 +75,7 @@ const TextField = ({
         height={height}
         readOnly={readOnly}
         onInputClick={onInputClick}
+        autoComplete={autoComplete}
         placeholder={placeholder}
         type={type}
         ariaLabel={label || name}

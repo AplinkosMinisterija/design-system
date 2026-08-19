@@ -1,28 +1,9 @@
 import styled from 'styled-components';
 import Checkbox from './Checkbox';
 import { FieldWrapper } from '../index';
-// @ts-ignore
 import React from 'react';
 
-const ButtonMultiSelect = ({
-  options,
-  values,
-  onChange,
-  labels,
-  columns = 4,
-  variant,
-  name,
-  gap,
-  radius,
-  label,
-  error,
-  showError,
-  disabled,
-  padding,
-  className,
-  buttonWidth,
-  labelButton,
-}: React.FC<{
+interface ButtonMultiSelectProps {
   options: string[];
   values: string[];
   onChange: (data: string[]) => void;
@@ -39,9 +20,29 @@ const ButtonMultiSelect = ({
   padding?: string;
   buttonWidth?: string;
   labelButton?: JSX.Element;
-}>) => {
-  const handleSelect = (option, selected) => {
-    let updatedValues = values;
+  className?: string;
+}
+
+const ButtonMultiSelect: React.FC<ButtonMultiSelectProps> = ({
+  options,
+  values,
+  onChange,
+  labels,
+  columns,
+  name,
+  gap,
+  radius,
+  label,
+  error,
+  showError,
+  disabled,
+  padding,
+  className,
+  buttonWidth,
+  labelButton,
+}) => {
+  const handleSelect = (option: string, selected: boolean) => {
+    let updatedValues;
     if (selected) {
       updatedValues = values.includes(option) ? values : [...values, option];
     } else {
@@ -60,9 +61,8 @@ const ButtonMultiSelect = ({
       labelButton={labelButton}
     >
       <Container
-        $cols={columns}
         $gap={gap}
-        $labelVisible={!!label}
+        $columns={columns}
         $errorVisible={!!error && !!showError}
       >
         {options.map((option, index) => {
@@ -75,11 +75,10 @@ const ButtonMultiSelect = ({
               name={`${name}_${option}`}
               label={labels?.[option] || option}
               displayAsButton={true}
-              variant={variant}
               width={buttonWidth}
-              radius={radius}
               value={values?.includes(option)}
               disabled={disabled}
+              radius={radius}
             />
           );
         })}
@@ -89,14 +88,12 @@ const ButtonMultiSelect = ({
 };
 
 const Container = styled.div<{
-  $cols: number;
-  $gap: number;
-  $labelVisible: boolean;
-  $errorVisible: boolean;
+  $gap?: number;
+  $columns?: number;
+  $errorVisible?: boolean;
 }>`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(${({ $columns }) => $columns ?? 4}, 1fr);
   gap: ${({ $gap, theme }) => $gap ?? theme.gap?.buttonMultiSelect ?? 0.8}rem;
 `;
 

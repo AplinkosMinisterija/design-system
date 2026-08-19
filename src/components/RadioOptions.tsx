@@ -35,7 +35,12 @@ const RadioOptions = ({
   return (
     <Container oneLine={oneLine} className={className}>
       <FieldWrapper error={error} showError={showError} label={label} required={required}>
-        <OptionsContainer column={column}>
+        <OptionsContainer
+          column={column}
+          role="radiogroup"
+          aria-label={label || undefined}
+          aria-invalid={showError && !!error ? true : undefined}
+        >
           {options?.map((option, index) => {
             const key = `${name}_${option.value}`;
             return (

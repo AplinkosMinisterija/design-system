@@ -52,7 +52,7 @@ const Button = ({
   );
 };
 
-const ButtonWrapper = styled.div<{ $width: string }>`
+const ButtonWrapper = styled.div<{ $width?: string }>`
   width: ${({ $width }) => $width || 'fit-content'};
 `;
 

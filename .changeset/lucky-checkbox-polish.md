@@ -13,9 +13,11 @@ Rework `Checkbox` visuals and accessibility
 - Added hover, `:focus-visible` ring and colour transitions. `error` now paints a
   danger border (and a danger fill when checked) instead of a solid red square.
 - Disabled state is dimmed once (0.48) instead of twice (0.23).
-- Accessibility: one tab stop instead of two, the mixed state is exposed through the
-  native `indeterminate` property, `aria-describedby` points at the description
-  element, and the input stays focusable in `displayAsButton` mode (it was
-  `visibility: hidden`, so keyboard users could not reach it).
+- `displayAsButton` shows its checked state again — `ButtonContainer` styles it from
+  `$checked`, which was never passed after the component was split in two.
+- Accessibility: the mixed state is exposed through the native `indeterminate`
+  property, `aria-describedby` points at the description element, and the input stays
+  focusable in `displayAsButton` mode (it was `visibility: hidden`, so keyboard users
+  could not reach it).
 - The label picks up `theme.colors.fields.label` and the description is set apart
   with the same treatment as other field helper text.

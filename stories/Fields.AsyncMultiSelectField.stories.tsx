@@ -13,26 +13,28 @@ type Story = StoryObj<typeof AsyncMultiSelectField>;
 
 const testUrl = 'https://dev-uetk.biip.lt/api/objects/search';
 
+function AsyncMultiSelectFieldComponent() {
+  const [values, setValues] = useState([]);
+
+  return (
+    <StoryWrapper>
+      <AsyncMultiSelectField
+        onChange={(values) => {
+          setValues(values);
+        }}
+        values={values}
+        getOptionLabel={(item) => item?.name}
+        loadOptions={async (input, page) => {
+          const response = await fetch(`${testUrl}?search=${input}&page=${page}`);
+          return await response.json();
+        }}
+        name={'test'}
+      />
+    </StoryWrapper>
+  );
+}
+
 export const AsyncMultiSelectFieldStory: Story = {
   name: 'AsyncMultiSelectField',
-  render: () => {
-    const [values, setValues] = useState([]);
-
-    return (
-      <StoryWrapper>
-        <AsyncMultiSelectField
-          onChange={(values) => {
-            setValues(values);
-          }}
-          values={values}
-          getOptionLabel={(item) => item?.name}
-          loadOptions={async (input, page) => {
-            const response = await fetch(`${testUrl}?search=${input}&page=${page}`);
-            return await response.json();
-          }}
-          name={'test'}
-        />
-      </StoryWrapper>
-    );
-  },
+  render: () => <AsyncMultiSelectFieldComponent />,
 };

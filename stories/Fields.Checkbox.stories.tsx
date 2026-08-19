@@ -4,7 +4,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import Checkbox from '../src/components/Checkbox';
 import StoryWrapper from '../src/components/common/StoryWrapper';
-import { ButtonVariants } from '../.storybook/preview';
 
 const meta: Meta<typeof Checkbox> = {
   component: Checkbox,
@@ -39,7 +38,7 @@ const StatesComponent = () => {
   const [values, setValues] = useState<{ [key: string]: boolean }>({
     checked: true,
     description: true,
-    long: false,
+    buttonChecked: true,
   });
   const setValue = (key: string) => (value: boolean) =>
     setValues((current) => ({ ...current, [key]: value }));
@@ -103,22 +102,20 @@ const StatesComponent = () => {
         <GroupTitle>Displayed as button</GroupTitle>
         <Row>
           <Checkbox
-            name="buttonOutline"
-            label="Outline"
+            name="buttonUnchecked"
+            label="Unchecked"
             displayAsButton={true}
             width={'120px'}
-            variant={ButtonVariants.OUTLINE}
-            value={values.buttonOutline}
-            onChange={setValue('buttonOutline')}
+            value={values.buttonUnchecked}
+            onChange={setValue('buttonUnchecked')}
           />
           <Checkbox
-            name="buttonPrimary"
-            label="Primary"
+            name="buttonChecked"
+            label="Checked"
             displayAsButton={true}
             width={'120px'}
-            variant={ButtonVariants.PRIMARY}
-            value={values.buttonPrimary}
-            onChange={setValue('buttonPrimary')}
+            value={values.buttonChecked}
+            onChange={setValue('buttonChecked')}
           />
         </Row>
       </Group>

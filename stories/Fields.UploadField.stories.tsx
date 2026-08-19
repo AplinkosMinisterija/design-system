@@ -11,33 +11,35 @@ const meta: Meta<typeof DragAndDropUploadField> = {
 export default meta;
 type Story = StoryObj<typeof DragAndDropUploadField>;
 
+function DragAndDropUploadFieldComponent() {
+  const [files, setFiles] = useState<any>([]);
+
+  return (
+    <StoryWrapper>
+      <DragAndDropUploadField
+        multiple
+        onDelete={(files) => setFiles(files)}
+        onUpload={async (files) => {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              const updatedFiles = files.map((file) => ({
+                url: URL.createObjectURL(file),
+                name: file.name,
+                size: file.size,
+              }));
+
+              setFiles(updatedFiles);
+              resolve();
+            }, 2000);
+          });
+        }}
+        files={files}
+      />
+    </StoryWrapper>
+  );
+}
+
 export const Field: Story = {
   name: 'DragAndDropUploadField',
-  render: () => {
-    const [files, setFiles] = useState<any>([]);
-
-    return (
-      <StoryWrapper>
-        <DragAndDropUploadField
-          multiple
-          onDelete={(files) => setFiles(files)}
-          onUpload={async (files) => {
-            return new Promise((resolve) => {
-              setTimeout(() => {
-                const updatedFiles = files.map((file) => ({
-                  url: URL.createObjectURL(file),
-                  name: file.name,
-                  size: file.size,
-                }));
-
-                setFiles(updatedFiles);
-                resolve();
-              }, 2000);
-            });
-          }}
-          files={files}
-        />
-      </StoryWrapper>
-    );
-  },
+  render: () => <DragAndDropUploadFieldComponent />,
 };

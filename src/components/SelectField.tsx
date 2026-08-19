@@ -19,7 +19,7 @@ export interface SelectFieldProps {
   padding?: string;
   onChange: (option: any) => void;
   disabled?: boolean;
-  getOptionLabel: (option: any) => string | JSX.Element;
+  getOptionLabel?: (option: any) => string | JSX.Element;
   /** When provided, `value` is matched against options by this accessor, so consumers can pass a primitive value instead of the option object. */
   getOptionValue?: (option: any) => any;
   getOptionComponent?: (option: any) => string | JSX.Element;
@@ -45,7 +45,7 @@ const SelectField = ({
   className,
   left,
   padding,
-  getOptionLabel,
+  getOptionLabel: getOptionLabelProp,
   getOptionValue,
   getOptionComponent,
   onChange,
@@ -55,6 +55,7 @@ const SelectField = ({
   ariaLabelRemove = 'Pašalinti',
   ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
 }: SelectFieldProps) => {
+  const getOptionLabel = getOptionLabelProp || ((option: any) => option.label);
   // With getOptionValue the consumer passes the option's value — resolve the
   // option object internally so display/selection keep working.
   const selected =
@@ -70,19 +71,24 @@ const SelectField = ({
     handleBlur,
     handleClick,
     handleOnChange,
+    handleKeyDown: handleInputKeyDown,
+    activeOptionId,
+    listId,
     loading,
   } = useSelectData({
-    options,
+    options: options || [],
     disabled,
     onChange,
-    getOptionLabel,
+    getOptionLabel: getOptionLabel || ((option: any) => option.label),
     refreshOptions,
     dependantId,
     value: selected,
   });
 
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
-  const showDeleteIcon = selected != null && !!clearable && !disabled;
+  const selectedIndex = selected === undefined ? -1 : suggestions.indexOf(selected);
+  const selectedOptionId = selectedIndex < 0 ? undefined : `${listId}-option-${selectedIndex}`;
+  const showDeleteIcon = selected != null && clearable && !disabled;
 
   return (
     <FieldWrapper
@@ -111,7 +117,7 @@ const SelectField = ({
                   e.stopPropagation();
                   !disabled && onChange(undefined);
                 }}
-                onKeyDown={handleKeyDown()}
+                onKeyDown={handleKeyDown}
                 disabled={disabled}
                 tabIndex={disabled ? -1 : 0}
               >
@@ -133,28 +139,28 @@ const SelectField = ({
           </RightContainer>
         }
         onChange={handleOnChange}
-        onKeyDown={(e) => {
-          if (e.key === 'ArrowDown' || e.key === 'Enter') {
-            e.preventDefault();
-            handleToggleSelect();
-          }
-        }}
+        onKeyDown={handleInputKeyDown}
+        role="combobox"
+        ariaExpanded={showSelect}
+        ariaControls={listId}
+        ariaHaspopup="listbox"
+        ariaActivedescendant={activeOptionId}
         disabled={disabled}
         placeholder={
-          selected
-            ? getOptionComponent
-              ? getOptionComponent(selected)
-              : getOptionLabel(selected)
-            : placeholder
+          selected ? (getOptionComponent?.(selected) ?? getOptionLabel(selected)) : placeholder
         }
         selectedValue={selected}
       />
       <OptionsContainer
+        id={listId}
+        name={listId}
         options={suggestions}
-        getOptionLabel={getOptionComponent || getOptionLabel}
+        getOptionLabel={(getOptionComponent as any) || getOptionLabel}
         loading={loading}
         showSelect={showSelect}
         handleClick={handleClick}
+        activeOptionId={activeOptionId}
+        selectedOptionId={selectedOptionId}
       />
     </FieldWrapper>
   );

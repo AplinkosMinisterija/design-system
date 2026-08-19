@@ -73,3 +73,6 @@ dist/
 generated-sources
 storybook-static
 /stats.html
+
+# Internal scaffolding
+.superpowers/

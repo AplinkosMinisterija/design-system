@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import styled from 'styled-components';
 import DesignSystemProvider from './DesignSystemProvider';
 

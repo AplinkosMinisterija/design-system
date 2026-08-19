@@ -1,13 +1,14 @@
-import { JSX, useState } from 'react';
+import { JSX, useId, useState } from 'react';
 import styled from 'styled-components';
 import { TextField } from '../index';
 import Icon, { IconName } from './common/Icons';
+import { useOptionNavigation } from './common/hooks';
 import OptionsContainer from './common/OptionsContainer';
 import NumericField from './NumericField';
 
 export interface CombinedFieldProps {
-  value: { input: string; option: string };
-  onChange: (option: { input: string; option: string }) => void;
+  value: { input: string | number; option: string };
+  onChange: (option: { input: string | number; option: string }) => void;
   name?: string;
   label?: string;
   error?: string;
@@ -23,6 +24,9 @@ export interface CombinedFieldProps {
   className?: string;
   numeric?: boolean;
 }
+
+/** One entry of the unit dropdown — as loose as the public `options` prop. */
+type CombinedOption = NonNullable<CombinedFieldProps['options']>[number];
 
 const CombinedField = ({
   value = {
@@ -53,7 +57,7 @@ const CombinedField = ({
     }
   };
 
-  const handleChange = (input) => {
+  const handleChange = (input: Partial<{ input: string | number; option: string }>) => {
     setShowSelect(false);
     onChange({
       ...value,
@@ -61,12 +65,36 @@ const CombinedField = ({
     });
   };
 
+  const pickOption = (option: CombinedOption) =>
+    handleChange({ option: getOptionValue ? getOptionValue(option) : option });
+
+  const listId = `${useId()}-listbox`;
+  const { activeOptionId, handleKeyDown } = useOptionNavigation({
+    options,
+    disabled,
+    showSelect,
+    setShowSelect,
+    onSelect: pickOption,
+    listId,
+  });
+
   const renderOptions = () => {
     return (
       <OptionsWrapper>
         <SelectedOption
           onBlur={handleBlur}
           onClick={() => !disabled && setShowSelect(!showSelect)}
+          // The unit picker was a plain div: not focusable, so it could not be
+          // reached or opened from the keyboard at all.
+          onKeyDown={handleKeyDown}
+          tabIndex={disabled ? -1 : 0}
+          role="combobox"
+          aria-expanded={showSelect}
+          aria-controls={listId}
+          aria-haspopup="listbox"
+          aria-activedescendant={activeOptionId}
+          aria-disabled={disabled}
+          aria-label={label}
           $width={optionsWidth}
           $disabled={disabled}
         >
@@ -76,14 +104,15 @@ const CombinedField = ({
           </IconContainer>
         </SelectedOption>
         <StyledOptionsContainer
+          id={listId}
+          name={listId}
+          activeOptionId={activeOptionId}
           options={options}
           getOptionLabel={(option) =>
             getOptionLabel ? getOptionLabel(option) : <Option>{option}</Option>
           }
           showSelect={showSelect}
-          handleClick={(option) => {
-            handleChange({ option: getOptionValue ? getOptionValue(option) : option });
-          }}
+          handleClick={pickOption}
           $width={optionsWidth}
         />
       </OptionsWrapper>
@@ -132,7 +161,7 @@ const StyledIcon = styled(Icon)`
   font-size: 2.4rem;
 `;
 
-const IconContainer = styled.div<{ $disabled: boolean }>`
+const IconContainer = styled.div<{ $disabled?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -140,7 +169,7 @@ const IconContainer = styled.div<{ $disabled: boolean }>`
 `;
 
 const OptionsWrapper = styled.div``;
-const SelectedOption = styled.div<{ $width?: number; $disabled: boolean }>`
+const SelectedOption = styled.div<{ $width?: number; $disabled?: boolean }>`
   display: flex;
   justify-content: space-between;
   padding: 0 9px 0 16px;

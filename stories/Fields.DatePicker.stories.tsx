@@ -12,14 +12,16 @@ const meta: Meta<typeof DatePicker> = {
 export default meta;
 type Story = StoryObj<typeof DatePicker>;
 
+function DatePickerComponent() {
+  const [value, setValue] = useState();
+  return (
+    <StoryWrapper>
+      <DatePicker label={'Date'} onChange={setValue} value={value} />
+    </StoryWrapper>
+  );
+}
+
 export const SelectFieldStory: Story = {
   name: 'DatePicker',
-  render: () => {
-    const [value, setValue] = useState();
-    return (
-      <StoryWrapper>
-        <DatePicker label={'Date'} onChange={setValue} value={value} />
-      </StoryWrapper>
-    );
-  },
+  render: () => <DatePickerComponent />,
 };

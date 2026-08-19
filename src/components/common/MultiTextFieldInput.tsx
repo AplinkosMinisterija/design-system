@@ -1,5 +1,7 @@
 import { useRef } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
+import { useFieldControl } from './FieldControlContext';
 import Icon from '../common/Icons';
 
 export interface MultiTextFieldProps {
@@ -8,6 +10,9 @@ export interface MultiTextFieldProps {
   className?: string;
   onRemove: ({ value, index }: any) => void;
   handleKeyDown?: (event?: any) => void;
+  ariaExpanded?: boolean;
+  ariaControls?: string;
+  ariaActivedescendant?: string;
   disabled?: boolean;
   handleInputChange: (event: any) => void;
   getOptionLabel: (option: any) => string | JSX.Element;
@@ -36,16 +41,24 @@ const MultiTextField = ({
   input = '',
   disabled,
   handleKeyDown,
-  role = 'combobox',
+  ariaExpanded,
+  ariaControls,
+  ariaActivedescendant,
+  role,
   name,
-  height = 56,
   ariaLabelRemove = 'Pašalinti',
   ariaLabelSelectedValue = 'Pasirinkta reikšmė',
   ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
   hideDropdown = false,
 }: MultiTextFieldProps) => {
   const inputRef = useRef<any>(null);
-  const ariaValue = label || name || 'field';
+  const field = useFieldControl();
+  const ariaValue = field?.controlId || label || name || 'field';
+
+  // Claims the id FieldWrapper labels, so it only renders a <label for> once
+  // something inside it can actually own that id (see FieldControlContext).
+  const registerControl = field?.registerControl;
+  useEffect(() => registerControl?.(), [registerControl]);
 
   const handleClick = () => {
     if (!inputRef?.current) return;
@@ -58,7 +71,7 @@ const MultiTextField = ({
     onRemove({ value, index });
   };
 
-  const handleRemoveOnKeyDown = (e, value, index) => {
+  const handleRemoveOnKeyDown = (e: React.KeyboardEvent, value: any, index: number) => {
     const keysToRemove = ['Enter', 'Backspace', 'Delete'];
     if (keysToRemove.includes(e.key)) {
       handleRemove(e, value, index);
@@ -73,11 +86,10 @@ const MultiTextField = ({
       $backgroundColor={backgroundColor}
       $error={!!error}
       $disabled={disabled || false}
-      $height={height}
       aria-disabled={disabled}
       aria-invalid={!!error}
       role={role}
-      aria-label={label || placeholder || 'Multi-select field'}
+      aria-label={role ? label || placeholder || 'Multi-select field' : undefined}
     >
       <InnerContainer role="listbox">
         {values?.map((value: any, index) => (
@@ -106,7 +118,9 @@ const MultiTextField = ({
         {!disabled && (
           <Input
             id={ariaValue}
-            aria-labelledby={!values?.length ? `${ariaValue}-placeholder` : undefined}
+            aria-expanded={ariaExpanded}
+            aria-controls={ariaControls}
+            aria-activedescendant={ariaActivedescendant}
             onKeyDown={handleKeyDown}
             name={name}
             ref={inputRef}
@@ -114,8 +128,12 @@ const MultiTextField = ({
             disabled={disabled}
             value={input}
             onChange={(e) => handleInputChange(e?.target?.value)}
-            aria-label="Įveskite reikšmę"
-            role="textbox"
+            // Inside a FieldWrapper the <label for> names this input; the
+            // generic fallback only applies to a bare one.
+            aria-label={field ? undefined : label || 'Įveskite reikšmę'}
+            aria-describedby={field?.errorId}
+            aria-invalid={field?.invalid || undefined}
+            role="combobox"
             aria-autocomplete="list"
           />
         )}
@@ -124,7 +142,7 @@ const MultiTextField = ({
         <DropdownIconContainer
           role="presentation"
           aria-hidden="true"
-          tabIndex={disabled ? -1 : 0}
+          tabIndex={-1}
           aria-label={ariaLabelDropDownIcon}
         >
           <StyledIcons name="dropdownArrow" />
@@ -135,10 +153,10 @@ const MultiTextField = ({
 };
 
 const InputContainer = styled.div<{
-  $error: boolean;
-  $disabled: boolean;
-  $hasBorder: boolean;
-  $backgroundColor: string;
+  $error?: boolean;
+  $disabled?: boolean;
+  $hasBorder?: boolean;
+  $backgroundColor?: string;
 }>`
   ${({ $hasBorder, $error, theme }) =>
     $hasBorder

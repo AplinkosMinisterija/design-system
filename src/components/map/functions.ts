@@ -8,7 +8,7 @@ import {
 } from 'maplibre-gl';
 
 // @ts-ignore
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import MapboxDraw, { Constants } from '@mapbox/mapbox-gl-draw';
 import { AllGeoJSON } from '@turf/helpers';
 // @ts-ignore
 import proj4 from 'proj4';
@@ -20,22 +20,27 @@ import epsg4326 from 'epsg-index/s/4326.json';
 import { coordEach, featureEach } from '@turf/meta';
 import { cloneDeep, mergeWith } from 'lodash';
 import { ThemeMapColors } from 'src/types';
-import { DragCircle, convertCircleToPoint, convertFeatureToCircle } from './modes';
-import { DirectSelect, SimpleSelect } from './modes';
+import {
+  convertCircleToPoint,
+  convertFeatureToCircle,
+  DirectSelect,
+  DragCircle,
+  SimpleSelect,
+} from './modes';
 
-const epsg = {
+export const epsg = {
   3346: epsg3346,
   4326: epsg4326,
-}
+};
+
+export type KeyOfEPSG = keyof typeof epsg;
 export const BASEMAP_URL = {
   LIGHT: 'https://basemap.biip.lt/styles/bright/style.json',
   GRAY: 'https://basemap.biip.lt/styles/positron/style.json',
 };
 
-export type DrawTypes =
-  | MapboxDraw.constants.types.POINT
-  | MapboxDraw.constants.types.LINE
-  | MapboxDraw.constants.types.POLYGON;
+type Types = typeof MapboxDraw.constants.types;
+export type DrawTypes = Types[keyof Types];
 
 export type MapControls = {
   geolocate?: boolean | ControlPosition;
@@ -58,10 +63,14 @@ export type DrawOptions = {
 };
 
 export const PREVIEW_LAYER_ID = 'preview-layer';
-export const MAP_PROJECTION = '4326';
-export const LKS_PROJECTION = '3346';
+export const MAP_PROJECTION = 4326 as const;
+export const LKS_PROJECTION = 3346 as const;
 
-export const DrawType = MapboxDraw.constants.types;
+export const DrawType = {
+  POINT: 'point' as const,
+  LINE: 'line_string' as const,
+  POLYGON: 'polygon' as const,
+};
 
 export function getPosition(
   fallbackPosition: ControlPosition,
@@ -96,40 +105,45 @@ export function enableDraw(map: Map, draw: DrawOptions, value?: AllGeoJSON, styl
     draw.buffer = typeof draw.buffer === 'boolean' ? { max: 10, min: 1 } : draw.buffer;
   }
 
-  if (!Array.isArray(draw.types)) draw.types = [draw.types];
+  if (!Array.isArray(draw.types)) draw.types = [draw.types!] as DrawTypes[];
 
-  let modes = MapboxDraw.modes;
+  // MapboxDraw.modes is untyped; we extend with custom modes for buffer functionality
+  const modes = { ...MapboxDraw.modes };
 
-  if (draw.buffer) {
+  if (draw.buffer && typeof draw.buffer !== 'boolean') {
     // TODO: setup lines
-    modes = Object.assign(modes, {
-      draw_point: DragCircle(draw.buffer),
-      simple_select: SimpleSelect(),
-      direct_select: DirectSelect({ circle: draw.buffer }),
-    });
+    (modes as any).draw_point = DragCircle(draw.buffer);
+    (modes as any).simple_select = SimpleSelect();
+    (modes as any).direct_select = DirectSelect({ circle: draw.buffer });
   }
 
+  const types = draw.types || [];
   const mapDraw = new MapboxDraw({
     controls: {
-      point: draw.types.includes(DrawType.POINT),
-      line_string: draw.types.includes(DrawType.LINE),
-      polygon: draw.types.includes(DrawType.POLYGON),
-      trash: draw.types.length > 1 || draw.multi,
+      point: types.includes(DrawType.POINT),
+      line_string: types.includes(DrawType.LINE),
+      polygon: types.includes(DrawType.POLYGON),
+      trash: types.length > 1 || draw.multi,
     },
-    modes,
+    modes: modes as any,
     styles,
     displayControlsDefault: false,
     userProperties: true,
   });
 
-  map.addControl(mapDraw, getPosition('top-left', draw.position));
+  // MapboxDraw constructor is untyped; addControl and set accept any
+  map.addControl(mapDraw as any, getPosition('top-left', draw.position));
 
-  if (value) mapDraw.set(value);
+  if (value) mapDraw.set(value as any);
 
   return mapDraw;
 }
 
-export function convertGeojsonToProjection(source: AllGeoJSON, from: string, to: string) {
+export function convertGeojsonToProjection(
+  source: AllGeoJSON,
+  from: KeyOfEPSG,
+  to: KeyOfEPSG,
+): AllGeoJSON {
   const fromEPSG = epsg[from];
   const toEPSG = epsg[to];
 
@@ -139,7 +153,7 @@ export function convertGeojsonToProjection(source: AllGeoJSON, from: string, to:
   const transform = proj4(fromEPSG.proj4, toEPSG.proj4);
   source = cloneDeep(source);
 
-  coordEach(source, (coords) => {
+  coordEach(source as any, (coords: any) => {
     const newCoord = transform.forward(coords);
     coords[0] = newCoord[0];
     coords[1] = newCoord[1];

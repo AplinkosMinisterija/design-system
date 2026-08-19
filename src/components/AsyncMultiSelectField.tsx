@@ -60,15 +60,20 @@ const AsyncMultiSelectField = ({
     observerRef,
     handleBlur,
     handleClick,
+    activeOptionId,
+    handleKeyDown,
+    listId,
   } = useAsyncSelectData({
     loadOptions,
     disabled,
     onChange: (option: any) => onChange([...values, option]),
+    filterOptions: (all) => filterSelectedOptions(all, values, getOptionValue),
     dependantValue,
     optionsKey,
     name,
     handleGetNextPageParam,
   });
+
 
   return (
     <FieldWrapper
@@ -91,10 +96,17 @@ const AsyncMultiSelectField = ({
         error={error}
         disabled={disabled}
         handleInputChange={handleInputChange}
+        handleKeyDown={handleKeyDown}
+        ariaExpanded={showSelect}
+        ariaControls={listId}
+        ariaActivedescendant={activeOptionId}
         getOptionLabel={getOptionLabel}
       />
       <OptionsContainer
-        options={filterSelectedOptions(suggestions, values, getOptionValue)}
+        id={listId}
+        name={listId}
+        options={suggestions}
+        activeOptionId={activeOptionId}
         getOptionLabel={getOptionLabel}
         loading={loading}
         observerRef={observerRef}

@@ -1,5 +1,7 @@
+import { useCallback, useId, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { ErrorMessage } from './ErrorMessage';
+import { FieldControlContext } from './FieldControlContext';
 import { useKeyAction } from './hooks';
 
 export interface FieldWrapperProps {
@@ -8,6 +10,11 @@ export interface FieldWrapperProps {
   label?: string;
   /** Renders the required mark (" *") after the label. Visual only — validation stays with the consumer. */
   required?: boolean;
+  /**
+   * Id of the control this labels. Omit and one is generated: the label, the
+   * control and the error message are wired together either way.
+   */
+  htmlFor?: string;
   className?: string;
   padding?: string;
   onClick?: () => void;
@@ -17,7 +24,6 @@ export interface FieldWrapperProps {
   secondLabel?: JSX.Element;
   children: any;
   labelButton?: JSX.Element;
-  htmlFor?: string;
 }
 
 const FieldWrapper = ({
@@ -36,11 +42,23 @@ const FieldWrapper = ({
   labelButton,
   htmlFor,
 }: FieldWrapperProps) => {
-  const handleKeyDown = useKeyAction(() => !!onClick && onClick());
+  const handleKeyDown = useKeyAction(() => !!onClick && onClick(), false);
 
-  const labelAriaValue = htmlFor || (label ? `field-${label}` : undefined);
-  const errorAriaValue = error ? `${labelAriaValue}-error` : undefined;
-  const subLabelAriaValue = subLabel ? `${subLabel}-sublabel` : undefined;
+  // Generated rather than derived from the label text: labels repeat across a
+  // page (two "Vardas" fields in one form) and carry spaces and diacritics.
+  const generatedId = useId();
+  const controlId = htmlFor || generatedId;
+  const labelAriaValue = `${controlId}-label`;
+  const showErrorMessage = showError && !!error;
+  const errorAriaValue = showErrorMessage ? `${controlId}-error` : undefined;
+  const subLabelAriaValue = subLabel ? `${controlId}-sublabel` : undefined;
+
+  const [hasLabelledControl, setHasLabelledControl] = useState(false);
+  const registerControl = useCallback(() => setHasLabelledControl(true), []);
+  const fieldControl = useMemo(
+    () => ({ controlId, errorId: errorAriaValue, invalid: showErrorMessage, registerControl }),
+    [controlId, errorAriaValue, showErrorMessage, registerControl],
+  );
 
   return (
     <Container
@@ -49,12 +67,12 @@ const FieldWrapper = ({
       className={`${className} fieldWrapper`}
       $padding={padding}
       onClick={onClick}
-      onKeyDown={handleKeyDown()}
+      onKeyDown={handleKeyDown}
     >
       <LabelRow>
         {!!label && (
           <LabelContainer>
-            <Label id={labelAriaValue} htmlFor={htmlFor}>
+            <Label id={labelAriaValue} htmlFor={hasLabelledControl ? controlId : undefined}>
               {label}
               {required && <RequiredMark aria-hidden="true"> *</RequiredMark>}
             </Label>
@@ -68,10 +86,10 @@ const FieldWrapper = ({
         {secondLabel}
         {labelButton}
       </LabelRow>
-      <div className="fieldWrapperChildren" aria-labelledby={labelAriaValue}>
-        {children}
+      <div className="fieldWrapperChildren">
+        <FieldControlContext.Provider value={fieldControl}>{children}</FieldControlContext.Provider>
       </div>
-      {showError && error && <ErrorMessage errorAriaValue={errorAriaValue} error={error} />}
+      {showErrorMessage && <ErrorMessage errorAriaValue={errorAriaValue} error={error} />}
       {bottomLabel && <BottomLabel>{bottomLabel}</BottomLabel>}
     </Container>
   );

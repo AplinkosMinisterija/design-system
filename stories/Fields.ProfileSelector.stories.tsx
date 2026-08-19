@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import styled from 'styled-components';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import ProfileSelector from '../src/components/ProfileSelector';
+import { Theme } from '../src';
 
 const meta: Meta<typeof ProfileSelector> = {
   component: ProfileSelector,
@@ -13,7 +14,7 @@ export default meta;
 type Story = StoryObj<typeof ProfileSelector>;
 
 const Option = ({ option, selected }: any) => {
-  const Container = styled.div<{ $selected }>`
+  const Container = styled.div<{ $selected: boolean; theme: Theme }>`
     padding: 16px;
     display: flex;
     flex-direction: row;
@@ -23,7 +24,7 @@ const Option = ({ option, selected }: any) => {
     background-color: ${({ $selected, theme }) => ($selected ? theme.colors.primary : 'white')};
     color: ${({ $selected, theme }) => ($selected ? 'white' : theme.colors.primary)};
   `;
-  const Initials = styled.div<{ $selected }>`
+  const Initials = styled.div<{ $selected: boolean; theme: Theme }>`
     padding: 8px;
     background-color: ${({ $selected, theme }) => ($selected ? 'white' : theme.colors.primary)};
     color: ${({ $selected, theme }) => ($selected ? theme.colors.primary : 'white')};

@@ -89,7 +89,7 @@ const Container = styled.nav`
   gap: 4px;
 `;
 
-const Item = styled.div<{ $isActive: boolean }>`
+const Item = styled.div<{ $isActive?: boolean }>`
   cursor: pointer;
   display: flex;
   gap: 12px;
