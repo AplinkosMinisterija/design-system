@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useMemo } from 'react';
 import styled from 'styled-components';
 import { TreeSelect } from 'antd';
 import { cloneDeep } from 'lodash';
@@ -34,6 +34,59 @@ export interface SelectFieldProps {
   groups?: Group[];
 }
 
+/**
+ * Disables everything outside the branch the current value lives in: a group the
+ * value does not belong to, and all of its descendants.
+ */
+const applyGroupRestrictions = (groupOptions: Group[], groups?: Group[], value?: any) => {
+  const findChildren = (options: Group[], path: boolean): boolean => {
+    for (let i = 0; i < options?.length; i++) {
+      const option = options[i];
+      const children = option.children;
+      const hasChildren = !!children && children.length > 0;
+      const id = option.id;
+      if (id) {
+        Object.assign(option, { disabled: path });
+      }
+      if (hasChildren) {
+        findChildren(children, path);
+      }
+    }
+    return path;
+  };
+
+  groups?.forEach((group) => {
+    const findParents = (options: Group[]): boolean | undefined => {
+      for (let i = 0; i < options?.length; i++) {
+        const option = options[i];
+        const children = option.children;
+        const hasChildren = !!children && children.length > 0;
+        const isCurrentValue = option.id === value;
+        const isGroupId = option.id === group.id;
+
+        if (isGroupId && !isCurrentValue) {
+          Object.assign(option, { disabled: true });
+          hasChildren && findChildren(children, true);
+          return true;
+        }
+        if (isCurrentValue) {
+          Object.assign(option, { disabled: false });
+          hasChildren && findChildren(children, false);
+        }
+
+        if (hasChildren) {
+          const result = findParents(children);
+          if (result) {
+            Object.assign(option, { disabled: true });
+            return result;
+          }
+        }
+      }
+    };
+    findParents(groupOptions);
+  });
+};
+
 const TreeSelectField = ({
   label,
   value,
@@ -45,62 +98,15 @@ const TreeSelectField = ({
   onChange,
   groups,
 }: SelectFieldProps) => {
-  const clonedGroupOptions = cloneDeep(groupOptions);
-
-  const filterTreeOptions = useCallback(() => {
-    const groupsIds = groups?.map((group) => group.id);
-
-    const findChildren = (options: Group[], path: boolean): boolean => {
-      for (let i = 0; i < options?.length; i++) {
-        const option = options[i];
-        const children = option.children;
-        const hasChildren = !!children && children.length > 0;
-        const id = option.id;
-        if (id) {
-          Object.assign(option, { disabled: path });
-        }
-        if (hasChildren) {
-          findChildren(children, path);
-        }
-      }
-      return path;
-    };
-
-    groupsIds?.map((groupId) => {
-      const findParents = (options: Group[]): boolean | undefined => {
-        for (let i = 0; i < options?.length; i++) {
-          const option = options[i];
-          const children = option.children;
-          const hasChildren = !!children && children.length > 0;
-          const isCurrentValue = option.id === value;
-          const isGroupId = option.id === groupId;
-
-          if (isGroupId && !isCurrentValue) {
-            Object.assign(option, { disabled: true });
-            hasChildren && findChildren(children, true);
-            return true;
-          }
-          if (isCurrentValue) {
-            Object.assign(option, { disabled: false });
-            hasChildren && findChildren(children, false);
-          }
-
-          if (hasChildren) {
-            const result = findParents(children);
-            if (result) {
-              Object.assign(option, { disabled: true });
-              return result;
-            }
-          }
-        }
-      };
-      return findParents(clonedGroupOptions);
-    });
-  }, [value, clonedGroupOptions, groups]);
-
-  useEffect(() => {
-    filterTreeOptions();
-  }, [filterTreeOptions]);
+  // Cloned and flagged during render: `cloneDeep` produced a new tree on every
+  // render, so the callback and the effect that applied the flags were rebuilt
+  // every time — and the flags landed on the tree only after the tree had
+  // already been handed to antd, one render late.
+  const clonedGroupOptions = useMemo(() => {
+    const cloned = cloneDeep(groupOptions);
+    applyGroupRestrictions(cloned, groups, value);
+    return cloned;
+  }, [groupOptions, groups, value]);
 
   return (
     <Container className={className} padding={padding || '0'}>

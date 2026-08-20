@@ -1,5 +1,5 @@
 import { map } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useKeyAction } from '../../common/hooks';
 import { DynamicFilterProps, FilterConfig } from '../../../types';
@@ -79,11 +79,10 @@ const DynamicFilter = ({
   },
 }: DynamicFilterProps) => {
   const [showFilters, setShowFilters] = useState(false);
-  const [appliedFilters, setAppliedFilters] = useState<any[]>([]);
-
-  useEffect(() => {
-    setAppliedFilters(mapFilters(filterConfig, filters));
-  }, [filters, filterConfig]);
+  // Derived, not synced through an effect: `mapFilters` returns a new array on
+  // every call, so an effect cost a second render on every prop change and the
+  // tags were missing from the first one.
+  const appliedFilters = useMemo(() => mapFilters(filterConfig, filters), [filterConfig, filters]);
 
   const handleClearFilter = (appliedFilter: any) => {
     const { [appliedFilter.key]: key, ...rest } = filters;

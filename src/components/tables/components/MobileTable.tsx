@@ -104,7 +104,9 @@ const MobileTable = ({
   const [expandedRowIds, setExpandedRowIds] = useState<Set<string | number | undefined>>(new Set());
 
   useEffect(() => {
-    setExpandedRowIds(new Set());
+    // Bail out when nothing is expanded: an unconditional `new Set()` is always
+    // a new reference, so it re-rendered the table on every data change.
+    setExpandedRowIds((expanded) => (expanded.size ? new Set() : expanded));
   }, [data]);
 
   const handleRowClick = (row: TableRow) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { Columns, NotFoundInfoProps, SortedColumnsProps, TableData } from '../../types';
 import { device, useWindowSize } from '../../utils';
 import LoaderComponent from '../common/LoaderComponent';
@@ -43,13 +43,12 @@ const Table = ({
   showPages = true,
 }: TableProps) => {
   const isMobile = useWindowSize(device.mobileL);
-  const [selectedItemIdsSet, setSelectedItemIdsSet] = useState<Set<string | number | undefined>>(
-    new Set(selectedItemIds),
+  // Derived rather than mirrored into state: the effect that kept them in sync
+  // built a new Set on every run, costing a render per prop change.
+  const selectedItemIdsSet = useMemo(
+    () => new Set<string | number | undefined>(selectedItemIds),
+    [selectedItemIds],
   );
-
-  useEffect(() => {
-    setSelectedItemIdsSet(new Set(selectedItemIds));
-  }, [selectedItemIds]);
 
   if (loading && !data?.data?.length) return <LoaderComponent />;
 
