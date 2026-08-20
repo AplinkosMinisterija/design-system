@@ -1,5 +1,76 @@
 # @aplinkosministerija/design-system
 
+## 3.1.1
+
+### Patch Changes
+
+- 2d47b38: Fix `useStorage` re-rendering forever when its fallback is an object or an array
+
+  Both effects listed `initialValue` as a dependency and set state unconditionally.
+  Callers write that fallback inline — `useStorage(key, {}, true)` is the shape in
+  every consuming app — which is a new reference on every render, so the effects
+  re-ran on every render, set state, and re-rendered: an infinite loop.
+
+  It presents as a frozen page rather than an error. There is no console message,
+  no network activity and no URL change; the screen simply rebuilds itself
+  hundreds of times a second, so a click released on a row lands on a node that is
+  already gone. Measured on a consuming app: ~30 000 DOM mutations in 1.5 s.
+
+  The fallback now goes through a ref, so it stays current without being a
+  dependency. A primitive fallback was always immune (it compares by value), which
+  is why only object and array fallbacks ever showed the symptom.
+
+  Introduced in 2.0.0 — 1.x kept these effects on `[]` and `[key]`. Apps still on
+  1.x are unaffected today, but every `useStorage(key, {}, …)` call site in them
+  would have hit this on upgrade.
+
+  Note the one behaviour change: with `persistent: false`, state no longer re-syncs
+  when the fallback's identity changes, only when `persistent` itself flips. No
+  consumer passes `persistent: false`, and the previous "behaviour" in that path
+  was the loop.
+
+- ebf1fde: Fix the render and refetch loops caused by unstable effect dependencies
+
+  `useSelectData` mirrored `options` into state and re-synced it from an effect
+  that listed `options` itself as a dependency. `SelectField` handed it
+  `options || []` — a new array on every one of its own renders whenever the
+  caller omits the prop or builds it inline — so the effect re-ran, set state, and
+  re-rendered. Measured on a bare `<SelectField onChange={…} />`: quiet on mount,
+  then **1807 renders in 1.5 s** with 183 × "Maximum update depth exceeded" as
+  soon as anything renders it a second time (a keystroke, a parent update). The
+  list is now derived during render, so there is no state to feed back.
+
+  The same hook re-armed `refreshOptions` on every render: `handleSetOptions`
+  depended on it, callers write it inline (`refreshOptions={(id) => load(id)}`),
+  and the refresh itself writes the fetched options into the caller's state, which
+  renders again. With `dependantId` set that fetched forever — 51 requests before
+  the repro's own guard stopped it; now one. `refreshOptions` and `onChange` are
+  read through refs, as `useStorage` already does.
+
+  The clear-value branch in that hook read `value?.id`, which is always undefined
+  for the multi-selects — they pass their whole value array. So with `dependantId`
+  it fired on every render, and `MultiSelectField`'s `onChange` appended the
+  resulting `null` to the value list until the component crashed on
+  `Cannot read properties of null (reading 'id')`. It now skips array values, and
+  skips an empty value entirely instead of calling `onChange(null)` when there was
+  never anything to clear.
+
+  Also derived rather than synced through an effect, each of which cost a render
+  per prop change: the applied-filter tags in `DynamicFilter` (which were also
+  missing from the first render), the selected-id set in `Table`, and the disabled
+  flags in `TreeSelectField` (which reached antd one render late, after the tree
+  had already been handed over). `MobileTable` keeps its reset but bails out when
+  no row is expanded. `Map` memoises its styles — `getMapStyles` returned a new
+  array on every render, and as a dependency that re-ran `fitBounds` on every
+  render, so with `zoomOnChange` the map snapped back whenever anything above it
+  re-rendered — and registers the pmtiles protocol once per module instead of once
+  per render.
+
+  Two behaviour changes fall out of dropping the mirrored list: after picking an
+  option the dropdown shows all options again instead of staying filtered by the
+  text that was typed before, and when options arrive asynchronously the typed
+  filter is now applied to them instead of being dropped.
+
 ## 3.1.0
 
 ### Minor Changes
