@@ -28,6 +28,10 @@ import {
 import { MapLayers } from './layers';
 import { LayerToggleControl } from './LayerToggleControl';
 
+// Registered once for the module rather than on every render of every map.
+const pmtilesProtocol = new Protocol();
+addProtocol('pmtiles', pmtilesProtocol.tile);
+
 if (MapboxDraw.constants?.classes) {
   (MapboxDraw.constants.classes as any).CONTROL_BASE = 'maplibregl-ctrl';
   (MapboxDraw.constants.classes as any).CONTROL_PREFIX = 'maplibregl-ctrl-';
@@ -80,7 +84,13 @@ const Map = ({
   const mapDraw = useRef<MapboxDraw | null>(null);
 
   const theme = useTheme();
-  const styles = theme.colors?.map ? getMapStyles(theme.colors.map) : undefined;
+  // Memoised: `getMapStyles` builds a new array on every call, and as an effect
+  // dependency that re-ran the effect below on every render — with
+  // `zoomOnChange` the map kept snapping back to the value's bounds.
+  const styles = useMemo(
+    () => (theme.colors?.map ? getMapStyles(theme.colors.map) : undefined),
+    [theme.colors?.map],
+  );
   const fitBoundsOptions = useMemo(() => ({ padding: 50, maxZoom: 16 }), []);
 
   const value4326: AllGeoJSON | undefined = useMemo(() => {
@@ -90,9 +100,6 @@ const Map = ({
   }, [value, projection]);
 
   const drawOptions = useMemo(() => parseDrawOptions(draw), [draw]);
-
-  const protocol = new Protocol();
-  addProtocol('pmtiles', protocol.tile);
 
   const mapOptions: Partial<MapOptions> = useMemo(() => {
     const options: Partial<MapOptions> = {
@@ -205,7 +212,7 @@ const Map = ({
         }
       });
     });
-  }, [toggleLayers, map]);
+  }, [toggleLayers]);
 
   const handleLayerToggle = (layer: MapToggleLayerConfig) => {
     onLayerToggle?.(layer, !layer.visible);
