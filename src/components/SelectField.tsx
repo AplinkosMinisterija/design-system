@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import { JSX, useMemo } from 'react';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
 import { useKeyAction, useSelectData } from './common/hooks';
@@ -56,11 +56,14 @@ const SelectField = ({
   ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
 }: SelectFieldProps) => {
   const getOptionLabel = getOptionLabelProp || ((option: any) => option.label);
+  // Memoised so an omitted `options` prop does not hand the hook below a brand
+  // new array on every render.
+  const optionList = useMemo(() => options || [], [options]);
   // With getOptionValue the consumer passes the option's value — resolve the
   // option object internally so display/selection keep working.
   const selected =
     getOptionValue && value != null
-      ? (options || []).find((option) => getOptionValue(option) === value)
+      ? optionList.find((option) => getOptionValue(option) === value)
       : value;
 
   const {
@@ -76,7 +79,7 @@ const SelectField = ({
     listId,
     loading,
   } = useSelectData({
-    options: options || [],
+    options: optionList,
     disabled,
     onChange,
     getOptionLabel: getOptionLabel || ((option: any) => option.label),

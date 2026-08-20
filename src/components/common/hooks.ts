@@ -116,10 +116,26 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
 }: UseSelectDataProps<T>) => {
   const [input, setInputValue] = useState<string>('');
   const [showSelect, setShowSelect] = useState(false);
-  const [suggestions, setSuggestions] = useState(options);
   const [loading, setLoading] = useState(false);
   const listId = `${useId()}-listbox`;
-  const visibleOptions = filterOptions ? filterOptions(suggestions) : suggestions;
+
+  // Callers write these inline — `refreshOptions={(id) => load(id)}` is the
+  // shape in every consuming app — so they are a new reference on every render.
+  // As effect dependencies they re-arm the effects below on every render, and
+  // `refreshOptions` then writes the fetched options into the caller's state,
+  // which renders again: an endless refetch. Read through refs so they stay
+  // current without ever being a dependency.
+  const refreshOptionsRef = useRef(refreshOptions);
+  refreshOptionsRef.current = refreshOptions;
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+
+  // Derived, not mirrored into state. Holding the list in state and syncing it
+  // from an effect looped forever: `options` is a new array on every render
+  // whenever the caller omits it or builds it inline, so the effect re-ran, set
+  // state, and re-rendered (~1800 renders/s, "Maximum update depth exceeded").
+  const filteredOptions = input ? getFilteredOptions(options, input, getOptionLabel) : options;
+  const visibleOptions = filterOptions ? filterOptions(filteredOptions) : filteredOptions;
   const { activeOptionId, resetActiveOption, handleKeyDown } = useOptionNavigation({
     options: visibleOptions,
     disabled,
@@ -138,11 +154,12 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
   };
 
   const handleSetOptions = useCallback(async () => {
-    if (!refreshOptions) return;
+    const refresh = refreshOptionsRef.current;
+    if (!refresh) return;
     setLoading(true);
-    dependantId && (await refreshOptions(dependantId));
+    dependantId && (await refresh(dependantId));
     setLoading(false);
-  }, [refreshOptions, dependantId]);
+  }, [dependantId]);
 
   useEffect(() => {
     if (!showSelect || options?.length) return;
@@ -154,16 +171,21 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
     handleSetOptions();
   }, [dependantId, handleSetOptions]);
 
+  // Nothing selected means nothing to clear; and the multi-selects pass their
+  // whole value array here, where `value?.id` is always undefined — that made
+  // the check below always true for them, and their `onChange` appended the
+  // resulting `null` to the value list on every render.
+  const valueId = value?.id;
+  const canClearValue = !disabled && !!dependantId && value != null && !Array.isArray(value);
+
   useEffect(() => {
-    const canClearValue =
-      !disabled && dependantId && !options?.some((option) => option?.id === value?.id);
+    if (!canClearValue) return;
 
-    if (canClearValue) {
-      onChange(null);
+    const isValueInOptions = options?.some((option) => option?.id === valueId);
+    if (!isValueInOptions) {
+      onChangeRef.current(null);
     }
-
-    setSuggestions(options);
-  }, [options, disabled, dependantId, value?.id, onChange]);
+  }, [options, canClearValue, valueId]);
 
   const handleClick = (option: T) => {
     setShowSelect(false);
@@ -182,7 +204,6 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
       setShowSelect(true);
     }
     setInputValue(input);
-    setSuggestions(getFilteredOptions(options, input, getOptionLabel));
     // The filtered list is a different list — highlighting index 3 of the old
     // one would point at an unrelated option.
     resetActiveOption();
