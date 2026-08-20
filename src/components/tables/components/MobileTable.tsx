@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useKeyAction } from '../../common/hooks';
 import {
   Columns,
@@ -173,8 +173,16 @@ const MobileTable = ({
         onClick={() => handleRowClick(row)}
         style={tableRowStyle}
         $checkable={checkable}
-        tabIndex={0}
-        onKeyDown={handleKeyDown}
+        // Focusable only when there is something to activate — a focus stop that
+        // does nothing is worse than no focus stop (this is what `DesktopTable`
+        // has always done).
+        tabIndex={onClick ? 0 : undefined}
+        // `handleKeyDown(row)`, not `handleKeyDown`: the hook is curried for the
+        // "action needs the item" form. Handed the raw handler, React called it
+        // WITH THE EVENT, the hook read the event as the item and invoked the
+        // action with nothing — so Enter on a focused row did nothing at all,
+        // while `tabIndex` advertised the row as interactive (WCAG 2.1.1).
+        onKeyDown={handleKeyDown(row)}
         aria-label={`Row ${index + 1}`}
         role="row"
       >
@@ -206,19 +214,19 @@ const MobileTable = ({
           restLabels?.map((column: any, i: number) => {
             const isEven = i % 2 === 0;
 
-            const expandedItem = (
-              <ExpandedColumnContainer key={`tr-td-${i}`}>
-                <ExpandedColumnName>{columns?.[column]?.label || ' '}</ExpandedColumnName>
-                <ExpandedColumnValue>{row?.[column] || '-'}</ExpandedColumnValue>
-              </ExpandedColumnContainer>
-            );
-
+            // The key belongs on the element this `map` RETURNS. It used to sit
+            // on the inner container while the returned fragment had none, so
+            // expanding a row logged "Each child in a list should have a unique
+            // key" in every consuming app.
             return (
-              <>
+              <Fragment key={`tr-td-${i}`}>
                 {isEven && <RowTD />}
                 {isEven && checkable && <RowTD />}
-                {expandedItem}
-              </>
+                <ExpandedColumnContainer>
+                  <ExpandedColumnName>{columns?.[column]?.label || ' '}</ExpandedColumnName>
+                  <ExpandedColumnValue>{row?.[column] || '-'}</ExpandedColumnValue>
+                </ExpandedColumnContainer>
+              </Fragment>
             );
           })}
       </TR>

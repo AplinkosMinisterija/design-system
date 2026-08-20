@@ -432,11 +432,30 @@ export const useDebouncedCallback = <TArgs extends any[], TResult>(
   return Object.assign(run, { cancel });
 };
 
+/**
+ * A keyboard twin for an `onClick`, in two shapes:
+ *
+ *   onKeyDown={handler}          // the action needs no argument
+ *   onKeyDown={handler(item)}    // the action needs the item
+ *
+ * Which one is meant is decided by what the handler is called with, so the check
+ * has to be exact: it used to accept "an object with a `key` property" as the
+ * event, and a data item with a `key` field (a perfectly ordinary column) then
+ * took the event branch — the action ran with no argument and the key was never
+ * even compared. That is a silently dead handler on a focusable element, which
+ * is how `MobileTable`'s rows lost Enter entirely.
+ */
+const isKeyboardEvent = (value: unknown): value is React.KeyboardEvent =>
+  typeof value === 'object' &&
+  value !== null &&
+  'key' in value &&
+  typeof (value as { preventDefault?: unknown }).preventDefault === 'function';
+
 export function useKeyAction<T = any>(action: (option?: T) => void, disabled = false): any {
   return useCallback(
     (option?: T) => {
-      if (typeof option === 'object' && option !== null && 'key' in option) {
-        const e = option as unknown as React.KeyboardEvent;
+      if (isKeyboardEvent(option)) {
+        const e = option;
         if (e.key === 'Enter' && !disabled) {
           e.stopPropagation();
           (action as any)();
