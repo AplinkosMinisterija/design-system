@@ -2,7 +2,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
-import { SortedColumnsProps } from '../src';
+import { SortedColumnsProps, useStorage } from '../src';
 import StoryWrapper from '../src/components/common/StoryWrapper';
 import Table from '../src/components/tables/Table';
 import React from 'react';
@@ -136,10 +136,19 @@ export const DefaultExpandedStory: Story = {
       }));
     };
 
+    // Same shape the consuming app uses: the table reports the bulk choice, the
+    // caller stores it, so a reload opens the way the user left it.
+    const { value: expandedByDefault, setValue: setExpandedByDefault } = useStorage<boolean>(
+      'storybook_table_expanded',
+      true,
+      true,
+    );
+
     return (
       <StoryWrapper>
         <Table
-          defaultExpanded={true}
+          defaultExpanded={expandedByDefault}
+          onDefaultExpandedChange={setExpandedByDefault}
           onColumnSort={handleColumnSort}
           loading={false}
           columns={{
