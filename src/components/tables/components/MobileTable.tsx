@@ -48,6 +48,7 @@ export interface MobileTableProps {
   handleToggleItem: (id: string | number | undefined) => void;
   checkable: boolean;
   loading?: boolean;
+  defaultExpanded?: boolean;
 }
 
 // Mobile layout displays first 2 columns as primary, remainder in expandable rows
@@ -97,17 +98,31 @@ const MobileTable = ({
   handleToggleItem,
   checkable,
   loading = false,
+  defaultExpanded = false,
 }: MobileTableProps) => {
   const mainLabels = Object.keys(columns).slice(0, MAIN_LABELS_COUNT);
   const restLabels = Object.keys(columns).slice(MAIN_LABELS_COUNT);
   const [sortedColumn, setSortedColumn] = useState<SortedColumnsProps>({});
-  const [expandedRowIds, setExpandedRowIds] = useState<Set<string | number | undefined>>(new Set());
+  // Rows the user toggled AWAY from `defaultExpanded` — the exceptions, not the
+  // open rows. Storing it this way lets a row nobody has touched follow the
+  // default no matter what data arrives under it.
+  const [overriddenRowIds, setOverriddenRowIds] = useState<Set<string | number | undefined>>(
+    new Set(),
+  );
+
+  const isRowExpanded = (rowId: string | number | undefined) =>
+    overriddenRowIds.has(rowId) !== defaultExpanded;
 
   useEffect(() => {
+    // A default-expanded table exists to be read many rows at a time (a field
+    // inspector paging through a journal), so it keeps the collapses the user
+    // made rather than undoing them on every page, filter or sort change.
+    if (defaultExpanded) return;
+
     // Bail out when nothing is expanded: an unconditional `new Set()` is always
     // a new reference, so it re-rendered the table on every data change.
-    setExpandedRowIds((expanded) => (expanded.size ? new Set() : expanded));
-  }, [data]);
+    setOverriddenRowIds((overridden) => (overridden.size ? new Set() : overridden));
+  }, [data, defaultExpanded]);
 
   const handleRowClick = (row: TableRow) => {
     if (onClick && row?.id) {
@@ -136,7 +151,7 @@ const MobileTable = ({
   );
 
   const toggleRowExpansion = (rowId: string | number | undefined) => {
-    setExpandedRowIds((prev) => {
+    setOverriddenRowIds((prev) => {
       const next = new Set(prev);
       if (next.has(rowId)) {
         next.delete(rowId);
@@ -147,22 +162,27 @@ const MobileTable = ({
     });
   };
 
-  const allRowsExpanded =
-    !!data?.length && data.every((row) => expandedRowIds.has(row.id));
+  const allRowsExpanded = !!data?.length && data.every((row) => isRowExpanded(row.id));
 
   const toggleAllRows = () => {
-    if (allRowsExpanded) {
-      setExpandedRowIds(new Set());
-    } else if (data?.length) {
-      setExpandedRowIds(new Set(data.map((row) => row.id)));
-    }
+    if (!data?.length) return;
+
+    const shouldExpand = !allRowsExpanded;
+
+    setOverriddenRowIds((prev) => {
+      const next = new Set(prev);
+      data.forEach((row) =>
+        shouldExpand === defaultExpanded ? next.delete(row.id) : next.add(row.id),
+      );
+      return next;
+    });
   };
 
   const handleKeyDown = useKeyAction((row: TableRow | undefined) =>
     row ? handleRowClick(row) : undefined,
   );
   const RenderRow = (row: TableRow, index: number) => {
-    const isRowExpanded = expandedRowIds.has(row.id);
+    const expanded = isRowExpanded(row.id);
 
     return (
       <TR
@@ -188,10 +208,7 @@ const MobileTable = ({
       >
         <RowTD>
           {restLabels?.length ? (
-            <ExpandButton
-              isExpanded={isRowExpanded}
-              onToggle={() => toggleRowExpansion(row.id)}
-            />
+            <ExpandButton isExpanded={expanded} onToggle={() => toggleRowExpansion(row.id)} />
           ) : null}
         </RowTD>
         {checkable && (
@@ -210,7 +227,7 @@ const MobileTable = ({
           </TD>
         ))}
 
-        {isRowExpanded &&
+        {expanded &&
           restLabels?.map((column: any, i: number) => {
             const isEven = i % 2 === 0;
 
@@ -265,10 +282,7 @@ const MobileTable = ({
             <TR $checkable={checkable} $expandable={true} $pointer={false} $index={0} role="row">
               <ArrowTh>
                 {restLabels?.length ? (
-                  <ExpandButton
-                    isExpanded={allRowsExpanded}
-                    onToggle={toggleAllRows}
-                  />
+                  <ExpandButton isExpanded={allRowsExpanded} onToggle={toggleAllRows} />
                 ) : null}
               </ArrowTh>
               {checkable && <ArrowTh />}

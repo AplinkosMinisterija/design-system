@@ -24,6 +24,12 @@ export interface TableProps {
   };
   showPageSizeDropdown?: boolean;
   showPages?: boolean;
+  /**
+   * Opens every row on the narrow (mobile) layout instead of hiding the
+   * secondary columns behind a per-row toggle. No effect on the desktop
+   * layout, which already shows every column.
+   */
+  defaultExpanded?: boolean;
 }
 
 const Table = ({
@@ -41,6 +47,7 @@ const Table = ({
   texts,
   showPageSizeDropdown,
   showPages = true,
+  defaultExpanded,
 }: TableProps) => {
   const isMobile = useWindowSize(device.mobileL);
   // Derived rather than mirrored into state: the effect that kept them in sync
@@ -88,6 +95,7 @@ const Table = ({
           checkable={!!onSetSelectedItemIds}
           texts={texts}
           loading={loading}
+          defaultExpanded={defaultExpanded}
         />
       ) : (
         <DesktopTable
