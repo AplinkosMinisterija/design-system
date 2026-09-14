@@ -21,9 +21,15 @@ export interface TableProps {
   onSetSelectedItemIds?: (ids: (string | number | undefined)[]) => void;
   texts?: {
     filteredItemsNotFound: string;
+    expandAll?: string;
+    collapseAll?: string;
+    expandRow?: string;
+    collapseRow?: string;
   };
   showPageSizeDropdown?: boolean;
   showPages?: boolean;
+  /** Narrow layout only — the desktop one already shows every column. */
+  defaultExpanded?: boolean;
 }
 
 const Table = ({
@@ -41,6 +47,7 @@ const Table = ({
   texts,
   showPageSizeDropdown,
   showPages = true,
+  defaultExpanded,
 }: TableProps) => {
   const isMobile = useWindowSize(device.mobileL);
   // Derived rather than mirrored into state: the effect that kept them in sync
@@ -88,6 +95,7 @@ const Table = ({
           checkable={!!onSetSelectedItemIds}
           texts={texts}
           loading={loading}
+          defaultExpanded={defaultExpanded}
         />
       ) : (
         <DesktopTable

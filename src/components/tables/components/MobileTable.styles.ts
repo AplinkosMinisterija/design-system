@@ -70,7 +70,6 @@ export const TdSecond = styled.td`
 `;
 
 export const RowTD = styled.td`
-  padding: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,17 +124,83 @@ export const ExpandedColumnValue = styled.div`
 `;
 
 export const StyledIcon = styled(Icon)<{ $expanded: boolean }>`
-  color: #cdd5df;
+  /* #cdd5df was 1.5:1 on white; WCAG 1.4.11 wants 3:1 for a control. */
+  color: #697586;
   font-size: 2.4rem;
+  transition: transform 0.15s ease-out;
   transform: ${({ $expanded }) => ($expanded ? 'rotate(180deg)' : 'rotate(0)')};
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 `;
 
-export const StyledIconContainer = styled.div`
+export const StyledIconContainer = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Stretches instead of taking a fixed height, which pads every row taller
+     and cuts how many records fit on screen. */
+  width: 100%;
+  align-self: stretch;
+  min-height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
 
-  &:focus {
-    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  &:hover ${StyledIcon} {
+    color: #364152;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: -2px;
+    border-radius: 4px;
+  }
+`;
+
+export const ExpandAllBar = styled.div`
+  display: flex;
+  padding: 4px 4px 0;
+`;
+
+export const ExpandAllButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  font-size: 1.2rem;
+  font-weight: bold;
+  letter-spacing: 0.29px;
+  color: #4b5565;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f8fafc;
+    color: #121926;
+  }
+
+  &:active {
+    background-color: #eef2f6;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 2px;
+  }
+`;
+
+export const ExpandAllIcon = styled(Icon)<{ $expanded: boolean }>`
+  font-size: 2rem;
+  transition: transform 0.15s ease-out;
+  transform: ${({ $expanded }) => ($expanded ? 'rotate(180deg)' : 'rotate(0)')};
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
   }
 `;

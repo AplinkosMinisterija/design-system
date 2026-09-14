@@ -105,3 +105,77 @@ export const TabsStory: Story = {
     );
   },
 };
+
+export const DefaultExpandedStory: Story = {
+  name: 'Table (defaultExpanded)',
+  render: () => {
+    const [data, setData] = useState({
+      data: [
+        { id: 1, column1: 'test1', column2: 'test', column3: 'data', column4: 'data' },
+        { id: 2, column1: 'test2', column2: 'test', column3: 'testdata', column4: 'data' },
+        { id: 3, column1: 'item7', column2: 'data3', column3: 'data3', column4: 'data' },
+      ],
+      total: 3,
+      page: 1,
+      pageSize: 3,
+      totalPages: 1,
+    });
+
+    // Sorting hands the table a new array, same as paging or filtering does.
+    // A row the user collapsed has to stay collapsed through it.
+    const handleColumnSort = ({ key, direction }: SortedColumnsProps) => {
+      if (!key) return;
+
+      setData((prev) => ({
+        ...prev,
+        data: [...prev.data].sort((a, b) =>
+          direction === 'asc'
+            ? String(a[key]).localeCompare(String(b[key]))
+            : String(b[key]).localeCompare(String(a[key])),
+        ),
+      }));
+    };
+
+    return (
+      <StoryWrapper>
+        <Table
+          defaultExpanded={true}
+          onColumnSort={handleColumnSort}
+          loading={false}
+          columns={{
+            column1: {
+              label: 'Column 1',
+              mobileOrder: 1,
+              desktopOrder: 1,
+              show: true,
+              visible: true,
+            },
+            column2: {
+              label: 'Column 2',
+              mobileOrder: 2,
+              desktopOrder: 2,
+              show: true,
+              visible: true,
+            },
+            column3: {
+              label: 'Column 3',
+              mobileOrder: 3,
+              desktopOrder: 3,
+              show: true,
+              visible: true,
+            },
+            column4: {
+              label: 'Column 4',
+              mobileOrder: 4,
+              desktopOrder: 4,
+              show: true,
+              visible: true,
+            },
+          }}
+          data={data}
+          notFoundInfo={{ text: 'Not found', url: '', urlText: 'not found', onClick: () => {} }}
+        />
+      </StoryWrapper>
+    );
+  },
+};
