@@ -21,6 +21,10 @@ export interface TableProps {
   onSetSelectedItemIds?: (ids: (string | number | undefined)[]) => void;
   texts?: {
     filteredItemsNotFound: string;
+    expandAll?: string;
+    collapseAll?: string;
+    expandRow?: string;
+    collapseRow?: string;
   };
   showPageSizeDropdown?: boolean;
   showPages?: boolean;

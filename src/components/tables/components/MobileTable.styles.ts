@@ -70,7 +70,8 @@ export const TdSecond = styled.td`
 `;
 
 export const RowTD = styled.td`
-  padding: 12px;
+  /* No padding of its own — the toggle inside fills the cell so the whole
+     32px track is tappable instead of just the glyph. */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,17 +126,85 @@ export const ExpandedColumnValue = styled.div`
 `;
 
 export const StyledIcon = styled(Icon)<{ $expanded: boolean }>`
-  color: #cdd5df;
+  /* #cdd5df sat at 1.5:1 on white — under the 3:1 WCAG 1.4.11 asks of a
+     control the user is meant to find. */
+  color: #697586;
   font-size: 2.4rem;
+  transition: transform 0.15s ease-out;
   transform: ${({ $expanded }) => ($expanded ? 'rotate(180deg)' : 'rotate(0)')};
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 `;
 
-export const StyledIconContainer = styled.div`
+export const StyledIconContainer = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Fills the 32px arrow track and stretches to the row, so the tap target is
+     the whole cell rather than the glyph — without padding the rows taller
+     and cutting how many records fit on screen. */
+  width: 100%;
+  align-self: stretch;
+  min-height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
 
-  &:focus {
-    outline: 1px solid ${({ theme }) => theme.colors.primary};
+  &:hover ${StyledIcon} {
+    color: #364152;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: -2px;
+    border-radius: 4px;
+  }
+`;
+
+export const ExpandAllBar = styled.div`
+  display: flex;
+  padding: 4px 4px 0;
+`;
+
+export const ExpandAllButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  font-size: 1.2rem;
+  font-weight: bold;
+  letter-spacing: 0.29px;
+  color: #4b5565;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f8fafc;
+    color: #121926;
+  }
+
+  &:active {
+    background-color: #eef2f6;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 2px;
+  }
+`;
+
+export const ExpandAllIcon = styled(Icon)<{ $expanded: boolean }>`
+  font-size: 2rem;
+  transition: transform 0.15s ease-out;
+  transform: ${({ $expanded }) => ($expanded ? 'rotate(180deg)' : 'rotate(0)')};
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
   }
 `;

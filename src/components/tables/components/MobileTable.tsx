@@ -31,6 +31,9 @@ import {
   ExpandedColumnValue,
   StyledIcon,
   StyledIconContainer,
+  ExpandAllBar,
+  ExpandAllButton,
+  ExpandAllIcon,
 } from './MobileTable.styles';
 
 export interface MobileTableProps {
@@ -43,6 +46,10 @@ export interface MobileTableProps {
   onClick?: (item: any) => void;
   texts?: {
     filteredItemsNotFound: string;
+    expandAll?: string;
+    collapseAll?: string;
+    expandRow?: string;
+    collapseRow?: string;
   };
   selectedItemIdsSet: Set<string | number | undefined>;
   handleToggleItem: (id: string | number | undefined) => void;
@@ -54,31 +61,33 @@ export interface MobileTableProps {
 // Mobile layout displays first 2 columns as primary, remainder in expandable rows
 const MAIN_LABELS_COUNT = 2;
 
+const DEFAULT_TEXTS = {
+  expandAll: 'Išskleisti visus',
+  collapseAll: 'Suskleisti visus',
+  expandRow: 'Išskleisti eilutę',
+  collapseRow: 'Suskleisti eilutę',
+};
+
 interface ExpandButtonProps {
   isExpanded: boolean;
+  label: string;
   onToggle: () => void;
 }
 
-const ExpandButton = ({ isExpanded, onToggle }: ExpandButtonProps) => {
+const ExpandButton = ({ isExpanded, label, onToggle }: ExpandButtonProps) => {
+  // The row around this button opens the record, so the toggle has to keep its
+  // click to itself.
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onToggle();
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      onToggle();
-    }
-  };
-
   return (
     <StyledIconContainer
+      type="button"
       onClick={handleClick}
       aria-expanded={isExpanded}
-      role="button"
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
+      aria-label={label}
     >
       <StyledIcon $expanded={isExpanded} name={IconName.dropdownArrow} />
     </StyledIconContainer>
@@ -102,6 +111,11 @@ const MobileTable = ({
 }: MobileTableProps) => {
   const mainLabels = Object.keys(columns).slice(0, MAIN_LABELS_COUNT);
   const restLabels = Object.keys(columns).slice(MAIN_LABELS_COUNT);
+  const isExpandable = !!restLabels.length;
+  const expandAllText = texts?.expandAll || DEFAULT_TEXTS.expandAll;
+  const collapseAllText = texts?.collapseAll || DEFAULT_TEXTS.collapseAll;
+  const expandRowText = texts?.expandRow || DEFAULT_TEXTS.expandRow;
+  const collapseRowText = texts?.collapseRow || DEFAULT_TEXTS.collapseRow;
   const [sortedColumn, setSortedColumn] = useState<SortedColumnsProps>({});
   // Rows the user toggled AWAY from `defaultExpanded` — the exceptions, not the
   // open rows. Storing it this way lets a row nobody has touched follow the
@@ -207,8 +221,12 @@ const MobileTable = ({
         role="row"
       >
         <RowTD>
-          {restLabels?.length ? (
-            <ExpandButton isExpanded={expanded} onToggle={() => toggleRowExpansion(row.id)} />
+          {isExpandable ? (
+            <ExpandButton
+              isExpanded={expanded}
+              label={expanded ? collapseRowText : expandRowText}
+              onToggle={() => toggleRowExpansion(row.id)}
+            />
           ) : null}
         </RowTD>
         {checkable && (
@@ -276,15 +294,19 @@ const MobileTable = ({
 
   return (
     <Wrapper>
+      {isExpandable && !!data?.length && (
+        <ExpandAllBar>
+          <ExpandAllButton type="button" onClick={toggleAllRows} aria-expanded={allRowsExpanded}>
+            <ExpandAllIcon $expanded={allRowsExpanded} name={IconName.dropdownArrow} />
+            {allRowsExpanded ? collapseAllText : expandAllText}
+          </ExpandAllButton>
+        </ExpandAllBar>
+      )}
       <TableContainer $disabled={loading}>
         <CustomTable role="table">
           <THEAD>
             <TR $checkable={checkable} $expandable={true} $pointer={false} $index={0} role="row">
-              <ArrowTh>
-                {restLabels?.length ? (
-                  <ExpandButton isExpanded={allRowsExpanded} onToggle={toggleAllRows} />
-                ) : null}
-              </ArrowTh>
+              <ArrowTh />
               {checkable && <ArrowTh />}
               {mainLabels.map((key: any, i: number) => {
                 const column = columns?.[key];

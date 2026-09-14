@@ -76,3 +76,4 @@ storybook-static
 
 # Internal scaffolding
 .superpowers/
+.gstack/
