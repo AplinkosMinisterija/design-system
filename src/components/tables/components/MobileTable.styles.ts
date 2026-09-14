@@ -70,8 +70,6 @@ export const TdSecond = styled.td`
 `;
 
 export const RowTD = styled.td`
-  /* No padding of its own — the toggle inside fills the cell so the whole
-     32px track is tappable instead of just the glyph. */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,8 +124,7 @@ export const ExpandedColumnValue = styled.div`
 `;
 
 export const StyledIcon = styled(Icon)<{ $expanded: boolean }>`
-  /* #cdd5df sat at 1.5:1 on white — under the 3:1 WCAG 1.4.11 asks of a
-     control the user is meant to find. */
+  /* #cdd5df was 1.5:1 on white; WCAG 1.4.11 wants 3:1 for a control. */
   color: #697586;
   font-size: 2.4rem;
   transition: transform 0.15s ease-out;
@@ -142,9 +139,8 @@ export const StyledIconContainer = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Fills the 32px arrow track and stretches to the row, so the tap target is
-     the whole cell rather than the glyph — without padding the rows taller
-     and cutting how many records fit on screen. */
+  /* Stretches instead of taking a fixed height, which pads every row taller
+     and cuts how many records fit on screen. */
   width: 100%;
   align-self: stretch;
   min-height: 44px;

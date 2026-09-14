@@ -75,8 +75,7 @@ interface ExpandButtonProps {
 }
 
 const ExpandButton = ({ isExpanded, label, onToggle }: ExpandButtonProps) => {
-  // The row around this button opens the record, so the toggle has to keep its
-  // click to itself.
+  // The row around it opens the record; the toggle must not.
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onToggle();
@@ -117,9 +116,8 @@ const MobileTable = ({
   const expandRowText = texts?.expandRow || DEFAULT_TEXTS.expandRow;
   const collapseRowText = texts?.collapseRow || DEFAULT_TEXTS.collapseRow;
   const [sortedColumn, setSortedColumn] = useState<SortedColumnsProps>({});
-  // Rows the user toggled AWAY from `defaultExpanded` — the exceptions, not the
-  // open rows. Storing it this way lets a row nobody has touched follow the
-  // default no matter what data arrives under it.
+  // The rows toggled AWAY from `defaultExpanded`, not the open ones — so a row
+  // nobody has touched follows the default however the data changes under it.
   const [overriddenRowIds, setOverriddenRowIds] = useState<Set<string | number | undefined>>(
     new Set(),
   );
@@ -128,9 +126,7 @@ const MobileTable = ({
     overriddenRowIds.has(rowId) !== defaultExpanded;
 
   useEffect(() => {
-    // A default-expanded table exists to be read many rows at a time (a field
-    // inspector paging through a journal), so it keeps the collapses the user
-    // made rather than undoing them on every page, filter or sort change.
+    // An opted-in table keeps the user's own collapses across refetches.
     if (defaultExpanded) return;
 
     // Bail out when nothing is expanded: an unconditional `new Set()` is always

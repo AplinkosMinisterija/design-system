@@ -28,11 +28,7 @@ export interface TableProps {
   };
   showPageSizeDropdown?: boolean;
   showPages?: boolean;
-  /**
-   * Opens every row on the narrow (mobile) layout instead of hiding the
-   * secondary columns behind a per-row toggle. No effect on the desktop
-   * layout, which already shows every column.
-   */
+  /** Narrow layout only — the desktop one already shows every column. */
   defaultExpanded?: boolean;
 }
 
