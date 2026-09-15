@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import FieldWrapper from './common/FieldWrapper';
+import { isSameNumber } from './common/functions';
 import TextFieldInput from './common/TextFieldInput';
 
 export interface NumericFieldProps {
@@ -52,6 +53,17 @@ const NumericField = ({
   secondLabel,
 }: NumericFieldProps) => {
   const [inputValue, setInputValue] = useState(value?.toString() || '');
+
+  // Follow `value` when it changes from outside — a prefill from a register, a
+  // draft that loads after mount, a form reset. Without this the box is read
+  // once at mount and never again, so a field the code fills stays visibly
+  // empty while the form holds the number. Derived during render rather than in
+  // an effect, so the box never paints a stale value first.
+  const [lastValue, setLastValue] = useState(value);
+  if (value !== lastValue) {
+    setLastValue(value);
+    if (!isSameNumber(inputValue, value)) setInputValue(value?.toString() || '');
+  }
 
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {

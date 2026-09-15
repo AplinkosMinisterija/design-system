@@ -42,3 +42,19 @@ export const handleError = (
     closeOnClick: true,
   });
 };
+
+/**
+ * Is the text in a numeric field already a spelling of the number the parent
+ * holds?
+ *
+ * `'574.'` and `'1.50'` are what a half-typed number looks like while the
+ * parent holds 574 and 1.5 — comparing numerically is what keeps the field
+ * from rewriting itself under the cursor. `NaN` (a lone `-` or `.`) counts as
+ * still-typing for the same reason.
+ */
+export const isSameNumber = (input: string, value?: string | number): boolean => {
+  const typed = input === '' ? null : Number(input);
+  if (typed !== null && Number.isNaN(typed)) return true;
+  const given = value === '' || value === undefined || value === null ? null : Number(value);
+  return typed === given;
+};
