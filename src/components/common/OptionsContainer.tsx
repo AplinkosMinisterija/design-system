@@ -12,14 +12,8 @@ export interface SelectOption {
 export interface OptionContainerTexts {
   noOptions: string;
   /**
-   * Shown in place of `noOptions` while the typed query is shorter than the
-   * search needs — pair it with `queryTooShort`.
-   *
-   * The two are different statements and a register-backed field cannot make
-   * do with one: "nothing found" is a claim about an ANSWER, and a search that
-   * has not run has no answer. Saying it anyway reads as "the source is empty
-   * or broken", which is how it was read on a live water-body field whose
-   * register was answering perfectly.
+   * Shown instead of `noOptions` while the query is too short to search on.
+   * A search that has not run has no answer to report as empty.
    */
   shortQuery?: string;
   resultsCount?: (count: number) => string;
@@ -43,10 +37,7 @@ export interface OptionsContainerProps {
   selectedOptionId?: string;
   activeOptionId?: string;
   id?: string;
-  /**
-   * The query is too short for the search to have run, so the empty list means
-   * "not asked yet" rather than "nothing matched". Needs `texts.shortQuery`.
-   */
+  /** The search has not run yet, so an empty list is not an empty answer. */
   queryTooShort?: boolean;
 }
 
@@ -72,7 +63,6 @@ const OptionsContainer = ({
 }: OptionsContainerProps) => {
   const display = showSelect && !disabled;
   const optionsLength = options.length;
-  /** Falls back to `noOptions` when the caller gave no short-query wording. */
   const emptyText = (queryTooShort && texts?.shortQuery) || texts?.noOptions;
   const handleKeyDown = useKeyAction(handleClick, disabled);
 

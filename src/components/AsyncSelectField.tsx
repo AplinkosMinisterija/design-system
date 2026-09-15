@@ -27,13 +27,7 @@ export interface AsyncSelectFieldProps<T extends SelectOption = SelectOption> {
   optionsKey?: string;
   hasOptionKey?: boolean;
   texts?: OptionContainerTexts;
-  /**
-   * Characters required before `loadOptions` returns anything. Purely
-   * cosmetic here — it does not gate the call, it tells the dropdown to say
-   * `texts.shortQuery` instead of `texts.noOptions` while the input is
-   * shorter, so a register that has not been asked does not report itself
-   * empty.
-   */
+  /** Characters required before the list is fetched; below it, `texts.shortQuery` shows. */
   minQueryLength?: number;
   handleGetNextPageParam?: (params: any) => number | undefined;
   ariaLabelRemove?: string;
@@ -78,6 +72,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
     handleKeyDown: handleInputKeyDown,
     activeOptionId,
     listId,
+    queryTooShort,
   } = useAsyncSelectData({
     loadOptions,
     disabled,
@@ -85,6 +80,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
     dependantValue,
     optionsKey,
     handleGetNextPageParam,
+    minQueryLength,
     name,
   });
 
@@ -162,7 +158,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
         showSelect={showSelect}
         handleClick={handleClick}
         texts={texts}
-        queryTooShort={input.trim().length < minQueryLength}
+        queryTooShort={queryTooShort}
       />
     </FieldWrapper>
   );

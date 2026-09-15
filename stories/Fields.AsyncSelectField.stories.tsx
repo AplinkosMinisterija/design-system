@@ -52,16 +52,10 @@ const OptionInfo = styled.span`
   font-size: 1.4rem;
 `;
 
-/**
- * A register-backed field that only answers from the second character on.
- *
- * With one character typed the list is empty because nothing was asked, not
- * because nothing matched — `texts.shortQuery` is what says so. Without it the
- * field claims "Nieko nerasta" over a register that is answering perfectly,
- * which is how a live water-body search was read as disconnected.
- */
+/** A register-backed field that is not asked until the second character. */
 function MinQueryLengthComponent() {
   const [value, setValue] = useState<SelectOption | undefined>();
+  const [asked, setAsked] = useState<string[]>([]);
   return (
     <StoryWrapper>
       <AsyncSelectField
@@ -79,7 +73,7 @@ function MinQueryLengthComponent() {
         }}
         loadOptions={async (input) => {
           const query = input.trim().toLowerCase();
-          if (query.length < 2) return { rows: [], page: 1, totalPages: 1 };
+          setAsked((previous) => [...previous, query]);
           return {
             rows: WATER_BODIES.filter((row) => row.name.toLowerCase().includes(query)),
             page: 1,
@@ -87,6 +81,7 @@ function MinQueryLengthComponent() {
           };
         }}
       />
+      <Asked>Užklausta: {asked.length ? asked.map((q) => `"${q}"`).join(', ') : '—'}</Asked>
     </StoryWrapper>
   );
 }
@@ -95,6 +90,11 @@ export const MinQueryLengthStory: Story = {
   name: 'AsyncSelectField (minQueryLength)',
   render: () => <MinQueryLengthComponent />,
 };
+
+const Asked = styled.div`
+  color: darkgrey;
+  font-size: 1.4rem;
+`;
 
 const WATER_BODIES: SelectOption[] = [
   { id: 1, name: 'Aisetas' },

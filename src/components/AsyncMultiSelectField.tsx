@@ -12,12 +12,7 @@ export interface SelectOption {
 
 export interface SelectFieldProps {
   texts?: OptionContainerTexts;
-  /**
-   * Characters required before `loadOptions` returns anything. Purely
-   * cosmetic — it tells the dropdown to say `texts.shortQuery` instead of
-   * `texts.noOptions` while the input is shorter, so a register that has not
-   * been asked does not report itself empty.
-   */
+  /** Characters required before the list is fetched; below it, `texts.shortQuery` shows. */
   minQueryLength?: number;
   label?: string;
   required?: boolean;
@@ -71,8 +66,10 @@ const AsyncMultiSelectField = ({
     activeOptionId,
     handleKeyDown,
     listId,
+    queryTooShort,
   } = useAsyncSelectData({
     loadOptions,
+    minQueryLength,
     disabled,
     onChange: (option: any) => onChange([...values, option]),
     filterOptions: (all) => filterSelectedOptions(all, values, getOptionValue),
@@ -120,7 +117,7 @@ const AsyncMultiSelectField = ({
         showSelect={showSelect}
         handleClick={handleClick}
         texts={texts}
-        queryTooShort={input.trim().length < minQueryLength}
+        queryTooShort={queryTooShort}
       />
     </FieldWrapper>
   );
