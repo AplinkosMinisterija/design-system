@@ -23,7 +23,7 @@ interface UseOptionNavigationProps<T> {
  * one had no keyboard navigation at all, so its options were reachable only by
  * Tab-stopping through every one of them.
  */
-export const useOptionNavigation = <T,>({
+export const useOptionNavigation = <T>({
   options,
   disabled,
   showSelect,
@@ -238,6 +238,8 @@ interface UseAsyncSelectDataProps<T extends SelectOption = SelectOption> {
   name: string;
   optionsKey?: string;
   handleGetNextPageParam: (data: any) => number | null | undefined;
+  /** Characters required before the list is fetched at all. */
+  minQueryLength?: number;
   /** Narrows what the list shows — the multi-select drops already-picked values. */
   filterOptions?: (options: T[]) => T[];
 }
@@ -250,6 +252,7 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
   name,
   optionsKey,
   handleGetNextPageParam,
+  minQueryLength = 0,
   filterOptions,
 }: UseAsyncSelectDataProps<T>) => {
   const [input, setInput] = useState('');
@@ -269,8 +272,10 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     };
   };
 
+  const queryTooShort = input.trim().length < minQueryLength;
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } = useInfiniteQuery({
-    enabled: showSelect,
+    enabled: showSelect && !queryTooShort,
     queryKey: [name, input],
     initialPageParam: 1,
     queryFn: ({ pageParam }: { pageParam: number }) => fetchData(pageParam),
@@ -342,7 +347,6 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     listId,
   });
 
-
   return {
     loading: isFetching,
     suggestions,
@@ -356,6 +360,7 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     handleKeyDown,
     activeOptionId,
     listId,
+    queryTooShort,
   };
 };
 

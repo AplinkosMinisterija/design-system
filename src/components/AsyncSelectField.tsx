@@ -27,6 +27,8 @@ export interface AsyncSelectFieldProps<T extends SelectOption = SelectOption> {
   optionsKey?: string;
   hasOptionKey?: boolean;
   texts?: OptionContainerTexts;
+  /** Characters required before the list is fetched; below it, `texts.shortQuery` shows. */
+  minQueryLength?: number;
   handleGetNextPageParam?: (params: any) => number | undefined;
   ariaLabelRemove?: string;
   ariaLabelDropDownIcon?: string;
@@ -52,6 +54,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
   ariaLabelRemove = 'Pašalinti',
   ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
   texts,
+  minQueryLength = 0,
   handleGetNextPageParam = (data) => {
     return data?.page < data?.totalPages ? data.page + 1 : undefined;
   },
@@ -69,6 +72,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
     handleKeyDown: handleInputKeyDown,
     activeOptionId,
     listId,
+    queryTooShort,
   } = useAsyncSelectData({
     loadOptions,
     disabled,
@@ -76,12 +80,12 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
     dependantValue,
     optionsKey,
     handleGetNextPageParam,
+    minQueryLength,
     name,
   });
 
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
   const placeholderValue = value ? getOptionLabel(value) : placeholder;
-
 
   return (
     <FieldWrapper
@@ -154,6 +158,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
         showSelect={showSelect}
         handleClick={handleClick}
         texts={texts}
+        queryTooShort={queryTooShort}
       />
     </FieldWrapper>
   );

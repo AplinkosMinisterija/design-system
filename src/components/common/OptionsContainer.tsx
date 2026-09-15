@@ -11,6 +11,11 @@ export interface SelectOption {
 
 export interface OptionContainerTexts {
   noOptions: string;
+  /**
+   * Shown instead of `noOptions` while the query is too short to search on.
+   * A search that has not run has no answer to report as empty.
+   */
+  shortQuery?: string;
   resultsCount?: (count: number) => string;
 }
 
@@ -32,6 +37,8 @@ export interface OptionsContainerProps {
   selectedOptionId?: string;
   activeOptionId?: string;
   id?: string;
+  /** The search has not run yet, so an empty list is not an empty answer. */
+  queryTooShort?: boolean;
 }
 
 const OptionsContainer = ({
@@ -52,9 +59,11 @@ const OptionsContainer = ({
   activeOptionId,
   selectedOptionId,
   id,
+  queryTooShort = false,
 }: OptionsContainerProps) => {
   const display = showSelect && !disabled;
   const optionsLength = options.length;
+  const emptyText = (queryTooShort && texts?.shortQuery) || texts?.noOptions;
   const handleKeyDown = useKeyAction(handleClick, disabled);
 
   /** Keeps the arrow-key highlight inside the scrollable list. */
@@ -69,7 +78,7 @@ const OptionsContainer = ({
         <LoaderComponent />
       ) : (
         <Option key="no-options" role="option" aria-disabled="true">
-          {texts?.noOptions}
+          {emptyText}
         </Option>
       );
     }
@@ -118,7 +127,7 @@ const OptionsContainer = ({
         {observerRef && <ObserverRef $display={display} ref={observerRef} aria-hidden={!display} />}
       </OptionContainer>
       <OptionsLength aria-live="polite" aria-atomic="true">
-        {optionsLength > 0 ? texts?.resultsCount?.(optionsLength) : texts?.noOptions}
+        {optionsLength > 0 ? texts?.resultsCount?.(optionsLength) : emptyText}
       </OptionsLength>
     </>
   );

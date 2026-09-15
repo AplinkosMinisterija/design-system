@@ -12,6 +12,8 @@ export interface SelectOption {
 
 export interface SelectFieldProps {
   texts?: OptionContainerTexts;
+  /** Characters required before the list is fetched; below it, `texts.shortQuery` shows. */
+  minQueryLength?: number;
   label?: string;
   required?: boolean;
   values?: any[];
@@ -46,6 +48,7 @@ const AsyncMultiSelectField = ({
   loadOptions,
   dependantValue,
   texts = { noOptions: 'Nėra pasirinkimų' },
+  minQueryLength = 0,
   handleGetNextPageParam = (data) => {
     return data?.page < data?.totalPages ? data.page + 1 : undefined;
   },
@@ -63,8 +66,10 @@ const AsyncMultiSelectField = ({
     activeOptionId,
     handleKeyDown,
     listId,
+    queryTooShort,
   } = useAsyncSelectData({
     loadOptions,
+    minQueryLength,
     disabled,
     onChange: (option: any) => onChange([...values, option]),
     filterOptions: (all) => filterSelectedOptions(all, values, getOptionValue),
@@ -73,7 +78,6 @@ const AsyncMultiSelectField = ({
     name,
     handleGetNextPageParam,
   });
-
 
   return (
     <FieldWrapper
@@ -113,6 +117,7 @@ const AsyncMultiSelectField = ({
         showSelect={showSelect}
         handleClick={handleClick}
         texts={texts}
+        queryTooShort={queryTooShort}
       />
     </FieldWrapper>
   );
