@@ -11,6 +11,17 @@ export interface SelectOption {
 
 export interface OptionContainerTexts {
   noOptions: string;
+  /**
+   * Shown in place of `noOptions` while the typed query is shorter than the
+   * search needs — pair it with `queryTooShort`.
+   *
+   * The two are different statements and a register-backed field cannot make
+   * do with one: "nothing found" is a claim about an ANSWER, and a search that
+   * has not run has no answer. Saying it anyway reads as "the source is empty
+   * or broken", which is how it was read on a live water-body field whose
+   * register was answering perfectly.
+   */
+  shortQuery?: string;
   resultsCount?: (count: number) => string;
 }
 
@@ -32,6 +43,11 @@ export interface OptionsContainerProps {
   selectedOptionId?: string;
   activeOptionId?: string;
   id?: string;
+  /**
+   * The query is too short for the search to have run, so the empty list means
+   * "not asked yet" rather than "nothing matched". Needs `texts.shortQuery`.
+   */
+  queryTooShort?: boolean;
 }
 
 const OptionsContainer = ({
@@ -52,9 +68,12 @@ const OptionsContainer = ({
   activeOptionId,
   selectedOptionId,
   id,
+  queryTooShort = false,
 }: OptionsContainerProps) => {
   const display = showSelect && !disabled;
   const optionsLength = options.length;
+  /** Falls back to `noOptions` when the caller gave no short-query wording. */
+  const emptyText = (queryTooShort && texts?.shortQuery) || texts?.noOptions;
   const handleKeyDown = useKeyAction(handleClick, disabled);
 
   /** Keeps the arrow-key highlight inside the scrollable list. */
@@ -69,7 +88,7 @@ const OptionsContainer = ({
         <LoaderComponent />
       ) : (
         <Option key="no-options" role="option" aria-disabled="true">
-          {texts?.noOptions}
+          {emptyText}
         </Option>
       );
     }
@@ -118,7 +137,7 @@ const OptionsContainer = ({
         {observerRef && <ObserverRef $display={display} ref={observerRef} aria-hidden={!display} />}
       </OptionContainer>
       <OptionsLength aria-live="polite" aria-atomic="true">
-        {optionsLength > 0 ? texts?.resultsCount?.(optionsLength) : texts?.noOptions}
+        {optionsLength > 0 ? texts?.resultsCount?.(optionsLength) : emptyText}
       </OptionsLength>
     </>
   );

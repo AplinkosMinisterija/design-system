@@ -12,6 +12,13 @@ export interface SelectOption {
 
 export interface SelectFieldProps {
   texts?: OptionContainerTexts;
+  /**
+   * Characters required before `loadOptions` returns anything. Purely
+   * cosmetic — it tells the dropdown to say `texts.shortQuery` instead of
+   * `texts.noOptions` while the input is shorter, so a register that has not
+   * been asked does not report itself empty.
+   */
+  minQueryLength?: number;
   label?: string;
   required?: boolean;
   values?: any[];
@@ -46,6 +53,7 @@ const AsyncMultiSelectField = ({
   loadOptions,
   dependantValue,
   texts = { noOptions: 'Nėra pasirinkimų' },
+  minQueryLength = 0,
   handleGetNextPageParam = (data) => {
     return data?.page < data?.totalPages ? data.page + 1 : undefined;
   },
@@ -73,7 +81,6 @@ const AsyncMultiSelectField = ({
     name,
     handleGetNextPageParam,
   });
-
 
   return (
     <FieldWrapper
@@ -113,6 +120,7 @@ const AsyncMultiSelectField = ({
         showSelect={showSelect}
         handleClick={handleClick}
         texts={texts}
+        queryTooShort={input.trim().length < minQueryLength}
       />
     </FieldWrapper>
   );
