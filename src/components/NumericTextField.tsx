@@ -55,21 +55,18 @@ const NumericTextField = ({
   secondLabel,
   returnNumber = false,
 }: NumericTextFieldProps) => {
-  const [inputValue, setInputValue] = useState(numericFieldText(value));
+  /** What the user last typed, or `null` when the box should just show `value`. */
+  const [typed, setTyped] = useState<string | null>(null);
 
-  // Follow `value` when it changes from outside: a prefill, a draft that loads
-  // after mount, a reset. `Object.is`, not `!==` — a NaN value compares unequal
-  // to itself, so `!==` never settles and React throws "Too many re-renders".
-  const [lastValue, setLastValue] = useState(value);
-  if (!Object.is(value, lastValue)) {
-    setLastValue(value);
-    if (!isSameNumber(inputValue, value)) setInputValue(numericFieldText(value));
-  }
+  // Derived, not synced. The box keeps the typed text only while that text still
+  // spells `value` (`574.` and `1.50` do), and otherwise shows what the parent
+  // holds — so a value set from outside lands immediately, with no effect to
+  // paint a stale number first and no render-phase condition that could fail to
+  // settle. Blur drops the typed text to re-canonicalize (`1.50` -> `1.5`).
+  const inputValue = typed !== null && isSameNumber(typed, value) ? typed : numericFieldText(value);
 
   const handleBlur = (event: any) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) {
-      setInputValue(numericFieldText(value));
-    }
+    if (!event.currentTarget.contains(event.relatedTarget)) setTyped(null);
   };
 
   const handleChange = (input = '') => {
@@ -86,7 +83,7 @@ const NumericTextField = ({
       if (significantDigitsCount <= 15) {
         const number = fixed ? Number(fixed) : undefined;
 
-        setInputValue(fixed);
+        setTyped(fixed);
         onChange(returnNumber ? (Number.isNaN(number) ? undefined : number) : fixed);
       }
     }

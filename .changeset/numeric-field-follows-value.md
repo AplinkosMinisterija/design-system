@@ -9,8 +9,10 @@ again — the box was an uncontrolled input wearing a controlled input's props.
 Anything the code put in the form after that stayed invisible: a value prefilled
 from a register, a draft that loads after the field mounts, a form reset.
 
-Both now follow `value` when it changes, derived during render rather than
-synced through an effect, so the box never paints a stale value first.
+The displayed text is now derived during render instead of held in state: the
+box keeps what was typed only while that text still spells `value`, and shows
+`value` otherwise. So a value set from outside lands immediately, with no effect
+to paint a stale number first.
 
 Typing is untouched. `574.` and `1.50` are mid-typing spellings of numbers the
 parent already holds as `574` and `1.5`, so the comparison is numeric and the
