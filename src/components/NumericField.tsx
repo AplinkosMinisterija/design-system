@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import FieldWrapper from './common/FieldWrapper';
-import { isSameNumber } from './common/functions';
+import { isSameNumber, numericFieldText } from './common/functions';
 import TextFieldInput from './common/TextFieldInput';
 
 export interface NumericFieldProps {
@@ -52,22 +52,20 @@ const NumericField = ({
   subLabel,
   secondLabel,
 }: NumericFieldProps) => {
-  const [inputValue, setInputValue] = useState(value?.toString() || '');
+  const [inputValue, setInputValue] = useState(numericFieldText(value));
 
-  // Follow `value` when it changes from outside — a prefill from a register, a
-  // draft that loads after mount, a form reset. Without this the box is read
-  // once at mount and never again, so a field the code fills stays visibly
-  // empty while the form holds the number. Derived during render rather than in
-  // an effect, so the box never paints a stale value first.
+  // Follow `value` when it changes from outside: a prefill, a draft that loads
+  // after mount, a reset. `Object.is`, not `!==` — a NaN value compares unequal
+  // to itself, so `!==` never settles and React throws "Too many re-renders".
   const [lastValue, setLastValue] = useState(value);
-  if (value !== lastValue) {
+  if (!Object.is(value, lastValue)) {
     setLastValue(value);
-    if (!isSameNumber(inputValue, value)) setInputValue(value?.toString() || '');
+    if (!isSameNumber(inputValue, value)) setInputValue(numericFieldText(value));
   }
 
   const handleBlur = (event: any) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
-      setInputValue(value?.toString() || '');
+      setInputValue(numericFieldText(value));
     }
   };
 

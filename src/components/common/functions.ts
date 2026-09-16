@@ -43,18 +43,33 @@ export const handleError = (
   });
 };
 
+/** A number still being typed: `-`, `0.`, `1,` — no digits after the separator yet. */
+const HALF_TYPED = /^-?\d*[.,]?$/;
+
+/**
+ * The text a numeric field may hold for `value`. Empty for anything that could
+ * not have been typed into it — without this, `NaN` and `Infinity` are written
+ * in as literal words, and the field's own input regex then rejects every
+ * keystroke that follows, leaving it effectively read-only.
+ */
+export const numericFieldText = (value?: string | number): string => {
+  if (value === '' || value === undefined || value === null) return '';
+  return Number.isFinite(Number(value)) ? String(value) : '';
+};
+
 /**
  * Is the text in a numeric field already a spelling of the number the parent
- * holds?
- *
- * `'574.'` and `'1.50'` are what a half-typed number looks like while the
- * parent holds 574 and 1.5 — comparing numerically is what keeps the field
- * from rewriting itself under the cursor. `NaN` (a lone `-` or `.`) counts as
- * still-typing for the same reason.
+ * holds? `'574.'` and `'1.50'` mean 574 and 1.5, so comparing numerically is
+ * what keeps the field from rewriting them under the cursor.
  */
 export const isSameNumber = (input: string, value?: string | number): boolean => {
-  const typed = input === '' ? null : Number(input);
-  if (typed !== null && Number.isNaN(typed)) return true;
   const given = value === '' || value === undefined || value === null ? null : Number(value);
+  if (input === '') return given === null;
+
+  const typed = Number(input);
+  // `-`, `0.`, `1,`: a number being typed, which `Number` cannot compare. Keep
+  // it only while the parent holds nothing — that is our own `onChange(undefined)`
+  // coming back. A parent holding a real number is a prefill, and it wins.
+  if (Number.isNaN(typed)) return given === null && HALF_TYPED.test(input);
   return typed === given;
 };

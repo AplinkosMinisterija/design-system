@@ -34,11 +34,10 @@ export const Field: Story = {
 
 /**
  * A value that arrives from somewhere other than the keyboard — a register
- * lookup, a draft loading after mount, a reset.
- *
- * "Užpildyti iš registro" is the case that was broken: the field read `value`
- * once at mount, so a number the code filled in stayed invisible while the form
- * held it. Type into the box first and then press it: the box follows.
+ * lookup, a draft loading after mount, a reset. The field used to read `value`
+ * once at mount, so any of these stayed invisible while the form held the
+ * number. "Bloga reikšmė (NaN)" is the crash that guards the fix: NaN compares
+ * unequal to itself, so a `!==` check here never settles.
  */
 const PrefilledComponent = () => {
   const [value, setValue] = useState<number | undefined>();
@@ -47,6 +46,7 @@ const PrefilledComponent = () => {
     <StoryWrapper>
       <NumericField
         label="Plotas (ha)"
+        negativeNumber
         onChange={setValue}
         value={value}
         bottomLabel={`Forma turi: ${value ?? '—'}`}
@@ -60,6 +60,12 @@ const PrefilledComponent = () => {
         </button>
         <button type="button" onClick={() => setValue(undefined)}>
           Išvalyti
+        </button>
+        <button type="button" onClick={() => setValue(Number('nepamatuota'))}>
+          Bloga reikšmė (NaN)
+        </button>
+        <button type="button" onClick={() => setValue(1 / 0)}>
+          Bloga reikšmė (Infinity)
         </button>
       </Row>
     </StoryWrapper>
