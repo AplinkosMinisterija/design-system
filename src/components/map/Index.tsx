@@ -1,4 +1,19 @@
 import { addProtocol, Map as MaplibreMap, MapOptions } from 'maplibre-gl';
+
+/**
+ * `draw.*` is fired on the map by `@mapbox/mapbox-gl-draw`, not by MapLibre, so
+ * MapLibre's `MapEventType` does not list it — and that type is an alias, not
+ * an interface, so it cannot be widened by declaration merging either. One
+ * narrow cast here, over a closed set of event names, instead of one per
+ * listener. MapLibre 6 is what made this visible: before it, `on()` took any
+ * string.
+ */
+type DrawEventName = 'draw.create' | 'draw.update' | 'draw.delete' | 'draw.render';
+
+const onDrawEvent = (map: MaplibreMap, event: DrawEventName, listener: () => void): void => {
+  (map.on as unknown as (type: string, listener: () => void) => void)(event, listener);
+};
+
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import FieldWrapper from '../common/FieldWrapper';
@@ -143,12 +158,12 @@ const Map = ({
       onChange?.(transformBufferedItems(featureCollection, false));
     }
 
-    map.current.on('draw.create', onDrawChange);
-    map.current.on('draw.update', onDrawChange);
-    map.current.on('draw.delete', onDrawChange);
+    onDrawEvent(map.current, 'draw.create', onDrawChange);
+    onDrawEvent(map.current, 'draw.update', onDrawChange);
+    onDrawEvent(map.current, 'draw.delete', onDrawChange);
 
     if (!(drawOptions as DrawOptions)?.multi) {
-      map.current.on('draw.render', () => {
+      onDrawEvent(map.current, 'draw.render', () => {
         if (!mapDraw.current) return;
         const { features } = mapDraw.current.getAll();
         if (features?.length < 2) return;

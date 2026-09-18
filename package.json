@@ -68,7 +68,7 @@
     "epsg-index": "^2.0.0",
     "formik": "^2.4.6",
     "lodash": "^4.17.21",
-    "maplibre-gl": "^4.3.2",
+    "maplibre-gl": "^6.4.1",
     "numeral": "^2.0.6",
     "openapi-fetch": "^0.12.2",
     "pmtiles": "^3.0.6",
