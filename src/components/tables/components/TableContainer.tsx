@@ -1,5 +1,4 @@
 import { useEffect, ReactNode, useMemo } from 'react';
-import ReactPaginate from 'react-paginate';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router';
 import styled from 'styled-components';
 import { device, useWindowSize } from '../../../utils';
@@ -7,6 +6,7 @@ import Icon from '../../common/Icons';
 import { TableData } from './types';
 import { isEmpty } from 'lodash';
 import PageSizeDropdown from './PageSizeDropdown';
+import Pagination from './Pagination';
 
 export interface TableLayoutProps {
   data?: TableData;
@@ -82,11 +82,11 @@ const TableContainer = ({
     }
   }, [searchParams, data, loading, totalPages, params, pageName, navigate]);
 
-  const handlePageChange = (e: { selected: number }) => {
+  const handlePageChange = (selected: number) => {
     navigate({
       search: `?${createSearchParams({
         ...params,
-        [pageName]: (e.selected + 1).toString(),
+        [pageName]: (selected + 1).toString(),
       })}`,
     });
   };
@@ -119,25 +119,14 @@ const TableContainer = ({
               />
             )}
             {showPagination && (
-              <StyledReactPaginate
+              <Pagination
                 pageCount={totalPages || 1}
+                page={parseInt(params?.[pageName]) - 1 || 0}
                 pageRangeDisplayed={pageRange}
                 marginPagesDisplayed={pageMargin}
-                forcePage={parseInt(params?.[pageName]) - 1 || 0}
                 onPageChange={handlePageChange}
-                containerClassName="pagination"
-                activeClassName="active"
-                pageLinkClassName="page-link"
-                breakLinkClassName="page-link"
-                nextLinkClassName="page-link"
-                previousLinkClassName="page-link"
-                pageClassName="page-item"
-                breakClassName="page-item"
-                nextClassName="page-item"
-                previousClassName="page-item"
-                aria-label="Pagination navigation"
-                previousLabel={<StyledIcon name="backward" aria-label="Previous page" />}
-                nextLabel={<StyledIcon name="forward" aria-label="Next page" />}
+                previousLabel={<StyledIcon name="backward" />}
+                nextLabel={<StyledIcon name="forward" />}
               />
             )}
           </>
@@ -177,37 +166,6 @@ const StyledIcon = styled(Icon)`
   color: #9aa4b2;
   font-size: 1.4rem;
   cursor: pointer;
-`;
-
-const StyledReactPaginate = styled(ReactPaginate)`
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
-  padding: 0;
-  margin: 17px 0;
-  justify-content: flex-end;
-
-  .page-link {
-    height: 32px;
-    min-width: 32px;
-    margin: 0 2px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 4px;
-    color: #231f20;
-    border: none;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .active a {
-    background: ${({ theme }) => theme.colors.primary} 0% 0% no-repeat padding-box !important;
-    border-radius: 4px;
-    border: none;
-    color: white;
-  }
 `;
 
 export default TableContainer;

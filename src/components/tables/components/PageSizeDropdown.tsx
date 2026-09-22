@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { device } from '../../../utils';
 
 const pageSizeOptions = [10, 20, 50, 100];
+const LABEL = 'Įrašų skaičius puslapyje';
 
 export interface PageSizeDropdownProps {
   value: number;
@@ -20,29 +21,37 @@ const PageSizeDropdown = ({ value, onChange }: PageSizeDropdownProps) => {
   };
 
   return (
-    <Container tabIndex={1} onBlur={handleBlur}>
+    // Blur bubbles up from the button and the options; the wrapper is not a tab stop.
+    <Container onBlur={handleBlur}>
       <PageSizeDropdownContainer>
-        <Label>Įrašų skaičius puslapyje</Label>
-        <FilterButton $selected={open} onClick={() => setOpen(!open)}>
+        <Label>{LABEL}</Label>
+        <FilterButton
+          type="button"
+          $selected={open}
+          aria-expanded={open}
+          aria-haspopup="true"
+          aria-label={`${LABEL}: ${value}`}
+          onClick={() => setOpen(!open)}
+        >
           <SelectedValueLabel>{value.toString()}</SelectedValueLabel>
           <StyledIcon name={open ? IconName.tableArrowUp : IconName.tableArrowDown} />
         </FilterButton>
       </PageSizeDropdownContainer>
       {open ? (
-        <FilterContainer>
-          {pageSizeOptions?.map((item) => {
-            return (
-              <ValueLabel
-                key={item}
-                onClick={() => {
-                  onChange(item);
-                  setOpen(false);
-                }}
-              >
-                {item.toString()}
-              </ValueLabel>
-            );
-          })}
+        <FilterContainer role="group" aria-label={LABEL}>
+          {pageSizeOptions.map((item) => (
+            <ValueLabel
+              key={item}
+              type="button"
+              aria-pressed={item === value}
+              onClick={() => {
+                onChange(item);
+                setOpen(false);
+              }}
+            >
+              {item.toString()}
+            </ValueLabel>
+          ))}
         </FilterContainer>
       ) : null}
     </Container>
@@ -62,12 +71,9 @@ const PageSizeDropdownContainer = styled.div`
 
 const Container = styled.div`
   width: 100%;
-  &:focus {
-    outline: none;
-  }
 `;
 
-const FilterButton = styled.div<{ $selected: boolean }>`
+const FilterButton = styled.button<{ $selected: boolean }>`
   display: flex;
   flex-direction: row;
   background-color: white;
@@ -79,12 +85,21 @@ const FilterButton = styled.div<{ $selected: boolean }>`
   border: 1px solid ${({ theme, $selected }) => ($selected ? theme.colors.primary : '#cdd5df')};
   padding: 4px 8px 4px 10px;
   gap: 8px;
+  font: inherit;
   cursor: pointer;
   box-shadow: 0 0 0 4px
     ${({ theme, $selected }) => ($selected ? `${theme.colors.primary}33` : 'transparent')};
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 2px;
+  }
 `;
 
-const ValueLabel = styled.div`
+const ValueLabel = styled.button`
+  border: none;
+  background: none;
+  width: 100%;
+  font: inherit;
   color: ${({ theme }) => theme.colors.text?.secondary};
   font-size: 1.4rem;
   font-weight: 400;
@@ -95,6 +110,10 @@ const ValueLabel = styled.div`
   cursor: pointer;
   &:hover {
     background: #f3f3f7 0% 0% no-repeat padding-box;
+  }
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: -2px;
   }
 `;
 

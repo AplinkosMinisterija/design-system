@@ -72,7 +72,11 @@ const FieldWrapper = ({
       <LabelRow>
         {!!label && (
           <LabelContainer>
-            <Label id={labelAriaValue} htmlFor={hasLabelledControl ? controlId : undefined}>
+            <Label
+              id={labelAriaValue}
+              // An explicit `htmlFor` names a real control; only generated ids need a claim.
+              htmlFor={hasLabelledControl || !!htmlFor ? controlId : undefined}
+            >
               {label}
               {required && <RequiredMark aria-hidden="true"> *</RequiredMark>}
             </Label>

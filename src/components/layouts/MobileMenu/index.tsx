@@ -21,7 +21,7 @@ const MobileMenu = ({
   onClose,
 }: Props) => {
   return (
-    <Modal visible={visible} onClose={onClose}>
+    <Modal visible={visible} onClose={onClose} ariaLabel="Meniu">
       <Container>
         <InnerContainer>
           <Header>
