@@ -180,12 +180,9 @@ const InputContainer = styled.div<{
     outline: none;
   }
   &:focus-within {
-    border-color: ${({ theme }) =>
-      theme.colors.fields?.borderFocus || theme.colors.fields?.border || '#d4d5de'};
+    border-color: ${({ theme }) => theme.colors.fields?.borderFocus || theme.colors.primary};
     box-shadow: ${({ theme }) =>
-      theme.colors.fields?.borderFocus
-        ? `0 0 0 4px ${theme.colors.fields?.borderFocus}33`
-        : 'none'};
+      `0 0 0 4px ${theme.colors.fields?.borderFocus || theme.colors.primary}33`};
   }
   width: 100%;
 `;

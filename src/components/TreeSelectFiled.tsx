@@ -171,11 +171,9 @@ const StyledTreeSelect = styled(TreeSelect)<{ $error: boolean }>`
 
   .ant-select-selector:focus-within {
     border-color: ${({ theme }) =>
-      theme.colors.fields?.borderFocus || theme.colors.fields?.border || '#d4d5de'} !important;
+      theme.colors.fields?.borderFocus || theme.colors.primary} !important;
     box-shadow: ${({ theme }) =>
-      theme.colors.fields?.borderFocus
-        ? `0 0 0 4px ${theme.colors.fields.borderFocus}33`
-        : 'none'} !important;
+      `0 0 0 4px ${theme.colors.fields?.borderFocus || theme.colors.primary}33`} !important;
     outline: none !important;
     animation-duration: 0s !important;
     transition: none !important;
