@@ -153,6 +153,7 @@ const DynamicFilter = ({
         visible={showFilters}
         onClose={() => setShowFilters(false)}
         ariaLabelledby="filtro-modalo-pavadinimas"
+        maxWidth="640px"
       >
         <FilterWraper>
           <VisuallyHidden id="filtro-modalo-pavadinimas">{title}</VisuallyHidden>

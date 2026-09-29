@@ -228,7 +228,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
 };
 
 const Container = styled.div`
-  max-width: 500px;
+  max-width: 600px;
   @media ${device.mobileL} {
     max-width: 100%;
   }
@@ -241,7 +241,7 @@ const Content = styled.div`
 
 const InputWrapper = styled.div<{ isLast: boolean; single: boolean }>`
   padding: 0 ${({ isLast }) => (isLast ? 0 : '12px')} 0 0;
-  min-width: ${({ single }) => (single ? '400px' : 'auto')};
+  min-width: ${({ single }) => (single ? '560px' : 'auto')};
   flex: 2;
   margin-top: 8px;
   @media ${device.mobileL} {
