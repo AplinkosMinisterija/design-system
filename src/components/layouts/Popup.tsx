@@ -14,6 +14,7 @@ export interface PopupProps {
   left?: React.ReactNode;
   ariaLabel?: string;
   ariaLabelledby?: string;
+  maxWidth?: string;
 }
 
 const Popup = ({
@@ -24,6 +25,7 @@ const Popup = ({
   left,
   ariaLabel = 'popup',
   ariaLabelledby,
+  maxWidth = '440px',
 }: PopupProps) => {
   const handleKeyDownOnClose = useKeyAction(() => onClose(), false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -55,6 +57,7 @@ const Popup = ({
     <Modal visible={visible} onClose={onClose}>
       <Container
         $type={type}
+        $maxWidth={maxWidth}
         aria-label={ariaLabelledby ? undefined : ariaLabel}
         aria-labelledby={ariaLabelledby}
         role="dialog"
@@ -147,7 +150,7 @@ const StyledIcon = styled(Icon)`
   font-size: 2rem;
 `;
 
-const Container = styled.div<{ width?: string; $type: PopupType }>`
+const Container = styled.div<{ width?: string; $type: PopupType; $maxWidth: string }>`
   position: relative;
   height: fit-content;
   width: ${({ width }) => width};
@@ -157,7 +160,7 @@ const Container = styled.div<{ width?: string; $type: PopupType }>`
   outline: none;
 
   @media ${device.desktop} {
-    max-width: 440px;
+    max-width: ${({ $maxWidth }) => $maxWidth};
   }
 
   @media ${device.mobileL} {
