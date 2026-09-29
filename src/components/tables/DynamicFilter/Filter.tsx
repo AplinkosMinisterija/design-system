@@ -246,6 +246,7 @@ const InputWrapper = styled.div<{ isLast: boolean; single: boolean }>`
   margin-top: 8px;
   @media ${device.mobileL} {
     min-width: 100%;
+    padding: 0;
   }
 `;
 
