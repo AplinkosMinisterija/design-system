@@ -70,3 +70,64 @@ export const TabsStory: Story = {
     );
   },
 };
+
+const zones = [
+  { id: 'LAGOON', label: 'Kuršių marios' },
+  { id: 'POLDERS', label: 'Polderiai' },
+  { id: 'RIVERS', label: 'Nemuno žemupys' },
+];
+
+const onlyZone = (values: Record<string, any>, zone: string) =>
+  values.zones?.length === 1 && values.zones[0].id === zone;
+
+const dependentFilterConfig = (): Record<string, FilterConfig> => ({
+  zones: {
+    label: 'Žvejybos vieta',
+    key: 'zones',
+    inputType: FilterInputTypes.multiselect,
+    options: zones,
+    customSetValue: (setFieldValue, value) => {
+      setFieldValue('zones', value);
+      setFieldValue('bar', null);
+      setFieldValue('polder', null);
+    },
+  },
+  bar: {
+    label: 'Kuršių marių kvadratas',
+    key: 'bar',
+    inputType: FilterInputTypes.singleSelect,
+    options: [
+      { id: 11, label: '11' },
+      { id: 12, label: '12' },
+    ],
+    hidden: (values) => !onlyZone(values, 'LAGOON'),
+  },
+  polder: {
+    label: 'Polderis',
+    key: 'polder',
+    inputType: FilterInputTypes.singleSelect,
+    options: [{ id: 1, label: 'Polderis A' }],
+    hidden: (values) => !onlyZone(values, 'POLDERS'),
+  },
+});
+
+export const DependentFieldsStory: Story = {
+  name: 'DynamicFilter with dependent fields',
+  render: () => {
+    const [filter, setFilter] = useState({});
+    return (
+      <StoryWrapper>
+        <DynamicFilter
+          filterConfig={dependentFilterConfig()}
+          rowConfig={[['zones'], ['bar'], ['polder']]}
+          onSetFilters={setFilter}
+          filters={filter}
+          texts={{
+            clearAll: 'Išvalyti filtrus',
+            filter: 'Filtruoti',
+          }}
+        />
+      </StoryWrapper>
+    );
+  },
+};

@@ -328,6 +328,12 @@ const Container = styled.div<{ $disabled: boolean; $bottom: boolean }>`
   .react-datepicker__triangle {
     display: none;
   }
+  // Margins below assume 1.7rem cells; newer react-datepicker CSS (2.125em) overflows the week.
+  .react-datepicker__day,
+  .react-datepicker__day-name {
+    width: 1.7rem;
+    line-height: 1.7rem;
+  }
   .react-datepicker__day {
     &:focus {
       outline: none;

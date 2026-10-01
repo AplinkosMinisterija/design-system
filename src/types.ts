@@ -235,6 +235,9 @@ export interface FilterConfig {
   refreshOptions?: (input?: string, page?: number) => any;
   getOptionValue?: (value: any) => string;
   default?: any;
+  // Hides the field while this holds for the form's current values; a hidden
+  // field is submitted as null.
+  hidden?: (values: Record<string, any>) => boolean;
 }
 
 export interface DynamicFilterProps {

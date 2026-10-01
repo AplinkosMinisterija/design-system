@@ -1,5 +1,26 @@
 # @aplinkosministerija/design-system
 
+## 3.6.0
+
+### Minor Changes
+
+- f66a636: DynamicFilter / DatePicker layout fixes:
+
+  - `DatePicker` sets its own calendar cell size (1.7rem). The day margins were sized for react-datepicker 6's cells; an app that also loads a newer react-datepicker stylesheet (v9 cells are 2.125em) had Saturday and Sunday spill out of the calendar.
+  - `Popup` takes an optional `maxWidth` (default `440px`, unchanged). `DynamicFilter` uses `640px`, with single fields 560px wide, so multiselect chips fit on one line on desktop.
+  - Stacked filter rows on mobile no longer keep the first field's right padding, so both date fields are equally wide.
+
+## 3.5.0
+
+### Minor Changes
+
+- b38643c: DynamicFilter: fields can depend on each other.
+
+  - New `FilterConfig.hidden(values)` — the field is not rendered while it returns `true` for the form's current (not yet applied) values, and a hidden field is submitted as `null`, so it can never be applied or show up as a chip. A row whose fields are all hidden disappears.
+  - `customSetValue` now applies to every input type, not only `singleSelect` — e.g. a multiselect can clear a dependent field when it changes.
+
+  See the "DynamicFilter with dependent fields" story.
+
 ## 3.4.0
 
 ### Minor Changes

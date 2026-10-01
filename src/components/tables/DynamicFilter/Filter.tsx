@@ -29,6 +29,13 @@ export interface DynamicFilterProps {
   values?: Record<string, any>;
 }
 
+type SetFieldValue = (field: string, value: any, shouldValidate?: boolean) => Promise<void | any>;
+
+const isHidden = (filter: FilterConfig, values: Record<string, any>) => !!filter.hidden?.(values);
+
+const applyChange = (filter: FilterConfig, setFieldValue: SetFieldValue, value: any) =>
+  filter.customSetValue ? filter.customSetValue(setFieldValue, value) : setFieldValue(filter.key, value);
+
 const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterProps) => {
   const generateDefaultValues = () => {
     const defaultValues: Record<string, any> = {};
@@ -42,7 +49,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
   const renderRow = (
     row: string[],
     values: Record<string, any>,
-    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => Promise<void | any>,
+    setFieldValue: SetFieldValue,
     index: number
   ) => (
     <Content key={`row_${index}`}>
@@ -53,7 +60,6 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
         const optionValue = filter?.getOptionValue;
         const hasOptionValue = !!optionValue;
         const hasOptionLabelFunction = !!optionLabel;
-        const customSetValue = filter?.customSetValue;
         const options: SelectOption[] = filter?.options || [];
 
         if (filter) {
@@ -65,7 +71,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   value={values[filter.key]}
                   {...(!!handleDateRestriction(filter, values) &&
                     handleDateRestriction(filter, values))}
-                  onChange={(value) => setFieldValue(filter.key, value)}
+                  onChange={(value) => applyChange(filter, setFieldValue, value)}
                   label={filter.label}
                 />
               </InputWrapper>
@@ -79,11 +85,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   value={values[filter.key]}
                   dependantId={filter.getDependId && filter.getDependId(values)}
                   options={options}
-                  onChange={(value) =>
-                    customSetValue
-                      ? customSetValue(setFieldValue, value)
-                      : setFieldValue(filter.key, value)
-                  }
+                  onChange={(value) => applyChange(filter, setFieldValue, value)}
                   getOptionLabel={(option: SelectOption) =>
                     hasOptionLabelFunction ? optionLabel(option) : option.label || ''
                   }
@@ -98,7 +100,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   label={filter.label}
                   values={values[filter.key] || []}
                   options={options}
-                  onChange={(value) => setFieldValue(filter.key, value)}
+                  onChange={(value) => applyChange(filter, setFieldValue, value)}
                   getOptionLabel={(option: SelectOption) =>
                     hasOptionLabelFunction ? optionLabel(option) : option.label || ''
                   }
@@ -113,7 +115,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   name={filter.key}
                   label={filter.label}
                   value={values[filter.key]}
-                  onChange={(value) => setFieldValue(filter.key, value)}
+                  onChange={(value) => applyChange(filter, setFieldValue, value)}
                   handleGetNextPageParam={filter?.handleGetNextPageParam}
                   getOptionLabel={(option: SelectOption) =>
                     hasOptionLabelFunction ? optionLabel(option) : option.name
@@ -133,7 +135,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   name={filter.key}
                   label={filter.label}
                   values={values[filter.key] || []}
-                  onChange={(value) => setFieldValue(filter.key, value)}
+                  onChange={(value) => applyChange(filter, setFieldValue, value)}
                   getOptionLabel={(option: SelectOption) =>
                     hasOptionLabelFunction ? optionLabel(option) : option.name
                   }
@@ -152,7 +154,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
                   name={filter.key}
                   label={filter.label}
                   value={values[filter.key]}
-                  onChange={(value) => setFieldValue(filter.key, value)}
+                  onChange={(value) => applyChange(filter, setFieldValue, value)}
                 />
               </InputWrapper>
             );
@@ -162,7 +164,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
               <TextField
                 name={filter.key}
                 key={filter.key}
-                onChange={(value) => setFieldValue(filter.key, value)}
+                onChange={(value) => applyChange(filter, setFieldValue, value)}
                 value={values[filter.key]}
                 label={filter.label}
               />
@@ -173,12 +175,20 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
     </Content>
   );
 
+  const withoutHidden = (values: Record<string, any>) => {
+    const submitted = { ...values };
+    map(filters, (filter) => {
+      if (isHidden(filter, values)) submitted[filter.key] = null;
+    });
+    return submitted;
+  };
+
   return (
     <Container>
       <Formik
         enableReinitialize={true}
         initialValues={values || generateDefaultValues()}
-        onSubmit={onSubmit}
+        onSubmit={(values) => onSubmit(withoutHidden(values))}
         validateOnChange={false}
       >
         {(formikProps: FormikProps<Record<string, any>>) => {
@@ -187,7 +197,12 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
           <form onSubmit={handleSubmit}>
             <>
               {map(rowConfig, (row, index) => {
-                return renderRow(row, values, setFieldValue, index);
+                const visibleRow = row.filter(
+                  (key) => filters[key] && !isHidden(filters[key], values)
+                );
+                return visibleRow.length
+                  ? renderRow(visibleRow, values, setFieldValue, index)
+                  : null;
               })}
 
               <Row key="form_actions">
@@ -213,7 +228,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit, texts }: DynamicFilterPr
 };
 
 const Container = styled.div`
-  max-width: 500px;
+  max-width: 600px;
   @media ${device.mobileL} {
     max-width: 100%;
   }
@@ -226,11 +241,12 @@ const Content = styled.div`
 
 const InputWrapper = styled.div<{ isLast: boolean; single: boolean }>`
   padding: 0 ${({ isLast }) => (isLast ? 0 : '12px')} 0 0;
-  min-width: ${({ single }) => (single ? '400px' : 'auto')};
+  min-width: ${({ single }) => (single ? '560px' : 'auto')};
   flex: 2;
   margin-top: 8px;
   @media ${device.mobileL} {
     min-width: 100%;
+    padding: 0;
   }
 `;
 
