@@ -30,6 +30,12 @@ export interface TableProps {
   showPages?: boolean;
   /** Narrow layout only — the desktop one already shows every column. */
   defaultExpanded?: boolean;
+  /**
+   * Called with the new value when the user hits expand/collapse-all, for a
+   * caller that wants to store the choice. Supply it and you own
+   * `defaultExpanded`; leave it out and the table keeps the choice itself.
+   */
+  onDefaultExpandedChange?: (expanded: boolean) => void;
 }
 
 const Table = ({
@@ -48,6 +54,7 @@ const Table = ({
   showPageSizeDropdown,
   showPages = true,
   defaultExpanded,
+  onDefaultExpandedChange,
 }: TableProps) => {
   const isMobile = useWindowSize(device.mobileL);
   // Derived rather than mirrored into state: the effect that kept them in sync
@@ -96,6 +103,7 @@ const Table = ({
           texts={texts}
           loading={loading}
           defaultExpanded={defaultExpanded}
+          onDefaultExpandedChange={onDefaultExpandedChange}
         />
       ) : (
         <DesktopTable

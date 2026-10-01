@@ -56,6 +56,7 @@ export interface MobileTableProps {
   checkable: boolean;
   loading?: boolean;
   defaultExpanded?: boolean;
+  onDefaultExpandedChange?: (expanded: boolean) => void;
 }
 
 // Mobile layout displays first 2 columns as primary, remainder in expandable rows
@@ -107,6 +108,7 @@ const MobileTable = ({
   checkable,
   loading = false,
   defaultExpanded = false,
+  onDefaultExpandedChange,
 }: MobileTableProps) => {
   const mainLabels = Object.keys(columns).slice(0, MAIN_LABELS_COUNT);
   const restLabels = Object.keys(columns).slice(MAIN_LABELS_COUNT);
@@ -178,6 +180,15 @@ const MobileTable = ({
     if (!data?.length) return;
 
     const shouldExpand = !allRowsExpanded;
+
+    // A caller that owns `defaultExpanded` gets told to move it, so the choice
+    // can outlive this table — reaching for the bulk control is the user
+    // dropping the per-row exceptions they had.
+    if (onDefaultExpandedChange) {
+      setOverriddenRowIds(new Set());
+      onDefaultExpandedChange(shouldExpand);
+      return;
+    }
 
     setOverriddenRowIds((prev) => {
       const next = new Set(prev);
