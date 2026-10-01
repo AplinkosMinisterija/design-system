@@ -80,7 +80,8 @@ const TimePicker = ({
         setOpen(!open);
       }}
       className={className}
-      tabIndex={1}
+      // Focusable for the blur check, not a tab stop.
+      tabIndex={-1}
       onBlur={handleBlur}
     >
       <StyledTextInput

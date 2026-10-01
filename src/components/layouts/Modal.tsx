@@ -6,9 +6,13 @@ interface ModalProps {
   visible: boolean;
   onClose?: () => void;
   children?: React.ReactNode;
+  /** Without a name the container is only the backdrop — for a child that is the dialog itself. */
+  ariaLabel?: string;
+  ariaLabelledby?: string;
 }
 
-const Modal = ({ visible, children, onClose }: ModalProps) => {
+const Modal = ({ visible, children, onClose, ariaLabel, ariaLabelledby }: ModalProps) => {
+  const isDialog = !!(ariaLabel || ariaLabelledby);
   const handleCloseOnEscape = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -31,9 +35,10 @@ const Modal = ({ visible, children, onClose }: ModalProps) => {
 
   return (
     <ModalContainer
-      role="dialog"
-      aria-modal="true"
-      aria-label="Modal"
+      role={isDialog ? 'dialog' : 'presentation'}
+      aria-modal={isDialog ? 'true' : undefined}
+      aria-label={ariaLabelledby ? undefined : ariaLabel}
+      aria-labelledby={ariaLabelledby}
       tabIndex={-1}
       onClick={(e) => {
         if (e.target === e.currentTarget) {

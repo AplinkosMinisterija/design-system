@@ -14,6 +14,7 @@ export interface PopupProps {
   left?: React.ReactNode;
   ariaLabel?: string;
   ariaLabelledby?: string;
+  closeLabel?: string;
   maxWidth?: string;
 }
 
@@ -25,6 +26,7 @@ const Popup = ({
   left,
   ariaLabel = 'popup',
   ariaLabelledby,
+  closeLabel = 'Užverti',
   maxWidth = '440px',
 }: PopupProps) => {
   const handleKeyDownOnClose = useKeyAction(() => onClose(), false);
@@ -71,7 +73,7 @@ const Popup = ({
             <IconContainer
               onClick={onClose}
               onKeyDown={handleKeyDownOnClose}
-              aria-label={`Close ${ariaLabel}`}
+              aria-label={closeLabel}
               role="button"
               tabIndex={0}
             >

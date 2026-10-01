@@ -91,9 +91,9 @@ const InputContainer = styled.div<{ $error: boolean; $disabled: boolean }>`
   border-radius: ${({ theme }) => theme.radius?.fields || 0.4}rem;
   &:focus-within {
     border-color: ${({ theme }) =>
-      theme.colors.fields?.borderFocus || theme.colors.fields?.border || '#d4d5de'};
+      theme.colors.fields?.borderFocus || theme.colors.primary};
     box-shadow: ${({ theme }) =>
-      theme.colors.fields?.borderFocus ? `0 0 0 4px ${theme.colors.fields.borderFocus}33` : 'none'};
+      `0 0 0 4px ${theme.colors.fields?.borderFocus || theme.colors.primary}33`};
   }
 `;
 

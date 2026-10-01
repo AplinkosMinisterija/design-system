@@ -226,7 +226,7 @@ const DateField = ({
       </TextFieldWrapper>
 
       {open && !disabled ? (
-        <DateContainer ref={calendarRef} tabIndex={1}>
+        <DateContainer ref={calendarRef} tabIndex={-1}>
           {isMobile && (
             <div onClick={() => setOpen(false)}>
               <CloseIcon name={IconName.close} />
