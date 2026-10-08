@@ -42,6 +42,7 @@ import {
 } from './functions';
 import { MapLayers } from './layers';
 import { LayerToggleControl } from './LayerToggleControl';
+import { ensureMaplibreWorker } from './worker';
 
 // Registered once for the module rather than on every render of every map.
 const pmtilesProtocol = new Protocol();
@@ -199,6 +200,7 @@ const Map = ({
     if (map.current || !mapContainer?.current) return;
 
     const options = { ...mapOptions, container: mapContainer.current };
+    ensureMaplibreWorker();
     map.current = new MaplibreMap(options as MapOptions);
 
     addMapControls(map.current, controls);

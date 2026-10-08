@@ -3,6 +3,7 @@ import { resolve } from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, type PluginOption } from 'vite';
 import dts from 'vite-plugin-dts';
+import { maplibreWorker } from './build/maplibreWorker';
 
 export default defineConfig({
   build: {
@@ -30,5 +31,10 @@ export default defineConfig({
     sourcemap: false,
     emptyOutDir: true,
   },
-  plugins: [react(), dts({ rollupTypes: true }), visualizer({ brotliSize: true }) as PluginOption],
+  plugins: [
+    react(),
+    maplibreWorker(),
+    dts({ rollupTypes: true }),
+    visualizer({ brotliSize: true }) as PluginOption,
+  ],
 });
