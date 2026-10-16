@@ -87,6 +87,14 @@ const TextFieldInput = ({
   // so an empty div was rendered and pointed at as the field's name.
   const isCustomPlaceholder = placeholder != null && typeof placeholder !== 'string';
 
+  // A select shows its CHOICE as the placeholder (`value` is the typed query),
+  // and a placeholder is not a value — so the control reads as empty without this.
+  const describesSelection = !!selectedValue && !value && placeholder != null && placeholder !== '';
+  const selectionId = isCustomPlaceholder ? `${ariaValue}-placeholder` : `${ariaValue}-selection`;
+  const describedBy = [field?.errorId, describesSelection ? selectionId : undefined]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <InputContainer
       $error={!!error}
@@ -101,6 +109,9 @@ const TextFieldInput = ({
             {placeholder}
           </CustomPlaceholder>
         )}
+        {describesSelection && !isCustomPlaceholder && (
+          <SelectedValue id={selectionId}>{placeholder}</SelectedValue>
+        )}
 
         <StyledTextInput
           id={ariaValue}
@@ -108,7 +119,7 @@ const TextFieldInput = ({
           // else may claim the name — a placeholder is not a label. Only a bare
           // input falls back to naming itself.
           aria-label={field ? undefined : ariaLabel || label || undefined}
-          aria-describedby={field?.errorId}
+          aria-describedby={describedBy || undefined}
           aria-invalid={field?.invalid || undefined}
           role={role}
           aria-expanded={ariaExpanded}
@@ -135,6 +146,19 @@ const TextFieldInput = ({
     </InputContainer>
   );
 };
+
+/** Announced, never drawn: the native placeholder already shows this text. */
+const SelectedValue = styled.span`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+`;
 
 const CustomPlaceholder = styled.div`
   position: absolute;
