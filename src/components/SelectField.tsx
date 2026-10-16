@@ -53,7 +53,7 @@ const SelectField = ({
   dependantId,
   refreshOptions,
   ariaLabelRemove = 'Pašalinti',
-  ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
+  ariaLabelDropDownIcon = 'Išskleisti',
 }: SelectFieldProps) => {
   const getOptionLabel = getOptionLabelProp || ((option: any) => option.label);
   // Memoised so an omitted `options` prop does not hand the hook below a brand
@@ -129,7 +129,7 @@ const SelectField = ({
             )}
             <IconButton
               type="button"
-              aria-label={ariaLabelDropDownIcon}
+              aria-label={`${ariaLabelDropDownIcon}${label ? ` ${label}` : ''}`}
               onClick={(e) => {
                 e.stopPropagation();
                 !disabled && handleToggleSelect();
