@@ -59,6 +59,7 @@ const MultiSelectField = ({
     value: values,
     onChange: (option: any) => onChange([...values, option]),
     filterOptions: (all) => filterSelectedOptions(all, values, getOptionValue),
+    getOptionValue,
   });
 
 

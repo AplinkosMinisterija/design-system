@@ -102,6 +102,12 @@ interface UseSelectDataProps<T extends SelectOption = SelectOption> {
    * the user can see.
    */
   filterOptions?: (options: T[]) => T[];
+  /**
+   * What identifies an option when deciding whether a pick changes anything.
+   * Defaults to `id`, falling back to the option itself so primitive options
+   * compare by value; pass your own when the key lives elsewhere.
+   */
+  getOptionValue?: (option: T) => unknown;
 }
 
 export const useSelectData = <T extends SelectOption = SelectOption>({
@@ -113,6 +119,7 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
   dependantId,
   value,
   filterOptions,
+  getOptionValue = (option) => option?.id ?? option,
 }: UseSelectDataProps<T>) => {
   const [input, setInputValue] = useState<string>('');
   const [showSelect, setShowSelect] = useState(false);
@@ -192,7 +199,13 @@ export const useSelectData = <T extends SelectOption = SelectOption>({
     setInputValue('');
     resetActiveOption();
 
-    if (value && getOptionLabel(value) === getOptionLabel(option)) return;
+    // Labels are not identities: two options may legitimately share one, and comparing text then
+    // swallowed a pick of a genuinely different option.
+    const selectedValue = value == null ? undefined : getOptionValue(value);
+    const isSameOption =
+      value === option || (selectedValue != null && selectedValue === getOptionValue(option));
+
+    if (isSameOption) return;
 
     onChange(option);
   };
