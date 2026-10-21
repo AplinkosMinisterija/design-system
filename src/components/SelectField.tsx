@@ -86,6 +86,7 @@ const SelectField = ({
     refreshOptions,
     dependantId,
     value: selected,
+    getOptionValue,
   });
 
   const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
