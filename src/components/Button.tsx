@@ -30,7 +30,8 @@ const Button = ({
   width,
   ...rest
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
-  const areaLabel = (label || typeof children === 'string' ? children : type)?.toString();
+  const fallbackLabel = label || (typeof children === 'string' ? children : type);
+  const hasCallerName = !!rest['aria-label'] || !!rest['aria-labelledby'];
 
   return (
     <ButtonWrapper $width={width}>
@@ -39,10 +40,8 @@ const Button = ({
         $variant={variant}
         type={type}
         disabled={disabled}
+        aria-label={hasCallerName ? undefined : fallbackLabel}
         {...rest}
-        aria-label={areaLabel}
-        role="button"
-        tabIndex={0}
       >
         {left}
         {loading ? <Loader size={'24'} color="white" /> : children}
