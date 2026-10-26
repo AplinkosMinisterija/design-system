@@ -33,18 +33,19 @@ const RadioOptions = ({
   ...rest
 }: RadioOptionsProps) => {
   return (
-    <Container oneLine={oneLine} className={className}>
+    <Container $oneLine={oneLine} className={className}>
       <FieldWrapper error={error} showError={showError} label={label} required={required}>
         <OptionsContainer
-          column={column}
+          $column={column}
           role="radiogroup"
           aria-label={label || undefined}
           aria-invalid={showError && !!error ? true : undefined}
+          aria-required={required || undefined}
         >
-          {options?.map((option, index) => {
+          {options?.map((option) => {
             const key = `${name}_${option.value}`;
             return (
-              <InputContainer key={key} first={index === 0}>
+              <InputContainer key={key}>
                 <StyledInput
                   disabled={disabled}
                   type="radio"
@@ -67,21 +68,21 @@ const RadioOptions = ({
   );
 };
 
-const Container = styled.div<{ oneLine?: boolean }>`
+const Container = styled.div<{ $oneLine?: boolean }>`
   padding: 8px 0;
-  display: ${({ oneLine }) => (oneLine ? 'flex' : 'block')};
+  display: ${({ $oneLine }) => ($oneLine ? 'flex' : 'block')};
 `;
 
-const OptionsContainer = styled.div<{ column?: boolean }>`
+const OptionsContainer = styled.div<{ $column?: boolean }>`
   display: flex;
-  flex-direction: ${({ column }) => (column ? 'column' : 'row')};
+  flex-direction: ${({ $column }) => ($column ? 'column' : 'row')};
   @media ${device.mobileL} {
     flex-wrap: wrap;
     flex-direction: column;
   }
 `;
 
-const InputContainer = styled.div<{ first: boolean }>`
+const InputContainer = styled.div`
   margin: 0 8px 0 0;
 
   @media ${device.mobileL} {

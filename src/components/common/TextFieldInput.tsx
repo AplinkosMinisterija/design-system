@@ -121,6 +121,7 @@ const TextFieldInput = ({
           aria-label={field ? undefined : ariaLabel || label || undefined}
           aria-describedby={describedBy || undefined}
           aria-invalid={field?.invalid || undefined}
+          aria-required={field?.required || undefined}
           role={role}
           aria-expanded={ariaExpanded}
           aria-controls={ariaControls}
