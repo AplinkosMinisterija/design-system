@@ -56,8 +56,14 @@ const FieldWrapper = ({
   const [hasLabelledControl, setHasLabelledControl] = useState(false);
   const registerControl = useCallback(() => setHasLabelledControl(true), []);
   const fieldControl = useMemo(
-    () => ({ controlId, errorId: errorAriaValue, invalid: showErrorMessage, registerControl }),
-    [controlId, errorAriaValue, showErrorMessage, registerControl],
+    () => ({
+      controlId,
+      errorId: errorAriaValue,
+      invalid: showErrorMessage,
+      required,
+      registerControl,
+    }),
+    [controlId, errorAriaValue, showErrorMessage, required, registerControl],
   );
 
   return (

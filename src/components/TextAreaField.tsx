@@ -71,6 +71,7 @@ const TextAreaField = ({
           aria-label={label ? undefined : name || 'Text area'}
           aria-describedby={showError && error ? `${id}-error` : undefined}
           aria-invalid={!!error || undefined}
+          aria-required={required || undefined}
         />
       </InputContainer>
     </FieldWrapper>

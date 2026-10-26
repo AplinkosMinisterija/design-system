@@ -133,6 +133,7 @@ const MultiTextField = ({
             aria-label={field ? undefined : label || 'Įveskite reikšmę'}
             aria-describedby={field?.errorId}
             aria-invalid={field?.invalid || undefined}
+            aria-required={field?.required || undefined}
             role="combobox"
             aria-autocomplete="list"
           />
