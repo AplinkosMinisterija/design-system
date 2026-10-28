@@ -1,6 +1,8 @@
+import type { ReactNode } from 'react';
 import { device } from '../utils';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
+import { useFieldControl } from './common/FieldControlContext';
 
 export interface RadioOptionsProps {
   options: { label: string; value: any }[];
@@ -35,12 +37,11 @@ const RadioOptions = ({
   return (
     <Container $oneLine={oneLine} className={className}>
       <FieldWrapper error={error} showError={showError} label={label} required={required}>
-        <OptionsContainer
-          $column={column}
-          role="radiogroup"
-          aria-label={label || undefined}
-          aria-invalid={showError && !!error ? true : undefined}
-          aria-required={required || undefined}
+        <RadioGroup
+          column={column}
+          label={label}
+          required={required}
+          invalid={showError && !!error}
         >
           {options?.map((option) => {
             const key = `${name}_${option.value}`;
@@ -62,9 +63,35 @@ const RadioOptions = ({
               </InputContainer>
             );
           })}
-        </OptionsContainer>
+        </RadioGroup>
       </FieldWrapper>
     </Container>
+  );
+};
+
+interface RadioGroupProps {
+  column: boolean;
+  label?: string;
+  required?: boolean;
+  invalid: boolean;
+  children: ReactNode;
+}
+
+const RadioGroup = ({ column, label, required, invalid, children }: RadioGroupProps) => {
+  const field = useFieldControl();
+  const describedBy = [field?.errorId, field?.hintId].filter(Boolean).join(' ');
+
+  return (
+    <OptionsContainer
+      $column={column}
+      role="radiogroup"
+      aria-label={label || undefined}
+      aria-invalid={invalid ? true : undefined}
+      aria-required={required || undefined}
+      aria-describedby={describedBy || undefined}
+    >
+      {children}
+    </OptionsContainer>
   );
 };
 

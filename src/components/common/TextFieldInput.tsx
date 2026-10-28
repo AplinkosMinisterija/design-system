@@ -91,7 +91,7 @@ const TextFieldInput = ({
   // and a placeholder is not a value — so the control reads as empty without this.
   const describesSelection = !!selectedValue && !value && placeholder != null && placeholder !== '';
   const selectionId = isCustomPlaceholder ? `${ariaValue}-placeholder` : `${ariaValue}-selection`;
-  const describedBy = [field?.errorId, describesSelection ? selectionId : undefined]
+  const describedBy = [field?.errorId, field?.hintId, describesSelection ? selectionId : undefined]
     .filter(Boolean)
     .join(' ');
 
