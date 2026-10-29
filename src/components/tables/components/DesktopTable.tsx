@@ -86,7 +86,6 @@ const DesktopTable = ({
                 onKeyDown={handleKeyDown(row) as any}
                 tabIndex={onClick ? 0 : undefined}
                 style={tableRowStyle}
-                aria-label={`Row with ID ${row?.id}`}
                 role="row"
               >
                 {checkable && (
@@ -108,7 +107,6 @@ const DesktopTable = ({
                       $width={width}
                       key={`tr-td-${i}`}
                       role="cell"
-                      aria-label={`${columns[label]?.label}: ${item}`}
                     >
                       {item}
                     </TD>
