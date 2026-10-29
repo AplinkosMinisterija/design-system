@@ -131,7 +131,7 @@ const MultiTextField = ({
             // Inside a FieldWrapper the <label for> names this input; the
             // generic fallback only applies to a bare one.
             aria-label={field ? undefined : label || 'Įveskite reikšmę'}
-            aria-describedby={field?.errorId}
+            aria-describedby={[field?.errorId, field?.hintId].filter(Boolean).join(' ') || undefined}
             aria-invalid={field?.invalid || undefined}
             aria-required={field?.required || undefined}
             role="combobox"

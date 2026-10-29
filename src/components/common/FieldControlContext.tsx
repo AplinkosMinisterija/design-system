@@ -5,6 +5,8 @@ export interface FieldControl {
   controlId: string;
   /** `id` of the rendered error message, or undefined when there is none. */
   errorId?: string;
+  /** `id` of the rendered `bottomLabel` hint, or undefined when there is none. */
+  hintId?: string;
   /** Whether the field is currently in error. */
   invalid: boolean;
   /** Whether the field is mandatory — the same flag that draws the required mark. */

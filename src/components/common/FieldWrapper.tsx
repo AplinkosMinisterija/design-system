@@ -51,6 +51,7 @@ const FieldWrapper = ({
   const labelAriaValue = `${controlId}-label`;
   const showErrorMessage = showError && !!error;
   const errorAriaValue = showErrorMessage ? `${controlId}-error` : undefined;
+  const hintAriaValue = bottomLabel ? `${controlId}-hint` : undefined;
   const subLabelAriaValue = subLabel ? `${controlId}-sublabel` : undefined;
 
   const [hasLabelledControl, setHasLabelledControl] = useState(false);
@@ -59,11 +60,12 @@ const FieldWrapper = ({
     () => ({
       controlId,
       errorId: errorAriaValue,
+      hintId: hintAriaValue,
       invalid: showErrorMessage,
       required,
       registerControl,
     }),
-    [controlId, errorAriaValue, showErrorMessage, required, registerControl],
+    [controlId, errorAriaValue, hintAriaValue, showErrorMessage, required, registerControl],
   );
 
   return (
@@ -100,7 +102,7 @@ const FieldWrapper = ({
         <FieldControlContext.Provider value={fieldControl}>{children}</FieldControlContext.Provider>
       </div>
       {showErrorMessage && <ErrorMessage errorAriaValue={errorAriaValue} error={error} />}
-      {bottomLabel && <BottomLabel>{bottomLabel}</BottomLabel>}
+      {bottomLabel && <BottomLabel id={hintAriaValue}>{bottomLabel}</BottomLabel>}
     </Container>
   );
 };
