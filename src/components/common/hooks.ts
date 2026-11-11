@@ -362,7 +362,10 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
 
   return {
     loading: isFetching,
-    suggestions,
+    // The list that is rendered and the list the arrow keys walk have to be the
+    // same one, or the highlighted option and the clicked option are different
+    // rows — and a multi select offers what it already holds.
+    suggestions: visibleOptions,
     input,
     handleInputChange,
     handleToggleSelect,
