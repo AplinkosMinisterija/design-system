@@ -2,6 +2,8 @@ import type { Address, AddressesSearchFilterRequest } from './boundaries';
 import { addressesSearch } from './boundaries/services.gen';
 
 const DEFAULT_SIZE = 10;
+const DEFAULT_TIMEOUT_MS = 5000;
+const TIMED_OUT = Symbol('timed-out');
 
 export interface AddressQuery {
   text: string;
@@ -45,18 +47,40 @@ export const addressSearchFilters = (query: AddressQuery): AddressesSearchFilter
   ];
 };
 
-export const searchAddresses = async (input: string, size = DEFAULT_SIZE): Promise<string[]> => {
+export const searchAddresses = async (
+  input: string,
+  size = DEFAULT_SIZE,
+  timeoutMs = DEFAULT_TIMEOUT_MS,
+): Promise<string[]> => {
   const query = parseAddressQuery(input);
   if (!query.text) return [];
 
-  try {
-    const { items } = await addressesSearch({
-      size,
-      requestBody: { filters: addressSearchFilters(query) },
-    });
+  const pending = addressesSearch({
+    size,
+    requestBody: { filters: addressSearchFilters(query) },
+  });
 
-    return [...new Set(items.map(formatBoundariesAddress))];
-  } catch {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  // A registry that never answers must not hold the field hostage: the caller's
+  // own fallback can only appear once this resolves.
+  const outcome = await Promise.race([
+    pending.then(
+      (result) => result,
+      () => undefined,
+    ),
+    new Promise<typeof TIMED_OUT>((resolve) => {
+      timer = setTimeout(() => resolve(TIMED_OUT), timeoutMs);
+    }),
+  ]);
+  clearTimeout(timer);
+
+  if (outcome === TIMED_OUT) {
+    pending.cancel();
     return [];
   }
+
+  if (!outcome) return [];
+
+  return [...new Set(outcome.items.map(formatBoundariesAddress))];
 };

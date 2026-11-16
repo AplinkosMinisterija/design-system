@@ -6,6 +6,7 @@ import {
   searchAddresses,
 } from './address';
 import { addressesSearch } from './boundaries/services.gen';
+import { CancelablePromise } from './boundaries';
 import type { Address } from './boundaries';
 
 vi.mock('./boundaries/services.gen', () => ({ addressesSearch: vi.fn() }));
@@ -141,6 +142,20 @@ describe('searchAddresses', () => {
     vi.mocked(addressesSearch).mockRejectedValue(new Error('503'));
 
     await expect(searchAddresses('Gedimino 11')).resolves.toEqual([]);
+  });
+
+  it('gives up on a registry that never answers, and cancels the request', async () => {
+    let cancelled = false;
+    vi.mocked(addressesSearch).mockReturnValue(
+      new CancelablePromise((_resolve, _reject, onCancel) => {
+        onCancel(() => {
+          cancelled = true;
+        });
+      }),
+    );
+
+    await expect(searchAddresses('Hauptstraße 5, Berlin', 10, 20)).resolves.toEqual([]);
+    expect(cancelled).toBe(true);
   });
 
   it('de-duplicates identical formatted addresses', async () => {
