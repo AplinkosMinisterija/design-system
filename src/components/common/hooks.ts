@@ -255,6 +255,9 @@ interface UseAsyncSelectDataProps<T extends SelectOption = SelectOption> {
   minQueryLength?: number;
   /** Narrows what the list shows — the multi-select drops already-picked values. */
   filterOptions?: (options: T[]) => T[];
+  /** An option built from the live input, so what the user typed is offered
+   *  without waiting for the query and is kept when they leave the field. */
+  inputOption?: (input: string) => T | undefined;
   /** Wait this long after the last keystroke before querying; the query key is the
    *  input, so `0` makes every character its own request. */
   debounceMs?: number;
@@ -270,6 +273,7 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
   handleGetNextPageParam,
   minQueryLength = 0,
   filterOptions,
+  inputOption,
   debounceMs = 0,
 }: UseAsyncSelectDataProps<T>) => {
   const [input, setInput] = useState('');
@@ -302,6 +306,9 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     queryFn: ({ pageParam }: { pageParam: number }) => fetchData(pageParam),
     getNextPageParam: (lastPage) => lastPage.nextPage,
     gcTime: 60000,
+    // A failed search resolves to an empty list, and a consumer's default
+    // staleTime would then serve "nothing found" for the next minute.
+    staleTime: 0,
   });
 
   useEffect(() => {
@@ -325,6 +332,8 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
 
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
+      const typed = inputOption?.(input);
+      if (typed) onChange(typed);
       setShowSelect(false);
       setInput('');
       resetActiveOption();
@@ -357,7 +366,12 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
         .map((item) => item?.data)
         .flat()
     : [];
-  const visibleOptions = filterOptions ? filterOptions(suggestions) : suggestions;
+  const filtered = filterOptions ? filterOptions(suggestions) : suggestions;
+  const typedOption = queryTooShort ? undefined : inputOption?.(input);
+  const visibleOptions =
+    typedOption && !filtered.some((option) => option.label === typedOption.label)
+      ? [...filtered, typedOption]
+      : filtered;
 
   const { activeOptionId, resetActiveOption, handleKeyDown } = useOptionNavigation({
     options: visibleOptions,
@@ -396,11 +410,12 @@ export const useDebouncedValue = <T>(value: T, delayMs = 300): T => {
   const [debounced, setDebounced] = useState(value);
 
   useEffect(() => {
+    if (delayMs <= 0) return;
     const timer = setTimeout(() => setDebounced(value), delayMs);
     return () => clearTimeout(timer);
   }, [value, delayMs]);
 
-  return debounced;
+  return delayMs > 0 ? debounced : value;
 };
 
 /**

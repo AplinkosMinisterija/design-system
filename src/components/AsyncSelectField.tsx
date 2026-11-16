@@ -31,6 +31,9 @@ export interface AsyncSelectFieldProps<T extends SelectOption = SelectOption> {
   minQueryLength?: number;
   /** Wait this long after the last keystroke before querying. `0` queries per keystroke. */
   debounceMs?: number;
+  /** An option built from the live input, offered without waiting for the query. */
+  inputOption?: (input: string) => T | undefined;
+  autoComplete?: string;
   handleGetNextPageParam?: (params: any) => number | undefined;
   ariaLabelRemove?: string;
   ariaLabelDropDownIcon?: string;
@@ -58,6 +61,8 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
   texts,
   minQueryLength = 0,
   debounceMs = 0,
+  inputOption,
+  autoComplete,
   handleGetNextPageParam = (data) => {
     return data?.page < data?.totalPages ? data.page + 1 : undefined;
   },
@@ -85,6 +90,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
     handleGetNextPageParam,
     minQueryLength,
     debounceMs,
+    inputOption,
     name,
   });
 
@@ -107,6 +113,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
         value={input}
         name={name}
         error={error}
+        autoComplete={autoComplete}
         right={
           <>
             {value && !disabled && (

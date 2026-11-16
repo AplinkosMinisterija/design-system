@@ -25,6 +25,7 @@ export interface AddressPickerProps {
   disabled?: boolean;
   placeholder?: string;
   allowFreeText?: boolean;
+  autoComplete?: string;
   className?: string;
   texts?: AddressPickerTexts;
 }
@@ -43,23 +44,26 @@ const AddressPicker = ({
   disabled,
   placeholder,
   allowFreeText = true,
+  autoComplete,
   className,
   texts,
 }: AddressPickerProps) => {
   const freeTextLabel = texts?.freeText ?? ((input: string) => `Naudoti įvestą adresą: „${input}“`);
 
   const loadOptions = async (input: string): Promise<{ rows: AddressOption[] }> => {
+    // The registry is a third-party call, and the free-text option is the user's
+    // only way out of the field, so a failure must not reach the list.
+    const found = await searchAddresses(input.trim()).catch(() => [] as string[]);
+
+    return { rows: found.map((text) => ({ id: text, label: text })) };
+  };
+
+  // Offered from what is typed rather than from the answer: the registry takes
+  // seconds, and until this row exists there is no way to enter an address it
+  // does not hold.
+  const typedOption = (input: string): AddressOption | undefined => {
     const query = input.trim();
-    // The registry is a third-party call: if it throws, the free-text option is
-    // the user's only way out of the field, so it must survive the failure.
-    const found = await searchAddresses(query).catch(() => [] as string[]);
-    const rows = found.map((text) => ({ id: text, label: text }));
-
-    if (allowFreeText && query && !found.includes(query)) {
-      rows.push({ id: FREE_TEXT_ID, label: query });
-    }
-
-    return { rows };
+    return allowFreeText && query ? { id: FREE_TEXT_ID, label: query } : undefined;
   };
 
   return (
@@ -72,6 +76,7 @@ const AddressPicker = ({
       showError={showError}
       disabled={disabled}
       placeholder={placeholder}
+      autoComplete={autoComplete}
       value={value ? { id: value, label: value } : undefined}
       onChange={(option) => onChange(option?.label ?? '')}
       loadOptions={loadOptions}
@@ -81,6 +86,7 @@ const AddressPicker = ({
       }
       minQueryLength={MIN_QUERY_LENGTH}
       debounceMs={DEBOUNCE_MS}
+      inputOption={typedOption}
       handleGetNextPageParam={() => undefined}
       optionsKey="rows"
       texts={{

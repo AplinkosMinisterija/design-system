@@ -73,6 +73,19 @@ describe('parseAddressQuery', () => {
   it('keeps a lone number as the name, not as a house number', () => {
     expect(parseAddressQuery('11')).toEqual({ text: '11' });
   });
+
+  it('searches the building when the number carries a flat or a block', () => {
+    expect(parseAddressQuery('A. Jakšto g. 4-12')).toEqual({ text: 'A. Jakšto g.', number: '4' });
+    expect(parseAddressQuery('Laisvės al. 10 korp. 2')).toEqual({
+      text: 'Laisvės al.',
+      number: '10',
+    });
+    expect(parseAddressQuery('Laisvės al. 10 k. 2')).toEqual({ text: 'Laisvės al.', number: '10' });
+  });
+
+  it('does not mistake a village for a building block', () => {
+    expect(parseAddressQuery('Kauniškio k. 1')).toEqual({ text: 'Kauniškio k.', number: '1' });
+  });
 });
 
 describe('formatBoundariesAddress', () => {
@@ -89,9 +102,9 @@ describe('formatBoundariesAddress', () => {
     expect(formatBoundariesAddress(KAUNISKIO_1)).toBe('Kauniškio k. 1, Kupiškio r. sav., LT-40101');
   });
 
-  it('keeps a building block number', () => {
+  it('names a building block so it cannot read as the village abbreviation', () => {
     expect(formatBoundariesAddress({ ...KAUNAS_LAISVES_10, building_block_number: '2' })).toBe(
-      'Laisvės al. 10 k. 2, Kauno m., Kauno m. sav., LT-44215',
+      'Laisvės al. 10 korp. 2, Kauno m., Kauno m. sav., LT-44215',
     );
   });
 });

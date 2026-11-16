@@ -63,7 +63,7 @@ describe('AddressPicker', () => {
     vi.mocked(searchAddresses).mockResolvedValue([KAUNAS]);
     renderPicker(<AddressPicker name="address" label="Adresas" onChange={vi.fn()} />);
 
-    await userEvent.type(screen.getByRole('combobox'), 'Laisves');
+    await userEvent.setup({ delay: null }).type(screen.getByRole('combobox'), 'Laisves');
 
     expect(await screen.findByRole('option', { name: KAUNAS })).toBeInTheDocument();
     expect(searchAddresses).toHaveBeenCalledTimes(1);
@@ -84,6 +84,33 @@ describe('AddressPicker', () => {
 
     await userEvent.click(freeText);
     expect(onChange).toHaveBeenCalledWith('Pamario sodyba, Nida');
+  });
+
+  it('keeps an address the user typed and then tabbed away from', async () => {
+    vi.mocked(searchAddresses).mockResolvedValue([]);
+    const onChange = vi.fn();
+    renderPicker(
+      <>
+        <AddressPicker name="address" label="Adresas" onChange={onChange} />
+        <button type="button">Kitas</button>
+      </>,
+    );
+
+    await userEvent.type(screen.getByRole('combobox'), 'Pamario sodyba, Nida');
+    await userEvent.click(screen.getByRole('button', { name: 'Kitas' }));
+
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith('Pamario sodyba, Nida'));
+  });
+
+  it('offers the typed text without waiting for the registry to answer', async () => {
+    vi.mocked(searchAddresses).mockReturnValue(new Promise<string[]>(() => {}));
+    renderPicker(<AddressPicker name="address" label="Adresas" onChange={vi.fn()} />);
+
+    await userEvent.type(screen.getByRole('combobox'), 'Gedimino pr. 11');
+
+    expect(
+      await screen.findByRole('option', { name: 'Naudoti įvestą adresą: „Gedimino pr. 11“' }),
+    ).toBeInTheDocument();
   });
 
   it('offers no free-text option when allowFreeText is false', async () => {
