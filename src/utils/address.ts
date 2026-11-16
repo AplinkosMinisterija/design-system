@@ -10,10 +10,14 @@ export interface AddressQuery {
   number?: string;
 }
 
+// Bounded on purpose: an unbounded `\d+` before a literal scans quadratically,
+// and this runs on every keystroke.
+const NUMBER = String.raw`\d{1,5}[A-Za-z]?`;
+
 /** `10 korp. 2`, and the `10 k. 2` people also write — but not the `k.` of
  *  `Kauniškio k. 1`, which is a village and whose number is the house. */
-const BLOCK_TAIL = /\s*(\d+[A-Za-z]?)\s*(?:korp\.?|k\.)\s*\d+[A-Za-z]?$/;
-const FLAT = /^(\d+[A-Za-z]?)-\d+[A-Za-z]?$/;
+const BLOCK_TAIL = new RegExp(String.raw`(${NUMBER})\s{0,4}(?:korp\.?|k\.)\s{0,4}${NUMBER}$`);
+const FLAT = new RegExp(String.raw`^(${NUMBER})-${NUMBER}$`);
 
 export const parseAddressQuery = (input: string): AddressQuery => {
   const trimmed = input.trim();

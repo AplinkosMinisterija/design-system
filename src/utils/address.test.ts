@@ -86,6 +86,13 @@ describe('parseAddressQuery', () => {
   it('does not mistake a village for a building block', () => {
     expect(parseAddressQuery('Kauniškio k. 1')).toEqual({ text: 'Kauniškio k.', number: '1' });
   });
+
+  it('parses a pasted wall of digits without stalling the keystroke', () => {
+    const started = performance.now();
+    parseAddressQuery('9'.repeat(40_000));
+
+    expect(performance.now() - started).toBeLessThan(100);
+  });
 });
 
 describe('formatBoundariesAddress', () => {
