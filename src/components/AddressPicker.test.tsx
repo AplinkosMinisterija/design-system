@@ -59,6 +59,17 @@ describe('AddressPicker', () => {
     expect(onChange).toHaveBeenCalledWith(KAUNAS);
   });
 
+  it('asks the registry once for a word typed one character at a time', async () => {
+    vi.mocked(searchAddresses).mockResolvedValue([KAUNAS]);
+    renderPicker(<AddressPicker name="address" label="Adresas" onChange={vi.fn()} />);
+
+    await userEvent.type(screen.getByRole('combobox'), 'Laisves');
+
+    expect(await screen.findByRole('option', { name: KAUNAS })).toBeInTheDocument();
+    expect(searchAddresses).toHaveBeenCalledTimes(1);
+    expect(searchAddresses).toHaveBeenCalledWith('Laisves');
+  });
+
   it('offers the typed text last and emits it verbatim', async () => {
     vi.mocked(searchAddresses).mockResolvedValue([]);
     const onChange = vi.fn();

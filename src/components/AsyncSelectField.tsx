@@ -29,6 +29,8 @@ export interface AsyncSelectFieldProps<T extends SelectOption = SelectOption> {
   texts?: OptionContainerTexts;
   /** Characters required before the list is fetched; below it, `texts.shortQuery` shows. */
   minQueryLength?: number;
+  /** Wait this long after the last keystroke before querying. `0` queries per keystroke. */
+  debounceMs?: number;
   handleGetNextPageParam?: (params: any) => number | undefined;
   ariaLabelRemove?: string;
   ariaLabelDropDownIcon?: string;
@@ -55,6 +57,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
   ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
   texts,
   minQueryLength = 0,
+  debounceMs = 0,
   handleGetNextPageParam = (data) => {
     return data?.page < data?.totalPages ? data.page + 1 : undefined;
   },
@@ -81,6 +84,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
     optionsKey,
     handleGetNextPageParam,
     minQueryLength,
+    debounceMs,
     name,
   });
 

@@ -30,6 +30,7 @@ export interface AddressPickerProps {
 }
 
 const MIN_QUERY_LENGTH = 3;
+const DEBOUNCE_MS = 300;
 
 const AddressPicker = ({
   name,
@@ -79,6 +80,7 @@ const AddressPicker = ({
         option.id === FREE_TEXT_ID ? freeTextLabel(option.label) : option.label
       }
       minQueryLength={MIN_QUERY_LENGTH}
+      debounceMs={DEBOUNCE_MS}
       handleGetNextPageParam={() => undefined}
       optionsKey="rows"
       texts={{

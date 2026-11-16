@@ -255,6 +255,9 @@ interface UseAsyncSelectDataProps<T extends SelectOption = SelectOption> {
   minQueryLength?: number;
   /** Narrows what the list shows — the multi-select drops already-picked values. */
   filterOptions?: (options: T[]) => T[];
+  /** Wait this long after the last keystroke before querying; the query key is the
+   *  input, so `0` makes every character its own request. */
+  debounceMs?: number;
 }
 
 export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
@@ -267,14 +270,19 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
   handleGetNextPageParam,
   minQueryLength = 0,
   filterOptions,
+  debounceMs = 0,
 }: UseAsyncSelectDataProps<T>) => {
   const [input, setInput] = useState('');
   const [showSelect, setShowSelect] = useState(false);
   const observerRef = useRef(null);
   const listId = `${useId()}-listbox`;
 
+  const debouncedInput = useDebouncedValue(input, debounceMs);
+  const queryInput = debounceMs > 0 ? debouncedInput : input;
+  const settling = queryInput !== input;
+
   const fetchData = async (page: number) => {
-    const data = await loadOptions(input, page, dependantValue);
+    const data = await loadOptions(queryInput, page, dependantValue);
     const nextPage = handleGetNextPageParam(data);
 
     const formattedData = optionsKey ? (data?.[optionsKey as keyof typeof data] ?? data) : data;
@@ -288,8 +296,8 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
   const queryTooShort = input.trim().length < minQueryLength;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } = useInfiniteQuery({
-    enabled: showSelect && !queryTooShort,
-    queryKey: [name, input],
+    enabled: showSelect && !queryTooShort && !settling,
+    queryKey: [name, queryInput],
     initialPageParam: 1,
     queryFn: ({ pageParam }: { pageParam: number }) => fetchData(pageParam),
     getNextPageParam: (lastPage) => lastPage.nextPage,
@@ -361,7 +369,7 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
   });
 
   return {
-    loading: isFetching,
+    loading: isFetching || (settling && !queryTooShort),
     // The list that is rendered and the list the arrow keys walk have to be the
     // same one, or the highlighted option and the clicked option are different
     // rows — and a multi select offers what it already holds.
