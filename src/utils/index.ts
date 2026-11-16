@@ -8,6 +8,8 @@ import * as Boundaries from './boundaries';
 
 export { Boundaries };
 
+export * from './address';
+
 export const device = {
   mobileS: `(max-width: 320px)`,
   mobileM: `(max-width: 425px)`,

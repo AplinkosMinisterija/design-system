@@ -31,6 +31,10 @@ export default defineConfig({
     sourcemap: false,
     emptyOutDir: true,
   },
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+  },
   plugins: [
     react(),
     maplibreWorker(),
