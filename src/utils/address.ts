@@ -1,4 +1,7 @@
 import type { Address, AddressesSearchFilterRequest } from './boundaries';
+import { addressesSearch } from './boundaries/services.gen';
+
+const DEFAULT_SIZE = 10;
 
 export interface AddressQuery {
   text: string;
@@ -40,4 +43,20 @@ export const addressSearchFilters = (query: AddressQuery): AddressesSearchFilter
     { streets: { full_name: { contains: query.text } }, ...number },
     { residential_areas: { name: { contains: query.text } }, ...number },
   ];
+};
+
+export const searchAddresses = async (input: string, size = DEFAULT_SIZE): Promise<string[]> => {
+  const query = parseAddressQuery(input);
+  if (!query.text) return [];
+
+  try {
+    const { items } = await addressesSearch({
+      size,
+      requestBody: { filters: addressSearchFilters(query) },
+    });
+
+    return [...new Set(items.map(formatBoundariesAddress))];
+  } catch {
+    return [];
+  }
 };

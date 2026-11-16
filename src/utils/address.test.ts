@@ -1,6 +1,14 @@
-import { describe, expect, it } from 'vitest';
-import { addressSearchFilters, formatBoundariesAddress, parseAddressQuery } from './address';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  addressSearchFilters,
+  formatBoundariesAddress,
+  parseAddressQuery,
+  searchAddresses,
+} from './address';
+import { addressesSearch } from './boundaries/services.gen';
 import type { Address } from './boundaries';
+
+vi.mock('./boundaries/services.gen', () => ({ addressesSearch: vi.fn() }));
 
 const KAUNAS_LAISVES_10: Address = {
   code: 188035677,
@@ -106,5 +114,40 @@ describe('addressSearchFilters', () => {
       { streets: { full_name: { contains: 'Gedimino' } } },
       { residential_areas: { name: { contains: 'Gedimino' } } },
     ]);
+  });
+});
+
+describe('searchAddresses', () => {
+  beforeEach(() => {
+    vi.mocked(addressesSearch).mockReset();
+  });
+
+  it('sends the OR filters and returns formatted texts', async () => {
+    vi.mocked(addressesSearch).mockResolvedValue({
+      items: [KAUNAS_LAISVES_10, PLUNGE_LAISVES_10],
+    });
+
+    await expect(searchAddresses('Laisvės al. 10')).resolves.toEqual([
+      'Laisvės al. 10, Kauno m., Kauno m. sav., LT-44215',
+      'Laisvės al. 10, Plungės m., Plungės r. sav., LT-90122',
+    ]);
+    expect(addressesSearch).toHaveBeenCalledWith({
+      size: 10,
+      requestBody: { filters: addressSearchFilters({ text: 'Laisvės al.', number: '10' }) },
+    });
+  });
+
+  it('returns an empty list when the registry fails, without throwing', async () => {
+    vi.mocked(addressesSearch).mockRejectedValue(new Error('503'));
+
+    await expect(searchAddresses('Gedimino 11')).resolves.toEqual([]);
+  });
+
+  it('de-duplicates identical formatted addresses', async () => {
+    vi.mocked(addressesSearch).mockResolvedValue({
+      items: [KAUNAS_LAISVES_10, KAUNAS_LAISVES_10],
+    });
+
+    await expect(searchAddresses('Laisvės al. 10')).resolves.toHaveLength(1);
   });
 });
