@@ -1,4 +1,5 @@
 import AsyncMultiSelectField from './components/AsyncMultiSelectField';
+import AddressPicker from './components/AddressPicker';
 import AsyncSelectField from './components/AsyncSelectField';
 import Button from './components/Button';
 import ButtonMultiSelect from './components/ButtonMultiSelect';
@@ -64,6 +65,7 @@ export {
   Modal,
   AsyncMultiSelectField,
   MultiSelectField,
+  AddressPicker,
   AsyncSelectField,
   SelectField,
   NumericField,

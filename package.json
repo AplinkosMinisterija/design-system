@@ -44,7 +44,8 @@
     "build-storybook": "storybook build",
     "openapi-ts:boundaries": "openapi-ts -f openapi-ts.boundaries.config.ts",
     "packages:changeset": "changeset",
-    "packages:publish": "changeset publish"
+    "packages:publish": "changeset publish",
+    "test": "vitest run"
   },
   "peerDependencies": {
     "@tanstack/react-query": "*",
@@ -97,6 +98,9 @@
     "@storybook/react": "^8.6.0",
     "@storybook/react-vite": "^8.6.0",
     "@storybook/testing-library": "^0.2.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/lodash": "^4.17.25",
     "@types/mapbox__mapbox-gl-draw": "^1.4.6",
     "@types/proj4": "^2.5.5",
@@ -109,6 +113,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "eslint-plugin-storybook": "^0.6.13",
+    "jsdom": "^26.1.0",
     "lint-staged": "^15.2.2",
     "prettier": "^3.3.3",
     "react": "^19.2.8",
@@ -120,7 +125,8 @@
     "styled-components": "^6.1.8",
     "typescript": "^5.0.2",
     "vite": "^5.4.6",
-    "vite-plugin-dts": "^3.7.3"
+    "vite-plugin-dts": "^3.7.3",
+    "vitest": "^3.2.4"
   },
   "eslintConfig": {
     "extends": "@aplinkosministerija/eslint-config-biip-react"

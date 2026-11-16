@@ -33,6 +33,7 @@ export interface TextFieldProps {
    * managers cannot offer to fill or save the credential.
    */
   autoComplete?: string;
+  inputRef?: React.Ref<HTMLInputElement>;
 }
 
 const TextFieldInput = ({
@@ -61,6 +62,7 @@ const TextFieldInput = ({
   onKeyDown,
   ariaLabel,
   autoComplete = 'off',
+  inputRef,
   ...rest
 }: TextFieldProps) => {
   const field = useFieldControl();
@@ -114,6 +116,7 @@ const TextFieldInput = ({
         )}
 
         <StyledTextInput
+          ref={inputRef}
           id={ariaValue}
           // Inside a FieldWrapper the <label for> names the field, so nothing
           // else may claim the name — a placeholder is not a label. Only a bare

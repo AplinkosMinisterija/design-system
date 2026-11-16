@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import { JSX, useRef } from 'react';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
 import { useAsyncSelectData, useKeyAction } from './common/hooks';
@@ -29,6 +29,11 @@ export interface AsyncSelectFieldProps<T extends SelectOption = SelectOption> {
   texts?: OptionContainerTexts;
   /** Characters required before the list is fetched; below it, `texts.shortQuery` shows. */
   minQueryLength?: number;
+  /** Wait this long after the last keystroke before querying. `0` queries per keystroke. */
+  debounceMs?: number;
+  /** An option built from the live input, offered without waiting for the query. */
+  inputOption?: (input: string) => T | undefined;
+  autoComplete?: string;
   handleGetNextPageParam?: (params: any) => number | undefined;
   ariaLabelRemove?: string;
   ariaLabelDropDownIcon?: string;
@@ -55,6 +60,9 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
   ariaLabelDropDownIcon = 'Išskleidimo ikonėlė',
   texts,
   minQueryLength = 0,
+  debounceMs = 0,
+  inputOption,
+  autoComplete,
   handleGetNextPageParam = (data) => {
     return data?.page < data?.totalPages ? data.page + 1 : undefined;
   },
@@ -81,10 +89,22 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
     optionsKey,
     handleGetNextPageParam,
     minQueryLength,
+    debounceMs,
+    inputOption,
     name,
   });
 
-  const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // The clear button unmounts with the value it clears, so without this focus
+  // lands on <body> and a keyboard user is dropped at the top of the document.
+  const clear = () => {
+    if (disabled) return;
+    onChange(undefined);
+    inputRef.current?.focus();
+  };
+
+  const handleKeyDown = useKeyAction(clear, disabled);
   const placeholderValue = value ? getOptionLabel(value) : placeholder;
 
   return (
@@ -99,10 +119,12 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
       showError={showError}
     >
       <TextFieldInput
+        inputRef={inputRef}
         label={label}
         value={input}
         name={name}
         error={error}
+        autoComplete={autoComplete}
         right={
           <>
             {value && !disabled && (
@@ -113,7 +135,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
                 }`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  !disabled && onChange(undefined);
+                  clear();
                 }}
                 onKeyDown={handleKeyDown}
                 disabled={disabled}
