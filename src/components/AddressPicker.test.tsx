@@ -113,6 +113,17 @@ describe('AddressPicker', () => {
     ).toBeInTheDocument();
   });
 
+  it('does not report an unfinished search as an empty one', async () => {
+    vi.mocked(searchAddresses).mockReturnValue(new Promise<string[]>(() => {}));
+    renderPicker(<AddressPicker name="address" label="Adresas" onChange={vi.fn()} />);
+
+    await userEvent.type(screen.getByRole('combobox'), 'Gedimino');
+    await screen.findByRole('option', { name: /Naudoti įvestą adresą/ });
+
+    expect(screen.queryByText('Adresas nerastas')).not.toBeInTheDocument();
+    expect(screen.getByText('Rasta adresų: 1')).toBeInTheDocument();
+  });
+
   it('offers no free-text option when allowFreeText is false', async () => {
     vi.mocked(searchAddresses).mockResolvedValue([]);
     renderPicker(

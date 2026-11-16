@@ -11,6 +11,9 @@ interface AddressOption {
 export interface AddressPickerTexts {
   noOptions?: string;
   shortQuery?: string;
+  searching?: string;
+  resultsCount?: (count: number) => string;
+  dropDownIcon?: string;
   freeText?: (input: string) => string;
 }
 
@@ -89,9 +92,12 @@ const AddressPicker = ({
       inputOption={typedOption}
       handleGetNextPageParam={() => undefined}
       optionsKey="rows"
+      ariaLabelDropDownIcon={texts?.dropDownIcon ?? 'Išskleisti adresų sąrašą'}
       texts={{
         noOptions: texts?.noOptions ?? 'Adresas nerastas',
         shortQuery: texts?.shortQuery ?? `Įveskite bent ${MIN_QUERY_LENGTH} simbolius`,
+        searching: texts?.searching ?? 'Ieškoma adresų…',
+        resultsCount: texts?.resultsCount ?? ((count) => `Rasta adresų: ${count}`),
       }}
     />
   );

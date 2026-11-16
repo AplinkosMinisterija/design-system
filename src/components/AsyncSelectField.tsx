@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import { JSX, useRef } from 'react';
 import styled from 'styled-components';
 import FieldWrapper from './common/FieldWrapper';
 import { useAsyncSelectData, useKeyAction } from './common/hooks';
@@ -94,7 +94,17 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
     name,
   });
 
-  const handleKeyDown = useKeyAction(() => onChange(undefined), disabled);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // The clear button unmounts with the value it clears, so without this focus
+  // lands on <body> and a keyboard user is dropped at the top of the document.
+  const clear = () => {
+    if (disabled) return;
+    onChange(undefined);
+    inputRef.current?.focus();
+  };
+
+  const handleKeyDown = useKeyAction(clear, disabled);
   const placeholderValue = value ? getOptionLabel(value) : placeholder;
 
   return (
@@ -109,6 +119,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
       showError={showError}
     >
       <TextFieldInput
+        inputRef={inputRef}
         label={label}
         value={input}
         name={name}
@@ -124,7 +135,7 @@ const AsyncSelectField = <T extends SelectOption = SelectOption>({
                 }`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  !disabled && onChange(undefined);
+                  clear();
                 }}
                 onKeyDown={handleKeyDown}
                 disabled={disabled}

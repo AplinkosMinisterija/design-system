@@ -11,6 +11,9 @@ export interface SelectOption {
 
 export interface OptionContainerTexts {
   noOptions: string;
+  /** Announced while the query is in flight, so an unfinished search is not
+   *  reported as an empty one. */
+  searching?: string;
   /**
    * Shown instead of `noOptions` while the query is too short to search on.
    * A search that has not run has no answer to report as empty.
@@ -65,6 +68,12 @@ const OptionsContainer = ({
   const optionsLength = options.length;
   const emptyText = (queryTooShort && texts?.shortQuery) || texts?.noOptions;
   const handleKeyDown = useKeyAction(handleClick, disabled);
+
+  const announcement = () => {
+    if (optionsLength > 0) return texts?.resultsCount?.(optionsLength);
+    if (loading) return texts?.searching;
+    return emptyText;
+  };
 
   /** Keeps the arrow-key highlight inside the scrollable list. */
   const scrollActiveIntoView = (node: HTMLDivElement | null) =>
@@ -127,7 +136,7 @@ const OptionsContainer = ({
         {observerRef && <ObserverRef $display={display} ref={observerRef} aria-hidden={!display} />}
       </OptionContainer>
       <OptionsLength aria-live="polite" aria-atomic="true">
-        {optionsLength > 0 ? texts?.resultsCount?.(optionsLength) : emptyText}
+        {announcement()}
       </OptionsLength>
     </>
   );
