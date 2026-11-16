@@ -2,7 +2,7 @@ import type { Address, AddressesSearchFilterRequest } from './boundaries';
 import { addressesSearch } from './boundaries/services.gen';
 
 const DEFAULT_SIZE = 10;
-const DEFAULT_TIMEOUT_MS = 5000;
+const DEFAULT_TIMEOUT_MS = 12000;
 const TIMED_OUT = Symbol('timed-out');
 
 export interface AddressQuery {
@@ -63,7 +63,9 @@ export const searchAddresses = async (
   let timer: ReturnType<typeof setTimeout> | undefined;
 
   // A registry that never answers must not hold the field hostage: the caller's
-  // own fallback can only appear once this resolves.
+  // own fallback can only appear once this resolves. The cap is generous because
+  // the registry measurably takes 4-8s for a `contains` query, and cutting that
+  // off would turn an address it does hold into free text.
   const outcome = await Promise.race([
     pending.then(
       (result) => result,
