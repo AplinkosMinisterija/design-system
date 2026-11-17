@@ -309,6 +309,11 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     // A failed search resolves to an empty list, and a consumer's default
     // staleTime would then serve "nothing found" for the next minute.
     staleTime: 0,
+    // Every keystroke is a new key, so without this the list empties between
+    // them and a search that answers in half a second reads as waiting. Not
+    // while the query is off, or a closed or too-short field keeps rows that
+    // its own state says it has none of.
+    placeholderData: (previous) => (queryTooShort || !showSelect ? undefined : previous),
   });
 
   useEffect(() => {

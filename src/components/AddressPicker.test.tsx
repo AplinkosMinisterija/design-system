@@ -48,6 +48,41 @@ describe('AddressPicker', () => {
     expect(searchAddresses).not.toHaveBeenCalled();
   });
 
+  it('keeps the rows on screen while the next keystroke is being searched', async () => {
+    vi.mocked(searchAddresses).mockResolvedValue([KAUNAS, PLUNGE]);
+    renderPicker(<AddressPicker name="address" label="Adresas" onChange={vi.fn()} />);
+
+    const input = screen.getByRole('combobox');
+    await userEvent.type(input, 'Laisvės al. 1');
+    expect(await screen.findByRole('option', { name: KAUNAS })).toBeInTheDocument();
+
+    const answered = vi.mocked(searchAddresses).mock.calls.length;
+    vi.mocked(searchAddresses).mockImplementation(() => new Promise<string[]>(() => {}));
+    await userEvent.type(input, '0');
+    await waitFor(() =>
+      expect(vi.mocked(searchAddresses).mock.calls.length).toBeGreaterThan(answered),
+    );
+
+    expect(screen.getByRole('option', { name: KAUNAS })).toBeInTheDocument();
+  });
+
+  it('drops the rows when the query falls back below the minimum length', async () => {
+    vi.mocked(searchAddresses).mockResolvedValue([KAUNAS, PLUNGE]);
+    renderPicker(<AddressPicker name="address" label="Adresas" onChange={vi.fn()} />);
+
+    const input = screen.getByRole('combobox');
+    await userEvent.type(input, 'Laisvės al. 10');
+    expect(await screen.findByRole('option', { name: KAUNAS })).toBeInTheDocument();
+
+    await userEvent.clear(input);
+    await userEvent.type(input, 'La');
+
+    expect(
+      await screen.findByRole('option', { name: 'Įveskite bent 3 simbolius' }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: KAUNAS })).not.toBeInTheDocument();
+  });
+
   it('offers registry matches and emits the picked text', async () => {
     vi.mocked(searchAddresses).mockResolvedValue([KAUNAS, PLUNGE]);
     const onChange = vi.fn();
