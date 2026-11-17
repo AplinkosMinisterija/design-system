@@ -178,6 +178,23 @@ describe('parseAddressQuery under a hostile paste', () => {
   });
 });
 
+describe('parseAddressQuery against hostile keys and wildcards', () => {
+  it('does not answer a street type out of the object prototype', () => {
+    expect(parseAddressQuery('Vilniaus constructor 5')).toEqual({
+      text: 'Vilniaus constructor',
+      number: '5',
+    });
+    expect(parseAddressQuery('Vilniaus toString 5')).toEqual({
+      text: 'Vilniaus toString',
+      number: '5',
+    });
+  });
+
+  it('does not read a wildcard-bearing token as a house number', () => {
+    expect(parseAddressQuery('Jurbarkas 1%')).toEqual({ text: 'Jurbarkas 1%' });
+  });
+});
+
 describe('formatBoundariesAddress', () => {
   it('names the street, locality and municipality so two matches differ', () => {
     expect(formatBoundariesAddress(KAUNAS_LAISVES_10)).toBe(
@@ -240,6 +257,12 @@ describe('addressSearchFilters', () => {
         residential_areas: { codes: [16586] },
       },
     ]);
+  });
+});
+
+describe('addressSearchFilters with nothing to search', () => {
+  it('asks for nothing rather than for every row', () => {
+    expect(addressSearchFilters({})).toEqual([]);
   });
 });
 
@@ -336,6 +359,45 @@ describe('searchAddresses', () => {
     await searchAddresses('Laisvės al. 10');
 
     expect(streetsSearch).toHaveBeenCalledTimes(1);
+  });
+
+  it('looks the street up inside the town it already resolved', async () => {
+    vi.mocked(residentialAreasSearch).mockResolvedValue(page([{ code: 17507 }]));
+    vi.mocked(streetsSearch).mockResolvedValue(page([{ code: 7 }]));
+    vi.mocked(addressesSearch).mockResolvedValue({ items: [KAUNAS_LAISVES_10] });
+
+    await searchAddresses('Sodų g. 1 Kaunas');
+
+    expect(vi.mocked(streetsSearch).mock.calls[0]?.[0]?.requestBody.filters?.[0]).toEqual({
+      streets: { full_name: { contains: 'Sodų g.' } },
+      residential_areas: { codes: [17507] },
+    });
+  });
+
+  it('does not re-walk six pages for a street name that matches too many', async () => {
+    vi.mocked(streetsSearch).mockResolvedValue(
+      page(
+        Array.from({ length: 100 }, (_, i) => ({ code: i })),
+        'more',
+      ),
+    );
+    vi.mocked(addressesSearch).mockResolvedValue({ items: [KAUNAS_LAISVES_10] });
+
+    await searchAddresses('Sodų g. 1');
+    const afterFirst = vi.mocked(streetsSearch).mock.calls.length;
+    await searchAddresses('Sodų g. 12');
+
+    expect(vi.mocked(streetsSearch).mock.calls.length).toBe(afterFirst);
+  });
+
+  it('does not remember an empty answer as a lasting "no such street"', async () => {
+    vi.mocked(streetsSearch).mockResolvedValueOnce(page([]));
+    await searchAddresses('Tilžės g. 2');
+
+    vi.mocked(streetsSearch).mockResolvedValue(page([{ code: 7 }]));
+    vi.mocked(addressesSearch).mockResolvedValue({ items: [KAUNAS_LAISVES_10] });
+
+    await expect(searchAddresses('Tilžės g. 2')).resolves.toHaveLength(1);
   });
 
   it('refuses a wildcard-only query instead of matching every street', async () => {

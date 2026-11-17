@@ -30,6 +30,20 @@ live('against the real boundaries registry', () => {
   );
 
   it(
+    'finds a street name that exists in more places than it will collect codes for',
+    async () => {
+      clearAddressCodeCache();
+      // `Sodų g.` exists in 565 places, past the 500 cap; scoping the lookup to
+      // the town it already resolved brings that down to two.
+      const found = await searchAddresses('Sodų g. 1 Kaunas');
+
+      expect(found[0]).toContain('Sodų g.');
+      expect(found[0]).toContain('Kauno m.');
+    },
+    30_000,
+  );
+
+  it(
     'lists addresses in the town itself when only the town is typed',
     async () => {
       clearAddressCodeCache();

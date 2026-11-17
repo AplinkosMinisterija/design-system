@@ -13,6 +13,7 @@ const CODE_PAGE_SIZE = 100;
 const MAX_CODES = 500;
 const MAX_CODE_PAGES = Math.ceil(MAX_CODES / CODE_PAGE_SIZE) + 1;
 const CODE_CACHE_TTL_MS = 86_400_000;
+const UNRESOLVED_TTL_MS = 60_000;
 const CODE_CACHE_MAX_ENTRIES = 200;
 const NAME_MIN_LENGTH = 3;
 
@@ -40,31 +41,32 @@ const BLOCK_TAIL = new RegExp(String.raw`(${NUMBER})\s{0,4}(?:korp\.?|k\.)\s{0,4
 const FLAT = new RegExp(String.raw`^(${NUMBER})-${NUMBER}$`);
 const HOUSE = new RegExp(String.raw`^(${NUMBER})(?:-${NUMBER})?$`);
 
-/** Spelled out or abbreviated, mapped to the form the registry files. */
-const STREET_TYPES: Record<string, string> = {
-  g: 'g.',
-  gatve: 'g.',
-  gatvė: 'g.',
-  pr: 'pr.',
-  prospektas: 'pr.',
-  al: 'al.',
-  aleja: 'al.',
-  alėja: 'al.',
-  pl: 'pl.',
-  plentas: 'pl.',
-  kel: 'kel.',
-  kelias: 'kel.',
-  skg: 'skg.',
-  skersgatvis: 'skg.',
-  tak: 'tak.',
-  takas: 'tak.',
-  a: 'a.',
-  aikste: 'a.',
-  aikštė: 'a.',
-};
+/** Spelled out or abbreviated, mapped to the form the registry files. A Map, not
+ *  an object: `constructor` and `toString` are not street types. */
+const STREET_TYPES = new Map<string, string>([
+  ['g', 'g.'],
+  ['gatve', 'g.'],
+  ['gatvė', 'g.'],
+  ['pr', 'pr.'],
+  ['prospektas', 'pr.'],
+  ['al', 'al.'],
+  ['aleja', 'al.'],
+  ['alėja', 'al.'],
+  ['pl', 'pl.'],
+  ['plentas', 'pl.'],
+  ['kel', 'kel.'],
+  ['kelias', 'kel.'],
+  ['skg', 'skg.'],
+  ['skersgatvis', 'skg.'],
+  ['tak', 'tak.'],
+  ['takas', 'tak.'],
+  ['a', 'a.'],
+  ['aikste', 'a.'],
+  ['aikštė', 'a.'],
+]);
 
 const streetTypeOf = (token: string): string | undefined =>
-  STREET_TYPES[token.toLowerCase().replace(/\.$/, '')];
+  STREET_TYPES.get(token.toLowerCase().replace(/\.$/, ''));
 
 /** The last one, so the `A.` of `A. Jakšto g.` stays part of the name. */
 const lastStreetTypeAt = (tokens: string[]): number => {
@@ -76,7 +78,7 @@ const lastStreetTypeAt = (tokens: string[]): number => {
 };
 
 const streetFrom = (tokens: string[], at: number) =>
-  [...tokens.slice(0, at), streetTypeOf(tokens[at]!)].join(' ');
+  [...tokens.slice(0, at), streetTypeOf(tokens[at]!) ?? tokens[at]].join(' ');
 
 /**
  * The registry files a locality in the genitive — `Jurbarko m.`, `Vilniaus m.`
@@ -157,11 +159,12 @@ export const parseAddressQuery = (input: string): AddressQuery => {
   if (typeAt <= 0) {
     const last = tokens[tokens.length - 1];
 
-    if (!number && tokens.length > 1 && last && /^\d/.test(last)) {
-      // The registry holds buildings, not flats, so a flat number would match
-      // nothing — search the building and let the user keep the rest.
-      const flat = last.match(FLAT);
-      return { text: tokens.slice(0, -1).join(' '), number: flat ? flat[1] : last };
+    // The registry holds buildings, not flats, so a flat number would match
+    // nothing — search the building and let the user keep the rest.
+    const trailing = last && (last.match(FLAT) ?? last.match(HOUSE));
+
+    if (!number && tokens.length > 1 && trailing) {
+      return { text: tokens.slice(0, -1).join(' '), number: trailing[1] };
     }
 
     return number ? { text: tokens.join(' '), number } : { text: tokens.join(' ') };
@@ -194,6 +197,25 @@ const searchableName = (value?: string): string | undefined => {
   return cleaned && cleaned.length >= NAME_MIN_LENGTH ? cleaned : undefined;
 };
 
+/** `undefined` codes mean "unresolved, match by name"; an empty list is the
+ *  registry's "no filter", so that branch is dropped rather than widened. */
+const streetPart = (
+  name?: string,
+  codes?: number[],
+): AddressesSearchFilterRequest | undefined => {
+  if (codes?.length === 0) return undefined;
+  if (codes) return { streets: { codes } };
+
+  return name ? { streets: { full_name: { contains: name } } } : undefined;
+};
+
+const areaPart = (name?: string, codes?: number[]): AddressesSearchFilterRequest | undefined => {
+  if (codes?.length === 0) return undefined;
+  if (codes) return { residential_areas: { codes } };
+
+  return name ? { residential_areas: { name: { contains: name } } } : undefined;
+};
+
 export const addressSearchFilters = (
   query: AddressQuery,
   resolved: ResolvedCodes = {},
@@ -202,34 +224,27 @@ export const addressSearchFilters = (
     ? { addresses: { plot_or_building_number: { starts: query.number } } }
     : {};
 
-  const street = resolved.street
-    ? { streets: { codes: resolved.street } }
-    : { streets: { full_name: { contains: query.street ?? query.text } } };
-  const area = resolved.area
-    ? { residential_areas: { codes: resolved.area } }
-    : { residential_areas: { name: { contains: query.locality ?? query.text } } };
-
-  // An empty code list is the registry's "no filter", so a name that resolved
-  // to nothing has to drop its branch rather than widen it.
-  const dropped = (codes?: number[]) => codes?.length === 0;
+  const street = streetPart(query.street ?? query.text, resolved.street);
+  const area = areaPart(query.locality ?? query.text, resolved.area);
 
   if (query.street) {
-    if (dropped(resolved.street) || (query.locality && dropped(resolved.area))) return [];
+    if (!street || (query.locality && !area)) return [];
 
     return [{ ...street, ...(query.locality ? area : {}), ...number }];
   }
 
   // Each entry is sent as its own request: the registry sorts a union of two
   // filters without an index, and pays seconds for it.
-  return [
-    ...(dropped(resolved.street) ? [] : [{ ...street, ...number }]),
-    ...(dropped(resolved.area) ? [] : [{ ...area, ...number }]),
-  ];
+  return [street, area]
+    .filter((branch): branch is AddressesSearchFilterRequest => Boolean(branch))
+    .map((branch) => ({ ...branch, ...number }));
 };
 
 interface CodeCacheEntry {
-  codes: number[];
+  /** `null` once a name proved unresolvable — too many matches, or the registry refused. */
+  codes: number[] | null;
   at: number;
+  ttl: number;
 }
 
 const codeCache = new Map<string, CodeCacheEntry>();
@@ -240,29 +255,49 @@ const cachedCodes = (key: string) => {
   const hit = codeCache.get(key);
   if (!hit) return undefined;
 
-  if (Date.now() - hit.at > CODE_CACHE_TTL_MS) {
+  if (Date.now() - hit.at > hit.ttl) {
     codeCache.delete(key);
     return undefined;
   }
 
-  return hit.codes;
+  return hit;
 };
 
-const cacheCodes = (key: string, codes: number[]) => {
+const cacheCodes = (key: string, codes: number[] | null) => {
+  // An empty answer costs one indexed query to recompute and would otherwise
+  // pin "no such street" for a day after a single bad reply.
+  if (codes?.length === 0) return;
+
   if (codeCache.size >= CODE_CACHE_MAX_ENTRIES) {
     const oldest = codeCache.keys().next().value;
     if (oldest !== undefined) codeCache.delete(oldest);
   }
 
-  codeCache.set(key, { codes, at: Date.now() });
+  codeCache.set(key, {
+    codes,
+    at: Date.now(),
+    ttl: codes === null ? UNRESOLVED_TTL_MS : CODE_CACHE_TTL_MS,
+  });
 };
 
-const searchCodes = (kind: 'street' | 'area', name: string, cursor?: string) =>
+const searchCodes = (
+  kind: 'street' | 'area',
+  name: string,
+  cursor?: string,
+  within?: number[],
+) =>
   kind === 'street'
     ? streetsSearch({
         size: CODE_PAGE_SIZE,
         cursor,
-        requestBody: { filters: [{ streets: { full_name: { contains: name } } }] },
+        requestBody: {
+          filters: [
+            {
+              streets: { full_name: { contains: name } },
+              ...(within?.length ? { residential_areas: { codes: within } } : {}),
+            },
+          ],
+        },
       })
     : residentialAreasSearch({
         size: CODE_PAGE_SIZE,
@@ -275,23 +310,24 @@ const searchCodes = (kind: 'street' | 'area', name: string, cursor?: string) =>
 const collectCodes = async (
   kind: 'street' | 'area',
   name: string,
+  within?: number[],
 ): Promise<number[] | undefined> => {
-  const key = `${kind}:${name.toLowerCase()}`;
+  const key = `${kind}:${name.toLowerCase()}${within?.length ? `@${within.join(',')}` : ''}`;
   const cached = cachedCodes(key);
-  if (cached) return cached;
+  if (cached) return cached.codes ?? undefined;
 
   const codes: number[] = [];
   let cursor: string | undefined;
 
   try {
     for (let page = 0; page < MAX_CODE_PAGES; page += 1) {
-      const found = await searchCodes(kind, name, cursor);
+      const found = await searchCodes(kind, name, cursor, within);
 
       for (const item of found.items) {
         if (typeof item.code === 'number') codes.push(item.code);
       }
 
-      if (codes.length > MAX_CODES) return undefined;
+      if (codes.length > MAX_CODES) break;
 
       if (!found.next_page) {
         cacheCodes(key, codes);
@@ -301,9 +337,11 @@ const collectCodes = async (
       cursor = found.next_page;
     }
   } catch {
+    cacheCodes(key, null);
     return undefined;
   }
 
+  cacheCodes(key, null);
   return undefined;
 };
 
@@ -389,12 +427,22 @@ export const searchAddresses = async (
   // to be asked for in the genitive the registry files it under.
   if (!query.street && query.text) query.locality = searchableName(localityQuery(query.text));
 
-  const areaName = query.locality;
+  let street: number[] | undefined;
+  let area: number[] | undefined;
 
-  const [street, area] = await Promise.all([
-    collectCodes('street', streetName),
-    areaName ? collectCodes('area', areaName) : Promise.resolve(undefined),
-  ]);
+  if (query.street && query.locality) {
+    // Resolving the town first collapses the street lookup from every street of
+    // that name in the country to the two or three in that town.
+    area = await collectCodes('area', query.locality);
+    if (area?.length === 0) return [];
+
+    street = await collectCodes('street', query.street, area);
+  } else {
+    [street, area] = await Promise.all([
+      collectCodes('street', streetName),
+      query.locality ? collectCodes('area', query.locality) : Promise.resolve(undefined),
+    ]);
+  }
 
   const filters = addressSearchFilters(query, { street, area });
   if (!filters.length) return [];

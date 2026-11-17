@@ -30,8 +30,17 @@ Also from measuring the live registry:
 - Results are ordered town before village, and one address per place before a second from
   the same place, so a name shared by many places shows where it exists.
 
+When a town is named, it is resolved first and the street lookup is scoped to it: that
+turns `Sodų g.` — 565 streets of that name in the country, past the collection cap — from a
+2.5s fallback into a 364ms answer, and no longer depends on the cap at all. A name that
+still cannot be resolved is remembered as unresolvable for a minute, so a six-page walk is
+not repaid on every keystroke; an empty answer is deliberately *not* remembered, so one bad
+reply cannot pin "no such street" for a day.
+
 Every async select — not only the address one — now keeps its rows on screen while the
-next keystroke is searched, instead of emptying the list between them.
+next keystroke is searched, instead of emptying the list between them. Not while the query
+is switched off, though: a field whose text has fallen back below `minQueryLength`, or that
+is closed, drops the rows it says it has none of.
 
 `addressSearchFilters` takes an optional second argument of resolved codes and returns one
 entry per request to send. `rankAddresses` and `clearAddressCodeCache` are exported.
