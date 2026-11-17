@@ -60,14 +60,14 @@ const KAUNISKIO_1: Address = {
 
 describe('parseAddressQuery', () => {
   it('splits a trailing house number off the street part', () => {
-    expect(parseAddressQuery('Gedimino pr. 11')).toEqual({ text: 'Gedimino pr.', number: '11' });
-    expect(parseAddressQuery('Laisvės al. 10A')).toEqual({ text: 'Laisvės al.', number: '10A' });
+    expect(parseAddressQuery('Gedimino pr. 11')).toEqual({ street: 'Gedimino pr.', number: '11' });
+    expect(parseAddressQuery('Laisvės al. 10A')).toEqual({ street: 'Laisvės al.', number: '10A' });
     expect(parseAddressQuery('Kauniškio k. 1')).toEqual({ text: 'Kauniškio k.', number: '1' });
   });
 
   it('treats a query with no trailing number as a name only', () => {
     expect(parseAddressQuery('Vilniaus')).toEqual({ text: 'Vilniaus' });
-    expect(parseAddressQuery('  Gedimino   pr.  ')).toEqual({ text: 'Gedimino pr.' });
+    expect(parseAddressQuery('  Gedimino   pr.  ')).toEqual({ street: 'Gedimino pr.' });
   });
 
   it('keeps a lone number as the name, not as a house number', () => {
@@ -75,16 +75,53 @@ describe('parseAddressQuery', () => {
   });
 
   it('searches the building when the number carries a flat or a block', () => {
-    expect(parseAddressQuery('A. Jakšto g. 4-12')).toEqual({ text: 'A. Jakšto g.', number: '4' });
+    expect(parseAddressQuery('A. Jakšto g. 4-12')).toEqual({ street: 'A. Jakšto g.', number: '4' });
     expect(parseAddressQuery('Laisvės al. 10 korp. 2')).toEqual({
-      text: 'Laisvės al.',
+      street: 'Laisvės al.',
       number: '10',
     });
-    expect(parseAddressQuery('Laisvės al. 10 k. 2')).toEqual({ text: 'Laisvės al.', number: '10' });
+    expect(parseAddressQuery('Laisvės al. 10 k. 2')).toEqual({ street: 'Laisvės al.', number: '10' });
   });
 
   it('does not mistake a village for a building block', () => {
     expect(parseAddressQuery('Kauniškio k. 1')).toEqual({ text: 'Kauniškio k.', number: '1' });
+  });
+
+  it('separates the street from the town, in either order', () => {
+    expect(parseAddressQuery('Tilžės g. 2 Jurbarkas')).toEqual({
+      street: 'Tilžės g.',
+      locality: 'Jurbark',
+      number: '2',
+    });
+    expect(parseAddressQuery('Jurbarkas, Tilžės g. 2')).toEqual({
+      street: 'Tilžės g.',
+      locality: 'Jurbark',
+      number: '2',
+    });
+  });
+
+  it('reduces a town to the stem the registry files it under', () => {
+    // The registry writes localities in the genitive: `Jurbarko m.`, `Vilniaus
+    // m.`, `Kauno m.` — so the nominative a person types matches nothing.
+    expect(parseAddressQuery('Gedimino pr. 11 Vilnius').locality).toBe('Vilni');
+    expect(parseAddressQuery('Laisvės al. 10 Kaunas').locality).toBe('Kaun');
+    expect(parseAddressQuery('Vilties g. 1 Klaipėda').locality).toBe('Klaipėd');
+  });
+
+  it('keeps a town already written the way the registry writes it', () => {
+    expect(parseAddressQuery('Tilžės g. 2, Jurbarko m.').locality).toBe('Jurbarko m.');
+  });
+
+  it('takes the building number out of a block tail before the town', () => {
+    expect(parseAddressQuery('Vytauto g. 10 korp. 2 Kaunas')).toEqual({
+      street: 'Vytauto g.',
+      locality: 'Kaun',
+      number: '10',
+    });
+  });
+
+  it('leaves a query with no street marker as plain text', () => {
+    expect(parseAddressQuery('Jurbark')).toEqual({ text: 'Jurbark' });
   });
 
   it('parses a pasted wall of digits without stalling the keystroke', () => {
@@ -138,12 +175,35 @@ describe('addressSearchFilters', () => {
   });
 });
 
+describe('addressSearchFilters with a town', () => {
+  it('ands the street and the town into one filter instead of or-ing them', () => {
+    expect(
+      addressSearchFilters({ street: 'Tilžės g.', locality: 'Jurbark', number: '2' }),
+    ).toEqual([
+      {
+        streets: { full_name: { contains: 'Tilžės g.' } },
+        residential_areas: { name: { contains: 'Jurbark' } },
+        addresses: { plot_or_building_number: { exact: '2' } },
+      },
+    ]);
+  });
+
+  it('searches streets alone when no town was named', () => {
+    expect(addressSearchFilters({ street: 'Tilžės g.', number: '2' })).toEqual([
+      {
+        streets: { full_name: { contains: 'Tilžės g.' } },
+        addresses: { plot_or_building_number: { exact: '2' } },
+      },
+    ]);
+  });
+});
+
 describe('searchAddresses', () => {
   beforeEach(() => {
     vi.mocked(addressesSearch).mockReset();
   });
 
-  it('sends the OR filters and returns formatted texts', async () => {
+  it('sends the filters and returns formatted texts', async () => {
     vi.mocked(addressesSearch).mockResolvedValue({
       items: [KAUNAS_LAISVES_10, PLUNGE_LAISVES_10],
     });
@@ -154,7 +214,7 @@ describe('searchAddresses', () => {
     ]);
     expect(addressesSearch).toHaveBeenCalledWith({
       size: 10,
-      requestBody: { filters: addressSearchFilters({ text: 'Laisvės al.', number: '10' }) },
+      requestBody: { filters: addressSearchFilters({ street: 'Laisvės al.', number: '10' }) },
     });
   });
 
