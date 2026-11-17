@@ -1,9 +1,20 @@
 import type { Address, AddressesSearchFilterRequest } from './boundaries';
-import { addressesSearch } from './boundaries/services.gen';
+import {
+  addressesSearch,
+  residentialAreasSearch,
+  streetsSearch,
+} from './boundaries/services.gen';
 
 const DEFAULT_SIZE = 10;
 const DEFAULT_TIMEOUT_MS = 12000;
 const TIMED_OUT = Symbol('timed-out');
+
+const CODE_PAGE_SIZE = 100;
+const MAX_CODES = 500;
+const MAX_CODE_PAGES = Math.ceil(MAX_CODES / CODE_PAGE_SIZE) + 1;
+const CODE_CACHE_TTL_MS = 86_400_000;
+const CODE_CACHE_MAX_ENTRIES = 200;
+const NAME_MIN_LENGTH = 3;
 
 export interface AddressQuery {
   /** Set when no street marker was found, and matched against either field. */
@@ -11,6 +22,12 @@ export interface AddressQuery {
   street?: string;
   locality?: string;
   number?: string;
+}
+
+/** Codes the registry indexes by; absent means "not resolved, filter by name". */
+export interface ResolvedCodes {
+  street?: number[];
+  area?: number[];
 }
 
 // Bounded on purpose: an unbounded `\d+` before a literal scans quadratically,
@@ -23,8 +40,43 @@ const BLOCK_TAIL = new RegExp(String.raw`(${NUMBER})\s{0,4}(?:korp\.?|k\.)\s{0,4
 const FLAT = new RegExp(String.raw`^(${NUMBER})-${NUMBER}$`);
 const HOUSE = new RegExp(String.raw`^(${NUMBER})(?:-${NUMBER})?$`);
 
-/** How the registry abbreviates a street: `Tilžės g.`, `Gedimino pr.`. */
-const STREET_TYPE = /^(?:g|pr|al|skg|kel|pl|gatv)\.$/i;
+/** Spelled out or abbreviated, mapped to the form the registry files. */
+const STREET_TYPES: Record<string, string> = {
+  g: 'g.',
+  gatve: 'g.',
+  gatvė: 'g.',
+  pr: 'pr.',
+  prospektas: 'pr.',
+  al: 'al.',
+  aleja: 'al.',
+  alėja: 'al.',
+  pl: 'pl.',
+  plentas: 'pl.',
+  kel: 'kel.',
+  kelias: 'kel.',
+  skg: 'skg.',
+  skersgatvis: 'skg.',
+  tak: 'tak.',
+  takas: 'tak.',
+  a: 'a.',
+  aikste: 'a.',
+  aikštė: 'a.',
+};
+
+const streetTypeOf = (token: string): string | undefined =>
+  STREET_TYPES[token.toLowerCase().replace(/\.$/, '')];
+
+/** The last one, so the `A.` of `A. Jakšto g.` stays part of the name. */
+const lastStreetTypeAt = (tokens: string[]): number => {
+  for (let at = tokens.length - 1; at >= 0; at -= 1) {
+    if (streetTypeOf(tokens[at]!)) return at;
+  }
+
+  return -1;
+};
+
+const streetFrom = (tokens: string[], at: number) =>
+  [...tokens.slice(0, at), streetTypeOf(tokens[at]!)].join(' ');
 
 /**
  * The registry files a locality in the genitive — `Jurbarko m.`, `Vilniaus m.`
@@ -32,15 +84,43 @@ const STREET_TYPE = /^(?:g|pr|al|skg|kel|pl|gatv)\.$/i;
  * leaves a stem that `contains` finds either way, and a shorter stem can only
  * widen the search, never lose a row.
  */
-const NOMINATIVE_END = /(?:as|is|ys|us|iai|ai|ė|a)$/;
-const localityStem = (word: string) => (word.length >= 5 ? word.replace(NOMINATIVE_END, '') : word);
+const TRAILING_VOWELS = /[aąeęėiįyouų]+$/i;
+
+const localityStem = (word: string) => {
+  const base = word.replace(/s$/i, '');
+  const stem = base.replace(TRAILING_VOWELS, '');
+
+  if (stem.length >= NAME_MIN_LENGTH) return stem;
+
+  return base.length >= NAME_MIN_LENGTH ? base : word;
+};
 
 /** Left alone when it already carries the registry's own `m.`/`k.` suffix. */
+const localityQuery = (name: string) =>
+  /\.$/.test(name) ? name : name.split(/\s+/).filter(Boolean).map(localityStem).join(' ');
+
 const localityOf = (named: string[]) => {
   if (!named.length) return {};
-  const joined = named.join(' ');
 
-  return { locality: /\.$/.test(joined) ? joined : named.map(localityStem).join(' ') };
+  return { locality: localityQuery(named.join(' ')) };
+};
+
+const splitHouseNumber = (tokens: string[], known?: string) => {
+  let number = known;
+  const named: string[] = [];
+
+  for (const token of tokens) {
+    const house = token.match(HOUSE);
+
+    if (house) {
+      number ??= house[1];
+      continue;
+    }
+
+    named.push(token);
+  }
+
+  return { number, named };
 };
 
 export const parseAddressQuery = (input: string): AddressQuery => {
@@ -57,28 +137,20 @@ export const parseAddressQuery = (input: string): AddressQuery => {
   // A comma is the one reliable boundary between a street and a town, and it
   // is how the registry's own formatted address is written.
   const segments = rest.split(',').map(words).filter((part) => part.length);
-  const streetAt = segments.findIndex((part) => part.some((token) => STREET_TYPE.test(token)));
+  const streetAt = segments.findIndex((part) => lastStreetTypeAt(part) > 0);
   const tokens = segments.flat();
-  const typeAt = tokens.findIndex((token) => STREET_TYPE.test(token));
+  const typeAt = lastStreetTypeAt(tokens);
 
   if (segments.length > 1 && streetAt >= 0) {
     const segment = segments[streetAt]!;
-    const at = segment.findIndex((token) => STREET_TYPE.test(token));
-    const street = segment.slice(0, at + 1).join(' ');
-    const named: string[] = [];
+    const at = lastStreetTypeAt(segment);
+    const street = streetFrom(segment, at);
+    const { number: house, named } = splitHouseNumber(
+      [...segment.slice(at + 1), ...segments.filter((_, i) => i !== streetAt).flat()],
+      number,
+    );
 
-    for (const token of [...segment.slice(at + 1), ...segments.filter((_, i) => i !== streetAt).flat()]) {
-      const house = token.match(HOUSE);
-
-      if (house) {
-        number ??= house[1];
-        continue;
-      }
-
-      named.push(token);
-    }
-
-    return street ? { street, ...localityOf(named), ...(number && { number }) } : { text: tokens.join(' ') };
+    return { street, ...localityOf(named), ...(house && { number: house }) };
   }
 
   if (typeAt <= 0) {
@@ -94,23 +166,9 @@ export const parseAddressQuery = (input: string): AddressQuery => {
     return number ? { text: tokens.join(' '), number } : { text: tokens.join(' ') };
   }
 
-  // No comma to go by, so everything before the street type is the street's
-  // own name — `A. Jakšto g.` is two words and a type, not a town and a street.
-  const street = tokens.slice(0, typeAt + 1).join(' ');
-  const named: string[] = [];
+  const { number: house, named } = splitHouseNumber(tokens.slice(typeAt + 1), number);
 
-  for (const token of tokens.slice(typeAt + 1)) {
-    const house = token.match(HOUSE);
-
-    if (house) {
-      number ??= house[1];
-      continue;
-    }
-
-    named.push(token);
-  }
-
-  return { street, ...localityOf(named), ...(number && { number }) };
+  return { street: streetFrom(tokens, typeAt), ...localityOf(named), ...(house && { number: house }) };
 };
 
 export const formatBoundariesAddress = (address: Address): string => {
@@ -128,46 +186,169 @@ export const formatBoundariesAddress = (address: Address): string => {
     .join(', ');
 };
 
-export const addressSearchFilters = (query: AddressQuery): AddressesSearchFilterRequest[] => {
+/** `%` and `_` reach the registry's matcher, where they match every row. */
+const searchableName = (value?: string): string | undefined => {
+  const cleaned = value?.replace(/[%_]/g, '').trim();
+
+  return cleaned && cleaned.length >= NAME_MIN_LENGTH ? cleaned : undefined;
+};
+
+export const addressSearchFilters = (
+  query: AddressQuery,
+  resolved: ResolvedCodes = {},
+): AddressesSearchFilterRequest[] => {
   const number = query.number
-    ? { addresses: { plot_or_building_number: { exact: query.number } } }
+    ? { addresses: { plot_or_building_number: { starts: query.number } } }
     : {};
 
-  if (query.street) {
-    // One ANDed filter, not two OR'ed: a street name alone matches the same
-    // street in every town in the country, and the one meant is rarely first.
-    const street = { streets: { full_name: { contains: query.street } } };
+  const street = resolved.street
+    ? { streets: { codes: resolved.street } }
+    : { streets: { full_name: { contains: query.street ?? query.text } } };
+  const area = resolved.area
+    ? { residential_areas: { codes: resolved.area } }
+    : { residential_areas: { name: { contains: query.locality ?? query.text } } };
 
-    return [
-      query.locality
-        ? { ...street, residential_areas: { name: { contains: query.locality } }, ...number }
-        : { ...street, ...number },
-    ];
+  // An empty code list is the registry's "no filter", so a name that resolved
+  // to nothing has to drop its branch rather than widen it.
+  const dropped = (codes?: number[]) => codes?.length === 0;
+
+  if (query.street) {
+    if (dropped(resolved.street) || (query.locality && dropped(resolved.area))) return [];
+
+    return [{ ...street, ...(query.locality ? area : {}), ...number }];
   }
 
+  // Each entry is sent as its own request: the registry sorts a union of two
+  // filters without an index, and pays seconds for it.
   return [
-    { streets: { full_name: { contains: query.text } }, ...number },
-    { residential_areas: { name: { contains: query.text } }, ...number },
+    ...(dropped(resolved.street) ? [] : [{ ...street, ...number }]),
+    ...(dropped(resolved.area) ? [] : [{ ...area, ...number }]),
   ];
 };
 
-export const searchAddresses = async (
-  input: string,
-  size = DEFAULT_SIZE,
-  timeoutMs = DEFAULT_TIMEOUT_MS,
-): Promise<string[]> => {
-  const query = parseAddressQuery(input);
-  if (!query.text && !query.street) return [];
+interface CodeCacheEntry {
+  codes: number[];
+  at: number;
+}
 
+const codeCache = new Map<string, CodeCacheEntry>();
+
+export const clearAddressCodeCache = () => codeCache.clear();
+
+const cachedCodes = (key: string) => {
+  const hit = codeCache.get(key);
+  if (!hit) return undefined;
+
+  if (Date.now() - hit.at > CODE_CACHE_TTL_MS) {
+    codeCache.delete(key);
+    return undefined;
+  }
+
+  return hit.codes;
+};
+
+const cacheCodes = (key: string, codes: number[]) => {
+  if (codeCache.size >= CODE_CACHE_MAX_ENTRIES) {
+    const oldest = codeCache.keys().next().value;
+    if (oldest !== undefined) codeCache.delete(oldest);
+  }
+
+  codeCache.set(key, { codes, at: Date.now() });
+};
+
+const searchCodes = (kind: 'street' | 'area', name: string, cursor?: string) =>
+  kind === 'street'
+    ? streetsSearch({
+        size: CODE_PAGE_SIZE,
+        cursor,
+        requestBody: { filters: [{ streets: { full_name: { contains: name } } }] },
+      })
+    : residentialAreasSearch({
+        size: CODE_PAGE_SIZE,
+        cursor,
+        requestBody: { filters: [{ residential_areas: { name: { contains: name } } }] },
+      });
+
+/** The registry indexes addresses by code, not by the joined name, so filtering
+ *  1.1M rows by name is a scan. `undefined` means the caller falls back to it. */
+const collectCodes = async (
+  kind: 'street' | 'area',
+  name: string,
+): Promise<number[] | undefined> => {
+  const key = `${kind}:${name.toLowerCase()}`;
+  const cached = cachedCodes(key);
+  if (cached) return cached;
+
+  const codes: number[] = [];
+  let cursor: string | undefined;
+
+  try {
+    for (let page = 0; page < MAX_CODE_PAGES; page += 1) {
+      const found = await searchCodes(kind, name, cursor);
+
+      for (const item of found.items) {
+        if (typeof item.code === 'number') codes.push(item.code);
+      }
+
+      if (codes.length > MAX_CODES) return undefined;
+
+      if (!found.next_page) {
+        cacheCodes(key, codes);
+        return codes;
+      }
+
+      cursor = found.next_page;
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+};
+
+/** A town before a village, and every place once before any place twice. */
+const PLACE_KINDS = [/\sm\.$/, /\smstl\.$/, /\ssen\.$/, /\sk\.$/];
+
+const placeRank = (address: Address) => {
+  const name = address.residential_area?.name ?? '';
+  const kind = PLACE_KINDS.findIndex((suffix) => suffix.test(name));
+
+  return kind < 0 ? PLACE_KINDS.length : kind;
+};
+
+export const rankAddresses = (items: Address[]): Address[] => {
+  const seen = new Set<number>();
+  const first: Address[] = [];
+  const repeated: Address[] = [];
+
+  for (const address of [...items].sort((a, b) => placeRank(a) - placeRank(b))) {
+    const place = address.residential_area?.code;
+
+    if (place !== undefined && seen.has(place)) {
+      repeated.push(address);
+      continue;
+    }
+
+    if (place !== undefined) seen.add(place);
+    first.push(address);
+  }
+
+  return [...first, ...repeated];
+};
+
+const runSearch = async (
+  filter: AddressesSearchFilterRequest,
+  size: number,
+  timeoutMs: number,
+): Promise<Address[]> => {
   const pending = addressesSearch({
     size,
-    requestBody: { filters: addressSearchFilters(query) },
+    sortBy: 'plot_or_building_number',
+    requestBody: { filters: [filter] },
   });
 
   let timer: ReturnType<typeof setTimeout> | undefined;
 
-  // Generous, because the registry takes seconds for a `contains` query and
-  // cutting it off would turn an address it does hold into free text.
   const outcome = await Promise.race([
     pending.then(
       (result) => result,
@@ -184,7 +365,40 @@ export const searchAddresses = async (
     return [];
   }
 
-  if (!outcome) return [];
+  return outcome?.items ?? [];
+};
 
-  return [...new Set(outcome.items.map(formatBoundariesAddress))];
+export const searchAddresses = async (
+  input: string,
+  size = DEFAULT_SIZE,
+  timeoutMs = DEFAULT_TIMEOUT_MS,
+): Promise<string[]> => {
+  const parsed = parseAddressQuery(input);
+  const query: AddressQuery = {
+    ...(searchableName(parsed.text) && { text: searchableName(parsed.text) }),
+    ...(searchableName(parsed.street) && { street: searchableName(parsed.street) }),
+    ...(searchableName(parsed.locality) && { locality: searchableName(parsed.locality) }),
+    ...(parsed.number && { number: parsed.number }),
+  };
+
+  const streetName = query.street ?? query.text;
+  if (!streetName) return [];
+
+  // A bare name is as likely to be a town as a street, and the town side has
+  // to be asked for in the genitive the registry files it under.
+  if (!query.street && query.text) query.locality = searchableName(localityQuery(query.text));
+
+  const areaName = query.locality;
+
+  const [street, area] = await Promise.all([
+    collectCodes('street', streetName),
+    areaName ? collectCodes('area', areaName) : Promise.resolve(undefined),
+  ]);
+
+  const filters = addressSearchFilters(query, { street, area });
+  if (!filters.length) return [];
+
+  const found = await Promise.all(filters.map((filter) => runSearch(filter, size, timeoutMs)));
+
+  return [...new Set(rankAddresses(found.flat()).map(formatBoundariesAddress))].slice(0, size);
 };

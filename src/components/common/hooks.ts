@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 import { JSX, useCallback, useEffect, useId, useRef, useState } from 'react';
 import { intersectionObserverConfig } from '../../utils';
 import { getFilteredOptions } from './functions';
@@ -309,6 +309,9 @@ export const useAsyncSelectData = <T extends SelectOption = SelectOption>({
     // A failed search resolves to an empty list, and a consumer's default
     // staleTime would then serve "nothing found" for the next minute.
     staleTime: 0,
+    // Every keystroke is a new key, so without this the list empties between
+    // them and a search that answers in half a second reads as waiting.
+    placeholderData: keepPreviousData,
   });
 
   useEffect(() => {

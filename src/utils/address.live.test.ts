@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { addressSearchFilters, parseAddressQuery } from './address';
+import { clearAddressCodeCache, searchAddresses } from './address';
 
 /** Hits the real registry; skipped unless LIVE_REGISTRY is set to 1. */
 const enabled = globalThis.process?.env?.['LIVE_REGISTRY'] === '1';
@@ -7,28 +7,49 @@ const live = enabled ? describe : describe.skip;
 
 live('against the real boundaries registry', () => {
   it.each([
-    ['Tilžės g. 2 Jurbarkas', 'Jurbarko m.'],
-    ['Jurbarkas, Tilžės g. 2', 'Jurbarko m.'],
-    ['Gedimino pr. 11 Vilnius', 'Vilniaus m.'],
-    ['A. Jakšto g. 4 Vilnius', 'Vilniaus m.'],
-    ['Vytauto g. 10 korp. 2 Kaunas', 'Kauno m.'],
+    ['Tilžės g. 2 Jurbarkas', 'Tilžės g. 2, Jurbarko m.'],
+    ['Jurbarkas, Tilžės g. 2', 'Tilžės g. 2, Jurbarko m.'],
+    ['Gedimino pr. 11 Vilnius', 'Gedimino pr. 11, Vilniaus m.'],
+    ['A. Jakšto g. 4 Vilnius', 'A. Jakšto g. 4, Vilniaus m.'],
+    ['Vytauto g. 10 Kaunas', 'Vytauto g. 10, Kauno m.'],
+    ['Vytauto prospektas 6 Kaunas', 'Vytauto pr. 6, Kauno m.'],
+    ['Mituvos g 1 Jurbarkas', 'Mituvos g. 1, Jurbarko m.'],
   ])(
-    'finds %s in %s',
-    async (input, area) => {
+    'finds %s',
+    async (input, expected) => {
+      clearAddressCodeCache();
       const started = Date.now();
-      const res = await fetch('https://boundaries.biip.lt/v1/addresses/search?size=3', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filters: addressSearchFilters(parseAddressQuery(input)) }),
-      });
-      const body = (await res.json()) as {
-        total: number;
-        items: { residential_area?: { name?: string } }[];
-      };
-      console.log(`${input} -> total=${body.total} in ${Date.now() - started}ms`);
+      const found = await searchAddresses(input);
+      const elapsed = Date.now() - started;
+      console.log(`${input} -> ${elapsed}ms, ${found.length} rows: ${found[0] ?? '—'}`);
 
-      expect(body.items.length).toBeGreaterThan(0);
-      expect(body.items[0]?.residential_area?.name).toBe(area);
+      expect(found[0]).toContain(expected);
+      expect(elapsed).toBeLessThan(2500);
+    },
+    30_000,
+  );
+
+  it(
+    'lists addresses in the town itself when only the town is typed',
+    async () => {
+      clearAddressCodeCache();
+      const found = await searchAddresses('Jurbarkas');
+
+      expect(found.some((row) => row.includes('Jurbarko m.'))).toBe(true);
+    },
+    30_000,
+  );
+
+  it(
+    'answers a repeated street from the cache, without re-resolving',
+    async () => {
+      clearAddressCodeCache();
+      await searchAddresses('Tilžės g. 2 Jurbarkas');
+
+      const started = Date.now();
+      await searchAddresses('Tilžės g. 20 Jurbarkas');
+
+      expect(Date.now() - started).toBeLessThan(1200);
     },
     30_000,
   );
