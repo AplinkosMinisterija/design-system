@@ -84,7 +84,8 @@ const streetFrom = (tokens: string[], at: number) =>
  * leaves a stem that `contains` finds either way, and a shorter stem can only
  * widen the search, never lose a row.
  */
-const TRAILING_VOWELS = /[aąeęėiįyouų]+$/i;
+// Bounded: an unbounded `+$` retries from every position and scans quadratically.
+const TRAILING_VOWELS = /[aąeęėiįyouų]{1,4}$/i;
 
 const localityStem = (word: string) => {
   const base = word.replace(/s$/i, '');

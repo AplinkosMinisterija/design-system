@@ -169,6 +169,15 @@ describe('parseAddressQuery street markers', () => {
   });
 });
 
+describe('parseAddressQuery under a hostile paste', () => {
+  it('stems a wall of vowels without stalling the keystroke', () => {
+    const started = Date.now();
+    parseAddressQuery(`Tilžės g. 2 ${'a'.repeat(40000)}b`);
+
+    expect(Date.now() - started).toBeLessThan(100);
+  });
+});
+
 describe('formatBoundariesAddress', () => {
   it('names the street, locality and municipality so two matches differ', () => {
     expect(formatBoundariesAddress(KAUNAS_LAISVES_10)).toBe(
